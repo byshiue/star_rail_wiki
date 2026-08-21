@@ -53,11 +53,25 @@ function equipmentDocument(bundle: GameReleaseBundle, equipment: EquipmentRevisi
   };
 }
 
+function aggregateDocuments(documents: WikiSearchDocument[]): WikiSearchDocument[] {
+  const logicalEntities = new Map<string, WikiSearchDocument>();
+  for (const document of documents) {
+    const key = `${document.kind}:${document.id}`;
+    const previous = logicalEntities.get(key);
+    logicalEntities.set(key, previous ? {
+      ...document,
+      metrics: [...new Set([...previous.metrics, ...document.metrics])],
+      searchableText: `${previous.searchableText}${document.searchableText}`,
+    } : document);
+  }
+  return [...logicalEntities.values()];
+}
+
 export function buildSearchIndex(bundle: GameReleaseBundle): WikiSearchIndex {
-  return { releaseId: bundle.release.id, documents: [
+  return { releaseId: bundle.release.id, documents: aggregateDocuments([
     ...bundle.entities.characters.map((character) => characterDocument(bundle, character)),
     ...bundle.entities.equipment.map((equipment) => equipmentDocument(bundle, equipment)),
-  ] };
+  ]) };
 }
 
 function intersects<T>(actual: T[], selected: T[] | undefined): boolean {
