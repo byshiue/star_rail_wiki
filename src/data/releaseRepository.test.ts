@@ -6,19 +6,36 @@ import { loadRelease, loadReleaseIndex } from "./releaseRepository";
 afterEach(() => vi.unstubAllGlobals());
 
 function releaseIndexFor(...releases: Array<typeof releaseFixture>) {
-  return { currentReleaseId: releases[0].id, releases };
+  return {
+    currentReleaseId: releases[0].channel === "released" ? releases[0].id : null, releases,
+  };
 }
 
 describe("release repository", () => {
   it("loads and validates the release index", async () => {
+    const released = structuredClone(releaseFixture);
+    released.id = "4.3-reviewed";
+    released.channel = "released";
+    released.sources[0].name = "Reviewed upstream source";
+    released.sources[0].url = "https://example.com/star-rail-reviewed";
     const fetchStub = vi.fn().mockResolvedValue(new Response(
-      JSON.stringify(releaseIndexFor(releaseFixture)),
+      JSON.stringify(releaseIndexFor(released)),
       { status: 200 },
     ));
     vi.stubGlobal("fetch", fetchStub);
 
-    await expect(loadReleaseIndex()).resolves.toMatchObject({ currentReleaseId: "4.3-fixture" });
+    await expect(loadReleaseIndex()).resolves.toMatchObject({ currentReleaseId: "4.3-reviewed" });
     expect(fetchStub).toHaveBeenCalledWith("/data/releases/index.json");
+  });
+
+  it("rejects a fixture selected as current through the shared runtime schema", async () => {
+    const fetchStub = vi.fn().mockResolvedValue(new Response(JSON.stringify({
+      currentReleaseId: releaseFixture.id,
+      releases: [releaseFixture],
+    }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchStub);
+
+    await expect(loadReleaseIndex()).rejects.toThrow(/current.*released/i);
   });
 
   it("encodes the release ID independently while accepting a matching response", async () => {

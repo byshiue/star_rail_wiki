@@ -10,7 +10,7 @@ import {
   TriggerExpressionSchema,
 } from "./effects";
 import { AccountProfileSchema } from "./profiles";
-import { DataReleaseSchema, GameReleaseBundleSchema } from "./releases";
+import { DataReleaseSchema, GameReleaseBundleSchema, ReleaseIndexSchema } from "./releases";
 
 function validEntities() {
   return structuredClone(GameReleaseBundleSchema.parse({
@@ -28,6 +28,37 @@ describe("versioned domain schemas", () => {
   it("marks the reviewed synthetic data as a fixture channel", () => {
     expect(DataReleaseSchema.parse(releaseFixture).channel).toBe("fixture");
     expect(releaseFixture.sources[0].revision).toMatch(/^[a-f0-9]{8,40}$/);
+  });
+
+  it("allows current to select only a non-fixture released-channel release", () => {
+    const release = structuredClone(releaseFixture);
+    release.id = "4.3-reviewed";
+    release.channel = "released";
+    release.sources[0].name = "Reviewed upstream source";
+    release.sources[0].url = "https://example.com/star-rail-reviewed";
+
+    expect(ReleaseIndexSchema.parse({ currentReleaseId: release.id, releases: [release] }))
+      .toMatchObject({ currentReleaseId: "4.3-reviewed" });
+    expect(() => ReleaseIndexSchema.parse({
+      currentReleaseId: release.id,
+      releases: [{ ...release, channel: "fixture" }],
+    })).toThrow(/current.*released/i);
+  });
+
+  it.each([
+    ["fixture ID", { id: "4.3-fixture", sources: [{
+      ...releaseFixture.sources[0], name: "Reviewed source", url: "https://example.com/source",
+    }] }],
+    ["fixture source name", { id: "4.3-reviewed", sources: [{
+      ...releaseFixture.sources[0], name: "Synthetic fixture source", url: "https://example.com/source",
+    }] }],
+    ["fixture source URL", { id: "4.3-reviewed", sources: [{
+      ...releaseFixture.sources[0], name: "Reviewed source", url: "https://example.com/fixture-source",
+    }] }],
+  ])("rejects released channel for a %s even when it is not current", (_label, overrides) => {
+    const release = { ...structuredClone(releaseFixture), ...overrides, channel: "released" };
+    expect(() => ReleaseIndexSchema.parse({ currentReleaseId: null, releases: [release] }))
+      .toThrow(/fixture.*released channel/i);
   });
 
   it("accepts immutable character and equipment revisions with provenance", () => {

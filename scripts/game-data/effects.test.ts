@@ -108,6 +108,40 @@ describe("reviewed effect overlays", () => {
     });
   });
 
+  it("does not also extract a flat speed effect from a percentage", () => {
+    expect(extractCandidateEffects(feature(
+      "ability:speed-percent@4.3-fixture", "speed increases by 7%",
+    )).map(({ metric, operation, value }) => ({ metric, operation, value: value.base }))).toEqual([
+      { metric: "speed", operation: "percent", value: 0.07 },
+    ]);
+  });
+
+  it.each([
+    ["Increases the wearer’s ATK by 12%", "attack"],
+    ["Increases SPD by 12%", "speed"],
+    ["Increases the wearer's DEF by 12%", "defense"],
+    ["Increases CRIT Rate by 12%", "critical_rate"],
+    ["Increases CRIT DMG by 12%", "critical_damage"],
+    ["Increases Effect RES by 12%", "effect_resistance"],
+    ["Increases Effect Hit Rate by 12%", "effect_hit_rate"],
+  ])("supports common English game wording: %s", (text, metric) => {
+    const candidates = extractCandidateEffects(feature("ability:english@4.3-fixture", text));
+    expect(candidates).toHaveLength(1);
+    expect(candidates[0]).toMatchObject({
+      metric, operation: "percent", value: { base: 0.12 },
+    });
+  });
+
+  it("determines each target from the local clause containing its match", () => {
+    const candidates = extractCandidateEffects(feature(
+      "ability:local-target@4.3-fixture", "自身攻击力提高10%，我方全体速度提高20%",
+    ));
+    expect(candidates.map(({ metric, target }) => [metric, target?.type])).toEqual([
+      ["attack", "self"],
+      ["speed", "team"],
+    ]);
+  });
+
   it("replaces generated candidates with schema-valid reviewed and unsupported overlays", () => {
     const reviewedSource = feature("ability:reviewed@4.3-fixture", "team damage bonus 50%");
     const unsupportedSource = feature("ability:unsupported@4.3-fixture", "action advance 25%");
@@ -269,7 +303,7 @@ describe("effect completeness gate", () => {
     await cp("public/data/releases/4.3-fixture/coverage.json", path.join(directory, "coverage.json"));
     await cp("data/manual/effects.json", path.join(root, "data/manual/effects.json"));
 
-    await expect(validateRepository(root)).rejects.toThrow(/fixture.*current release/i);
+    await expect(validateRepository(root)).rejects.toThrow(/fixture release|current release.*fixture/i);
   });
 
   it("rejects a repository whose checked-in coverage silently claims no unmapped effects", async () => {

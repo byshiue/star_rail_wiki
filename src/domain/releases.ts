@@ -15,12 +15,26 @@ export const DataReleaseSchema = z.strictObject({
 });
 export type DataRelease = z.infer<typeof DataReleaseSchema>;
 
+function hasFixtureMarker(release: DataRelease): boolean {
+  return /fixture/i.test(release.id) || release.sources.some((source) => (
+    /fixture/i.test(source.name) || /fixture/i.test(source.url)
+  ));
+}
+
 export const ReleaseIndexSchema = z.strictObject({
   currentReleaseId: z.string().min(1).nullable(),
   releases: z.array(DataReleaseSchema).min(1),
 }).superRefine((index, context) => {
   const releaseIds = new Set<string>();
   for (const [releaseIndex, release] of index.releases.entries()) {
+    if (release.channel === "released" && hasFixtureMarker(release)) {
+      context.addIssue({
+        code: "custom",
+        path: ["releases", releaseIndex, "channel"],
+        message: `fixture release cannot use released channel: ${release.id}`,
+      });
+    }
+
     if (releaseIds.has(release.id)) {
       context.addIssue({
         code: "custom",
@@ -31,12 +45,21 @@ export const ReleaseIndexSchema = z.strictObject({
     releaseIds.add(release.id);
   }
 
-  if (index.currentReleaseId !== null && !releaseIds.has(index.currentReleaseId)) {
-    context.addIssue({
-      code: "custom",
-      path: ["currentReleaseId"],
-      message: `unknown current release id: ${index.currentReleaseId}`,
-    });
+  if (index.currentReleaseId !== null) {
+    const current = index.releases.find((release) => release.id === index.currentReleaseId);
+    if (!current) {
+      context.addIssue({
+        code: "custom",
+        path: ["currentReleaseId"],
+        message: `unknown current release id: ${index.currentReleaseId}`,
+      });
+    } else if (current.channel !== "released" || hasFixtureMarker(current)) {
+      context.addIssue({
+        code: "custom",
+        path: ["currentReleaseId"],
+        message: `current release must reference a non-fixture released channel: ${current.id}`,
+      });
+    }
   }
   for (const [releaseIndex, release] of index.releases.entries()) {
     if (release.previousReleaseId !== null && !releaseIds.has(release.previousReleaseId)) {

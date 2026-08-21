@@ -30,22 +30,33 @@ const rule = (pattern: string, metric: EffectMetric, operation: CandidateEffect[
   pattern: new RegExp(pattern, "giu"), metric, operation, target,
 });
 
+const englishSubject = String.raw`(?:the\s+wearer['’]s\s+)?`;
+const statPercent = (chinese: string, english: string): string => String.raw`(?:
+  ${chinese}\s*|
+  (?:${english})\s+increases?\s+by\s*|
+  increases?\s+${englishSubject}(?:${english})\s+by\s*
+)${number}${percent}`.replace(/\s+/g, String.raw`\s*`);
+const englishStatFlat = (english: string): string => String.raw`(?:
+  (?:${english})\s+increases?\s+by\s*|
+  increases?\s+${englishSubject}(?:${english})\s+by\s*
+)${number}(?![\d.])(?:\s+points?)?(?!\s*(?:%|percent))`.replace(/\s+/g, String.raw`\s*`);
+
 const rules: readonly PhraseRule[] = [
   rule(String.raw`(?:team\s+damage\s+bonus|damage\s+bonus(?:\s+increases?\s+by)?|[a-z]+\s+dmg\s+increases?\s+by|造成的伤害提高|(?:火|冰|雷|风|物理|量子|虚数)属性伤害提高)\s*${number}${percent}`, "damage_bonus"),
   rule(String.raw`(?:enemy\s+defense\s+reduction|防御力降低)\s*${number}${percent}`, "defense_reduction", "percent", "enemy"),
   rule(String.raw`(?:action\s+advance|行动提前)\s*${number}${percent}`, "action_advance", "percent", "ally"),
   rule(String.raw`(?:action\s+delay|行动延后)\s*${number}${percent}`, "action_delay", "percent", "enemy"),
-  rule(String.raw`(?:攻击力提高|attack\s+increases?\s+by)\s*${number}${percent}`, "attack"),
-  rule(String.raw`(?:生命值提高|(?:max\s+)?hp\s+increases?\s+by)\s*${number}${percent}`, "hp"),
-  rule(String.raw`(?:防御力提高|defense\s+increases?\s+by)\s*${number}${percent}`, "defense"),
-  rule(String.raw`(?:速度提高|speed\s+increases?\s+by)\s*${number}${percent}`, "speed"),
+  rule(statPercent("攻击力提高", "(?:attack|atk)"), "attack"),
+  rule(statPercent("生命值提高", "(?:(?:max\\s+)?hp)"), "hp"),
+  rule(statPercent("防御力提高", "(?:defense|def)"), "defense"),
+  rule(statPercent("速度提高", "(?:speed|spd)"), "speed"),
   rule(String.raw`速度提高\s*${number}\s*点`, "speed", "flat"),
-  rule(String.raw`speed\s+increases?\s+by\s*${number}(?:\s+points?)?`, "speed", "flat"),
-  rule(String.raw`(?:暴击率提高|critical\s+rate\s+increases?\s+by)\s*${number}${percent}`, "critical_rate"),
-  rule(String.raw`(?:暴击伤害提高|critical\s+damage\s+increases?\s+by)\s*${number}${percent}`, "critical_damage"),
+  rule(englishStatFlat("(?:speed|spd)"), "speed", "flat"),
+  rule(statPercent("暴击率提高", "(?:critical|crit)\\s+rate"), "critical_rate"),
+  rule(statPercent("暴击伤害提高", "(?:critical\\s+damage|crit\\s+dmg)"), "critical_damage"),
   rule(String.raw`(?:击破特攻提高|break\s+effect\s+increases?\s+by)\s*${number}${percent}`, "break_effect"),
-  rule(String.raw`(?:效果命中提高|effect\s+hit\s+rate\s+increases?\s+by)\s*${number}${percent}`, "effect_hit_rate"),
-  rule(String.raw`(?:效果抵抗提高|effect\s+resistance\s+increases?\s+by)\s*${number}${percent}`, "effect_resistance"),
+  rule(statPercent("效果命中提高", "effect\\s+hit\\s+rate"), "effect_hit_rate"),
+  rule(statPercent("效果抵抗提高", "effect\\s+(?:resistance|res)"), "effect_resistance"),
   rule(String.raw`(?:能量恢复效率提高|energy\s+regeneration\s+rate\s+increases?\s+by)\s*${number}${percent}`, "energy"),
   rule(String.raw`(?:额外)?恢复\s*${number}\s*点能量`, "energy", "flat"),
   rule(String.raw`(?:受到的伤害提高|vulnerability(?:\s+increases?\s+by)?)\s*${number}${percent}`, "vulnerability", "percent", "enemy"),
@@ -62,11 +73,20 @@ const rules: readonly PhraseRule[] = [
 function targetFor(rule: PhraseRule, text: string): TargetSelector | undefined {
   if (rule.target === "enemy") return { type: "all-enemies" };
   if (/team|我方全体/i.test(text)) return { type: "team" };
-  if (/self|装备者|自身/i.test(text)) return { type: "self" };
+  if (/self|wearer|装备者|自身/i.test(text)) return { type: "self" };
   if (rule.target === "ally") return { type: "single-ally" };
   return undefined;
 }
 
+function clauseAt(text: string, index: number): string {
+  const delimiters = /[,，。；;\n]/g;
+  let start = 0;
+  for (const match of text.matchAll(delimiters)) {
+    if (match.index >= index) return text.slice(start, match.index);
+    start = match.index + match[0].length;
+  }
+  return text.slice(start);
+}
 export function extractCandidateEffects(entity: EffectSourceRevision): CandidateEffect[] {
   const sourceText = entity.originalText ?? entity.description;
   if (!sourceText) return [];
@@ -93,7 +113,7 @@ export function extractCandidateEffects(entity: EffectSourceRevision): Candidate
     metric: match.rule.metric,
     operation: match.rule.operation,
     value: { base: match.rule.operation === "percent" ? match.value / 100 : match.value, scaling: [] },
-    target: targetFor(match.rule, match.segment),
+    target: targetFor(match.rule, clauseAt(match.segment, match.index)),
     reviewStatus: "generated",
   }));
 }
