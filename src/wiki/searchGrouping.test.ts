@@ -4,16 +4,18 @@ import { GameReleaseBundleSchema } from "../domain/releases";
 import { buildSearchIndex } from "./searchIndex";
 
 test("keeps different equipment kinds with the same logical ID separate", () => {
-  const bundle = GameReleaseBundleSchema.parse({ release: releaseJson, entities: entitiesJson });
-  const relic = structuredClone(bundle.entities.equipment[0]);
+  const fixture = GameReleaseBundleSchema.parse({ release: releaseJson, entities: entitiesJson });
+  const entities = structuredClone(fixture.entities);
+  const relic = structuredClone(entities.equipment[0]);
   relic.kind = "relic-set";
   relic.revisionId = "relic-set:shared-logical-id@4.3";
-  relic.logicalId = bundle.entities.equipment[0].logicalId;
+  relic.logicalId = entities.equipment[0].logicalId;
   relic.name = "同 ID 遗器";
   relic.effectIds = [];
-  bundle.entities.equipment.push(relic);
+  entities.equipment.push(relic);
+  const reparsedBundle = GameReleaseBundleSchema.parse({ release: releaseJson, entities });
 
-  const documents = buildSearchIndex(bundle).documents.filter(
+  const documents = buildSearchIndex(reparsedBundle).documents.filter(
     (document) => document.id === relic.logicalId,
   );
 

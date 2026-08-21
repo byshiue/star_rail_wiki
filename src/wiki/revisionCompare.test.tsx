@@ -52,4 +52,7 @@ test("resolves each revision version and compares only adjacent releases", async
   expect(comparison).toHaveTextContent("第二版说明");
   expect(comparison).toHaveTextContent("第三版说明");
   expect(comparison).not.toHaveTextContent("第一版说明");
+  const details = screen.getByRole("region", { name: "版本变化明细" });
+  expect(details).toHaveAttribute("tabindex", "0");
+  expect(within(details).getByRole("table")).toBeVisible();
 });
