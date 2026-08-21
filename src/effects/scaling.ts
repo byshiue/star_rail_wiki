@@ -1,7 +1,12 @@
 import type { Effect, ScalingValue, StackingRule } from "../domain/effects";
 import type { EvaluationWarning } from "./context";
 
-export interface ScalingResult { value: number; stacks: number; warnings: EvaluationWarning[] }
+export interface ScalingResult {
+  value: number;
+  stacks: number;
+  requestedStacks: number;
+  warnings: EvaluationWarning[];
+}
 
 function normalizedLevel(level: number | undefined): number {
   return Number.isFinite(level) ? Math.max(1, Math.trunc(level ?? 1)) : 1;
@@ -27,15 +32,16 @@ export function resolveEffectValue(
     message: `Requested scaling level exceeds available values for ${effect.id}; using the highest value.`,
   });
   const stacks = resolveStacks(effect.stacking, requestedStacks);
-  if (stacks.exceeded) warnings.push({
-    code: "stack_cap_exceeded", effectId: effect.id,
-    message: `Requested stacks exceed the cap of ${effect.stacking.maxStacks} for ${effect.id}.`,
-  });
-  return { value: scaled.value * stacks.count, stacks: stacks.count, warnings };
+  return {
+    value: scaled.value * stacks.count,
+    stacks: stacks.count,
+    requestedStacks: stacks.requested,
+    warnings,
+  };
 }
 
 function resolveStacks(rule: StackingRule, requested: number | undefined) {
-  if (rule.type !== "additive") return { count: 1, exceeded: false };
+  if (rule.type !== "additive") return { count: 1, requested: 1 };
   const safeRequested = Number.isFinite(requested) ? Math.max(0, Math.trunc(requested ?? 1)) : 1;
-  return { count: Math.min(safeRequested, rule.maxStacks), exceeded: safeRequested > rule.maxStacks };
+  return { count: Math.min(safeRequested, rule.maxStacks), requested: safeRequested };
 }

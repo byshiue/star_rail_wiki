@@ -14,21 +14,48 @@ function reduceOperation(operation: Effect["operation"], values: number[]): numb
   return values.reduce((total, value) => total + value, 0);
 }
 
-function valuesAfterStacking(entries: EvaluatedEffect[]): number[] {
+function valuesAfterStacking(entries: EvaluatedEffect[]): {
+  values: number[];
+  warnings: EvaluationWarning[];
+} {
   const byEffect = new Map<string, EvaluatedEffect[]>();
   for (const entry of entries) {
     const instances = byEffect.get(entry.effectId) ?? [];
     instances.push(entry);
     byEffect.set(entry.effectId, instances);
   }
-  return [...byEffect.values()].flatMap((instances) => {
+  const values: number[] = [];
+  const warnings: EvaluationWarning[] = [];
+  for (const [effectId, unsortedInstances] of [...byEffect.entries()].sort(([left], [right]) => left.localeCompare(right))) {
+    const instances = [...unsortedInstances].sort((a, b) => a.evaluationId.localeCompare(b.evaluationId));
     const rule = instances[0]!.stacking;
-    if (rule.type !== "additive") return [Math.max(...instances.map(({ value }) => value))];
+    if (rule.type !== "additive") {
+      values.push(Math.max(...instances.map(({ value }) => value)));
+      continue;
+    }
     const stackValues = instances.flatMap((entry) => (
       Array.from({ length: entry.stacks }, () => entry.value / entry.stacks)
     )).sort((a, b) => b - a);
-    return stackValues.slice(0, rule.maxStacks);
-  });
+    values.push(...stackValues.slice(0, rule.maxStacks));
+    const requestedStacks = instances.reduce((total, entry) => total + entry.requestedStacks, 0);
+    if (requestedStacks > rule.maxStacks) {
+      const discardedStacks = requestedStacks - rule.maxStacks;
+      const evaluationIds = instances
+        .filter(({ requestedStacks: requested }) => requested > 0)
+        .map(({ evaluationId }) => evaluationId)
+        .sort();
+      warnings.push({
+        code: "stack_cap_exceeded",
+        effectId,
+        evaluationIds,
+        requestedStacks,
+        stackCap: rule.maxStacks,
+        discardedStacks,
+        message: `Requested ${requestedStacks} shared stacks for ${effectId}; cap ${rule.maxStacks} discarded ${discardedStacks} ${discardedStacks === 1 ? "stack" : "stacks"} across ${evaluationIds.length} source ${evaluationIds.length === 1 ? "instance" : "instances"}.`,
+      });
+    }
+  }
+  return { values, warnings };
 }
 
 function signature(targets: string[]): string {
@@ -50,9 +77,10 @@ export function aggregateEffects(entries: EvaluatedEffect[]): {
   const warnings: EvaluationWarning[] = [];
   const groups = [...buckets.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([id, group]) => {
     const first = group[0]!;
-    const values = valuesAfterStacking(group);
-    let total = reduceOperation(first.operation, values);
-    if (first.operation === "override" && new Set(values).size > 1) warnings.push({
+    const stacked = valuesAfterStacking(group);
+    warnings.push(...stacked.warnings);
+    let total = reduceOperation(first.operation, stacked.values);
+    if (first.operation === "override" && new Set(stacked.values).size > 1) warnings.push({
       code: "conflicting_overrides", metric: first.metric,
       message: `Conflicting overrides for ${first.metric} on ${signature(first.targets)}; the highest is selected.`,
     });

@@ -103,13 +103,15 @@ export function evaluateTeam(
       if (scaling.stacks === 0) {
         inactive.push({
           ...excluded(effect, source, context, "no_active_stacks"),
-          value: 0, stacks: 0, targets: target.targets,
+          value: 0, stacks: 0, requestedStacks: scaling.requestedStacks,
+          targets: target.targets,
         });
         continue;
       }
       const entry: EvaluatedEffect = {
         ...baseEntry(effect, source, context),
-        value: scaling.value, stacks: scaling.stacks, targets: target.targets,
+        value: scaling.value, stacks: scaling.stacks,
+        requestedStacks: scaling.requestedStacks, targets: target.targets,
       };
       if (!hasCompatibleConsumer(effect, target.targets, context)) {
         wasted.push({ ...entry, reason: "no_compatible_consumer" });

@@ -103,6 +103,39 @@ describe("evaluateTeam fix round 1", () => {
     ]);
   });
 
+  it("warns once when additive stacks exceed a shared cap across source instances", () => {
+    const bundle = cloneBundle();
+    const effect = bundle.entities.effects.find(({ id }) => id === "effect:stacks")!;
+    effect.stacking = { type: "additive", maxStacks: 3 };
+    const build = { ...goldenTeam, members: goldenTeam.members.slice(0, 2) };
+    const stacks = Object.fromEntries(build.members.map(({ slotId }) => [
+      `${slotId}:${effect.sourceRevisionId}:${effect.id}`, 2,
+    ]));
+
+    const result = evaluateTeam(build, { stacks }, bundle);
+    const warning = result.warnings.filter(({ code, effectId }) => (
+      code === "stack_cap_exceeded" && effectId === effect.id
+    ));
+    expect(result.groups.find(({ metric }) => metric === "speed")?.total).toBe(30);
+    expect(warning).toEqual([expect.objectContaining({
+      code: "stack_cap_exceeded",
+      effectId: effect.id,
+      evaluationIds: [
+        `slot-1:${effect.sourceRevisionId}:${effect.id}`,
+        `slot-2:${effect.sourceRevisionId}:${effect.id}`,
+      ],
+      requestedStacks: 4,
+      stackCap: 3,
+      discardedStacks: 1,
+      message: `Requested 4 shared stacks for ${effect.id}; cap 3 discarded 1 stack across 2 source instances.`,
+    })]);
+
+    const reversed = evaluateTeam({ ...build, members: [...build.members].reverse() }, { stacks }, {
+      ...bundle, entities: { ...bundle.entities, effects: [...bundle.entities.effects].reverse() },
+    });
+    expect(reversed.warnings.filter(({ code }) => code === "stack_cap_exceeded")).toEqual(warning);
+  });
+
   it("groups aggregation by metric, operation, and concrete target signature", () => {
     const bundle = cloneBundle();
     const template = bundle.entities.effects.find(({ id }) => id === "effect:damage")!;

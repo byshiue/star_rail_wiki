@@ -117,3 +117,35 @@ Fix tests cover shuffled historical/current character, light-cone, and relic rev
 - `npm run validate:data && npm run build`: passed; Vite transformed 121 modules.
 
 The task prohibited subagents, so Fix Round 1 used local full-diff review plus the complete project checks.
+
+## Fix Round 2
+
+### Finding and root cause
+
+Additive stack caps were applied twice: scaling capped each source instance and could warn only when that individual instance exceeded the cap, while target-scoped aggregation silently truncated the combined stacks from multiple source instances. Two instances requesting two stacks each against a shared cap of three therefore produced the correct total but no explanation for the discarded stack.
+
+### TDD evidence
+
+Added a regression with two source instances each requesting two stacks against cap three, plus the same evaluation with reversed member and effect input order.
+
+Initial focused command:
+
+```text
+npm test -- src/effects/evaluateTeam.fix.test.ts
+```
+
+Result: exit 1; 1 of 13 tests failed because the shared-cap warning collection was empty even though the aggregate total was truncated to 30.
+
+After implementation, the focused suite passed 13/13 and all evaluator tests passed 23/23.
+
+### Implementation
+
+- Scaling now retains both applied `stacks` and normalized `requestedStacks`; it no longer emits instance-local additive cap warnings.
+- Target-scoped aggregation groups source instances by stable effect ID, applies the shared cap once, and emits exactly one `stack_cap_exceeded` warning per affected effect/target group.
+- The warning includes `effectId`, sorted participating `evaluationIds`, `requestedStacks`, `stackCap`, `discardedStacks`, and a stable explanatory message.
+- Effect groups and participating instances are sorted before warning construction, so reversing source/effect input order yields identical warnings.
+
+### Final verification
+
+- `npm test -- src/effects`: 2 files and 23 tests passed.
+- `npm run check`: passed; typecheck, lint, 24 files/145 tests, repository validation, and production build all succeeded. Vite transformed 121 modules.

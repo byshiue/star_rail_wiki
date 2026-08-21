@@ -70,14 +70,16 @@ export interface EvaluatedEffect {
   stacking: StackingRule;
   value: number;
   stacks: number;
+  requestedStacks: number;
   targets: string[];
   evidence: EffectEvidence;
 }
 
-export interface ExcludedEffect extends Omit<EvaluatedEffect, "value" | "stacks" | "targets"> {
+export interface ExcludedEffect extends Omit<EvaluatedEffect, "value" | "stacks" | "requestedStacks" | "targets"> {
   reason: EvaluationReason | string;
   value?: number;
   stacks?: number;
+  requestedStacks?: number;
   targets?: string[];
 }
 
@@ -86,6 +88,10 @@ export interface EvaluationWarning {
     | "target_mismatch" | "no_compatible_consumer" | "scaling_level_exceeded";
   effectId?: string;
   metric?: EffectMetric;
+  evaluationIds?: string[];
+  requestedStacks?: number;
+  stackCap?: number;
+  discardedStacks?: number;
   message: string;
 }
 
