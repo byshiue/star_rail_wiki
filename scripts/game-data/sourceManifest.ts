@@ -20,7 +20,16 @@ const SourceManifestEntrySchema = z.strictObject({
   gameVersion: z.string().min(1),
   channel: z.enum(["released", "preload"]),
   retrievedAt: z.iso.datetime(),
-  downloadUrlTemplate: z.string().min(1).optional(),
+  downloadUrlTemplate: z.string().min(1)
+    .refine(
+      (template) => template.includes("{revision}"),
+      "download URL template must include the immutable revision placeholder {revision}",
+    )
+    .refine(
+      (template) => !/(?:^|[^A-Za-z0-9])(?:master|latest)(?=$|[^A-Za-z0-9])/i.test(template),
+      "download URL template contains mutable ref master/latest",
+    )
+    .optional(),
   fileChecksums: z.record(
     z.string().min(1),
     z.string().regex(/^sha256:[a-f0-9]{64}$/),
@@ -44,7 +53,7 @@ export async function loadSourceManifest(manifestPath: string): Promise<Approved
   return ApprovedSourceManifestSchema.parse(JSON.parse(await readFile(manifestPath, "utf8")));
 }
 
-export function assertRequiredPaths(manifest: ApprovedSourceManifest): void {
+export function assertAllowlistedPaths(manifest: ApprovedSourceManifest): void {
   const owners = new Map<string, string>();
   for (const source of manifest.sources) {
     for (const sourcePath of Object.keys(source.fileChecksums)) {
@@ -57,7 +66,12 @@ export function assertRequiredPaths(manifest: ApprovedSourceManifest): void {
       owners.set(sourcePath, source.name);
     }
   }
+}
+
+export function assertRequiredPaths(manifest: ApprovedSourceManifest): void {
+  assertAllowlistedPaths(manifest);
+  const suppliedPaths = new Set(manifest.sources.flatMap((source) => Object.keys(source.fileChecksums)));
   for (const sourcePath of requiredPaths) {
-    if (!owners.has(sourcePath)) throw new Error(`required source path is missing: ${sourcePath}`);
+    if (!suppliedPaths.has(sourcePath)) throw new Error(`required source path is missing: ${sourcePath}`);
   }
 }

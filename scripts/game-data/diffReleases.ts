@@ -23,6 +23,7 @@ function flatten(bundle: GameReleaseBundle): Diffable[] {
       ...character.eidolons,
     ]),
     ...bundle.entities.equipment,
+    ...bundle.entities.effects.map((effect) => ({ logicalId: `effect:${effect.id}`, ...effect })),
   ];
 }
 

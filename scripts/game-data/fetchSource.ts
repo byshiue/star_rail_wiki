@@ -2,7 +2,12 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { ApprovedSource, ApprovedSourceManifest } from "./sourceManifest";
+import {
+  ApprovedSourceManifestSchema,
+  assertAllowlistedPaths,
+  type ApprovedSource,
+  type ApprovedSourceManifest,
+} from "./sourceManifest";
 
 export interface FetchedSourceFile {
   path: string;
@@ -29,9 +34,11 @@ export async function fetchSource(
   manifest: ApprovedSourceManifest,
   sourceRoot?: string,
 ): Promise<FetchedSource> {
+  const approvedManifest = ApprovedSourceManifestSchema.parse(manifest);
+  assertAllowlistedPaths(approvedManifest);
   const resolvedRoot = sourceRoot ?? await mkdtemp(path.join(tmpdir(), "star-rail-source-"));
   const files = new Map<string, FetchedSourceFile>();
-  for (const source of manifest.sources) {
+  for (const source of approvedManifest.sources) {
     for (const [sourcePath, expectedChecksum] of Object.entries(source.fileChecksums)) {
       const localPath = path.join(resolvedRoot, sourcePath);
       if (!sourceRoot) {
@@ -53,5 +60,5 @@ export async function fetchSource(
       });
     }
   }
-  return { manifest, files, sourceRoot: resolvedRoot };
+  return { manifest: approvedManifest, files, sourceRoot: resolvedRoot };
 }
