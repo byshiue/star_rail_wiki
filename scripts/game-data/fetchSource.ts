@@ -22,20 +22,27 @@ export interface FetchedSource {
   sourceRoot: string;
 }
 
+const maxPercentDecodePasses = 8;
 const mutableRefs = new Set(["master", "latest"]);
 const refQueryKeys = new Set(["ref", "reference", "branch", "revision", "rev", "version", "commit", "sha"]);
 
+function decodeOnce(value: string, original: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    throw new Error(`source URL contains invalid percent encoding: ${original}`);
+  }
+}
+
 function decodeRepeated(value: string): string {
   let decoded = value;
-  for (let pass = 0; pass < 3; pass += 1) {
-    let next: string;
-    try {
-      next = decodeURIComponent(decoded);
-    } catch {
-      throw new Error(`source URL contains invalid percent encoding: ${value}`);
-    }
+  for (let pass = 0; pass < maxPercentDecodePasses; pass += 1) {
+    const next = decodeOnce(decoded, value);
     if (next === decoded) return decoded;
     decoded = next;
+  }
+  if (decodeOnce(decoded, value) !== decoded) {
+    throw new Error(`source URL contains excessive percent encoding: more than ${maxPercentDecodePasses} passes`);
   }
   return decoded;
 }
