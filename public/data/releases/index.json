@@ -1,0 +1,26 @@
+{
+  "currentReleaseId": "4.3-fixture",
+  "releases": [
+    {
+      "id": "4.3-fixture",
+      "gameVersion": "4.3",
+      "region": "cn",
+      "channel": "released",
+      "importedAt": "2026-08-21T00:00:00.000Z",
+      "reviewedAt": "2026-08-21T01:00:00.000Z",
+      "sources": [
+        {
+          "name": "Synthetic reviewed fixture source",
+          "url": "https://example.invalid/star-rail-synthetic-fixture",
+          "revision": "4f3a91c2d847beef",
+          "fileChecksums": {
+            "fixtures/characters/synthetic-support.json": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88",
+            "fixtures/equipment/synthetic-cone.json": "sha256:46231144f68a6d84e47717f84608e35dfffa89af870e04152832a735f7b1e34d"
+          },
+          "retrievedAt": "2026-08-21T00:00:00.000Z"
+        }
+      ],
+      "previousReleaseId": null
+    }
+  ]
+}

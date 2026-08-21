@@ -1,0 +1,80 @@
+{
+  "characters": [
+    {
+      "logicalId": "character:synthetic-support",
+      "revisionId": "character:synthetic-support@4.3-fixture",
+      "validFromReleaseId": "4.3-fixture",
+      "validToReleaseId": null,
+      "provenance": [{
+        "sourceName": "Synthetic reviewed fixture source",
+        "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+        "sourceRevision": "4f3a91c2d847beef",
+        "sourcePath": "fixtures/characters/synthetic-support.json",
+        "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+      }],
+      "name": "测试辅助",
+      "rarity": 5,
+      "element": "synthetic",
+      "path": "synthetic-support",
+      "description": "仅用于自动化测试的合成角色，不代表任何真实游戏内容。",
+      "reviewStatus": "reviewed",
+      "abilities": [{
+        "logicalId": "ability:synthetic-support-skill",
+        "revisionId": "ability:synthetic-support-skill@4.3-fixture",
+        "validFromReleaseId": "4.3-fixture",
+        "validToReleaseId": null,
+        "provenance": [{
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }],
+        "name": "合成增益技能",
+        "kind": "skill",
+        "originalText": "合成评审夹具：使我方全体造成的伤害提高 10%。",
+        "effectIds": ["effect:synthetic-team-damage@4.3-fixture"],
+        "reviewStatus": "reviewed"
+      }],
+      "traces": [],
+      "eidolons": []
+    }
+  ],
+  "equipment": [{
+    "logicalId": "light-cone:synthetic-cone",
+    "revisionId": "light-cone:synthetic-cone@4.3-fixture",
+    "validFromReleaseId": "4.3-fixture",
+    "validToReleaseId": null,
+    "provenance": [{
+      "sourceName": "Synthetic reviewed fixture source",
+      "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+      "sourceRevision": "4f3a91c2d847beef",
+      "sourcePath": "fixtures/equipment/synthetic-cone.json",
+      "sourceChecksum": "sha256:46231144f68a6d84e47717f84608e35dfffa89af870e04152832a735f7b1e34d"
+    }],
+    "kind": "light-cone",
+    "name": "测试光锥",
+    "rarity": 5,
+    "description": "仅用于自动化测试的合成装备，不代表任何真实游戏内容。",
+    "pathRestriction": "synthetic-support",
+    "superimpositionValues": [0.1, 0.12, 0.14, 0.16, 0.18],
+    "setThresholds": [],
+    "effectIds": [],
+    "reviewStatus": "reviewed"
+  }],
+  "effects": [{
+    "id": "effect:synthetic-team-damage@4.3-fixture",
+    "sourceRevisionId": "ability:synthetic-support-skill@4.3-fixture",
+    "metric": "damage_bonus",
+    "operation": "percent",
+    "value": { "base": 0.1, "scaling": [] },
+    "target": { "type": "team" },
+    "trigger": { "type": "always" },
+    "duration": { "type": "permanent" },
+    "stacking": { "type": "none", "maxStacks": 1 },
+    "conditions": [],
+    "dispellable": null,
+    "reviewStatus": "reviewed",
+    "originalText": "合成评审夹具：使我方全体造成的伤害提高 10%。"
+  }]
+}
