@@ -1,0 +1,17 @@
+.recommendation-page > header { max-width: 56rem; }
+.recommendation-page > header > p:last-child { color: var(--color-text-muted); }
+.recommendation-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); margin-block: var(--space-6); padding: var(--space-4); background: rgb(9 13 24 / 58%); border: 1px solid var(--color-border); border-radius: var(--radius-lg); }
+.recommendation-controls label { display: grid; gap: var(--space-1); color: var(--color-text-muted); }
+.recommendation-controls input, .recommendation-controls textarea, .recommendation-controls select { width: 100%; min-height: 2.75rem; padding: var(--space-2); color: var(--color-text); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+.recommendation-controls textarea { min-height: 5rem; }
+.recommendation-controls .owned-toggle { display: flex; align-items: center; }
+.recommendation-controls .owned-toggle input { width: 1.25rem; min-height: 1.25rem; }
+.wide-control, .recommendation-controls button { grid-column: 1 / -1; }
+.recommendation-results { display: grid; gap: var(--space-5); }
+.recommendation-card { padding: var(--space-5); background: rgb(10 20 36 / 55%); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.recommendation-card h2, .recommendation-card h3 { margin-top: 0; overflow-wrap: anywhere; }
+.recommendation-card section, .recommendation-card details { margin-top: var(--space-4); border-top: 1px solid var(--color-border); padding-top: var(--space-3); }
+.recommendation-heading { display: flex; justify-content: space-between; gap: var(--space-4); }
+.score-components { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+.simulator-link { display: inline-block; margin-top: var(--space-4); padding: var(--space-2) var(--space-3); background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+@media (max-width: 54rem) { .recommendation-controls, .score-components { grid-template-columns: 1fr; } .recommendation-controls > * { grid-column: 1; } .recommendation-heading { flex-direction: column; } }

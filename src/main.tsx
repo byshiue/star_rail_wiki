@@ -6,6 +6,7 @@ import "./styles/app.css";
 import "./styles/wiki.css";
 import "./styles/simulator.css";
 import "./styles/community.css";
+import "./styles/recommendations.css";
 
 const root = document.getElementById("root");
 

@@ -1,4 +1,5 @@
 import type { RouteObject } from "react-router-dom";
+import { RecommendationPage } from "../recommendations/RecommendationPage";
 import { CommunityTeamsPage } from "../community/CommunityTeamsPage";
 import { CharacterBuilderPage } from "../simulator/CharacterBuilderPage";
 import { TeamSimulatorPage } from "../simulator/TeamSimulatorPage";
@@ -40,7 +41,7 @@ export const appRoutes: RouteObject[] = [
   },
   {
     path: "/agent",
-    element: <PlaceholderPage title="Agent 推荐" purpose="这里将基于固定数据版本生成确定、可解释且无需 API 密钥的配队建议。" />,
+    element: <ReleaseProvider><RecommendationPage /></ReleaseProvider>,
   },
   {
     path: "/community",
