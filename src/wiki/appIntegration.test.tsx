@@ -48,7 +48,12 @@ function releasedTestData() {
   };
   entities.equipment.push(relic);
   const releaseId = "4.3-reviewed";
-  for (const revision of [character, ...character.abilities, ...character.traces, ...character.eidolons, ...entities.equipment]) {
+  const revisions = [
+    ...entities.characters,
+    ...entities.characters.flatMap((revision) => [...revision.abilities, ...revision.traces, ...revision.eidolons]),
+    ...entities.equipment,
+  ];
+  for (const revision of revisions) {
     revision.validFromReleaseId = releaseId;
     revision.validToReleaseId = null;
   }

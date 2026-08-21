@@ -3,11 +3,11 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { z } from "zod";
 import { EffectSchema, type Effect } from "../src/domain/effects";
-import { GameReleaseBundleSchema, ReleaseEntitiesSchema, ReleaseIndexSchema } from "../src/domain/releases";
+import { GameReleaseBundleSchema, ReleaseEntitiesSchema, ReleaseIndexSchema, type GameReleaseBundle } from "../src/domain/releases";
 import { EffectOverlayFileSchema, applyEffectOverlays } from "./game-data/applyEffectOverlays";
 import { assertComplete, buildCoverageReport, collectEffectSources, CoverageReportSchema } from "./game-data/checkEffectCoverage";
 import { extractCandidateEffects, type CandidateEffect } from "./game-data/extractEffects";
-import { validateCommunityTeamLibrary } from "./validate-community-teams";
+import { validateCommunityRepository } from "./validate-community-teams";
 
 async function readJson(file: string): Promise<unknown> {
   return JSON.parse(await readFile(file, "utf8"));
@@ -18,7 +18,6 @@ function stable(value: unknown): string {
 }
 
 export async function validateRepository(repositoryRoot = "."): Promise<void> {
-  validateCommunityTeamLibrary(await readJson(path.join(repositoryRoot, "data/community/teams.json")));
   const releaseRoot = path.join(repositoryRoot, "public/data/releases");
   const releaseIndex = ReleaseIndexSchema.parse(await readJson(path.join(releaseRoot, "index.json")));
   if (releaseIndex.currentReleaseId !== null) {
@@ -32,6 +31,7 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
   );
   const allCandidates: CandidateEffect[] = [];
   const allReviewedEffects: Effect[] = [];
+  const bundles = new Map<string, GameReleaseBundle>();
 
   for (const indexedRelease of releaseIndex.releases) {
     const directory = path.join(releaseRoot, indexedRelease.id);
@@ -45,7 +45,8 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
     if (stable(entities.effects) !== stable(effects)) {
       throw new Error(`independent effects payload mismatch for ${indexedRelease.id}`);
     }
-    GameReleaseBundleSchema.parse({ release, entities });
+    const bundle = GameReleaseBundleSchema.parse({ release, entities });
+    bundles.set(bundle.release.id, bundle);
 
     const checkedInCoverage = CoverageReportSchema.parse(
       await readJson(path.join(directory, "coverage.json")),
@@ -65,6 +66,14 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
   if (stable(applied) !== stable(reviewedPayload)) {
     throw new Error("reviewed effect overlay mismatch");
   }
+
+  const communityPath = path.join(repositoryRoot, "data/community/teams.json");
+  const publicCommunityPath = path.join(repositoryRoot, "public/data/community/teams.json");
+  const community = await readJson(communityPath);
+  if (stable(community) !== stable(await readJson(publicCommunityPath))) {
+    throw new Error("public community team payload mismatch");
+  }
+  validateCommunityRepository(community, releaseIndex, bundles);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

@@ -75,6 +75,12 @@ function preset(overrides: Partial<TeamPreset> = {}): TeamPreset {
     gameVersion: "4.3",
     channel: "released",
     slots: ["character:a", "character:b", "character:c", "character:d"],
+    memberAssumptions: [
+      { eidolon: 0, equipment: { status: "none", reason: "来源未指定光锥" } },
+      { eidolon: 0, equipment: { status: "none", reason: "来源未指定光锥" } },
+      { eidolon: 0, equipment: { status: "none", reason: "来源未指定光锥" } },
+      { eidolon: 0, equipment: { status: "none", reason: "来源未指定光锥" } },
+    ],
     substitutions: [{ slot: 1, characterLogicalId: "character:e", note: "缺少乙时可换用戊。" }],
     requirements: ["全员零星魂", "不依赖限定光锥"],
     investment: "low",
@@ -85,7 +91,7 @@ function preset(overrides: Partial<TeamPreset> = {}): TeamPreset {
       title: "4.3 Team Guide",
       author: "Guide Author",
       publisher: "Community Publisher",
-      publishedAt: "2026-08-20T00:00:00.000Z",
+      publication: { status: "published", publishedAt: "2026-08-20T00:00:00.000Z" },
       retrievedAt: "2026-08-21T00:00:00.000Z",
       availability: "available",
     },
@@ -94,6 +100,9 @@ function preset(overrides: Partial<TeamPreset> = {}): TeamPreset {
 }
 
 test("repository filters normalized presets by release and validates IDs before simulation", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({
+    schemaVersion: 1, libraryKind: "mixed", currentReleaseId: "release-4.3", presets: [preset()],
+  }))));
   await expect(loadCommunityTeams("missing-release")).resolves.toEqual([]);
   expect(createTeamBuildFromPreset(preset(), releasedBundle())).toMatchObject({
     releaseId: "release-4.3",
@@ -107,7 +116,7 @@ test("repository filters normalized presets by release and validates IDs before 
   expect(() => createTeamBuildFromPreset(
     preset({ slots: ["character:a", "character:b", "character:c", "character:missing"] }),
     releasedBundle(),
-  )).toThrow(/unknown character/i);
+  )).toThrow(/unknown active character/i);
 });
 
 test("filters presets, preserves stale source attribution, and loads a valid current preset", async () => {
@@ -140,14 +149,13 @@ test("filters presets, preserves stale source attribution, and loads a valid cur
   );
 
   expect(await screen.findByRole("heading", { name: "社区配队" })).toBeVisible();
-  expect(screen.getByRole("link", { name: /Archived Break Guide/ })).toHaveAttribute(
-    "href", "https://example.com/community/archived-guide",
-  );
+  expect(screen.getByText(/Archived Break Guide/)).toBeVisible();
+  expect(screen.queryByRole("link", { name: /Archived Break Guide/ })).not.toBeInTheDocument();
   expect(screen.getByText(/来源当前不可用/)).toBeVisible();
   expect(screen.getByText(/适用于 4.2.*当前资料为 4.3/)).toBeVisible();
 
   await user.selectOptions(screen.getByLabelText("适用版本"), "release-4.2");
-  expect(screen.getByRole("link", { name: /Archived Break Guide/ })).toBeVisible();
+  expect(screen.getByText(/Archived Break Guide/)).toBeVisible();
   expect(screen.queryByRole("heading", { name: "team:reviewed-follow-up" })).not.toBeInTheDocument();
   await user.selectOptions(screen.getByLabelText("适用版本"), "all");
 

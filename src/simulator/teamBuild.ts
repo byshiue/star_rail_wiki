@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CommunityPresetReferenceSchema } from "../domain/community";
 import { EffectMetricSchema } from "../domain/effects";
 import type { GameReleaseBundle } from "../domain/releases";
 import {
@@ -25,6 +26,7 @@ const TeamMemberBuildSchema = z.strictObject({
 const TeamBuildSchema = z.strictObject({
   releaseId: z.string().min(1),
   members: z.array(TeamMemberBuildSchema).max(4),
+  communityPreset: CommunityPresetReferenceSchema.optional(),
 });
 
 export class TeamBuildLinkError extends Error {
@@ -37,6 +39,19 @@ export class TeamBuildLinkError extends Error {
 function normalizedBuild(build: TeamBuild): TeamBuild {
   return {
     releaseId: build.releaseId,
+    communityPreset: build.communityPreset ? {
+      presetId: build.communityPreset.presetId,
+      investment: build.communityPreset.investment,
+      requirements: [...build.communityPreset.requirements],
+      substitutions: [...build.communityPreset.substitutions]
+        .map((substitution) => ({ ...substitution }))
+        .sort((left, right) => left.slot - right.slot
+          || left.characterLogicalId.localeCompare(right.characterLogicalId)),
+      memberAssumptions: build.communityPreset.memberAssumptions.map((assumption) => ({
+        eidolon: assumption.eidolon,
+        equipment: { ...assumption.equipment },
+      })) as typeof build.communityPreset.memberAssumptions,
+    } : undefined,
     members: [...build.members]
       .map((member) => ({
         slotId: member.slotId,

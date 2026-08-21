@@ -108,6 +108,26 @@ function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceP
           {linkError ? <button type="button" onClick={clearSharedBuild}>清除链接并重新构筑</button> : null}
         </div>
       ) : null}
+      {team.build.communityPreset ? (
+        <section className="community-assumptions" role="region" aria-label="社区预设假设">
+          <h2>社区预设假设</h2>
+          <p><strong>预设：</strong>{team.build.communityPreset.presetId}</p>
+          <p><strong>投入：</strong>{team.build.communityPreset.investment}</p>
+          <p><strong>要求：</strong>{team.build.communityPreset.requirements.join("；")}</p>
+          <ul>
+            {team.build.communityPreset.substitutions.map((substitution) => (
+              <li key={`${substitution.slot}:${substitution.characterLogicalId}`}>
+                替代 {substitution.slot + 1} 号位：{substitution.characterLogicalId}（{substitution.note}）
+              </li>
+            ))}
+            {team.build.communityPreset.memberAssumptions.map((assumption, index) => (
+              <li key={`assumption:${index}`}>第 {index + 1} 位：{assumption.eidolon} 魂；{assumption.equipment.status === "specified"
+                ? `${assumption.equipment.logicalId}（叠影 ${assumption.equipment.superimposition}）`
+                : assumption.equipment.reason}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       <div className="simulator-layout">
         <div className="builder-column">
           <TeamSlots bundle={bundle} build={team.build} maxSlots={maxSlots} onChange={team.updateMember} />

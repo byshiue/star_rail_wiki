@@ -1,3 +1,4 @@
+import type { CommunityPresetReference } from "../domain/community";
 import type { Effect, EffectMetric, ReviewStatus, StackingRule } from "../domain/effects";
 import type { CharacterRevision, EntityProvenance, EquipmentRevision, FeatureRevision, RevisionIdentity } from "../domain/entities";
 import type { GameReleaseBundle } from "../domain/releases";
@@ -15,6 +16,7 @@ export interface TeamBuild {
   releaseId: string;
   members: TeamMemberBuild[];
   effectLevels?: Record<string, number>;
+  communityPreset?: CommunityPresetReference;
 }
 
 export interface FiredThisEvaluation {

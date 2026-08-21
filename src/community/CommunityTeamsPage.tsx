@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRelease } from "../app/ReleaseProvider";
 import type { TeamPreset } from "../domain/community";
 import { encodeTeamBuild } from "../simulator/teamBuild";
-import { createTeamBuildFromPreset, loadCommunityTeamLibrary } from "./teamRepository";
+import { createTeamBuildFromPreset, loadCommunityTeamLibrary, validatePresetForBundle } from "./teamRepository";
 
 type CommunityTeamsPageProps = { loadPresets?: () => Promise<TeamPreset[]> };
 
@@ -94,10 +94,14 @@ export function CommunityTeamsPage({ loadPresets = loadCommunityTeamLibrary }: C
       </div>
       {error ? <div role="alert">{error}</div> : null}
       {loading ? <p role="status">正在加载社区配队…</p> : null}
-      {!loading && filtered.length === 0 ? <p role="status">没有符合筛选条件的社区配队。</p> : null}
+      {!loading && !error && filtered.length === 0 ? <p role="status">没有符合筛选条件的社区配队。</p> : null}
       <div className="community-team-grid">
         {filtered.map((preset) => {
-          const stale = preset.releaseId !== bundle.release.id;
+          const loadIssues = validatePresetForBundle(preset, bundle);
+          const stale = loadIssues.length > 0;
+          const publication = preset.source.publication.status === "published"
+            ? preset.source.publication.publishedAt
+            : `未标注（${preset.source.publication.reason}）`;
           return (
             <article className="community-team-card" key={preset.id}>
               <div className="community-team-heading">
@@ -108,11 +112,18 @@ export function CommunityTeamsPage({ loadPresets = loadCommunityTeamLibrary }: C
               <p><strong>角色：</strong>{preset.slots.join(" / ")}</p>
               <ul>{preset.substitutions.map((item) => <li key={`${item.slot}:${item.characterLogicalId}`}>替代 {item.slot + 1} 号位：{item.characterLogicalId}（{item.note}）</li>)}</ul>
               <p><strong>假设：</strong>{preset.requirements.join("；")}</p>
-              {stale ? <p className="version-warning">适用于 {preset.gameVersion}；当前资料为 {bundle.release.gameVersion}，仅保留历史归属，不能直接载入。</p> : null}
+              <ul>{preset.memberAssumptions.map((assumption, index) => (
+                <li key={preset.slots[index]}>第 {index + 1} 位：{assumption.eidolon} 魂；{assumption.equipment.status === "specified"
+                  ? `${assumption.equipment.logicalId}（叠影 ${assumption.equipment.superimposition}）`
+                  : assumption.equipment.reason}</li>
+              ))}</ul>
+              {stale ? <p className="version-warning">版本、渠道、来源或角色引用不适用于当前资料；仅保留历史归属，不能直接载入。{preset.releaseId !== bundle.release.id ? ` 适用于 ${preset.gameVersion}；当前资料为 ${bundle.release.gameVersion}。` : ""}</p> : null}
               {preset.source.availability === "unavailable" ? <p className="source-warning">来源当前不可用；仍保留检索时记录。</p> : null}
               <p className="community-source">
-                来源：<a href={preset.source.url} target="_blank" rel="noreferrer">{preset.source.title} — {preset.source.publisher}</a>
-                <br />作者 {preset.source.author}；发布 {preset.source.publishedAt ?? "未标注"}；检索 {preset.source.retrievedAt}
+                来源：{preset.source.availability === "available"
+                  ? <a href={preset.source.url} target="_blank" rel="noreferrer">{preset.source.title} — {preset.source.publisher}</a>
+                  : <span>{preset.source.title} — {preset.source.publisher}</span>}
+                <br />作者 {preset.source.author}；发布 {publication}；检索 {preset.source.retrievedAt}
               </p>
               <button type="button" disabled={stale} onClick={() => loadPreset(preset)}>载入配队实验室</button>
             </article>
