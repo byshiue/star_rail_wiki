@@ -1,4 +1,7 @@
 import type { RouteObject } from "react-router-dom";
+import { EntityDetailPage } from "../wiki/EntityDetailPage";
+import { WikiPage } from "../wiki/WikiPage";
+import { ReleaseProvider } from "./ReleaseProvider";
 
 type PlaceholderPageProps = {
   title: string;
@@ -18,7 +21,11 @@ function PlaceholderPage({ title, purpose }: PlaceholderPageProps) {
 export const appRoutes: RouteObject[] = [
   {
     path: "/",
-    element: <PlaceholderPage title="资料库" purpose="这里将按已审核的数据版本检索角色、技能、星魂、光锥、遗器与位面饰品的完整说明和来源。" />,
+    element: <ReleaseProvider><WikiPage /></ReleaseProvider>,
+  },
+  {
+    path: "/wiki/:kind/:logicalId",
+    element: <ReleaseProvider><EntityDetailPage /></ReleaseProvider>,
   },
   {
     path: "/builds",
