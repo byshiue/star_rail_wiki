@@ -134,3 +134,44 @@ Result: exit 0.
 - The browser diff is intentionally a stable presentation-only recursive field comparison for adjacent revisions; it excludes identity, validity, and provenance bookkeeping fields. The Task 3 release diff remains the import/build authority.
 - The checked-in 4.3 fixture remains synthetic and `currentReleaseId` remains `null`; the released integration payload exists only inside the test.
 - Subagent review was not run because this task explicitly prohibited subagents. Local staged-diff review and complete verification were used instead.
+
+## Fix Round 2
+
+Status: DONE
+
+Commit: `dab0c8a` (`fix: stabilize wiki history comparisons`).
+
+### Review findings resolved
+
+1. Search aggregation now selects the single active revision (`validToReleaseId === null`) as the canonical visible result, independent of input order. Historical revisions contribute only searchable text and metrics. Missing or ambiguous active revisions are rejected safely instead of silently choosing an arbitrary record.
+2. Revision comparison now recursively compares nested objects and arrays. Arrays with stable identities are aligned by `logicalId` or `id`; other arrays use deterministic index alignment. Identity, validity, provenance, and checksum bookkeeping fields are excluded at every nesting level.
+3. Character abilities, traces, and eidolons are no longer emitted as whole-array JSON cells. Meaningful nested changes render as readable leaf paths such as `abilities[ability:synthetic-support-skill].originalText`.
+4. The comparison table now has a keyboard-focusable, horizontally scrollable region and defensive wrapping for narrow screens.
+
+### TDD evidence
+
+- Search RED: shuffled revisions selected historical display content, and malformed zero-active/two-active histories were accepted. GREEN: the canonical active revision supplies display fields while historical-only text remains searchable; malformed histories throw a clear canonical-revision error.
+- Nested-diff RED: a localized ability text change emitted the complete `abilities` array as JSON. GREEN: it emits one leaf change and leaks no identity, validity, provenance, or checksum bookkeeping fields.
+- Focused verification: `npm test -- src/wiki` passed 9 files and 15 tests; `npm run typecheck` and `npm run lint` passed.
+
+### Final verification
+
+Fresh command after all Fix Round 2 changes:
+
+```text
+npm run check
+```
+
+Result: exit 0.
+
+- TypeScript and ESLint passed.
+- Vitest passed 20 files and 119 tests.
+- Repository data validation passed.
+- Vite production build passed with 121 modules transformed.
+- `git diff --check` and staged `git diff --cached --check` passed.
+
+### Residual notes
+
+- Invalid revision sets with anything other than exactly one active revision are intentionally rejected rather than guessed.
+- Arrays without unique stable identities fall back to index alignment; repository-owned stable IDs remain the preferred comparison contract.
+- Subagent review was not run because this task explicitly prohibited subagents. Local staged-diff review and complete verification were used instead.
