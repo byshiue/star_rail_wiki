@@ -1,5 +1,5 @@
 import type { EffectMetric, ReviewStatus } from "../domain/effects";
-import type { CharacterRevision, EquipmentRevision } from "../domain/entities";
+import type { CharacterRevision, EquipmentRevision, RevisionIdentity } from "../domain/entities";
 import type { GameReleaseBundle } from "../domain/releases";
 
 export type WikiEntityKind = "character" | "light-cone" | "relic-set";
@@ -53,25 +53,40 @@ function equipmentDocument(bundle: GameReleaseBundle, equipment: EquipmentRevisi
   };
 }
 
-function aggregateDocuments(documents: WikiSearchDocument[]): WikiSearchDocument[] {
-  const logicalEntities = new Map<string, WikiSearchDocument>();
-  for (const document of documents) {
-    const key = `${document.kind}:${document.id}`;
-    const previous = logicalEntities.get(key);
-    logicalEntities.set(key, previous ? {
-      ...document,
-      metrics: [...new Set([...previous.metrics, ...document.metrics])],
-      searchableText: `${previous.searchableText}${document.searchableText}`,
-    } : document);
+function canonicalRevision<T extends RevisionIdentity>(revisions: T[]): T {
+  const active = revisions.filter((revision) => revision.validToReleaseId === null);
+  if (active.length !== 1) {
+    throw new Error(`canonical entity ${revisions[0]?.logicalId ?? "unknown"} requires exactly one active revision; got ${active.length}`);
   }
-  return [...logicalEntities.values()];
+  return active[0];
+}
+
+function aggregateRevisions<T extends RevisionIdentity>(
+  revisions: T[],
+  makeDocument: (revision: T) => WikiSearchDocument,
+): WikiSearchDocument[] {
+  const groups = new Map<string, T[]>();
+  for (const revision of revisions) {
+    const group = groups.get(revision.logicalId) ?? [];
+    group.push(revision);
+    groups.set(revision.logicalId, group);
+  }
+  return [...groups.values()].map((group) => {
+    const canonical = makeDocument(canonicalRevision(group));
+    const history = group.map(makeDocument);
+    return {
+      ...canonical,
+      metrics: [...new Set(history.flatMap((document) => document.metrics))],
+      searchableText: history.map((document) => document.searchableText).join(""),
+    };
+  });
 }
 
 export function buildSearchIndex(bundle: GameReleaseBundle): WikiSearchIndex {
-  return { releaseId: bundle.release.id, documents: aggregateDocuments([
-    ...bundle.entities.characters.map((character) => characterDocument(bundle, character)),
-    ...bundle.entities.equipment.map((equipment) => equipmentDocument(bundle, equipment)),
-  ]) };
+  return { releaseId: bundle.release.id, documents: [
+    ...aggregateRevisions(bundle.entities.characters, (character) => characterDocument(bundle, character)),
+    ...aggregateRevisions(bundle.entities.equipment, (equipment) => equipmentDocument(bundle, equipment)),
+  ] };
 }
 
 function intersects<T>(actual: T[], selected: T[] | undefined): boolean {

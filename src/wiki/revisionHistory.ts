@@ -2,7 +2,9 @@ import type { RevisionIdentity } from "../domain/entities";
 import type { DataRelease, ReleaseIndex } from "../domain/releases";
 
 const ignoredDiffFields = new Set([
-  "logicalId", "revisionId", "validFromReleaseId", "validToReleaseId", "provenance",
+  "id", "logicalId", "revisionId", "sourceRevisionId",
+  "validFromReleaseId", "validToReleaseId", "provenance",
+  "sourceChecksum", "checksum", "fileChecksums",
 ]);
 
 export type RevisionChange = { path: string; before: unknown; after: unknown };
@@ -35,12 +37,45 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function stableIdentity(value: unknown): string | null {
+  if (!isRecord(value)) return null;
+  if (typeof value.logicalId === "string") return value.logicalId;
+  if (typeof value.id === "string") return value.id;
+  return null;
+}
+
+function stableArrayMap(values: unknown[]): Map<string, unknown> | null {
+  const entries = values.map((value) => [stableIdentity(value), value] as const);
+  if (entries.some(([identity]) => identity === null)) return null;
+  const identities = entries.map(([identity]) => identity as string);
+  if (new Set(identities).size !== identities.length) return null;
+  return new Map(entries as ReadonlyArray<readonly [string, unknown]>);
+}
+
+function arrayChanges(before: unknown[], after: unknown[], prefix: string): RevisionChange[] {
+  const beforeByIdentity = stableArrayMap(before);
+  const afterByIdentity = stableArrayMap(after);
+  if (beforeByIdentity && afterByIdentity) {
+    return [...new Set([...beforeByIdentity.keys(), ...afterByIdentity.keys()])].sort().flatMap((identity) => (
+      collectChanges(beforeByIdentity.get(identity), afterByIdentity.get(identity), `${prefix}[${identity}]`)
+    ));
+  }
+  return Array.from({ length: Math.max(before.length, after.length) }, (_, index) => index).flatMap((index) => (
+    collectChanges(before[index], after[index], `${prefix}[${index}]`)
+  ));
+}
+
 function collectChanges(before: unknown, after: unknown, prefix = ""): RevisionChange[] {
   if (Object.is(before, after) || JSON.stringify(before) === JSON.stringify(after)) return [];
-  if (isRecord(before) && isRecord(after)) {
-    return [...new Set([...Object.keys(before), ...Object.keys(after)])].sort().flatMap((key) => {
-      if (!prefix && ignoredDiffFields.has(key)) return [];
-      return collectChanges(before[key], after[key], prefix ? `${prefix}.${key}` : key);
+  if (Array.isArray(before) || Array.isArray(after)) {
+    return arrayChanges(Array.isArray(before) ? before : [], Array.isArray(after) ? after : [], prefix);
+  }
+  if (isRecord(before) || isRecord(after)) {
+    const beforeRecord = isRecord(before) ? before : {};
+    const afterRecord = isRecord(after) ? after : {};
+    return [...new Set([...Object.keys(beforeRecord), ...Object.keys(afterRecord)])].sort().flatMap((key) => {
+      if (ignoredDiffFields.has(key)) return [];
+      return collectChanges(beforeRecord[key], afterRecord[key], prefix ? `${prefix}.${key}` : key);
     });
   }
   return [{ path: prefix || "$", before, after }];

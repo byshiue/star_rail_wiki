@@ -1,3 +1,4 @@
+import "../styles/revision-comparison.css";
 import type { RevisionIdentity } from "../domain/entities";
 import type { ReleaseIndex } from "../domain/releases";
 import { diffRevisions, resolveRevisionRelease } from "./revisionHistory";
@@ -14,8 +15,10 @@ export function RevisionComparison({ before, after, index }: { before: RevisionI
   return <section className="revision-comparison" aria-label="版本变化">
     <h2>版本变化</h2>
     <p>{beforeRelease?.gameVersion ?? before.validFromReleaseId} → {afterRelease?.gameVersion ?? after.validFromReleaseId}</p>
-    {changes.length ? <table><thead><tr><th>字段</th><th>变更前</th><th>变更后</th></tr></thead><tbody>
-      {changes.map((change) => <tr key={change.path}><th>{change.path}</th><td>{displayValue(change.before)}</td><td>{displayValue(change.after)}</td></tr>)}
-    </tbody></table> : <p>可展示字段没有变化。</p>}
+    {changes.length ? <div className="comparison-table-scroll" tabIndex={0} role="region" aria-label="版本变化明细"><table>
+      <thead><tr><th>字段</th><th>变更前</th><th>变更后</th></tr></thead><tbody>
+        {changes.map((change) => <tr key={change.path}><th>{change.path}</th><td>{displayValue(change.before)}</td><td>{displayValue(change.after)}</td></tr>)}
+      </tbody>
+    </table></div> : <p>可展示字段没有变化。</p>}
   </section>;
 }

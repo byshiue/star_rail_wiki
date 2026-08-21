@@ -1,0 +1,20 @@
+.comparison-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.revision-comparison table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: collapse;
+}
+
+.revision-comparison th,
+.revision-comparison td {
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
