@@ -217,3 +217,39 @@ Result: exit 0.
 
 - The schema is the authority for repository-loaded bundles; the Wiki alert is a secondary defense for explicit/in-memory injection and future callers that bypass parsing.
 - Subagent review was not run because this task explicitly prohibited subagents. Local diff review and complete verification were used instead.
+
+## Fix Round 4
+
+Status: DONE
+
+Commit: `55aac8b` (`test: cover wiki integrity boundaries`).
+
+### Test coverage added
+
+1. The revision comparison UI test now selects the exact `region` named `版本变化明细`, asserts `tabindex="0"`, and verifies the comparison table is inside that focusable region.
+2. The cross-kind same-logical-ID test now reparses the augmented entities through `GameReleaseBundleSchema` before calling `buildSearchIndex`, proving the schema and search boundaries accept and preserve distinct equipment kinds together.
+3. No production code changed. These assertions cover behavior established in Fix Rounds 2 and 3.
+
+### Verification
+
+Focused command:
+
+```text
+npm test -- src/wiki/revisionCompare.test.tsx src/wiki/searchGrouping.test.ts
+```
+
+Result: exit 0; 2 files and 2 tests passed.
+
+Fresh full command:
+
+```text
+npm run check
+```
+
+Result: exit 0.
+
+- TypeScript and ESLint passed.
+- Vitest passed 22 files and 122 tests.
+- Repository data validation passed.
+- Vite production build passed with 121 modules transformed.
+- `git diff --check` and staged `git diff --cached --check` passed.
