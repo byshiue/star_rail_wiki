@@ -175,3 +175,45 @@ Result: exit 0.
 - Invalid revision sets with anything other than exactly one active revision are intentionally rejected rather than guessed.
 - Arrays without unique stable identities fall back to index alignment; repository-owned stable IDs remain the preferred comparison contract.
 - Subagent review was not run because this task explicitly prohibited subagents. Local staged-diff review and complete verification were used instead.
+
+## Fix Round 3
+
+Status: DONE
+
+Commit: `bb01681` (`fix: enforce wiki canonical integrity`).
+
+### Review finding resolved
+
+1. Equipment search aggregation now groups by `kind + logicalId`, so a light cone and relic set with the same logical ID remain distinct canonical documents.
+2. `GameReleaseBundleSchema` now enforces exactly one active revision for every `kind + logicalId` group across characters, equipment, and nested features. Repository loads therefore reject invalid canonical sets at the data boundary.
+3. The Wiki remains defensive when an invalid in-memory bundle bypasses repository parsing: search-index construction errors are caught and rendered as an accessible `role="alert"` instead of escaping React render.
+4. The existing comparison scroll region already provides `tabIndex={0}`, `role="region"`, and an accessible name. No passing-before-change test was added solely to restate that existing behavior.
+
+### TDD evidence
+
+- Search grouping RED: two active equipment revisions with the same logical ID but different kinds collided and threw a two-active canonical error. GREEN: both documents remain separate with their own kind and name.
+- Repository RED: a fetched bundle containing two active revisions for one light-cone identity resolved successfully. GREEN: schema parsing rejects it with the canonical active-revision invariant.
+- Wiki RED: rendering a real `WikiPage` with an injected invalid bundle threw from `buildSearchIndex`. GREEN: the page renders a named failure section and accessible alert, with no search controls.
+- Initial focused RED: 3 files failed with 3 targeted failures; the other 7 tests passed.
+- Focused GREEN after refactor: `npm test -- src/wiki src/data/releaseRepository.test.ts` passed 12 files and 25 tests; `npm run typecheck` and `npm run lint` passed.
+
+### Final verification
+
+Fresh command after all Fix Round 3 code and test changes:
+
+```text
+npm run check
+```
+
+Result: exit 0.
+
+- TypeScript and ESLint passed.
+- Vitest passed 22 files and 122 tests.
+- Repository data validation passed.
+- Vite production build passed with 121 modules transformed.
+- `git diff --check` and staged `git diff --cached --check` passed.
+
+### Residual notes
+
+- The schema is the authority for repository-loaded bundles; the Wiki alert is a secondary defense for explicit/in-memory injection and future callers that bypass parsing.
+- Subagent review was not run because this task explicitly prohibited subagents. Local diff review and complete verification were used instead.
