@@ -12,13 +12,6 @@ const metricLabels: Record<string, string> = {
   healing: "治疗", shielding: "护盾", skill_points: "战技点", mechanic_counter: "机制计数",
 };
 
-const percentMetrics = new Set([
-  "attack", "hp", "defense", "critical_rate", "critical_damage", "break_effect",
-  "effect_hit_rate", "effect_resistance", "damage_bonus", "vulnerability",
-  "defense_reduction", "defense_ignore", "resistance_reduction", "resistance_penetration",
-  "action_advance", "action_delay", "healing", "shielding",
-]);
-
 const categoryLabels = {
   active: "active · 生效",
   conditional: "conditional · 条件生效",
@@ -67,11 +60,21 @@ function groupTargetLabel(group: AggregationGroup, bundle: GameReleaseBundle): s
   return concrete;
 }
 
+function rounded(value: number): string {
+  return String(Math.round(value * 100) / 100);
+}
+
 function groupValue(group: AggregationGroup, value: number): string {
-  const rendered = percentMetrics.has(group.metric)
-    ? `${Math.round(value * 10000) / 100}%`
-    : String(Math.round(value * 100) / 100);
-  return value >= 0 ? `+${rendered}` : rendered;
+  if (group.operation === "percent") return `${value >= 0 ? "+" : ""}${rounded(value * 100)}%`;
+  if (group.operation === "multiplier") return `×${rounded(1 + value)}`;
+  if (group.operation === "override") return `设为 ${rounded(value)}`;
+  return `${value >= 0 ? "+" : ""}${rounded(value)}`;
+}
+
+function capValue(group: AggregationGroup, value: number): string {
+  if (group.operation === "percent") return `${rounded(value * 100)}%`;
+  if (group.operation === "multiplier") return `×${rounded(1 + value)}`;
+  return rounded(value);
 }
 
 export function EffectSummary({ evaluation, bundle, onEvidence }: EffectSummaryProps) {
@@ -94,7 +97,7 @@ export function EffectSummary({ evaluation, bundle, onEvidence }: EffectSummaryP
                 <li key={group.id}>
                   <strong>{groupTargetLabel(group, bundle)} · {metricLabels[group.metric] ?? group.metric} · {group.operation}</strong>
                   <span>应用值：{group.appliedValues.map((value) => groupValue(group, value)).join("、")} · 合计：{groupValue(group, group.total)}</span>
-                  {group.cap !== null ? <span>上限：{groupValue(group, group.cap).replace(/^\+/, "")}</span> : null}
+                  {group.cap !== null ? <span>上限：{capValue(group, group.cap)}</span> : null}
                   {stackWarnings.map((warning) => (
                     <span key={warning.effectId}>叠层上限：{warning.stackCap}（请求 {warning.requestedStacks}，舍弃 {warning.discardedStacks}）</span>
                   ))}

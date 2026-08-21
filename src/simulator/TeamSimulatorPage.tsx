@@ -32,11 +32,6 @@ function readSharedBuild(
   }
 }
 
-function withoutFreshTrigger(scenario: BattleScenario): BattleScenario {
-  const { firedThisEvaluation: _fired, ...persistent } = scenario;
-  return persistent;
-}
-
 function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const sharedValue = searchParams.get("build");
@@ -46,10 +41,20 @@ function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceP
   );
   const [linkError, setLinkError] = useState<string | null>(shared.error ?? null);
   const [scenario, setScenario] = useState<BattleScenario>({});
-  const [evaluationScenario, setEvaluationScenario] = useState<BattleScenario>({});
   const [evidence, setEvidence] = useState<EffectEvidence | null>(null);
   const applyingLocation = useRef(false);
-  const team = useTeamBuild(bundle, evaluationScenario, shared.build, maxSlots);
+  const team = useTeamBuild(bundle, scenario, shared.build, maxSlots);
+  const encoded = useMemo((): { value: string | null; error: string | null } => {
+    if (!team.build.members.length) return { value: null, error: null };
+    try {
+      return { value: encodeTeamBuild(team.build), error: null };
+    } catch (error) {
+      return {
+        value: null,
+        error: error instanceof Error ? error.message : "构筑输入无法编码。",
+      };
+    }
+  }, [team.build]);
 
   useLayoutEffect(() => {
     applyingLocation.current = true;
@@ -67,11 +72,10 @@ function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceP
       applyingLocation.current = false;
       return;
     }
-    if (linkError) return;
-    const desired = team.build.members.length ? encodeTeamBuild(team.build) : null;
-    if (desired === sharedValue) return;
-    setSearchParams(desired ? { build: desired } : {}, { replace: true });
-  }, [team.build, linkError, setSearchParams, sharedValue]);
+    if (linkError || encoded.error) return;
+    if (encoded.value === sharedValue) return;
+    setSearchParams(encoded.value ? { build: encoded.value } : {}, { replace: true });
+  }, [encoded, linkError, setSearchParams, sharedValue]);
 
   function clearSharedBuild() {
     applyingLocation.current = true;
@@ -81,16 +85,15 @@ function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceP
   }
 
   function updateScenario(next: BattleScenario) {
-    const persistent = withoutFreshTrigger(next);
+    const { firedThisEvaluation: _ignored, ...persistent } = next;
     setScenario(persistent);
-    setEvaluationScenario(persistent);
   }
 
   function fireScenario(firedThisEvaluation: FiredThisEvaluation) {
-    setEvaluationScenario({ ...scenario, firedThisEvaluation });
+    team.evaluateOnce(firedThisEvaluation);
   }
 
-  const error = linkError ?? team.validationError?.message ?? null;
+  const error = linkError ?? team.validationError?.message ?? encoded.error;
   return (
     <section className="simulator-page" aria-labelledby="simulator-title">
       <header className="simulator-hero">
@@ -109,10 +112,10 @@ function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceP
         <div className="builder-column">
           <TeamSlots bundle={bundle} build={team.build} maxSlots={maxSlots} onChange={team.updateMember} />
           <ScenarioControls scenario={scenario} onChange={updateScenario} onFire={fireScenario} />
-          {team.build.members.length ? (
+          {encoded.value ? (
             <label className="share-field">
               <span>分享链接（固定到 {bundle.release.id}）</span>
-              <input readOnly value={`#${maxSlots === 1 ? "/builds" : "/simulator"}?build=${encodeTeamBuild(team.build)}`} onFocus={(event) => event.currentTarget.select()} />
+              <input readOnly value={`#${maxSlots === 1 ? "/builds" : "/simulator"}?build=${encoded.value}`} onFocus={(event) => event.currentTarget.select()} />
             </label>
           ) : null}
         </div>

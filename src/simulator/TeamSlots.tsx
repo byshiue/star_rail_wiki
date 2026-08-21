@@ -25,14 +25,16 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
   }
 
   function updateRelic(slot: number, member: TeamMemberBuild, index: number, logicalId: string) {
-    const relicSets = [...(member.relicSets ?? [])];
-    if (logicalId) relicSets[index] = { logicalId, pieces: 2 };
+    const relicSets = (member.relicSets ?? []).filter((set): set is NonNullable<typeof set> => Boolean(set));
+    if (index > relicSets.length) return;
+    if (logicalId && index === relicSets.length) relicSets.push({ logicalId, pieces: 2 });
+    else if (logicalId) relicSets[index] = { logicalId, pieces: 2 };
     else relicSets.splice(index, 1);
     onChange(slot, { relicSets: relicSets.length ? relicSets : undefined });
   }
 
   function updateRelicPieces(slot: number, member: TeamMemberBuild, index: number, pieces: number) {
-    const relicSets = [...(member.relicSets ?? [])];
+    const relicSets = (member.relicSets ?? []).filter((set): set is NonNullable<typeof set> => Boolean(set));
     const selected = relicSets[index];
     if (!selected) return;
     relicSets[index] = { ...selected, pieces };
@@ -119,6 +121,7 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
                     const selectedSet = member.relicSets?.[relicIndex];
                     const selectedRelic = relics.find(({ logicalId }) => logicalId === selectedSet?.logicalId);
                     const selectedRelicIds = new Set(member.relicSets?.map(({ logicalId }) => logicalId) ?? []);
+                    const disabled = relicIndex > (member.relicSets?.length ?? 0);
                     return (
                       <div className="relic-selection" key={relicIndex}>
                         <label>
@@ -126,6 +129,7 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
                           <select
                             aria-label={`${character.name}遗器套装 ${relicIndex + 1}`}
                             value={selectedSet?.logicalId ?? ""}
+                            disabled={disabled}
                             onChange={(event) => updateRelic(slot, member, relicIndex, event.target.value)}
                           >
                             <option value="">未选择</option>

@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { GameReleaseBundle } from "../domain/releases";
 import {
   evaluateTeam,
-  type BattleScenario, type TeamBuild, type TeamEvaluation, type TeamMemberBuild,
+  type BattleScenario, type FiredThisEvaluation, type TeamBuild, type TeamEvaluation, type TeamMemberBuild,
 } from "../effects/evaluateTeam";
 import { validateTeamBuild } from "./teamBuild";
 
@@ -13,6 +13,7 @@ export type TeamBuildState = {
   updateMember: (slot: number, update: Partial<TeamMemberBuild> | null) => void;
   replaceBuild: (build: TeamBuild) => void;
   clear: () => void;
+  evaluateOnce: (fired: FiredThisEvaluation) => void;
 };
 
 export function useTeamBuild(
@@ -20,6 +21,7 @@ export function useTeamBuild(
 ): TeamBuildState {
   const emptyBuild = useMemo<TeamBuild>(() => ({ releaseId: bundle.release.id, members: [] }), [bundle.release.id]);
   const [build, setBuild] = useState<TeamBuild>(initialBuild ?? emptyBuild);
+  const [oneShotEvaluation, setOneShotEvaluation] = useState<TeamEvaluation | null>(null);
   const result = useMemo(() => {
     if (build.members.length === 0) return { evaluation: null, validationError: null };
     try {
@@ -30,7 +32,12 @@ export function useTeamBuild(
     }
   }, [build, bundle, scenario, maxMembers]);
 
+  useEffect(() => {
+    setOneShotEvaluation(null);
+  }, [scenario]);
+
   function updateMember(slot: number, update: Partial<TeamMemberBuild> | null) {
+    setOneShotEvaluation(null);
     const slotId = `slot-${slot}`;
     setBuild((current) => {
       const existing = current.members.find((member) => member.slotId === slotId);
@@ -47,8 +54,31 @@ export function useTeamBuild(
     });
   }
 
+  function replaceBuild(nextBuild: TeamBuild) {
+    setOneShotEvaluation(null);
+    setBuild(nextBuild);
+  }
+
+  function clear() {
+    setOneShotEvaluation(null);
+    setBuild(emptyBuild);
+  }
+
+  function evaluateOnce(firedThisEvaluation: FiredThisEvaluation) {
+    if (build.members.length === 0) {
+      setOneShotEvaluation(null);
+      return;
+    }
+    try {
+      const validBuild = validateTeamBuild(build, bundle, { maxMembers });
+      setOneShotEvaluation(evaluateTeam(validBuild, { ...scenario, firedThisEvaluation }, bundle));
+    } catch {
+      setOneShotEvaluation(null);
+    }
+  }
+
   return {
-    build, evaluation: result.evaluation, validationError: result.validationError,
-    updateMember, replaceBuild: setBuild, clear: () => setBuild(emptyBuild),
+    build, evaluation: oneShotEvaluation ?? result.evaluation, validationError: result.validationError,
+    updateMember, replaceBuild, clear, evaluateOnce,
   };
 }

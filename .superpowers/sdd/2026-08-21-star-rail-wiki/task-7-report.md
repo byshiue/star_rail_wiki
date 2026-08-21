@@ -96,3 +96,29 @@ GREEN: `npm test -- src/effects src/simulator` passed four files and 35 tests af
 - Vitest passed 26 files and 157 tests.
 - Repository data validation passed.
 - Vite production build passed with 136 modules transformed.
+
+## Fix Round 2
+
+### Review findings addressed
+
+- Relic-set controls now enforce contiguous selection: slots two and three remain disabled until the preceding slot is populated, and update handlers compact and guard arrays before state writes.
+- Build encoding is performed once through the strict schema inside a non-throwing memoized boundary. Invalid UI state suppresses URL/share rendering and becomes an accessible build alert instead of throwing the route.
+- Fresh battle-start, action, and event markers are now call-local inputs to a single evaluator invocation. The resulting evaluation snapshot remains inspectable, while no `firedThisEvaluation` value is persisted. Character, eidolon, equipment, relic, persistent-scenario, and external URL/history changes clear the snapshot.
+- Aggregation values now follow operation semantics: flat values are numeric regardless of metric, percent values use percentages, multipliers render as factors, and overrides render as replacement values.
+
+### TDD evidence
+
+RED: the expanded `simulator.fix.test.tsx` ran 11 regressions; four new tests failed for enabled sparse relic slots, reused one-shot state across build changes, reused one-shot state across URL navigation, and metric-guessed flat formatting.
+
+GREEN:
+
+- `npm test -- src/simulator/simulator.fix.test.tsx`: 11 tests passed.
+- `npm test -- src/simulator src/effects`: four files and 39 tests passed.
+- Cross-unit coverage includes flat attack/HP/defense/healing/shielding, percent speed, multiplicative factors, and override replacement values.
+
+### Final verification
+
+- TypeScript type checking and ESLint passed.
+- `npm run check` was attempted twice. Both runs passed typecheck/lint and 160 of 161 tests, but the unchanged `scripts/game-data/cli-fetch.test.ts` child-process test hit its fixed 5-second timeout under full parallel load.
+- The timed-out CLI test passed alone in 481 ms (two tests passed), confirming parallel resource contention rather than a Task 7 regression.
+- `npm test -- --maxWorkers=2` passed all 26 files and 161 tests; repository data validation and the Vite production build also passed with 136 modules transformed.

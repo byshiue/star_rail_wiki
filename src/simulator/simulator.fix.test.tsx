@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { afterEach, vi } from "vitest";
@@ -92,8 +92,8 @@ test("renders applied aggregation groups with operations, concrete targets, tota
   const groups = screen.getByRole("region", { name: "applied groups · 已应用汇总" });
   expect(within(groups).getByText("全队（slot-1） · 增伤 · percent")).toBeVisible();
   expect(within(groups).getByText("应用值：+20%、+30% · 合计：+50%")).toBeVisible();
-  expect(within(groups).getByText("应用值：+20%、+50% · 合计：+80%")).toBeVisible();
-  expect(within(groups).getByText("应用值：+30%、+40% · 合计：+40%")).toBeVisible();
+  expect(within(groups).getByText("应用值：×1.2、×1.5 · 合计：×1.8")).toBeVisible();
+  expect(within(groups).getByText("应用值：设为 0.3、设为 0.4 · 合计：设为 0.4")).toBeVisible();
   expect(within(groups).getByText("上限：100%")).toBeVisible();
   expect(screen.getByRole("list", { name: "评估警告" })).toHaveTextContent("Conflicting overrides");
   expect(screen.getByRole("list", { name: "评估警告" })).toHaveTextContent("critical_rate exceeds its cap");
@@ -254,4 +254,91 @@ test("release provider exposes loading and load failures accessibly", async () =
   expect(screen.getByRole("status")).toHaveTextContent("正在加载版本资料");
   rejectFetch(new Error("release unavailable"));
   expect(await screen.findByRole("alert")).toHaveTextContent("release unavailable");
+});
+
+test("empty relic slots cannot create sparse build state by activating slot two or three first", async () => {
+  const user = userEvent.setup();
+  const bundle = reviewBundle();
+  window.location.hash = "#/simulator";
+  renderHashPage(bundle);
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
+
+  const second = screen.getByLabelText("测试辅助遗器套装 2");
+  const third = screen.getByLabelText("测试辅助遗器套装 3");
+  expect(second).toBeDisabled();
+  expect(third).toBeDisabled();
+  expect(() => fireEvent.change(third, { target: { value: "relic-set:test-3" } })).not.toThrow();
+  expect(second).toHaveValue("");
+  expect(third).toHaveValue("");
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+
+  await user.selectOptions(screen.getByLabelText("测试辅助遗器套装 1"), "relic-set:test-1");
+  expect(second).toBeEnabled();
+  expect(third).toBeDisabled();
+});
+
+test("a one-shot fired before its source enters the build is consumed and not reused", async () => {
+  const user = userEvent.setup();
+  const bundle = reviewBundle();
+  bundle.entities.effects = [effect(bundle, {
+    id: "effect:late-battle", metric: "attack", trigger: { type: "battle-start" }, duration: { type: "instant" },
+  })];
+  window.location.hash = "#/simulator";
+  renderHashPage(bundle);
+  await user.click(screen.getByText("场景条件"));
+  await user.click(screen.getByRole("button", { name: "触发战斗开始一次" }));
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
+  expect(screen.queryByText("全队攻击力 +10%")).not.toBeInTheDocument();
+  expect(screen.getByText("原因：battle_not_started")).toBeVisible();
+});
+
+test("external URL navigation consumes a one-shot without reusing it in the incoming build", async () => {
+  const user = userEvent.setup();
+  const bundle = reviewBundle();
+  bundle.entities.effects = [effect(bundle, {
+    id: "effect:url-battle", metric: "attack", trigger: { type: "battle-start" }, duration: { type: "instant" },
+  })];
+  const dps = encodeTeamBuild({
+    releaseId: bundle.release.id,
+    members: [{ slotId: "slot-1", characterLogicalId: "character:dps", eidolon: 0 }],
+  });
+  const support = encodeTeamBuild({
+    releaseId: bundle.release.id,
+    members: [{ slotId: "slot-1", characterLogicalId: "character:support", eidolon: 0 }],
+  });
+  window.location.hash = `#/simulator?build=${dps}`;
+  renderHashPage(bundle);
+  await waitFor(() => expect(screen.getByLabelText("1号位角色")).toHaveValue("character:dps"));
+  await user.click(screen.getByText("场景条件"));
+  await user.click(screen.getByRole("button", { name: "触发战斗开始一次" }));
+
+  act(() => { window.location.hash = `#/simulator?build=${support}`; });
+  await waitFor(() => expect(screen.getByLabelText("1号位角色")).toHaveValue("character:support"));
+  expect(screen.queryByText("全队攻击力 +10%")).not.toBeInTheDocument();
+  expect(screen.getByText("原因：battle_not_started")).toBeVisible();
+});
+
+test("aggregation formatting follows operation semantics instead of metric guesses", async () => {
+  const user = userEvent.setup();
+  const bundle = reviewBundle();
+  bundle.entities.effects = [
+    effect(bundle, { id: "effect:attack-flat", metric: "attack", operation: "flat", value: { base: 100, scaling: [] } }),
+    effect(bundle, { id: "effect:hp-flat", metric: "hp", operation: "flat", value: { base: 500, scaling: [] } }),
+    effect(bundle, { id: "effect:defense-flat", metric: "defense", operation: "flat", value: { base: 80, scaling: [] } }),
+    effect(bundle, { id: "effect:healing-flat", metric: "healing", operation: "flat", value: { base: 0.25, scaling: [] } }),
+    effect(bundle, { id: "effect:shield-flat", metric: "shielding", operation: "flat", value: { base: 200, scaling: [] } }),
+    effect(bundle, { id: "effect:speed-percent", metric: "speed", operation: "percent", value: { base: 0.1, scaling: [] } }),
+  ];
+  window.location.hash = "#/simulator";
+  renderHashPage(bundle);
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
+
+  const groups = screen.getByRole("region", { name: "applied groups · 已应用汇总" });
+  for (const [label, rendered] of [
+    ["攻击力", "+100"], ["生命值", "+500"], ["防御力", "+80"],
+    ["治疗", "+0.25"], ["护盾", "+200"], ["速度", "+10%"],
+  ]) {
+    const item = within(groups).getByText(new RegExp(`· ${label} ·`)).closest("li");
+    expect(item).toHaveTextContent(`应用值：${rendered} · 合计：${rendered}`);
+  }
 });
