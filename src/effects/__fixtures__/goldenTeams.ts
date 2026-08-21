@@ -43,15 +43,16 @@ export const fixtureBundle: GameReleaseBundle = {
 export const goldenTeam: TeamBuild = {
   releaseId: "4.3-fixture",
   members: [
-    { characterLogicalId: "character:synthetic-support", eidolon: 0 },
-    { characterLogicalId: "character:ally-2", eidolon: 0 },
-    { characterLogicalId: "character:ally-3", eidolon: 0 },
-    { characterLogicalId: "character:ally-4", eidolon: 0 },
+    { slotId: "slot-1", characterLogicalId: "character:synthetic-support", eidolon: 0 },
+    { slotId: "slot-2", characterLogicalId: "character:synthetic-support", eidolon: 0 },
+    { slotId: "slot-3", characterLogicalId: "character:synthetic-support", eidolon: 0 },
+    { slotId: "slot-4", characterLogicalId: "character:synthetic-support", eidolon: 0 },
   ],
 };
 
 export const allConditionsActive: BattleScenario = {
   enemyBroken: true,
-  triggeredEvents: ["skill-active"],
+  activeEvents: ["skill-active"],
+  firedThisEvaluation: { events: ["skill-active"] },
   stacks: { "effect:stacks": 5 },
 };

@@ -2,11 +2,20 @@ import { describe, expect, it } from "vitest";
 import { evaluateTeam } from "./evaluateTeam";
 import { allConditionsActive, fixtureBundle, goldenTeam } from "./__fixtures__/goldenTeams";
 
+function groupTotal(
+  result: ReturnType<typeof evaluateTeam>, metric: string,
+  operation: "flat" | "percent" | "multiplier" | "override" = "percent",
+  targets = "slot-1|slot-2|slot-3|slot-4",
+) {
+  return result.groups.find((group) => group.metric === metric
+    && group.operation === operation && group.targetSignature === targets)?.total;
+}
+
 describe("evaluateTeam", () => {
   it("does not naively add damage bonus and vulnerability", () => {
     const result = evaluateTeam(goldenTeam, allConditionsActive, fixtureBundle);
-    expect(result.groups.damage_bonus?.total).toBe(0.5);
-    expect(result.groups.vulnerability?.total).toBe(0.2);
+    expect(groupTotal(result, "damage_bonus")).toBe(0.5);
+    expect(groupTotal(result, "vulnerability", "percent", "enemy")).toBe(0.2);
   });
 
   it("keeps inactive conditional effects and their evidence", () => {
@@ -22,7 +31,7 @@ describe("evaluateTeam", () => {
     expect(result.inactive).toEqual(expect.arrayContaining([
       expect.objectContaining({ effectId: "effect:event", reason: "event_not_triggered" }),
     ]));
-    expect(result.unsupported.map(({ effectId }) => effectId)).toEqual([
+    expect([...new Set(result.unsupported.map(({ effectId }) => effectId))]).toEqual([
       "effect:generated", "effect:unsupported",
     ]);
     expect(result.active.some(({ effectId }) => effectId === "effect:event")).toBe(false);
@@ -32,7 +41,7 @@ describe("evaluateTeam", () => {
     const result = evaluateTeam(goldenTeam, allConditionsActive, fixtureBundle);
     const stacked = result.active.find(({ effectId }) => effectId === "effect:stacks");
     expect(stacked).toMatchObject({ value: 20, stacks: 2 });
-    expect(result.groups.speed?.total).toBe(20);
+    expect(groupTotal(result, "speed", "flat")).toBe(20);
     expect(result.warnings).toContainEqual(expect.objectContaining({
       effectId: "effect:stacks", code: "stack_cap_exceeded",
     }));
@@ -69,14 +78,15 @@ describe("evaluateTeam", () => {
     const negative = evaluateTeam(
       { ...goldenTeam, effectLevels: { "effect:damage": 2 } }, allConditionsActive, bundle,
     );
-    expect(zero.groups.damage_bonus?.total).toBe(0);
-    expect(negative.groups.damage_bonus?.total).toBe(-0.25);
-    expect(Number.isFinite(negative.groups.damage_bonus?.total)).toBe(true);
+    expect(groupTotal(zero, "damage_bonus")).toBe(0);
+    expect(groupTotal(negative, "damage_bonus")).toBe(-0.25);
+    expect(Number.isFinite(groupTotal(negative, "damage_bonus"))).toBe(true);
   });
 
-  it("treats a matching trigger as a fresh activation even when the old duration expired", () => {
+  it("treats an explicit fresh trigger as a new activation when the old duration expired", () => {
     const result = evaluateTeam(goldenTeam, {
-      triggeredEvents: ["skill-active"], remainingTurns: { "effect:event": 0 },
+      activeEvents: ["skill-active"], remainingTurns: { "effect:event": 0 },
+      firedThisEvaluation: { events: ["skill-active"] },
     }, fixtureBundle);
     expect(result.conditional).toContainEqual(expect.objectContaining({ effectId: "effect:event" }));
     expect(result.inactive).not.toContainEqual(expect.objectContaining({ effectId: "effect:event" }));
@@ -92,10 +102,9 @@ describe("evaluateTeam", () => {
       { ...template, id: "effect:override-b", operation: "override", value: { base: 0.8, scaling: [] } },
     );
     const result = evaluateTeam(goldenTeam, allConditionsActive, bundle);
-    expect(result.groups.damage_bonus?.total).toBeNull();
-    expect(result.groups.damage_bonus?.operations.percent).toBe(0.5);
-    expect(result.groups.damage_bonus?.operations.multiplier).toBeCloseTo(0.8);
-    expect(result.groups.damage_bonus?.operations.override).toBe(0.8);
+    expect(groupTotal(result, "damage_bonus", "percent")).toBe(0.5);
+    expect(groupTotal(result, "damage_bonus", "multiplier")).toBeCloseTo(0.8);
+    expect(groupTotal(result, "damage_bonus", "override")).toBe(0.8);
     expect(result.warnings).toContainEqual(expect.objectContaining({
       code: "conflicting_overrides", metric: "damage_bonus",
     }));
@@ -108,14 +117,14 @@ describe("evaluateTeam", () => {
       ...template, id: "effect:critical-cap", conditions: [], value: { base: 0.95, scaling: [] },
     });
     const result = evaluateTeam(goldenTeam, allConditionsActive, bundle);
-    expect(result.groups.critical_damage?.total).toBe(1.05);
+    expect(groupTotal(result, "critical_damage")).toBe(1.05);
 
     bundle.entities.effects.at(-1)!.metric = "critical_rate";
     bundle.entities.effects.push({
       ...bundle.entities.effects.at(-1)!, id: "effect:critical-rate-2", value: { base: 0.2, scaling: [] },
     });
     const capped = evaluateTeam(goldenTeam, allConditionsActive, bundle);
-    expect(capped.groups.critical_rate?.total).toBe(1);
+    expect(groupTotal(capped, "critical_rate")).toBe(1);
     expect(capped.warnings).toContainEqual(expect.objectContaining({
       code: "metric_cap_exceeded", metric: "critical_rate",
     }));
@@ -136,6 +145,6 @@ describe("evaluateTeam", () => {
     expect(result.wasted).toContainEqual(expect.objectContaining({
       effectId: "effect:damage", reason: "no_compatible_consumer",
     }));
-    expect(result.groups.damage_bonus).toBeUndefined();
+    expect(result.groups.some(({ metric }) => metric === "damage_bonus")).toBe(false);
   });
 });

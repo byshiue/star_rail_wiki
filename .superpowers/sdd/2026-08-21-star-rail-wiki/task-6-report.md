@@ -67,3 +67,53 @@ Golden and invariant tests cover distinct damage bonus/vulnerability metrics, in
 - Effects whose source or normalized effect is not `reviewed` never enter aggregation.
 - Unselected characters' sources are outside the relevant evaluation set; selected but locked/illegal sources remain explainable inactive entries.
 - The task explicitly prohibited subagents, so the code-review skill's reviewer dispatch was not performed. A local complete-diff self-review and the full project verification were used instead.
+
+## Fix Round 1
+
+### Findings and root causes
+
+The review identified six related authority-boundary defects:
+
+1. Logical-ID `.find()` selected whichever character, light-cone, or relic revision appeared first instead of the unique active revision in the pinned bundle.
+2. `Map<sourceRevisionId, source>` collapsed identical equipment selected in multiple member slots into one owner.
+3. Metric-only aggregation exposed operation totals across incompatible concrete targets.
+4. Trigger state and a trigger fired during the current evaluation were conflated, allowing expired effects to reactivate ambiguously.
+5. Evidence omitted effect review status and review exclusions did not distinguish effect/source generated/unsupported states.
+6. Unknown build references and invalid eidolon/rank values were silently skipped or accepted.
+
+### TDD evidence
+
+The initial Fix Round 1 command was:
+
+```text
+npm test -- src/effects/evaluateTeam.fix.test.ts
+```
+
+Result: exit 1; all 11 tests failed. The failures reproduced revision-order dependence, old equipment revisions winning, source-owner overwrite, the old metric-record aggregation API, missing explicit fresh trigger support, generic review reasons, and all five malformed-build cases being silently accepted.
+
+After the primary implementation, 10/11 tests passed. The remaining failure was a deliberately exact IEEE-754 expectation for a multiplier value; it was corrected to a tolerance assertion without evaluator-side rounding.
+
+A follow-up RED proved that a finite-duration effect with only historical `activeEvents` was still active without a fresh trigger or positive remaining duration. The condition pipeline was tightened and the complete evaluator suite returned to green.
+
+### Implementation
+
+- Character, light-cone, and relic selection now groups by kind/logical ID and requires exactly one `validToReleaseId === null` revision for the pinned bundle, independent of array order.
+- Sources are instantiated as deterministic `slotId:sourceRevisionId` records. Evaluation IDs, evidence IDs, self targets, target assignments, remaining duration, and stacks can all distinguish member-slot instances.
+- `TeamEvaluation.groups` is now a deterministic `AggregationGroup[]`. Every group represents exactly one metric, operation, and sorted concrete target signature; no cross-target or cross-operation pseudo-total is exposed.
+- Explicit stacking rules are applied after target grouping. Non-additive duplicate team effects contribute once, while additive instances respect the shared stack cap; self effects remain separate per target.
+- `BattleScenario.firedThisEvaluation` records battle-start, action, and event triggers fired in the current snapshot. A fresh trigger may start/refresh an expired effect; historical state alone cannot activate finite or instant effects.
+- Evidence now includes `effectReviewStatus` and `sourceReviewStatus`. Exclusions distinguish `effect_not_reviewed`, `source_not_reviewed`, `unsupported_effect`, and `unsupported_source`.
+- `TeamBuildValidationError` provides deterministically ordered structured issues. Evaluation fails before computing targets for unknown/ambiguous revisions, invalid member counts/slots, eidolons, superimposition ranks, relic references/piece counts, and effect levels.
+
+### Regression coverage
+
+Fix tests cover shuffled historical/current character, light-cone, and relic revisions; two member slots sharing one light cone; instance-specific stacks and self ownership; target-scoped aggregation API; expired event and battle-start effects; explicit fresh triggers; all four effect/source review-state reasons; unknown character/equipment; invalid eidolon/rank; and structured issue ordering.
+
+### Final verification
+
+- `npm test -- src/effects`: 2 files and 22 tests passed.
+- `npm run typecheck` and `npm run lint`: passed.
+- Full Vitest run: 24 files and 144 tests passed.
+- `npm run validate:data && npm run build`: passed; Vite transformed 121 modules.
+
+The task prohibited subagents, so Fix Round 1 used local full-diff review plus the complete project checks.
