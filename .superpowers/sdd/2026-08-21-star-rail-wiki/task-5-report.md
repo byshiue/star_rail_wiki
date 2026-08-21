@@ -89,3 +89,48 @@ Result: exit 0.
 - Search filters support kind, element, path, rarity, effect metric, and review status at the pure API boundary; the current UI exposes the type selector while full text covers the other indexed dimensions. Additional visible facets can be added when real released data provides meaningful option sets.
 - The comparison query identifies the peer revision and both revisions are rendered together; a field-level visual diff is not recomputed in the browser because Task 5 consumes repository/domain data and does not duplicate the Task 3 diff algorithm.
 - The task prohibited subagents, so the normally requested delegated code review was replaced by a full local diff audit and fresh complete verification.
+
+## Fix Round 1
+
+Status: DONE
+
+Commit: `3a04d85` (`fix: complete wiki revision disclosure`).
+
+### Review findings resolved
+
+1. Structured effect disclosure now renders trigger, duration, stacking, conditions, and dispellable state. `unsupported` effects are excluded from “可用效果” and shown in a separate “不支持解析，仅展示原文” section.
+2. Compare links now encode both the selected revision and its immediate predecessor from the release chain. The route parses those parameters, rejects non-adjacent pairs, and renders a stable before/after field table. A three-revision test proves 4.3 compares to 4.2, not 4.1.
+3. Every top-level and nested revision badge resolves its own `validFromReleaseId` through `ReleaseProvider.index.releases`. Missing metadata is disclosed instead of borrowing the bundle release. A 4.1→4.2→4.3 fixture-chain test covers cross-version labels.
+4. Direct detail routes now consume provider loading and error states, rendering a status while loading and an alert on failure.
+5. Search documents are aggregated by entity kind plus logical ID. All historical revision text and metrics remain searchable while the UI receives one result and one key per logical entity.
+6. A real `App`/`HashRouter` integration test exercises the production repository boundary through `loadReleaseIndex()` and `loadRelease()`. Its in-memory non-fixture released payload covers complete skill/trace/eidolon content, complex and unsupported effects, relic thresholds, released labeling, detail navigation, and load failure. No checked-in fixture was promoted or relabeled.
+
+### TDD evidence
+
+- Effect RED: the focused test showed complex event/turn/additive/condition/dispellable fields were absent and unsupported text appeared in “可用效果”. GREEN: `src/wiki/effectDisclosure.test.tsx` passed.
+- Search RED: two revisions of one light cone produced two documents. GREEN: `src/wiki/searchHistory.test.ts` passed with one result that remained searchable by historical-only text.
+- Revision/compare RED: all three historical revisions displayed the bundle’s 4.3 badge and the old link produced no comparison content. GREEN: `src/wiki/revisionCompare.test.tsx` passed with distinct 4.1/4.2/4.3 badges and an adjacent 4.2→4.3 before/after table.
+- Integration coverage: `src/wiki/appIntegration.test.tsx` passed both the deferred released-load success flow and direct-route network failure flow.
+- Focused combined verification: `npm test -- src/wiki` passed 7 files and 11 tests; `npm run typecheck` passed.
+
+### Final verification
+
+Fresh command after all Fix Round 1 changes:
+
+```text
+npm run check
+```
+
+Result: exit 0.
+
+- TypeScript and ESLint passed.
+- Vitest passed 18 files and 115 tests.
+- Repository data validation passed.
+- Vite production build passed with 120 modules transformed.
+- `git diff --check` and staged `git diff --cached --check` passed.
+
+### Residual notes
+
+- The browser diff is intentionally a stable presentation-only recursive field comparison for adjacent revisions; it excludes identity, validity, and provenance bookkeeping fields. The Task 3 release diff remains the import/build authority.
+- The checked-in 4.3 fixture remains synthetic and `currentReleaseId` remains `null`; the released integration payload exists only inside the test.
+- Subagent review was not run because this task explicitly prohibited subagents. Local staged-diff review and complete verification were used instead.
