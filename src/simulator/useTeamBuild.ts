@@ -16,19 +16,19 @@ export type TeamBuildState = {
 };
 
 export function useTeamBuild(
-  bundle: GameReleaseBundle, scenario: BattleScenario, initialBuild?: TeamBuild,
+  bundle: GameReleaseBundle, scenario: BattleScenario, initialBuild?: TeamBuild, maxMembers = 4,
 ): TeamBuildState {
   const emptyBuild = useMemo<TeamBuild>(() => ({ releaseId: bundle.release.id, members: [] }), [bundle.release.id]);
   const [build, setBuild] = useState<TeamBuild>(initialBuild ?? emptyBuild);
   const result = useMemo(() => {
     if (build.members.length === 0) return { evaluation: null, validationError: null };
     try {
-      const validBuild = validateTeamBuild(build, bundle);
+      const validBuild = validateTeamBuild(build, bundle, { maxMembers });
       return { evaluation: evaluateTeam(validBuild, scenario, bundle), validationError: null };
     } catch (error) {
       return { evaluation: null, validationError: error instanceof Error ? error : new Error("构筑验证失败") };
     }
-  }, [build, bundle, scenario]);
+  }, [build, bundle, scenario, maxMembers]);
 
   function updateMember(slot: number, update: Partial<TeamMemberBuild> | null) {
     const slotId = `slot-${slot}`;

@@ -24,6 +24,21 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
     onChange(slot, characterLogicalId ? { characterLogicalId, eidolon: 0, lightCone: undefined, relicSets: undefined } : null);
   }
 
+  function updateRelic(slot: number, member: TeamMemberBuild, index: number, logicalId: string) {
+    const relicSets = [...(member.relicSets ?? [])];
+    if (logicalId) relicSets[index] = { logicalId, pieces: 2 };
+    else relicSets.splice(index, 1);
+    onChange(slot, { relicSets: relicSets.length ? relicSets : undefined });
+  }
+
+  function updateRelicPieces(slot: number, member: TeamMemberBuild, index: number, pieces: number) {
+    const relicSets = [...(member.relicSets ?? [])];
+    const selected = relicSets[index];
+    if (!selected) return;
+    relicSets[index] = { ...selected, pieces };
+    onChange(slot, { relicSets });
+  }
+
   return (
     <section className="team-panel" aria-labelledby="team-slots-title">
       <div className="section-heading">
@@ -36,7 +51,6 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
           const member = memberAt(slot);
           const character = characters.find(({ logicalId }) => logicalId === member?.characterLogicalId);
           const selectedCone = cones.find(({ logicalId }) => logicalId === member?.lightCone?.logicalId);
-          const selectedRelic = relics.find(({ logicalId }) => logicalId === member?.relicSets?.[0]?.logicalId);
           return (
             <fieldset className="team-slot" key={slot}>
               <legend>{slot}号位</legend>
@@ -54,12 +68,12 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
                   ))}
                 </select>
               </label>
-              {character ? (
+              {character && member ? (
                 <>
                   <label>
                     <span>{character.name}星魂</span>
                     <select
-                      aria-label={`${character.name}星魂`} value={member?.eidolon ?? 0}
+                      aria-label={`${character.name}星魂`} value={member.eidolon}
                       onChange={(event) => onChange(slot, { eidolon: Number(event.target.value) })}
                     >
                       {Array.from({ length: character.eidolons.length + 1 }, (_, eidolon) => (
@@ -70,7 +84,7 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
                   <label>
                     <span>光锥</span>
                     <select
-                      aria-label={`${character.name}光锥`} value={member?.lightCone?.logicalId ?? ""}
+                      aria-label={`${character.name}光锥`} value={member.lightCone?.logicalId ?? ""}
                       onChange={(event) => onChange(slot, {
                         lightCone: event.target.value ? { logicalId: event.target.value, superimposition: 1 } : undefined,
                       })}
@@ -90,7 +104,7 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
                     <label>
                       <span>叠影</span>
                       <select
-                        aria-label={`${selectedCone.name}叠影`} value={member?.lightCone?.superimposition ?? 1}
+                        aria-label={`${selectedCone.name}叠影`} value={member.lightCone?.superimposition ?? 1}
                         onChange={(event) => onChange(slot, {
                           lightCone: { logicalId: selectedCone.logicalId, superimposition: Number(event.target.value) },
                         })}
@@ -101,33 +115,46 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
                       </select>
                     </label>
                   ) : null}
-                  <label>
-                    <span>遗器套装</span>
-                    <select
-                      aria-label={`${character.name}遗器套装`} value={selectedRelic?.logicalId ?? ""}
-                      onChange={(event) => onChange(slot, {
-                        relicSets: event.target.value ? [{ logicalId: event.target.value, pieces: 2 }] : undefined,
-                      })}
-                    >
-                      <option value="">未选择</option>
-                      {relics.map((relic) => <option key={relic.logicalId} value={relic.logicalId}>{relic.name}</option>)}
-                    </select>
-                  </label>
-                  {selectedRelic ? (
-                    <label>
-                      <span>套装件数</span>
-                      <select
-                        aria-label={`${selectedRelic.name}件数`} value={member?.relicSets?.[0]?.pieces ?? 2}
-                        onChange={(event) => onChange(slot, {
-                          relicSets: [{ logicalId: selectedRelic.logicalId, pieces: Number(event.target.value) }],
-                        })}
-                      >
-                        {Array.from(new Set(selectedRelic.setThresholds)).map((pieces) => (
-                          <option key={pieces} value={pieces}>{pieces}件</option>
-                        ))}
-                      </select>
-                    </label>
-                  ) : null}
+                  {Array.from({ length: 3 }, (_, relicIndex) => {
+                    const selectedSet = member.relicSets?.[relicIndex];
+                    const selectedRelic = relics.find(({ logicalId }) => logicalId === selectedSet?.logicalId);
+                    const selectedRelicIds = new Set(member.relicSets?.map(({ logicalId }) => logicalId) ?? []);
+                    return (
+                      <div className="relic-selection" key={relicIndex}>
+                        <label>
+                          <span>遗器套装 {relicIndex + 1}</span>
+                          <select
+                            aria-label={`${character.name}遗器套装 ${relicIndex + 1}`}
+                            value={selectedSet?.logicalId ?? ""}
+                            onChange={(event) => updateRelic(slot, member, relicIndex, event.target.value)}
+                          >
+                            <option value="">未选择</option>
+                            {relics.map((relic) => (
+                              <option
+                                key={relic.logicalId} value={relic.logicalId}
+                                disabled={relic.logicalId !== selectedSet?.logicalId && selectedRelicIds.has(relic.logicalId)}
+                              >
+                                {relic.name}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        {selectedRelic ? (
+                          <label>
+                            <span>套装件数</span>
+                            <select
+                              aria-label={`${selectedRelic.name}件数`} value={selectedSet?.pieces ?? 2}
+                              onChange={(event) => updateRelicPieces(slot, member, relicIndex, Number(event.target.value))}
+                            >
+                              {Array.from(new Set(selectedRelic.setThresholds)).map((pieces) => (
+                                <option key={pieces} value={pieces}>{pieces}件</option>
+                              ))}
+                            </select>
+                          </label>
+                        ) : null}
+                      </div>
+                    );
+                  })}
                 </>
               ) : <p className="slot-hint">选择角色后配置星魂与装备。</p>}
             </fieldset>

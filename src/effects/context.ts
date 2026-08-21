@@ -101,6 +101,8 @@ export interface AggregationGroup {
   operation: Effect["operation"];
   targetSignature: string;
   targets: string[];
+  appliedValues: number[];
+  cap: number | null;
   total: number;
   effectIds: string[];
   evaluationIds: string[];

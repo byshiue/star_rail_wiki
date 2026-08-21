@@ -79,15 +79,16 @@ export function aggregateEffects(entries: EvaluatedEffect[]): {
     const first = group[0]!;
     const stacked = valuesAfterStacking(group);
     warnings.push(...stacked.warnings);
+    const appliedValues = [...stacked.values];
     let total = reduceOperation(first.operation, stacked.values);
     if (first.operation === "override" && new Set(stacked.values).size > 1) warnings.push({
       code: "conflicting_overrides", metric: first.metric,
       message: `Conflicting overrides for ${first.metric} on ${signature(first.targets)}; the highest is selected.`,
     });
-    const cap = cappedMetrics[first.metric];
-    if (cap !== undefined && total > cap) {
-      warnings.push({ code: "metric_cap_exceeded", metric: first.metric, message: `${first.metric} exceeds its cap of ${cap}.` });
-      total = cap;
+    const configuredCap = cappedMetrics[first.metric];
+    if (configuredCap !== undefined && total > configuredCap) {
+      warnings.push({ code: "metric_cap_exceeded", metric: first.metric, message: `${first.metric} exceeds its cap of ${configuredCap}.` });
+      total = configuredCap;
     }
     return {
       id,
@@ -95,6 +96,8 @@ export function aggregateEffects(entries: EvaluatedEffect[]): {
       operation: first.operation,
       targetSignature: signature(first.targets),
       targets: [...first.targets].sort(),
+      appliedValues,
+      cap: configuredCap ?? null,
       total,
       effectIds: [...new Set(group.map(({ effectId }) => effectId))].sort(),
       evaluationIds: group.map(({ evaluationId }) => evaluationId).sort(),

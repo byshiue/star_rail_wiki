@@ -69,3 +69,30 @@ Tests cover stable logical-ID round trips, rejection of revision fields, duplica
 - Share links intentionally encode build investments, not mutable display labels, revision IDs, or scenario snapshots.
 - The checked-in repository still has `currentReleaseId: null`; real released data remains Task 12's audited responsibility.
 - The task prohibited subagents, so validation used a local complete-diff self-review and the full repository gate.
+
+## Fix Round 1
+
+### Review findings addressed
+
+- Rendered evaluator-owned aggregation groups by concrete target, metric, and operation, including post-stacking applied values, final capped totals, configured caps, and warnings.
+- Made the build query parameter bidirectionally synchronized with UI state across valid, malformed, stale, back/forward, recovery, and last-member-clear transitions without update loops.
+- Enforced the single-member `/builds` contract at validation/evaluation boundaries; multi-member shares now show a recoverable error and never evaluate hidden members.
+- Split persistent scenario conditions from one-shot battle-start, action, and event triggers, with explicit replay controls.
+- Exposed all three supported relic-set selections and their piece counts, preserving shared-build values and preventing duplicate hidden selections.
+- Added complete Tab/Shift+Tab containment to the evidence dialog while preserving Escape close and opener focus restoration.
+- Added accessible loading/error coverage; the existing suite continues to cover the empty-release state.
+
+### TDD evidence
+
+RED: `npm test -- src/simulator/simulator.fix.test.tsx` initially ran seven regressions; six failed against the pre-fix UI and the existing loading/error behavior passed.
+
+GREEN: `npm test -- src/effects src/simulator` passed four files and 35 tests after implementation. The focused simulator suite passed two files and 12 tests, including normal last-member URL removal.
+
+### Final verification
+
+`npm run check`: exit 0.
+
+- TypeScript type checking and ESLint passed.
+- Vitest passed 26 files and 157 tests.
+- Repository data validation passed.
+- Vite production build passed with 136 modules transformed.

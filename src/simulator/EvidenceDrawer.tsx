@@ -8,6 +8,8 @@ type EvidenceDrawerProps = {
   onClose: () => void;
 };
 
+const focusableSelector = "button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])";
+
 export function EvidenceDrawer({ evidence, bundle, onClose }: EvidenceDrawerProps) {
   const dialogRef = useRef<HTMLElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
@@ -19,11 +21,33 @@ export function EvidenceDrawer({ evidence, bundle, onClose }: EvidenceDrawerProp
   }, [evidence]);
   useEffect(() => {
     if (!evidence) return;
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+    function handleDialogKeys(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = [...dialogRef.current.querySelectorAll<HTMLElement>(focusableSelector)];
+      if (!focusable.length) {
+        event.preventDefault();
+        dialogRef.current.focus();
+        return;
+      }
+      const first = focusable[0]!;
+      const last = focusable[focusable.length - 1]!;
+      const active = document.activeElement;
+      const activeIndex = focusable.indexOf(active as HTMLElement);
+      if (event.shiftKey && (activeIndex <= 0)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (activeIndex === -1 || active === last)) {
+        event.preventDefault();
+        first.focus();
+      }
     }
-    document.addEventListener("keydown", closeOnEscape);
-    return () => document.removeEventListener("keydown", closeOnEscape);
+    document.addEventListener("keydown", handleDialogKeys);
+    return () => document.removeEventListener("keydown", handleDialogKeys);
   }, [evidence, onClose]);
 
   if (!evidence) return null;

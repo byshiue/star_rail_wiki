@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useRelease } from "../app/ReleaseProvider";
 import type { GameReleaseBundle } from "../domain/releases";
-import type { BattleScenario, EffectEvidence, TeamBuild } from "../effects/evaluateTeam";
+import type { BattleScenario, EffectEvidence, FiredThisEvaluation, TeamBuild } from "../effects/evaluateTeam";
 import { EffectSummary } from "./EffectSummary";
 import { EvidenceDrawer } from "./EvidenceDrawer";
 import { ScenarioControls } from "./ScenarioControls";
@@ -17,37 +17,77 @@ type WorkspaceProps = {
   maxSlots: number;
 };
 
-function readSharedBuild(value: string | null, bundle: GameReleaseBundle): { build?: TeamBuild; error?: string } {
+function readSharedBuild(
+  value: string | null, bundle: GameReleaseBundle, maxMembers: number, label: string,
+): { build?: TeamBuild; error?: string } {
   if (!value) return {};
   try {
     const build = decodeTeamBuild(value);
     if (build.releaseId !== bundle.release.id) return {
       error: `构筑链接固定到版本 ${build.releaseId}，当前仅载入 ${bundle.release.id}。请清除链接后重新构筑。`,
     };
-    return { build: validateTeamBuild(build, bundle) };
+    return { build: validateTeamBuild(build, bundle, { maxMembers, label }) };
   } catch (error) {
     return { error: error instanceof Error ? error.message : "构筑链接无法读取。" };
   }
 }
 
+function withoutFreshTrigger(scenario: BattleScenario): BattleScenario {
+  const { firedThisEvaluation: _fired, ...persistent } = scenario;
+  return persistent;
+}
+
 function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const sharedValue = searchParams.get("build");
-  const shared = useMemo(() => readSharedBuild(sharedValue, bundle), [sharedValue, bundle]);
+  const shared = useMemo(
+    () => readSharedBuild(sharedValue, bundle, maxSlots, maxSlots === 1 ? "角色构筑" : "队伍"),
+    [sharedValue, bundle, maxSlots],
+  );
   const [linkError, setLinkError] = useState<string | null>(shared.error ?? null);
   const [scenario, setScenario] = useState<BattleScenario>({});
+  const [evaluationScenario, setEvaluationScenario] = useState<BattleScenario>({});
   const [evidence, setEvidence] = useState<EffectEvidence | null>(null);
-  const team = useTeamBuild(bundle, scenario, shared.build);
+  const applyingLocation = useRef(false);
+  const team = useTeamBuild(bundle, evaluationScenario, shared.build, maxSlots);
+
+  useLayoutEffect(() => {
+    applyingLocation.current = true;
+    if (shared.error) {
+      team.clear();
+      setLinkError(shared.error);
+      return;
+    }
+    setLinkError(null);
+    team.replaceBuild(shared.build ?? { releaseId: bundle.release.id, members: [] });
+  }, [shared, bundle.release.id]);
 
   useEffect(() => {
-    if (team.build.members.length === 0 || linkError) return;
-    setSearchParams({ build: encodeTeamBuild(team.build) }, { replace: true });
-  }, [team.build, linkError, setSearchParams]);
+    if (applyingLocation.current) {
+      applyingLocation.current = false;
+      return;
+    }
+    if (linkError) return;
+    const desired = team.build.members.length ? encodeTeamBuild(team.build) : null;
+    if (desired === sharedValue) return;
+    setSearchParams(desired ? { build: desired } : {}, { replace: true });
+  }, [team.build, linkError, setSearchParams, sharedValue]);
 
   function clearSharedBuild() {
+    applyingLocation.current = true;
     team.clear();
     setLinkError(null);
     setSearchParams({}, { replace: true });
+  }
+
+  function updateScenario(next: BattleScenario) {
+    const persistent = withoutFreshTrigger(next);
+    setScenario(persistent);
+    setEvaluationScenario(persistent);
+  }
+
+  function fireScenario(firedThisEvaluation: FiredThisEvaluation) {
+    setEvaluationScenario({ ...scenario, firedThisEvaluation });
   }
 
   const error = linkError ?? team.validationError?.message ?? null;
@@ -68,7 +108,7 @@ function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceP
       <div className="simulator-layout">
         <div className="builder-column">
           <TeamSlots bundle={bundle} build={team.build} maxSlots={maxSlots} onChange={team.updateMember} />
-          <ScenarioControls scenario={scenario} onChange={setScenario} />
+          <ScenarioControls scenario={scenario} onChange={updateScenario} onFire={fireScenario} />
           {team.build.members.length ? (
             <label className="share-field">
               <span>分享链接（固定到 {bundle.release.id}）</span>

@@ -81,11 +81,18 @@ function activeEquipment(logicalId: string, bundle: GameReleaseBundle) {
   ));
 }
 
-export function validateTeamBuild(build: TeamBuild, bundle: GameReleaseBundle): TeamBuild {
+export function validateTeamBuild(
+  build: TeamBuild, bundle: GameReleaseBundle, options: { maxMembers?: number; label?: string } = {},
+): TeamBuild {
   const parsed = TeamBuildSchema.safeParse(build);
   if (!parsed.success) throw new TeamBuildLinkError("构筑输入不符合当前数据结构。");
   const normalized = normalizedBuild(parsed.data as TeamBuild);
   const issues: TeamBuildIssue[] = [];
+  const maxMembers = options.maxMembers ?? 4;
+  if (normalized.members.length > maxMembers) issues.push({
+    code: "invalid_member_count", path: "members",
+    message: `${options.label ?? "队伍"}最多允许 ${maxMembers} 名角色`,
+  });
   const selectedCharacters = new Set<string>();
   for (const [index, member] of normalized.members.entries()) {
     const characterPath = `members[${index}].characterLogicalId`;
