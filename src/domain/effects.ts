@@ -18,27 +18,37 @@ export const ScalingValueSchema = z.strictObject({
 });
 export type ScalingValue = z.infer<typeof ScalingValueSchema>;
 
-export const TargetSelectorSchema = z.strictObject({
-  type: z.enum(["self", "single-ally", "team", "single-enemy", "all-enemies"]),
-});
+export const TargetSelectorSchema = z.discriminatedUnion("type", [
+  z.strictObject({ type: z.literal("self") }),
+  z.strictObject({ type: z.literal("single-ally") }),
+  z.strictObject({ type: z.literal("team") }),
+  z.strictObject({ type: z.literal("single-enemy") }),
+  z.strictObject({ type: z.literal("all-enemies") }),
+]);
 export type TargetSelector = z.infer<typeof TargetSelectorSchema>;
 
-export const TriggerExpressionSchema = z.strictObject({
-  type: z.enum(["always", "battle-start", "action", "event"]),
-  event: z.string().min(1).optional(),
-});
+export const TriggerExpressionSchema = z.discriminatedUnion("type", [
+  z.strictObject({ type: z.literal("always") }),
+  z.strictObject({ type: z.literal("battle-start") }),
+  z.strictObject({ type: z.literal("action") }),
+  z.strictObject({ type: z.literal("event"), event: z.string().min(1) }),
+]);
 export type TriggerExpression = z.infer<typeof TriggerExpressionSchema>;
 
-export const DurationExpressionSchema = z.strictObject({
-  type: z.enum(["permanent", "instant", "turns", "actions"]),
-  value: z.number().int().positive().optional(),
-});
+export const DurationExpressionSchema = z.discriminatedUnion("type", [
+  z.strictObject({ type: z.literal("permanent") }),
+  z.strictObject({ type: z.literal("instant") }),
+  z.strictObject({ type: z.literal("turns"), value: z.number().int().positive() }),
+  z.strictObject({ type: z.literal("actions"), value: z.number().int().positive() }),
+]);
 export type DurationExpression = z.infer<typeof DurationExpressionSchema>;
 
-export const StackingRuleSchema = z.strictObject({
-  type: z.enum(["none", "additive", "refresh", "replace"]),
-  maxStacks: z.number().int().positive(),
-});
+export const StackingRuleSchema = z.discriminatedUnion("type", [
+  z.strictObject({ type: z.literal("none"), maxStacks: z.literal(1) }),
+  z.strictObject({ type: z.literal("additive"), maxStacks: z.number().int().positive() }),
+  z.strictObject({ type: z.literal("refresh"), maxStacks: z.literal(1) }),
+  z.strictObject({ type: z.literal("replace"), maxStacks: z.literal(1) }),
+]);
 export type StackingRule = z.infer<typeof StackingRuleSchema>;
 
 export const ConditionExpressionSchema = z.strictObject({
