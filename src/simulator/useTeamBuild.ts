@@ -42,7 +42,7 @@ export function useTeamBuild(
     setBuild((current) => {
       const existing = current.members.find((member) => member.slotId === slotId);
       const others = current.members.filter((member) => member.slotId !== slotId);
-      if (update === null) return { ...current, members: others };
+      if (update === null) return { ...current, communityPreset: undefined, members: others };
       const member: TeamMemberBuild = {
         slotId,
         characterLogicalId: update.characterLogicalId ?? existing?.characterLogicalId ?? "",
@@ -50,7 +50,10 @@ export function useTeamBuild(
         lightCone: Object.prototype.hasOwnProperty.call(update, "lightCone") ? update.lightCone : existing?.lightCone,
         relicSets: Object.prototype.hasOwnProperty.call(update, "relicSets") ? update.relicSets : existing?.relicSets,
       };
-      return { ...current, members: [...others, member].sort((a, b) => (a.slotId ?? "").localeCompare(b.slotId ?? "")) };
+      return {
+        ...current, communityPreset: undefined,
+        members: [...others, member].sort((a, b) => (a.slotId ?? "").localeCompare(b.slotId ?? "")),
+      };
     });
   }
 

@@ -25,13 +25,13 @@
       "tags": ["追击", "低配", "合成夹具"],
       "summary": "项目自写的合成配队摘要，仅用于验证来源、筛选与模拟器载入流程，不代表正式版本推荐。",
       "source": {
-        "url": "https://example.com/star-rail-synthetic-community-fixture",
+        "url": "https://example.invalid/star-rail-synthetic-community-fixture",
         "title": "Synthetic Follow-up Team Fixture",
         "author": "Star Rail Wiki Test Maintainers",
         "publisher": "Star Rail Wiki Synthetic Fixtures",
-        "publication": { "status": "published", "publishedAt": "2026-08-20T00:00:00.000Z" },
+        "publication": { "status": "unknown", "reason": "合成夹具没有独立公开发布日期。" },
         "retrievedAt": "2026-08-21T00:00:00.000Z",
-        "availability": "available"
+        "availability": "unavailable"
       }
     }
   ]

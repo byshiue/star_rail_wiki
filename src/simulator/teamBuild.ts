@@ -41,6 +41,7 @@ function normalizedBuild(build: TeamBuild): TeamBuild {
     releaseId: build.releaseId,
     communityPreset: build.communityPreset ? {
       presetId: build.communityPreset.presetId,
+      slots: [...build.communityPreset.slots] as typeof build.communityPreset.slots,
       investment: build.communityPreset.investment,
       requirements: [...build.communityPreset.requirements],
       substitutions: [...build.communityPreset.substitutions]
@@ -67,17 +68,39 @@ function normalizedBuild(build: TeamBuild): TeamBuild {
   };
 }
 
+function assertCommunityPresetConsistency(build: TeamBuild): void {
+  const preset = build.communityPreset;
+  if (!preset) return;
+  const consistent = build.members.length === preset.slots.length && build.members.every((member, index) => {
+    const assumption = preset.memberAssumptions[index];
+    if (member.slotId !== `slot-${index + 1}` || member.characterLogicalId !== preset.slots[index]
+      || member.eidolon !== assumption.eidolon || member.relicSets?.length
+      || member.consumableMetrics?.length) return false;
+    if (assumption.equipment.status === "none") return member.lightCone === undefined;
+    return member.lightCone?.logicalId === assumption.equipment.logicalId
+      && member.lightCone.superimposition === assumption.equipment.superimposition;
+  });
+  if (!consistent) throw new TeamBuildLinkError("构筑链接中的社区预设元数据与成员不一致。");
+}
+
+function parsedNormalizedBuild(value: unknown, message: string): TeamBuild {
+  const parsed = TeamBuildSchema.safeParse(value);
+  if (!parsed.success) throw new TeamBuildLinkError(message);
+  const normalized = normalizedBuild(parsed.data as TeamBuild);
+  assertCommunityPresetConsistency(normalized);
+  return normalized;
+}
+
 export function encodeTeamBuild(build: TeamBuild): string {
-  const result = TeamBuildSchema.safeParse(normalizedBuild(build));
-  if (!result.success) throw new TeamBuildLinkError("构筑链接包含无法编码的数据。");
-  return encodeURIComponent(JSON.stringify(result.data));
+  const normalized = parsedNormalizedBuild(build, "构筑链接包含无法编码的数据。");
+  return encodeURIComponent(JSON.stringify(normalized));
 }
 
 export function decodeTeamBuild(value: string): TeamBuild {
   try {
-    const result = TeamBuildSchema.safeParse(JSON.parse(decodeURIComponent(value)));
-    if (!result.success) throw new TeamBuildLinkError("构筑链接格式无效或包含旧版字段。");
-    return normalizedBuild(result.data as TeamBuild);
+    return parsedNormalizedBuild(
+      JSON.parse(decodeURIComponent(value)), "构筑链接格式无效、包含旧版字段或元数据不一致。",
+    );
   } catch (error) {
     if (error instanceof TeamBuildLinkError) throw error;
     throw new TeamBuildLinkError("构筑链接无法读取，请清除链接后重新构筑。");
@@ -99,9 +122,7 @@ function activeEquipment(logicalId: string, bundle: GameReleaseBundle) {
 export function validateTeamBuild(
   build: TeamBuild, bundle: GameReleaseBundle, options: { maxMembers?: number; label?: string } = {},
 ): TeamBuild {
-  const parsed = TeamBuildSchema.safeParse(build);
-  if (!parsed.success) throw new TeamBuildLinkError("构筑输入不符合当前数据结构。");
-  const normalized = normalizedBuild(parsed.data as TeamBuild);
+  const normalized = parsedNormalizedBuild(build, "构筑输入不符合当前数据结构。");
   const issues: TeamBuildIssue[] = [];
   const maxMembers = options.maxMembers ?? 4;
   if (normalized.members.length > maxMembers) issues.push({

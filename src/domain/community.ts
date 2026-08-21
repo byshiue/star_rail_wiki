@@ -4,7 +4,14 @@ const boundedText = (max: number) => z.string().trim().min(1).max(max);
 const LogicalIdSchema = boundedText(120);
 const CharacterLogicalIdSchema = LogicalIdSchema.regex(/^character:/, "expected character logical ID");
 const LightConeLogicalIdSchema = LogicalIdSchema.regex(/^light-cone:/, "expected light-cone logical ID");
-const HttpsUrlSchema = z.url().refine((value) => new URL(value).protocol === "https:", "source URL must use HTTPS");
+const HttpsUrlSchema = z.string().trim().min(1).max(2048).superRefine((value, context) => {
+  try {
+    if (new URL(value).protocol === "https:") return;
+  } catch {
+    // Report malformed and unsafe URLs through Zod instead of escaping safeParse.
+  }
+  context.addIssue({ code: "custom", message: "source URL must be a valid HTTPS URL" });
+});
 
 export const CommunityPublicationSchema = z.discriminatedUnion("status", [
   z.strictObject({ status: z.literal("published"), publishedAt: z.iso.datetime() }),
@@ -43,10 +50,15 @@ const MemberAssumptionsSchema = z.tuple([
   CommunityMemberAssumptionSchema, CommunityMemberAssumptionSchema,
   CommunityMemberAssumptionSchema, CommunityMemberAssumptionSchema,
 ]);
+const CommunitySlotsSchema = z.tuple([
+  CharacterLogicalIdSchema, CharacterLogicalIdSchema, CharacterLogicalIdSchema, CharacterLogicalIdSchema,
+]);
+
 
 export const CommunityPresetReferenceSchema = z.strictObject({
   presetId: boundedText(120), investment: z.enum(["low", "moderate", "high"]),
   requirements: RequirementsSchema, substitutions: SubstitutionsSchema,
+  slots: CommunitySlotsSchema,
   memberAssumptions: MemberAssumptionsSchema,
 });
 export type CommunityPresetReference = z.infer<typeof CommunityPresetReferenceSchema>;
@@ -54,9 +66,7 @@ export type CommunityPresetReference = z.infer<typeof CommunityPresetReferenceSc
 export const TeamPresetSchema = z.strictObject({
   id: boundedText(120), releaseId: boundedText(120), gameVersion: boundedText(40),
   channel: z.enum(["released", "fixture"]),
-  slots: z.tuple([
-    CharacterLogicalIdSchema, CharacterLogicalIdSchema, CharacterLogicalIdSchema, CharacterLogicalIdSchema,
-  ]),
+  slots: CommunitySlotsSchema,
   memberAssumptions: MemberAssumptionsSchema,
   substitutions: SubstitutionsSchema, requirements: RequirementsSchema,
   investment: z.enum(["low", "moderate", "high"]), tags: TagsSchema,

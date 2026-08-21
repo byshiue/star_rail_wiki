@@ -20,6 +20,7 @@ describe("community repository composition", () => {
 
     expect(library.libraryKind).toBe("fixture-only");
     expect(library.currentReleaseId).toBeNull();
+    expect(library.presets[0]?.source.availability).toBe("unavailable");
     expect(library.presets[0]?.slots).toEqual([
       "character:synthetic-dps",
       "character:synthetic-support",
@@ -76,17 +77,38 @@ describe("community repository composition", () => {
 
     expect(() => validateCommunityRepository(input, index, bundles)).toThrow(expected);
   });
+
+  it.each([
+    ["an incompatible light cone", (preset: Record<string, unknown>) => {
+      const assumptions = preset.memberAssumptions as Array<Record<string, unknown>>;
+      assumptions[0]!.equipment = {
+        status: "specified", logicalId: "light-cone:synthetic-cone", superimposition: 1,
+      };
+    }, /incompatible/i],
+    ["an eidolon above the character revision limit", (preset: Record<string, unknown>) => {
+      const assumptions = preset.memberAssumptions as Array<Record<string, unknown>>;
+      assumptions[0]!.eidolon = 1;
+    }, /eidolon/i],
+  ])("rejects %s through the authoritative handoff legality check", (_label, mutate, expected) => {
+    const { index, bundles } = repositoryInputs();
+    const input = structuredClone(teamsJson) as unknown as { presets: Array<Record<string, unknown>> };
+    mutate(input.presets[0]!);
+
+    expect(() => validateCommunityRepository(input, index, bundles)).toThrow(expected);
+  });
 });
 
 describe("bounded preset schema", () => {
   const validPreset = () => structuredClone(teamsJson.presets[0]);
 
-  it.each(["javascript:alert(1)", "ftp://example.com/team", "http://example.com/team"])(
+  it.each(["not a url", "javascript:alert(1)", "ftp://example.com/team", "http://example.com/team"])(
     "rejects non-HTTPS source URL %s",
     (url) => {
       const preset = validPreset();
       preset.source.url = url;
-      expect(() => TeamPresetSchema.parse(preset)).toThrow(/HTTPS/i);
+      const parse = () => TeamPresetSchema.safeParse(preset);
+      expect(parse).not.toThrow();
+      expect(parse().success).toBe(false);
     },
   );
 
@@ -102,7 +124,7 @@ describe("bounded preset schema", () => {
       status: "unknown", reason: "原页面未标注发布日期",
     });
 
-    const invalid = validPreset();
+    const invalid = validPreset() as unknown as { source: Record<string, unknown> };
     invalid.source.publication = { status: "published", publishedAt: "not-a-date" };
     expect(() => TeamPresetSchema.parse(invalid)).toThrow();
   });

@@ -116,7 +116,7 @@ test("repository filters normalized presets by release and validates IDs before 
   expect(() => createTeamBuildFromPreset(
     preset({ slots: ["character:a", "character:b", "character:c", "character:missing"] }),
     releasedBundle(),
-  )).toThrow(/unknown active character/i);
+  )).toThrow(/unknown character/i);
 });
 
 test("filters presets, preserves stale source attribution, and loads a valid current preset", async () => {

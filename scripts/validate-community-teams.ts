@@ -1,10 +1,11 @@
 import type { ZodIssue } from "zod";
 import { CommunityTeamLibrarySchema, TeamPresetSchema, type CommunityTeamLibrary } from "../src/domain/community";
 import type { GameReleaseBundle, ReleaseIndex } from "../src/domain/releases";
+import { validatePresetBuildForBundle } from "../src/community/teamRepository";
 
 export type ValidationIssue = {
   code: "missing_provenance" | "invalid_preset" | "unknown_release" | "release_mismatch"
-    | "unknown_character" | "unknown_equipment";
+    | "unknown_character" | "unknown_equipment" | "invalid_build";
   path: string;
   message: string;
 };
@@ -76,6 +77,9 @@ export function validateCommunityReferences(
     if (release.channel !== preset.channel || bundle.release.channel !== preset.channel) issues.push({
       code: "release_mismatch", path: `${prefix}.channel`,
       message: `channel ${preset.channel} does not match release ${release.channel}`,
+    });
+    for (const message of validatePresetBuildForBundle(preset, bundle)) issues.push({
+      code: "invalid_build", path: prefix, message,
     });
     const activeCharacters = new Set(bundle.entities.characters
       .filter((character) => character.validToReleaseId === null).map((character) => character.logicalId));

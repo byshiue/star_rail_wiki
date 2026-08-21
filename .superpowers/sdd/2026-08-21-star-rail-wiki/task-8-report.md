@@ -97,3 +97,19 @@ All seven review findings were addressed:
 - Initial focused RED: 25 tests, 24 failed and 1 passed.
 - Focused GREEN before final verification: 4 files, 31 tests passed.
 - Direct checked-fixture handoff assertion: 19 tests passed in the composition suite.
+
+## Fix Round 2
+
+All four follow-up findings were addressed:
+
+1. Repository composition, UI loadability, and handoff now share the authoritative `validateTeamBuild()` legality path. Exact-bundle validation rejects path-incompatible light cones, actual character eidolon limits, superimposition limits, unknown/ambiguous revisions, and every other handoff failure before navigation.
+2. The synthetic fixture no longer claims a reachable public source: its HTTPS `.invalid` URL is explicitly `unavailable`, the UI renders no anchor, and source availability is kept separate from internal fixture build legality so exact-bundle handoff remains testable.
+3. HTTPS validation guards URL construction, so `safeParse()` returns a normal Zod failure for malformed, JavaScript, FTP, and HTTP inputs without throwing.
+4. Community share metadata now includes primary slots and is checked against all members, eidolons, equipment, slot IDs, and unmodeled relic/consumable edits. Any simulator member/eidolon/equipment/relic edit clears `communityPreset`, and the regenerated share URL no longer claims the original assumptions.
+
+### Fix Round 2 TDD and verification evidence
+
+- Initial focused RED: 2 files, 31 tests; 9 failed and 22 passed.
+- Focused GREEN: 2 files, 31 tests passed.
+- TypeScript typecheck, ESLint, repository data validation, and Vite production build passed.
+- Full low-concurrency Vitest run: 30 files, 198 tests passed with `--maxWorkers=2`.

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, renderHook, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useRoutes } from "react-router-dom";
 import { afterEach, expect, test, vi } from "vitest";
@@ -6,10 +6,14 @@ import { appRoutes } from "../app/routes";
 import { ReleaseProvider } from "../app/ReleaseProvider";
 import type { TeamPreset } from "../domain/community";
 import type { CharacterRevision } from "../domain/entities";
+import type { TeamMemberBuild } from "../effects/evaluateTeam";
 import type { GameReleaseBundle } from "../domain/releases";
 import { decodeTeamBuild, encodeTeamBuild } from "../simulator/teamBuild";
+import { useTeamBuild } from "../simulator/useTeamBuild";
 import { CommunityTeamsPage } from "./CommunityTeamsPage";
-import { createTeamBuildFromPreset, loadCommunityTeamLibrary, loadCommunityTeams } from "./teamRepository";
+import {
+  createTeamBuildFromPreset, loadCommunityTeamLibrary, loadCommunityTeams, validatePresetForBundle,
+} from "./teamRepository";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -114,9 +118,38 @@ test("share round-trip preserves every structured preset assumption", () => {
 
   expect(decoded.communityPreset).toEqual({
     presetId: teamPreset.id, investment: "low", requirements: teamPreset.requirements,
+    slots: teamPreset.slots,
     substitutions: teamPreset.substitutions, memberAssumptions: teamPreset.memberAssumptions,
   });
   expect(decoded.members.map((member) => member.eidolon)).toEqual([0, 0, 0, 0]);
+});
+
+test("crafted community metadata must agree with shared members", () => {
+  const build = createTeamBuildFromPreset(preset(), releasedBundle());
+  const tampered = structuredClone(build);
+  tampered.members[0]!.eidolon = 1;
+  const crafted = encodeURIComponent(JSON.stringify(tampered));
+
+  expect(() => decodeTeamBuild(crafted)).toThrow(/构筑链接/);
+  expect(() => encodeTeamBuild(tampered)).toThrow(/构筑链接/);
+});
+
+test("every member, eidolon, equipment, or relic edit clears community provenance", () => {
+  const bundle = releasedBundle();
+  const build = createTeamBuildFromPreset(preset(), bundle);
+  const { result } = renderHook(() => useTeamBuild(bundle, {}, build));
+  const edits: Array<Partial<TeamMemberBuild>> = [
+    { characterLogicalId: "character:a" },
+    { eidolon: 0 },
+    { lightCone: undefined },
+    { relicSets: [] },
+  ];
+
+  for (const edit of edits) {
+    act(() => result.current.replaceBuild(build));
+    act(() => result.current.updateMember(1, edit));
+    expect(result.current.build.communityPreset).toBeUndefined();
+  }
 });
 
 test("app route reloads the release provider, decodes handoff, and shows preset assumptions", async () => {
@@ -135,6 +168,18 @@ test("app route reloads the release provider, decodes handoff, and shows preset 
   expect(screen.getByRole("region", { name: "社区预设假设" })).toHaveTextContent("全员零星魂");
   expect(screen.getByRole("region", { name: "社区预设假设" })).toHaveTextContent("缺少乙时可换用戊");
   expect(fetchStub.mock.calls.filter(([url]) => String(url).endsWith("data/releases/index.json")).length).toBeGreaterThanOrEqual(2);
+
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:e");
+  expect(screen.queryByRole("region", { name: "社区预设假设" })).not.toBeInTheDocument();
+  await waitFor(() => {
+    const value = (screen.getByLabelText(/分享链接/) as HTMLInputElement).value;
+    const payload = new URLSearchParams(value.split("?")[1]).get("build");
+    expect(decodeTeamBuild(payload!).communityPreset).toBeUndefined();
+  });
+  const shareUrl = (screen.getByLabelText(/分享链接/) as HTMLInputElement).value;
+  const encodedBuild = new URLSearchParams(shareUrl.split("?")[1]).get("build");
+  expect(encodedBuild).not.toBeNull();
+  expect(decodeTeamBuild(encodedBuild!).communityPreset).toBeUndefined();
 });
 
 test("unavailable presets keep provenance text but expose no active source or handoff", async () => {
@@ -171,4 +216,28 @@ test("fixture/current and orphan states are visibly non-loadable even when relea
   expect(buttons).toHaveLength(2);
   expect(buttons.every((button) => button.hasAttribute("disabled"))).toBe(true);
   expect(screen.getAllByText(/版本、渠道、来源或角色引用不适用于当前资料/)).toHaveLength(2);
+});
+
+test("incompatible preset equipment is rejected before UI handoff", async () => {
+  const bundle = releasedBundle();
+  bundle.entities.equipment = [{
+    logicalId: "light-cone:destruction", revisionId: "light-cone:destruction@release-4.3",
+    validFromReleaseId: "release-4.3", validToReleaseId: null, provenance,
+    kind: "light-cone", name: "毁灭测试光锥", rarity: 5,
+    description: "仅用于命途不兼容回归测试。", pathRestriction: "destruction",
+    superimpositionValues: [0.1], setThresholds: [], effectIds: [], reviewStatus: "reviewed",
+  }];
+  const memberAssumptions = structuredClone(preset().memberAssumptions);
+  memberAssumptions[0] = {
+    eidolon: 0,
+    equipment: { status: "specified", logicalId: "light-cone:destruction", superimposition: 1 },
+  };
+  const incompatible = preset({ memberAssumptions });
+
+  expect(validatePresetForBundle(incompatible, bundle).join("; ")).toMatch(/incompatible/i);
+  render(<MemoryRouter><ReleaseProvider bundle={bundle}>
+    <CommunityTeamsPage loadPresets={async () => [incompatible]} />
+  </ReleaseProvider></MemoryRouter>);
+
+  expect(await screen.findByRole("button", { name: "载入配队实验室" })).toBeDisabled();
 });
