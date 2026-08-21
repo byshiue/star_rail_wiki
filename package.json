@@ -34,6 +34,7 @@
     "lint": "eslint .",
     "test:e2e": "playwright test",
     "validate:data": "tsx scripts/validate-repository.ts",
+    "data:import": "tsx scripts/game-data/buildRelease.ts",
     "check": "npm run typecheck && npm run lint && npm test && npm run validate:data && npm run build"
   },
   "name": "star-rail-wiki",

@@ -1,0 +1,37 @@
+{
+  "releaseId": "4.3-reviewed-local-fixture",
+  "gameVersion": "4.3",
+  "channel": "released",
+  "importedAt": "2026-08-21T00:00:00.000Z",
+  "reviewedAt": "2026-08-21T01:00:00.000Z",
+  "previousReleaseId": null,
+  "sources": [
+    {
+      "name": "Dimbreath evidence fixture",
+      "baseUrl": "https://gitlab.com/Dimbreath/turnbasedgamedata",
+      "revision": "d5c40c00",
+      "gameVersion": "4.3",
+      "channel": "released",
+      "retrievedAt": "2026-08-21T00:00:00.000Z",
+      "fileChecksums": {
+        "index_new/cn/character_ranks.json": "sha256:d5f7bd96544bb51d3a0e774dcba6d30e52c4aab6569d43061e0f523148fc595f"
+      }
+    },
+    {
+      "name": "StarRailRes index fixture",
+      "baseUrl": "https://github.com/Mar-7th/StarRailRes",
+      "revision": "93fa10b7",
+      "gameVersion": "4.3",
+      "channel": "released",
+      "retrievedAt": "2026-08-21T00:00:00.000Z",
+      "fileChecksums": {
+        "index_new/cn/characters.json": "sha256:2231d45155c19f2cef3c8a7c97b6ce1c66951a71ac52ae5a5b516fd2156180f2",
+        "index_new/cn/character_skills.json": "sha256:bd642e2531ddd0b11a79e046c9edb5b1589f819eeea6bad1b226af231bb21d79",
+        "index_new/cn/character_skill_trees.json": "sha256:0933f4041d059c8f3095d8c6cdca4145d4872565de65f15cf301a4721c8459b6",
+        "index_new/cn/light_cones.json": "sha256:198c2fa7cc67a88f917b72eb9e7d1da85bfa717a21fcecb58e67ff7673ba6ab9",
+        "index_new/cn/light_cone_ranks.json": "sha256:e0980868166d70b36e6fb31822df39be6168f6ceaa1df358acbde839068893c5",
+        "index_new/cn/relic_sets.json": "sha256:9f636da3dd9608057f04bc34742205e98cadd4caa952f65852a31e6236dc0c6a"
+      }
+    }
+  ]
+}

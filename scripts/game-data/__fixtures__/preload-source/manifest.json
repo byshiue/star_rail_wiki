@@ -1,0 +1,21 @@
+{
+  "releaseId": "4.3-invalid-mixed-fixture",
+  "gameVersion": "4.3",
+  "channel": "released",
+  "importedAt": "2026-08-21T00:00:00.000Z",
+  "reviewedAt": null,
+  "previousReleaseId": null,
+  "sources": [
+    {
+      "name": "Mixed preload fixture",
+      "baseUrl": "https://example.invalid/preload-source",
+      "revision": "44ee44aa",
+      "gameVersion": "4.4",
+      "channel": "preload",
+      "retrievedAt": "2026-08-21T00:00:00.000Z",
+      "fileChecksums": {
+        "index_new/cn/characters.json": "sha256:40ba4b173b860ac07915bb88fa598c62841fa9c8104f7d5a8fe04172bfe0c516"
+      }
+    }
+  ]
+}
