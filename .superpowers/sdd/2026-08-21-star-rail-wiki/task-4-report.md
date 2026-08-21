@@ -140,3 +140,42 @@ Result: exit 0.
 - Extraction remains deliberately conservative and phrase-allowlisted. Unseen upstream wording requires a reviewed rule and regression test.
 - Stable candidate IDs depend on deterministic source text and match ordering; upstream wording or insertion changes intentionally invalidate affected overlays for rereview.
 - No real released snapshot is promoted by this task; the later pinned-source audit remains responsible for formal production coverage.
+
+## Fix Round 2
+
+### Findings addressed
+
+- Percentage speed wording now produces exactly one percent candidate and cannot backtrack into a flat candidate, including multi-digit values.
+- English stat extraction accepts game-style forward wording, wearer possessives (straight or curly apostrophe), and common abbreviations including ATK, SPD, DEF, CRIT Rate, CRIT DMG, Effect RES, and Effect Hit Rate.
+- Target inference now examines only the comma/semicolon-delimited clause containing each match, so mixed self/team effects in one sentence retain distinct targets.
+- `ReleaseIndexSchema.superRefine` now owns the production invariant: a non-null current release must resolve to a non-fixture `released` entry, and a fixture-marked ID or source name/URL cannot claim the `released` channel even when not current.
+- `loadReleaseIndex()` rejects invalid fixture-current payloads through its existing shared-schema parse without client-specific validation.
+
+### TDD evidence
+
+- Extractor RED: the focused effects suite reported 9 failures for duplicate speed extraction, missing English word order/abbreviations, and segment-wide target leakage.
+- Shared-schema RED: four precise schema cases incorrectly accepted fixture/current or fixture-as-released data.
+- Client RED: `loadReleaseIndex()` resolved a fixture-current payload instead of rejecting it.
+- Strengthened numeric RED: after the initial fix, `Increases SPD by 12%` still produced two candidates because the numeric regex backtracked to a prefix; an exact-one assertion exposed and closed that case.
+- Focused GREEN: `npm test -- scripts/game-data/effects.test.ts src/domain/schemas.test.ts src/data/releaseRepository.test.ts` passed 3 files and 71 tests.
+
+### Final verification
+
+Command: `npm run check`
+
+Result: exit 0.
+
+- TypeScript and ESLint passed.
+- Vitest passed 11 files and 104 tests.
+- Repository data validation passed.
+- The Vite production build passed with 26 modules transformed.
+- `git diff --check` and staged `git diff --cached --check` passed before commit.
+
+### Fix commit
+
+- Implementation: `5ecd592da44c4c281c6a0d3e19cd9f8d4012b385` (`fix: close effect extraction and fixture gaps`).
+
+### Residual risks
+
+- English extraction remains deliberately phrase-allowlisted; new upstream abbreviations or alternate syntax require reviewed regressions.
+- Fixture detection is marker-based on release IDs and source names/URLs; formal production metadata must avoid fixture markers and use `channel: released` only after review.
