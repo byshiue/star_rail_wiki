@@ -1,0 +1,22 @@
+:root {
+  color-scheme: dark;
+  --color-background: #090d18;
+  --color-surface: #11192b;
+  --color-surface-raised: #18243a;
+  --color-border: #2d3b57;
+  --color-text: #f4f7ff;
+  --color-text-muted: #aab7cf;
+  --color-accent: #7dd3fc;
+  --color-accent-strong: #f4cc67;
+  --font-sans: Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1rem;
+  --content-width: 72rem;
+  --shadow-raised: 0 1rem 3rem rgb(0 0 0 / 30%);
+}
