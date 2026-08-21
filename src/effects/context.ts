@@ -119,6 +119,7 @@ export interface TeamEvaluation {
 
 export interface TeamBuildIssue {
   code: "release_mismatch" | "invalid_member_count" | "duplicate_slot" | "unknown_character"
+    | "duplicate_character" | "illegal_equipment"
     | "ambiguous_character_revision" | "invalid_eidolon" | "unknown_light_cone"
     | "ambiguous_light_cone_revision" | "invalid_superimposition" | "unknown_relic_set"
     | "ambiguous_relic_revision" | "invalid_set_pieces" | "duplicate_relic_set"

@@ -1,4 +1,6 @@
 import type { RouteObject } from "react-router-dom";
+import { CharacterBuilderPage } from "../simulator/CharacterBuilderPage";
+import { TeamSimulatorPage } from "../simulator/TeamSimulatorPage";
 import { EntityDetailPage } from "../wiki/EntityDetailPage";
 import { WikiPage } from "../wiki/WikiPage";
 import { ReleaseProvider } from "./ReleaseProvider";
@@ -29,11 +31,11 @@ export const appRoutes: RouteObject[] = [
   },
   {
     path: "/builds",
-    element: <PlaceholderPage title="角色构筑" purpose="这里将展示角色配置能够产生的增益、减益、触发条件、持续时间与证据链。" />,
+    element: <ReleaseProvider><CharacterBuilderPage /></ReleaseProvider>,
   },
   {
     path: "/simulator",
-    element: <PlaceholderPage title="配队实验室" purpose="这里将评估四人队伍的增益、减益、行动与资源效果，不冒充完整伤害模拟器。" />,
+    element: <ReleaseProvider><TeamSimulatorPage /></ReleaseProvider>,
   },
   {
     path: "/agent",
