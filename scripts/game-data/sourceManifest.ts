@@ -20,16 +20,10 @@ const SourceManifestEntrySchema = z.strictObject({
   gameVersion: z.string().min(1),
   channel: z.enum(["released", "preload"]),
   retrievedAt: z.iso.datetime(),
-  downloadUrlTemplate: z.string().min(1)
-    .refine(
-      (template) => template.includes("{revision}"),
-      "download URL template must include the immutable revision placeholder {revision}",
-    )
-    .refine(
-      (template) => !/(?:^|[^A-Za-z0-9])(?:master|latest)(?=$|[^A-Za-z0-9])/i.test(template),
-      "download URL template contains mutable ref master/latest",
-    )
-    .optional(),
+  downloadUrlTemplate: z.string().min(1).refine(
+    (template) => template.includes("{revision}"),
+    "download URL template must include the immutable revision placeholder {revision}",
+  ).optional(),
   fileChecksums: z.record(
     z.string().min(1),
     z.string().regex(/^sha256:[a-f0-9]{64}$/),
