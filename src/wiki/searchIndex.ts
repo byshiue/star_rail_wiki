@@ -63,13 +63,15 @@ function canonicalRevision<T extends RevisionIdentity>(revisions: T[]): T {
 
 function aggregateRevisions<T extends RevisionIdentity>(
   revisions: T[],
+  groupKey: (revision: T) => string,
   makeDocument: (revision: T) => WikiSearchDocument,
 ): WikiSearchDocument[] {
   const groups = new Map<string, T[]>();
   for (const revision of revisions) {
-    const group = groups.get(revision.logicalId) ?? [];
+    const key = groupKey(revision);
+    const group = groups.get(key) ?? [];
     group.push(revision);
-    groups.set(revision.logicalId, group);
+    groups.set(key, group);
   }
   return [...groups.values()].map((group) => {
     const canonical = makeDocument(canonicalRevision(group));
@@ -84,8 +86,16 @@ function aggregateRevisions<T extends RevisionIdentity>(
 
 export function buildSearchIndex(bundle: GameReleaseBundle): WikiSearchIndex {
   return { releaseId: bundle.release.id, documents: [
-    ...aggregateRevisions(bundle.entities.characters, (character) => characterDocument(bundle, character)),
-    ...aggregateRevisions(bundle.entities.equipment, (equipment) => equipmentDocument(bundle, equipment)),
+    ...aggregateRevisions(
+      bundle.entities.characters,
+      (character) => `character:${character.logicalId}`,
+      (character) => characterDocument(bundle, character),
+    ),
+    ...aggregateRevisions(
+      bundle.entities.equipment,
+      (equipment) => `${equipment.kind}:${equipment.logicalId}`,
+      (equipment) => equipmentDocument(bundle, equipment),
+    ),
   ] };
 }
 

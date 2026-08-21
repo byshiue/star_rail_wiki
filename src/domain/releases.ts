@@ -91,6 +91,18 @@ export function collectRevisionIdentities(entities: ReleaseEntities) {
   ];
 }
 
+function collectKindedRevisionIdentities(entities: ReleaseEntities) {
+  return [
+    ...entities.characters.map((revision) => ({ kind: "character", revision })),
+    ...entities.equipment.map((revision) => ({ kind: revision.kind, revision })),
+    ...entities.characters.flatMap((character) => [
+      ...character.abilities,
+      ...character.traces,
+      ...character.eidolons,
+    ].map((revision) => ({ kind: revision.kind, revision }))),
+  ];
+}
+
 export const GameReleaseBundleSchema = z.strictObject({
   release: DataReleaseSchema, entities: ReleaseEntitiesSchema,
 }).superRefine((bundle, context) => {
@@ -104,6 +116,24 @@ export const GameReleaseBundleSchema = z.strictObject({
       });
     }
     revisionIds.add(revision.revisionId);
+  }
+
+  const canonicalGroups = new Map<string, Array<{ validToReleaseId: string | null }>>();
+  for (const { kind, revision } of collectKindedRevisionIdentities(bundle.entities)) {
+    const key = `${kind}:${revision.logicalId}`;
+    const group = canonicalGroups.get(key) ?? [];
+    group.push(revision);
+    canonicalGroups.set(key, group);
+  }
+  for (const [key, revisions] of canonicalGroups) {
+    const activeCount = revisions.filter((revision) => revision.validToReleaseId === null).length;
+    if (activeCount !== 1) {
+      context.addIssue({
+        code: "custom",
+        path: ["entities"],
+        message: `canonical entity ${key} requires exactly one active revision; got ${activeCount}`,
+      });
+    }
   }
 
   const effectIds = new Set<string>();

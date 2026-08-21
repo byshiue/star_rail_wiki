@@ -9,7 +9,8 @@ const kindLabels: Record<WikiEntityKind, string> = { character: "角色", "light
 function WikiBrowser() {
   const { bundle } = useRelease();
   if (!bundle) return null;
-  const { query, setQuery, filters, setFilters, results } = useWikiSearch(bundle);
+  const { query, setQuery, filters, setFilters, results, error } = useWikiSearch(bundle);
+  if (error) return <section><h1>资料索引失败</h1><p role="alert">{error}</p></section>;
   const selectedKind = filters.kinds?.[0] ?? "";
   return <section className="wiki-page" aria-labelledby="wiki-title">
     <div className="wiki-heading"><div><p className="eyebrow">可追溯资料库</p><h1 id="wiki-title">角色与装备</h1></div><VersionBadge release={bundle.release} /></div>

@@ -78,6 +78,24 @@ describe("release repository", () => {
     await expect(loadRelease("4.3-fixture")).rejects.toThrow(/unknown releaseId/);
   });
 
+  it("rejects a bundle without exactly one active revision per kind and logical ID", async () => {
+    const entities = structuredClone(entitiesFixture);
+    const duplicate = structuredClone(entities.equipment[0]);
+    duplicate.revisionId = "light-cone:synthetic-cone@duplicate-active";
+    duplicate.effectIds = [];
+    entities.equipment.push(duplicate);
+    const fetchStub = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(releaseFixture), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(entities), { status: 200 }))
+      .mockResolvedValueOnce(new Response(
+        JSON.stringify(releaseIndexFor(releaseFixture)),
+        { status: 200 },
+      ));
+    vi.stubGlobal("fetch", fetchStub);
+
+    await expect(loadRelease("4.3-fixture")).rejects.toThrow(/exactly one active revision/i);
+  });
+
   it("rejects malformed release data returned by fetch", async () => {
     const fetchStub = vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify({ ...releaseFixture, channel: "preload" }), { status: 200 }))
