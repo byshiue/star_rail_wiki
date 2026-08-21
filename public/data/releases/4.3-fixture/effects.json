@@ -1,0 +1,29 @@
+[
+  {
+    "id": "effect:synthetic-team-damage@4.3-fixture",
+    "sourceRevisionId": "ability:synthetic-support-skill@4.3-fixture",
+    "metric": "damage_bonus",
+    "operation": "percent",
+    "value": {
+      "base": 0.1,
+      "scaling": []
+    },
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    },
+    "conditions": [],
+    "dispellable": null,
+    "reviewStatus": "reviewed",
+    "originalText": "合成评审夹具：使我方全体造成的伤害提高 10%。"
+  }
+]
