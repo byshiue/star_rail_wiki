@@ -7,6 +7,7 @@ import { GameReleaseBundleSchema, ReleaseEntitiesSchema, ReleaseIndexSchema } fr
 import { EffectOverlayFileSchema, applyEffectOverlays } from "./game-data/applyEffectOverlays";
 import { assertComplete, buildCoverageReport, collectEffectSources, CoverageReportSchema } from "./game-data/checkEffectCoverage";
 import { extractCandidateEffects, type CandidateEffect } from "./game-data/extractEffects";
+import { validateCommunityTeamLibrary } from "./validate-community-teams";
 
 async function readJson(file: string): Promise<unknown> {
   return JSON.parse(await readFile(file, "utf8"));
@@ -17,6 +18,7 @@ function stable(value: unknown): string {
 }
 
 export async function validateRepository(repositoryRoot = "."): Promise<void> {
+  validateCommunityTeamLibrary(await readJson(path.join(repositoryRoot, "data/community/teams.json")));
   const releaseRoot = path.join(repositoryRoot, "public/data/releases");
   const releaseIndex = ReleaseIndexSchema.parse(await readJson(path.join(releaseRoot, "index.json")));
   if (releaseIndex.currentReleaseId !== null) {

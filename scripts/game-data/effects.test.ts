@@ -290,6 +290,7 @@ describe("effect completeness gate", () => {
     const root = await mkdtemp(path.join(tmpdir(), "star-rail-fixture-current-"));
     const directory = path.join(root, "public/data/releases/4.3-fixture");
     await mkdir(directory, { recursive: true });
+    await mkdir(path.join(root, "data/community"), { recursive: true });
     await mkdir(path.join(root, "data/manual"), { recursive: true });
     const index = JSON.parse(await readFile("public/data/releases/index.json", "utf8"));
     index.currentReleaseId = "4.3-fixture";
@@ -301,6 +302,7 @@ describe("effect completeness gate", () => {
     await cp("public/data/releases/4.3-fixture/entities.json", path.join(directory, "entities.json"));
     await cp("public/data/releases/4.3-fixture/effects.json", path.join(directory, "effects.json"));
     await cp("public/data/releases/4.3-fixture/coverage.json", path.join(directory, "coverage.json"));
+    await cp("data/community/teams.json", path.join(root, "data/community/teams.json"));
     await cp("data/manual/effects.json", path.join(root, "data/manual/effects.json"));
 
     await expect(validateRepository(root)).rejects.toThrow(/fixture release|current release.*fixture/i);
@@ -309,6 +311,7 @@ describe("effect completeness gate", () => {
   it("rejects a repository whose checked-in coverage silently claims no unmapped effects", async () => {
     const root = await mkdtemp(path.join(tmpdir(), "star-rail-invalid-coverage-"));
     await mkdir(path.join(root, "public/data/releases/4.3-fixture"), { recursive: true });
+    await mkdir(path.join(root, "data/community"), { recursive: true });
     await mkdir(path.join(root, "data/manual"), { recursive: true });
     await cp("public/data/releases/index.json", path.join(root, "public/data/releases/index.json"));
     await cp("public/data/releases/4.3-fixture/release.json", path.join(root, "public/data/releases/4.3-fixture/release.json"));
@@ -329,6 +332,7 @@ describe("effect completeness gate", () => {
       explicitUnsupportedEffects: 0,
       unmappedEffects: 0,
     }));
+    await cp("data/community/teams.json", path.join(root, "data/community/teams.json"));
     await writeFile(path.join(root, "data/manual/effects.json"), '{"schemaVersion":1,"overlays":[]}\n');
 
     await expect(validateRepository(root)).rejects.toThrow(/unmapped numeric effect|coverage report mismatch/i);

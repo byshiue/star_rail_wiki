@@ -1,4 +1,5 @@
 import type { RouteObject } from "react-router-dom";
+import { CommunityTeamsPage } from "../community/CommunityTeamsPage";
 import { CharacterBuilderPage } from "../simulator/CharacterBuilderPage";
 import { TeamSimulatorPage } from "../simulator/TeamSimulatorPage";
 import { EntityDetailPage } from "../wiki/EntityDetailPage";
@@ -43,7 +44,7 @@ export const appRoutes: RouteObject[] = [
   },
   {
     path: "/community",
-    element: <PlaceholderPage title="社区配队" purpose="这里将展示带作者、来源链接、发布日期和适用版本的社区配队摘要。" />,
+    element: <ReleaseProvider><CommunityTeamsPage /></ReleaseProvider>,
   },
   {
     path: "/profiles",

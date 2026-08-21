@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "currentReleaseId": null,
+  "presets": [
+    {
+      "id": "team:synthetic-follow-up-fixture",
+      "releaseId": "4.3-community-fixture",
+      "gameVersion": "4.3",
+      "channel": "fixture",
+      "slots": ["character:synthetic-dps", "character:synthetic-support", "character:synthetic-sub-dps", "character:synthetic-sustain"],
+      "substitutions": [{
+        "slot": 2,
+        "characterLogicalId": "character:synthetic-breaker",
+        "note": "合成夹具替代位：需要更多削韧时替换副输出。"
+      }],
+      "requirements": ["合成夹具：全员零星魂", "合成夹具：不依赖限定光锥"],
+      "investment": "low",
+      "tags": ["追击", "低配", "合成夹具"],
+      "summary": "项目自写的合成配队摘要，仅用于验证来源、筛选与模拟器载入流程，不代表正式版本推荐。",
+      "source": {
+        "url": "https://example.invalid/community/synthetic-follow-up-fixture",
+        "title": "Synthetic Follow-up Team Fixture",
+        "author": "Star Rail Wiki Test Maintainers",
+        "publisher": "Star Rail Wiki Synthetic Fixtures",
+        "publishedAt": "2026-08-20T00:00:00.000Z",
+        "retrievedAt": "2026-08-21T00:00:00.000Z",
+        "availability": "unavailable"
+      }
+    }
+  ]
+}

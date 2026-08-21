@@ -5,6 +5,7 @@ import "./styles/tokens.css";
 import "./styles/app.css";
 import "./styles/wiki.css";
 import "./styles/simulator.css";
+import "./styles/community.css";
 
 const root = document.getElementById("root");
 
