@@ -2,11 +2,11 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { z } from "zod";
-import { EffectSchema } from "../src/domain/effects";
+import { EffectSchema, type Effect } from "../src/domain/effects";
 import { GameReleaseBundleSchema, ReleaseEntitiesSchema, ReleaseIndexSchema } from "../src/domain/releases";
 import { EffectOverlayFileSchema, applyEffectOverlays } from "./game-data/applyEffectOverlays";
 import { assertComplete, buildCoverageReport, collectEffectSources, CoverageReportSchema } from "./game-data/checkEffectCoverage";
-import { extractCandidateEffects } from "./game-data/extractEffects";
+import { extractCandidateEffects, type CandidateEffect } from "./game-data/extractEffects";
 
 async function readJson(file: string): Promise<unknown> {
   return JSON.parse(await readFile(file, "utf8"));
@@ -19,9 +19,17 @@ function stable(value: unknown): string {
 export async function validateRepository(repositoryRoot = "."): Promise<void> {
   const releaseRoot = path.join(repositoryRoot, "public/data/releases");
   const releaseIndex = ReleaseIndexSchema.parse(await readJson(path.join(releaseRoot, "index.json")));
+  if (releaseIndex.currentReleaseId !== null) {
+    const current = releaseIndex.releases.find((release) => release.id === releaseIndex.currentReleaseId);
+    if (current?.channel === "fixture" || current?.id.toLowerCase().includes("fixture")) {
+      throw new Error(`fixture cannot be the production current release: ${current.id}`);
+    }
+  }
   const overlayFile = EffectOverlayFileSchema.parse(
     await readJson(path.join(repositoryRoot, "data/manual/effects.json")),
   );
+  const allCandidates: CandidateEffect[] = [];
+  const allReviewedEffects: Effect[] = [];
 
   for (const indexedRelease of releaseIndex.releases) {
     const directory = path.join(releaseRoot, indexedRelease.id);
@@ -46,14 +54,14 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
     }
     assertComplete(actualCoverage);
 
-    const candidates = collectEffectSources(entities).flatMap(extractCandidateEffects);
-    const applied = applyEffectOverlays(candidates, overlayFile.overlays);
-    const reviewedPayload = effects
-      .filter((effect) => effect.reviewStatus !== "generated")
-      .sort((left, right) => left.id.localeCompare(right.id));
-    if (stable(applied) !== stable(reviewedPayload)) {
-      throw new Error(`reviewed effect overlay mismatch for ${indexedRelease.id}`);
-    }
+    allCandidates.push(...collectEffectSources(entities).flatMap(extractCandidateEffects));
+    allReviewedEffects.push(...effects.filter((effect) => effect.reviewStatus !== "generated"));
+  }
+
+  const applied = applyEffectOverlays(allCandidates, overlayFile.overlays);
+  const reviewedPayload = allReviewedEffects.sort((left, right) => left.id.localeCompare(right.id));
+  if (stable(applied) !== stable(reviewedPayload)) {
+    throw new Error("reviewed effect overlay mismatch");
   }
 }
 

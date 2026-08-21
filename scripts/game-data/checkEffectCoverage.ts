@@ -42,7 +42,7 @@ export function buildCoverageReport(
   const sourceList = sources(entities);
   const candidates = sourceList.flatMap(extractCandidateEffects);
   const mappedCounts = new Map<string, number>();
-  for (const effect of effects) {
+  for (const effect of effects.filter((entry) => entry.reviewStatus !== "generated")) {
     const key = coverageKey(effect);
     mappedCounts.set(key, (mappedCounts.get(key) ?? 0) + 1);
   }
@@ -67,6 +67,9 @@ export function buildCoverageReport(
 
 export function assertComplete(report: CoverageReport): void {
   const parsed = CoverageReportSchema.parse(report);
+  if (parsed.generatedEffects !== 0) {
+    throw new Error(`generated effects are not allowed in production: ${parsed.generatedEffects}`);
+  }
   if (parsed.unmappedEffects !== 0) {
     throw new Error(`unmapped numeric effect count: ${parsed.unmappedEffects}`);
   }

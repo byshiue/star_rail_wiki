@@ -1,11 +1,11 @@
 {
-  "currentReleaseId": "4.3-fixture",
+  "currentReleaseId": null,
   "releases": [
     {
       "id": "4.3-fixture",
       "gameVersion": "4.3",
       "region": "cn",
-      "channel": "released",
+      "channel": "fixture",
       "importedAt": "2026-08-21T00:00:00.000Z",
       "reviewedAt": "2026-08-21T01:00:00.000Z",
       "sources": [

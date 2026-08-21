@@ -4,7 +4,7 @@ import { fetchSource } from "./fetchSource";
 import { importStarRailRes } from "./importStarRailRes";
 import { assertReleasedChannel } from "./releaseGuard";
 import { assertRequiredPaths, loadSourceManifest, type ApprovedSourceManifest } from "./sourceManifest";
-import type { GameReleaseBundle } from "../../src/domain/releases";
+import { GameReleaseBundleSchema, type GameReleaseBundle } from "../../src/domain/releases";
 import { EffectOverlayFileSchema, applyEffectOverlays, type EffectOverlay } from "./applyEffectOverlays";
 import { assertComplete, buildCoverageReport, collectEffectSources } from "./checkEffectCoverage";
 import { extractCandidateEffects } from "./extractEffects";
@@ -33,7 +33,7 @@ export async function buildRelease(input: BuildReleaseInput): Promise<GameReleas
     source.effectIds = effectIdsByRevision.get(source.revisionId)?.sort() ?? [];
   }
   assertComplete(buildCoverageReport(bundle.entities, bundle.entities.effects));
-  return bundle;
+  return GameReleaseBundleSchema.parse(bundle);
 }
 
 export async function loadEffectOverlays(file = "data/manual/effects.json"): Promise<EffectOverlay[]> {
@@ -65,6 +65,9 @@ async function main(): Promise<void> {
   const output = option("--output");
   const sourceRootIndex = process.argv.indexOf("--source-root");
   const sourceRoot = sourceRootIndex >= 0 ? process.argv[sourceRootIndex + 1] : undefined;
+  const overlaysIndex = process.argv.indexOf("--overlays");
+  const overlaysFile = overlaysIndex >= 0 ? process.argv[overlaysIndex + 1] : undefined;
+  if (overlaysIndex >= 0 && !overlaysFile) throw new Error("missing required option --overlays");
   const manifest = await loadSourceManifest(manifestPath);
   if (manifest.gameVersion !== version) {
     throw new Error(`manifest version mismatch: expected ${version}, received ${manifest.gameVersion}`);
@@ -72,7 +75,7 @@ async function main(): Promise<void> {
   if (!manifest.sources.some((source) => source.revision === sourceRevision)) {
     throw new Error(`source revision ${sourceRevision} is not present in the reviewed manifest`);
   }
-  await writeRelease(await buildRelease({ manifest, sourceRoot, overlays: await loadEffectOverlays() }), output);
+  await writeRelease(await buildRelease({ manifest, sourceRoot, overlays: await loadEffectOverlays(overlaysFile) }), output);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

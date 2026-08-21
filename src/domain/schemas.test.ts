@@ -25,8 +25,8 @@ describe("versioned domain schemas", () => {
     expect(() => CharacterRevisionSchema.parse(revisionWithoutProvenance)).toThrow();
   });
 
-  it("accepts a reviewed released-channel fixture", () => {
-    expect(DataReleaseSchema.parse(releaseFixture).channel).toBe("released");
+  it("marks the reviewed synthetic data as a fixture channel", () => {
+    expect(DataReleaseSchema.parse(releaseFixture).channel).toBe("fixture");
     expect(releaseFixture.sources[0].revision).toMatch(/^[a-f0-9]{8,40}$/);
   });
 
@@ -98,7 +98,7 @@ describe("versioned domain schemas", () => {
       entities.equipment[0].effectIds = ["effect:missing@4.3-fixture"];
     }
     expect(() => GameReleaseBundleSchema.parse({ release: releaseFixture, entities })).toThrow(
-      /dangling effectId/,
+      /dangling effectId|effect ownership/,
     );
   });
 

@@ -55,7 +55,7 @@ it("provides an honest CLI that requires the reviewed manifest and fixture root"
   const output = await mkdtemp(path.join(tmpdir(), "star-rail-cli-"));
   await execute(
     "npm",
-    ["run", "data:import", "--", "--version", "4.3", "--source-revision", "d5c40c00", "--manifest", path.join(fixtureRoot, "manifest.json"), "--source-root", fixtureRoot, "--output", output],
+    ["run", "data:import", "--", "--version", "4.3", "--source-revision", "d5c40c00", "--manifest", path.join(fixtureRoot, "manifest.json"), "--source-root", fixtureRoot, "--overlays", path.join(fixtureRoot, "effects.json"), "--output", output],
     { cwd: process.cwd() },
   );
 

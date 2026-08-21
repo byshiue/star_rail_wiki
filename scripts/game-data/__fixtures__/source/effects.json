@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "overlays": [
+    {
+      "candidateId": "ability:100101@4.3-reviewed-local-fixture#effect-1",
+      "id": "effect:100101-team-damage@4.3-reviewed-local-fixture",
+      "sourceRevisionId": "ability:100101@4.3-reviewed-local-fixture",
+      "metric": "damage_bonus",
+      "operation": "percent",
+      "value": {
+        "base": 0.2,
+        "scaling": []
+      },
+      "target": {
+        "type": "team"
+      },
+      "trigger": {
+        "type": "event",
+        "event": "skill-active"
+      },
+      "duration": {
+        "type": "turns",
+        "value": 3
+      },
+      "stacking": {
+        "type": "refresh",
+        "maxStacks": 1
+      },
+      "conditions": [],
+      "dispellable": true,
+      "reviewStatus": "reviewed",
+      "originalText": "使我方全体造成的伤害提高20%。"
+    },
+    {
+      "candidateId": "trace:100110@4.3-reviewed-local-fixture#effect-1",
+      "id": "effect:100110-energy@4.3-reviewed-local-fixture",
+      "sourceRevisionId": "trace:100110@4.3-reviewed-local-fixture",
+      "metric": "energy",
+      "operation": "flat",
+      "value": {
+        "base": 5,
+        "scaling": []
+      },
+      "target": {
+        "type": "self"
+      },
+      "trigger": {
+        "type": "event",
+        "event": "after-skill"
+      },
+      "duration": {
+        "type": "instant"
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [
+        {
+          "type": "unsupported",
+          "value": "source text does not identify the energy recipient"
+        }
+      ],
+      "dispellable": null,
+      "reviewStatus": "unsupported",
+      "originalText": "施放战技时，额外恢复5点能量。"
+    },
+    {
+      "candidateId": "eidolon:100106@4.3-reviewed-local-fixture#effect-1",
+      "id": "effect:100106-res-pen@4.3-reviewed-local-fixture",
+      "sourceRevisionId": "eidolon:100106@4.3-reviewed-local-fixture",
+      "metric": "resistance_penetration",
+      "operation": "percent",
+      "value": {
+        "base": 0.24,
+        "scaling": []
+      },
+      "target": {
+        "type": "team"
+      },
+      "trigger": {
+        "type": "event",
+        "event": "ultimate-active"
+      },
+      "duration": {
+        "type": "actions",
+        "value": 1
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [],
+      "dispellable": null,
+      "reviewStatus": "reviewed",
+      "originalText": "终结技期间，我方全体全属性抗性穿透提高24%。"
+    },
+    {
+      "candidateId": "light-cone:23024@4.3-reviewed-local-fixture#effect-1",
+      "id": "effect:23024-energy@4.3-reviewed-local-fixture",
+      "sourceRevisionId": "light-cone:23024@4.3-reviewed-local-fixture",
+      "metric": "energy",
+      "operation": "percent",
+      "value": {
+        "base": 0.15,
+        "scaling": [
+          0.175,
+          0.2,
+          0.225,
+          0.25
+        ]
+      },
+      "target": {
+        "type": "self"
+      },
+      "trigger": {
+        "type": "always"
+      },
+      "duration": {
+        "type": "permanent"
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [],
+      "dispellable": null,
+      "reviewStatus": "reviewed",
+      "originalText": "使装备者的能量恢复效率提高15%。"
+    },
+    {
+      "candidateId": "relic-set:117@4.3-reviewed-local-fixture#effect-1",
+      "id": "effect:117-attack@4.3-reviewed-local-fixture",
+      "sourceRevisionId": "relic-set:117@4.3-reviewed-local-fixture",
+      "metric": "attack",
+      "operation": "percent",
+      "value": {
+        "base": 0.12,
+        "scaling": []
+      },
+      "target": {
+        "type": "self"
+      },
+      "trigger": {
+        "type": "always"
+      },
+      "duration": {
+        "type": "permanent"
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [
+        {
+          "type": "set-pieces",
+          "operator": "at-least",
+          "value": 2
+        }
+      ],
+      "dispellable": null,
+      "reviewStatus": "reviewed",
+      "originalText": "2件套：攻击力提高12%"
+    },
+    {
+      "candidateId": "relic-set:117@4.3-reviewed-local-fixture#effect-2",
+      "id": "effect:117-team-damage@4.3-reviewed-local-fixture",
+      "sourceRevisionId": "relic-set:117@4.3-reviewed-local-fixture",
+      "metric": "damage_bonus",
+      "operation": "percent",
+      "value": {
+        "base": 0.12,
+        "scaling": []
+      },
+      "target": {
+        "type": "team"
+      },
+      "trigger": {
+        "type": "event",
+        "event": "after-ultimate"
+      },
+      "duration": {
+        "type": "actions",
+        "value": 1
+      },
+      "stacking": {
+        "type": "refresh",
+        "maxStacks": 1
+      },
+      "conditions": [
+        {
+          "type": "set-pieces",
+          "operator": "at-least",
+          "value": 4
+        }
+      ],
+      "dispellable": true,
+      "reviewStatus": "reviewed",
+      "originalText": "4件套：施放终结技时，使我方全体造成的伤害提高12%"
+    }
+  ]
+}

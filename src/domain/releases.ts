@@ -10,13 +10,13 @@ export type SourceSnapshot = z.infer<typeof SourceSnapshotSchema>;
 
 export const DataReleaseSchema = z.strictObject({
   id: z.string().min(1), gameVersion: z.string().min(1), region: z.literal("cn"),
-  channel: z.literal("released"), importedAt: z.iso.datetime(), reviewedAt: z.iso.datetime().nullable(),
+  channel: z.enum(["released", "fixture"]), importedAt: z.iso.datetime(), reviewedAt: z.iso.datetime().nullable(),
   sources: z.array(SourceSnapshotSchema).min(1), previousReleaseId: z.string().min(1).nullable(),
 });
 export type DataRelease = z.infer<typeof DataReleaseSchema>;
 
 export const ReleaseIndexSchema = z.strictObject({
-  currentReleaseId: z.string().min(1),
+  currentReleaseId: z.string().min(1).nullable(),
   releases: z.array(DataReleaseSchema).min(1),
 }).superRefine((index, context) => {
   const releaseIds = new Set<string>();
@@ -31,7 +31,7 @@ export const ReleaseIndexSchema = z.strictObject({
     releaseIds.add(release.id);
   }
 
-  if (!releaseIds.has(index.currentReleaseId)) {
+  if (index.currentReleaseId !== null && !releaseIds.has(index.currentReleaseId)) {
     context.addIssue({
       code: "custom",
       path: ["currentReleaseId"],
@@ -103,20 +103,24 @@ export const GameReleaseBundleSchema = z.strictObject({
       ...character.eidolons,
     ]),
   ];
+  const sourceRevisionIds = new Set(effectSources.map((source) => source.revisionId));
   for (const source of effectSources) {
-    for (const effectId of source.effectIds) {
-      if (!effectIds.has(effectId)) {
-        context.addIssue({
-          code: "custom",
-          path: ["entities"],
-          message: `dangling effectId ${effectId} from ${source.revisionId}`,
-        });
-      }
+    const declared = [...source.effectIds].sort();
+    const owned = bundle.entities.effects
+      .filter((effect) => effect.sourceRevisionId === source.revisionId)
+      .map((effect) => effect.id)
+      .sort();
+    if (JSON.stringify(declared) !== JSON.stringify(owned)) {
+      context.addIssue({
+        code: "custom",
+        path: ["entities"],
+        message: `effect ownership mismatch for ${source.revisionId}`,
+      });
     }
   }
 
   for (const effect of bundle.entities.effects) {
-    if (!revisionIds.has(effect.sourceRevisionId)) {
+    if (!sourceRevisionIds.has(effect.sourceRevisionId)) {
       context.addIssue({
         code: "custom",
         path: ["entities", "effects"],
