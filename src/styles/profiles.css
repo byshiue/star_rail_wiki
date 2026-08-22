@@ -1,0 +1,111 @@
+.profile-page {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.profile-page header,
+.profile-create,
+.profile-import,
+.profile-detail,
+.profile-workspace > aside {
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.profile-create,
+.profile-actions,
+.inventory-add,
+.inventory-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-4);
+}
+
+.profile-create h2 {
+  flex-basis: 100%;
+}
+
+.profile-workspace {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.3fr) minmax(0, 1fr);
+  gap: var(--space-6);
+}
+
+.profile-workspace > aside button {
+  width: 100%;
+  display: grid;
+  gap: var(--space-1);
+  margin-block: var(--space-2);
+  text-align: left;
+}
+
+.profile-workspace > aside button[aria-pressed="true"] {
+  outline: 3px solid var(--color-accent);
+}
+
+.profile-workspace > aside button span {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+.inventory-editor,
+.inventory-editor fieldset {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.inventory-editor fieldset {
+  margin-block: var(--space-6);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.inventory-row {
+  padding-block: var(--space-2);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.profile-detail textarea {
+  min-height: 15rem;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgb(0 0 0 / 65%);
+}
+
+.delete-dialog {
+  width: min(32rem, 100%);
+  padding: var(--space-8);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .profile-workspace { grid-template-columns: minmax(0, 1fr); }
+  .profile-create > *,
+  .profile-actions > *,
+  .inventory-add > *,
+  .inventory-row > * { width: 100%; }
+  .profile-page { min-width: 0; }
+  .profile-detail { overflow-wrap: anywhere; }
+}

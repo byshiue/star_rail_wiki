@@ -2,12 +2,16 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
+import { PROFILE_SELECTION_EVENT } from "../profiles/profileSelection";
 import communityJson from "../../data/community/teams.json";
 import { ReleaseProvider } from "../app/ReleaseProvider";
 import { CommunityTeamLibrarySchema } from "../domain/community";
 import { fixtureBundle } from "../effects/__fixtures__/goldenTeams";
 import { maxInvestmentFixture } from "./__fixtures__/maxInvestment";
 import { RecommendationPage } from "./RecommendationPage";
+import { decodeTeamBuild } from "../simulator/teamBuild";
+import { createMemoryProfileDatabase } from "../profiles/profileDatabase";
+import { createProfileService } from "../profiles/profileService";
 
 const presets = CommunityTeamLibrarySchema.parse(communityJson).presets;
 
@@ -22,6 +26,53 @@ function renderPage(bundle = fixtureBundle) {
 }
 
 describe("RecommendationPage", () => {
+  it("switches selected UID inventory without retaining the previous roster", async () => {
+    const user = userEvent.setup();
+    const service = createProfileService(createMemoryProfileDatabase());
+    const characterIds = fixtureBundle.entities.characters.map(({ logicalId }) => logicalId);
+    await service.putProfile({ schemaVersion: 1, uid: "100000001", label: "账号 A",
+      dataReleaseId: fixtureBundle.release.id, updatedAt: "2026-08-21T00:00:00.000Z",
+      characters: characterIds.slice(0, 4).map((logicalId) => ({ logicalId, eidolon: 0, level: 80 })),
+      lightCones: [{ logicalId: "light-cone:synthetic-cone", superimposition: 4, level: 80 }], relics: [] });
+    await service.putProfile({ schemaVersion: 1, uid: "100000002", label: "账号 B",
+      dataReleaseId: fixtureBundle.release.id, updatedAt: "2026-08-21T00:00:00.000Z",
+      characters: characterIds.slice(1, 5).map((logicalId) => ({ logicalId, eidolon: 2, level: 80 })),
+      lightCones: [], relics: [] });
+    render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+      <RecommendationPage loadPresets={async () => []} profileService={service} />
+    </ReleaseProvider></MemoryRouter>);
+
+    await user.selectOptions(await screen.findByLabelText("本地账号 UID"), "100000001");
+    expect(screen.getByLabelText("已拥有角色 logical ID")).toHaveValue(characterIds.slice(0, 4).sort().join(", "));
+    await user.click(screen.getByRole("button", { name: "生成推荐" }));
+    const href = (await screen.findAllByRole("link", { name: "载入模拟器" }))[0]!.getAttribute("href")!;
+    const build = decodeTeamBuild(href.split("build=")[1]!);
+    expect(build.members.find(({ characterLogicalId }) => characterLogicalId === "character:synthetic-support")?.lightCone)
+      .toEqual({ logicalId: "light-cone:synthetic-cone", superimposition: 4 });
+    await user.selectOptions(screen.getByLabelText("本地账号 UID"), "100000002");
+    expect(screen.getByLabelText("已拥有角色 logical ID")).toHaveValue(characterIds.slice(1, 5).sort().join(", "));
+    expect(screen.getByRole("status")).toHaveTextContent("切换账号后已清除旧推荐");
+  });
+
+  it("clears the previous UID immediately when a profile reload fails", async () => {
+    const service = createProfileService(createMemoryProfileDatabase());
+    const characterIds = fixtureBundle.entities.characters.map(({ logicalId }) => logicalId);
+    await service.putProfile({ schemaVersion: 1, uid: "100000001", dataReleaseId: fixtureBundle.release.id,
+      updatedAt: "2026-08-21T00:00:00.000Z", characters: characterIds.slice(0, 4).map((logicalId) => ({ logicalId, eidolon: 1, level: 80 })), lightCones: [], relics: [] });
+    const listProfiles = service.listProfiles.bind(service);
+    let calls = 0;
+    const unstable = { ...service, listProfiles: async () => { calls += 1; if (calls > 1) throw new Error("profile reload failed"); return listProfiles(); } };
+    render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+      <RecommendationPage loadPresets={async () => []} profileService={unstable} />
+    </ReleaseProvider></MemoryRouter>);
+    await userEvent.selectOptions(await screen.findByLabelText("本地账号 UID"), "100000001");
+    window.dispatchEvent(new CustomEvent(PROFILE_SELECTION_EVENT, { detail: "100000002" }));
+    expect(await screen.findByText(/profile reload failed/)).toBeInTheDocument();
+    expect(screen.getByLabelText("本地账号 UID")).toHaveValue("");
+    expect(screen.getByRole("checkbox", { name: "仅使用已拥有角色" })).not.toBeChecked();
+    expect(screen.getByLabelText("已拥有角色 logical ID")).toHaveValue(characterIds.slice().sort().join(", "));
+  });
+
   it("selects owned-only roster, objective, and encounter then renders auditable candidates", async () => {
     const user = userEvent.setup();
     renderPage();

@@ -1,8 +1,11 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useRelease } from "../app/ReleaseProvider";
 import { loadCommunityTeams } from "../community/teamRepository";
 import type { TeamPreset } from "../domain/community";
+import type { AccountProfile } from "../domain/profiles";
+import { PROFILE_SELECTION_EVENT, readSelectedProfileUid } from "../profiles/profileSelection";
+import { defaultProfileService, type ProfileService } from "../profiles/profileService";
 import { encodeTeamBuild } from "../simulator/teamBuild";
 import { recommendTeams, type RecommendationResult } from "./recommendTeams";
 import { RecommendationConstraintError, type EncounterMode, type RecommendationContext, type RecommendationObjective } from "./request";
@@ -10,6 +13,7 @@ import { RecommendationConstraintError, type EncounterMode, type RecommendationC
 type RecommendationPageProps = {
   loadPresets?: (releaseId: string) => Promise<TeamPreset[]>;
   memberBuilds?: RecommendationContext["memberBuilds"];
+  profileService?: ProfileService;
 };
 
 function ids(value: string): string[] {
@@ -22,7 +26,7 @@ const componentLabels = {
   survivability: "生存", activationCost: "启动成本", wastedEffects: "浪费效果", communityPrior: "社区先验",
 } as const;
 
-export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBuilds }: RecommendationPageProps) {
+export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBuilds, profileService }: RecommendationPageProps) {
   const { bundle, loading, error: releaseError } = useRelease();
   const [presets, setPresets] = useState<TeamPreset[]>([]);
   const [presetError, setPresetError] = useState<string | null>(null);
@@ -31,7 +35,13 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
   const defaultRoster = useMemo(() => bundle?.entities.characters
     .filter(({ validToReleaseId }) => validToReleaseId === null).map(({ logicalId }) => logicalId).sort().join(", ") ?? "", [bundle]);
   const [owned, setOwned] = useState("");
-  const [uid, setUid] = useState("");
+  const [profiles, setProfiles] = useState<AccountProfile[]>([]);
+  const [selectedUid, setSelectedUid] = useState("");
+  const [selectedProfile, setSelectedProfile] = useState<AccountProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const profileRequest = useRef(0);
+  const [switchNotice, setSwitchNotice] = useState(false);
   const [required, setRequired] = useState("");
   const [excluded, setExcluded] = useState("");
   const [weaknesses, setWeaknesses] = useState("");
@@ -46,7 +56,6 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
     if (!bundle) { setPresetLoading(false); return; }
     let active = true;
     setPresetLoading(true);
-    setOwned(defaultRoster);
     void loadPresets(bundle.release.id).then((loaded) => {
       if (active) {
         setPresets([...loaded].sort((left, right) => left.id.localeCompare(right.id)));
@@ -59,18 +68,103 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
     return () => { active = false; };
   }, [bundle, defaultRoster, loadPresets]);
 
+  useEffect(() => { if (!selectedProfile) setOwned(defaultRoster); }, [defaultRoster, selectedProfile]);
+
+  const activeProfileService = profileService ?? (typeof indexedDB === "undefined" ? null : defaultProfileService);
+
+  useEffect(() => {
+    if (!activeProfileService) { setProfiles([]); setProfileLoading(false); return; }
+    let active = true;
+    async function loadProfiles(requestedUid: string | null) {
+      const requestId = ++profileRequest.current;
+      setProfileLoading(true); setSelectedUid(""); setSelectedProfile(null);
+      setOwned(defaultRoster); setOwnedOnly(false);
+      try {
+        const loaded = await activeProfileService!.listProfiles();
+        if (!active || requestId !== profileRequest.current) return;
+        setProfiles(loaded);
+        const profile = loaded.find(({ uid }) => uid === requestedUid) ?? null;
+        setSelectedUid(profile?.uid ?? "");
+        setSelectedProfile(profile);
+        if (profile) { setOwned(profile.characters.map(({ logicalId }) => logicalId).sort().join(", ")); setOwnedOnly(true); }
+        else { setOwned(defaultRoster); setOwnedOnly(false); }
+        setProfileError(null);
+      } catch (caught) {
+        if (active && requestId === profileRequest.current) setProfileError(caught instanceof Error ? caught.message : "本地账号读取失败");
+      } finally { if (active && requestId === profileRequest.current) setProfileLoading(false); }
+    }
+    void loadProfiles(readSelectedProfileUid());
+    const selectionListener = (event: Event) => {
+      const uid = event instanceof CustomEvent && typeof event.detail === "string" ? event.detail : null;
+      setResults([]); setConstraintError(null); setSwitchNotice(true);
+      void loadProfiles(uid);
+    };
+    window.addEventListener(PROFILE_SELECTION_EVENT, selectionListener);
+    return () => { active = false; window.removeEventListener(PROFILE_SELECTION_EVENT, selectionListener); };
+  }, [activeProfileService, defaultRoster]);
+
+  const effectiveMemberBuilds = useMemo<RecommendationContext["memberBuilds"]>(() => {
+    if (!selectedProfile) return memberBuilds;
+    const coneIds = new Set(selectedProfile.lightCones.map(({ logicalId }) => logicalId));
+    const relicIds = new Set(selectedProfile.relics.map(({ setLogicalId }) => setLogicalId));
+    const equipment = new Map(bundle?.entities.equipment.filter(({ validToReleaseId }) => validToReleaseId === null)
+      .map((item) => [item.logicalId, item]) ?? []);
+    const availableCones = selectedProfile.lightCones.filter(({ logicalId }) => equipment.get(logicalId)?.kind === "light-cone")
+      .sort((left, right) => left.logicalId.localeCompare(right.logicalId));
+    const relicGroups = [...relicIds].filter((logicalId) => equipment.get(logicalId)?.kind === "relic-set")
+      .map((logicalId) => ({ logicalId, pieces: Math.min(6, selectedProfile.relics.filter(({ setLogicalId }) => setLogicalId === logicalId).length) }))
+      .sort((left, right) => left.logicalId.localeCompare(right.logicalId));
+    const usedCones = new Set<string>();
+    return Object.fromEntries(selectedProfile.characters.map((character, characterIndex) => {
+      const configured = memberBuilds?.[character.logicalId];
+      const revision = bundle?.entities.characters.find((item) => item.logicalId === character.logicalId && item.validToReleaseId === null);
+      const configuredCone = configured?.lightCone && coneIds.has(configured.lightCone.logicalId) ? configured.lightCone : undefined;
+      const ownedCone = configuredCone ?? availableCones.find((cone) => {
+        const item = equipment.get(cone.logicalId);
+        return !usedCones.has(cone.logicalId) && item?.kind === "light-cone"
+          && (item.pathRestriction === null || item.pathRestriction === revision?.path);
+      });
+      if (ownedCone) usedCones.add(ownedCone.logicalId);
+      const configuredRelics = configured?.relicSets?.filter(({ logicalId }) => relicIds.has(logicalId));
+      const assignedRelics = configuredRelics?.length ? configuredRelics
+        : relicGroups.filter((_item, index) => index % selectedProfile.characters.length === characterIndex);
+      return [character.logicalId, {
+        ...configured, eidolon: character.eidolon,
+        lightCone: ownedCone ? { logicalId: ownedCone.logicalId, superimposition: ownedCone.superimposition } : undefined,
+        relicSets: assignedRelics.length ? assignedRelics.map((item) => ({ ...item })) : undefined,
+      }];
+    }));
+  }, [bundle, memberBuilds, selectedProfile]);
+
+  function chooseProfile(nextUid: string) {
+    const profile = profiles.find(({ uid }) => uid === nextUid) ?? null;
+    setSelectedUid(nextUid); setSelectedProfile(profile); setResults([]); setConstraintError(null); setSwitchNotice(true);
+    if (profile) {
+      setOwned(profile.characters.map(({ logicalId }) => logicalId).sort().join(", "));
+      setOwnedOnly(true);
+    } else { setOwned(defaultRoster); setOwnedOnly(false); }
+  }
+
   function submit(event: FormEvent) {
     event.preventDefault();
-    if (!bundle || presetLoading) return;
+    if (!bundle || presetLoading || profileLoading) return;
+    if (selectedProfile && selectedProfile.dataReleaseId !== bundle.release.id) {
+      setResults([]); setConstraintError("档案版本 " + selectedProfile.dataReleaseId + " 与推荐版本 " + bundle.release.id + " 不一致"); return;
+    }
     try {
       setResults(recommendTeams({
         releaseId: bundle.release.id,
         roster: ownedOnly ? { mode: "owned-only", characterIds: ids(owned) } : { mode: "unrestricted" },
         requiredCharacterIds: ids(required), excludedCharacterIds: ids(excluded),
         encounter: { mode: encounter, enemyWeaknesses: ids(weaknesses) }, objective,
-        archetype: archetype.trim() || undefined, maxResults: 3, maxCombinations: 5_000,
-      }, { bundle, communityPresets: presets, memberBuilds }));
-      setConstraintError(null);
+        archetype: archetype.trim() || undefined,
+        investment: selectedProfile ? {
+          allowedLightConeIds: selectedProfile.lightCones.map(({ logicalId }) => logicalId).sort(),
+          allowedRelicSetIds: [...new Set(selectedProfile.relics.map(({ setLogicalId }) => setLogicalId))].sort(),
+        } : undefined,
+        maxResults: 3, maxCombinations: 5_000,
+      }, { bundle, communityPresets: presets, memberBuilds: effectiveMemberBuilds }));
+      setConstraintError(null); setSwitchNotice(false);
     } catch (caught) {
       setResults([]);
       setConstraintError(caught instanceof RecommendationConstraintError
@@ -86,21 +180,24 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
   return (
     <section className="recommendation-page" aria-labelledby="recommendation-title">
       <header><p className="eyebrow">本地规则 · 确定评分 · 无需 API 密钥</p><h1 id="recommendation-title">Agent 推荐</h1><p>固定到 {bundle.release.gameVersion}（{bundle.release.id}）；Buff 数值只来自配队实验室 evaluator。</p></header>
+      {selectedProfile ? <p className="profile-allocation-note">档案装备按 stable ID 顺序自动分配：光锥只分给兼容命途且不重复，遗器实例按套装汇总后分配给角色。</p> : null}
       <form className="recommendation-controls" onSubmit={submit}>
-        <label>账号 UID（可选，仅作本次输入标识）<input aria-label="账号 UID" value={uid} onChange={(event) => setUid(event.target.value)} /></label>
-        <label className="owned-toggle"><input type="checkbox" checked={ownedOnly} onChange={(event) => setOwnedOnly(event.target.checked)} />仅使用已拥有角色</label>
-        <label className="wide-control">已拥有角色 logical ID<textarea aria-label="已拥有角色 logical ID" disabled={!ownedOnly} value={owned} onChange={(event) => setOwned(event.target.value)} /></label>
+        <label>本地账号 UID<select aria-label="本地账号 UID" value={selectedUid} disabled={profileLoading} onChange={(event) => chooseProfile(event.target.value)}><option value="">不使用本地档案</option>{profiles.map((profile) => <option key={profile.uid} value={profile.uid}>{profile.label ?? "未命名账号"} · {profile.uid}</option>)}</select></label>
+        <label className="owned-toggle"><input type="checkbox" checked={ownedOnly} disabled={selectedProfile !== null} onChange={(event) => setOwnedOnly(event.target.checked)} />仅使用已拥有角色</label>
+        <label className="wide-control">已拥有角色 logical ID<textarea aria-label="已拥有角色 logical ID" disabled={!ownedOnly} readOnly={selectedProfile !== null} value={owned} onChange={(event) => setOwned(event.target.value)} /></label>
         <label>必选角色<input aria-label="必选角色" value={required} onChange={(event) => setRequired(event.target.value)} placeholder="逗号分隔 logical ID" /></label>
         <label>排除角色<input aria-label="排除角色" value={excluded} onChange={(event) => setExcluded(event.target.value)} placeholder="逗号分隔 logical ID" /></label>
         <label>推荐目标<select aria-label="推荐目标" value={objective} onChange={(event) => setObjective(event.target.value as RecommendationObjective)}><option value="maximum-synergy">最大协同</option><option value="comfort">舒适生存</option><option value="low-investment">低投入</option></select></label>
         <label>战斗场景<select aria-label="战斗场景" value={encounter} onChange={(event) => setEncounter(event.target.value as EncounterMode)}><option value="standard">常规</option><option value="break">击破</option><option value="follow-up">追击</option><option value="damage-over-time">持续伤害</option></select></label>
         <label>敌方弱点<input aria-label="敌方弱点" value={weaknesses} onChange={(event) => setWeaknesses(event.target.value)} /></label>
         <label>目标流派<input aria-label="目标流派" value={archetype} onChange={(event) => setArchetype(event.target.value)} /></label>
-        <button type="submit" disabled={presetLoading}>{presetLoading ? "正在加载社区参考…" : "生成推荐"}</button>
+        <button type="submit" disabled={presetLoading || profileLoading || (selectedProfile !== null && selectedProfile.dataReleaseId !== bundle.release.id)}>{presetLoading ? "正在加载社区参考…" : profileLoading ? "正在加载本地账号…" : "生成推荐"}</button>
       </form>
+      {profileError ? <p className="source-warning">本地账号未载入：{profileError}。仍可使用手动输入。</p> : null}
+      {selectedProfile && selectedProfile.dataReleaseId !== bundle.release.id ? <p className="version-warning">所选 UID 固定到 {selectedProfile.dataReleaseId}，当前推荐版本为 {bundle.release.id}；请切换匹配版本或账号。</p> : null}
       {presetError ? <p className="source-warning">社区参考未载入：{presetError}。核心计算仍可离线运行，社区先验记为 0。</p> : null}
       {constraintError ? <div role="alert" className="build-error"><strong>约束冲突</strong><p>{constraintError}</p></div> : null}
-      {!constraintError && results.length === 0 ? <p role="status">填写条件后生成最多三个可审计候选队伍。</p> : null}
+      {!constraintError && results.length === 0 ? <p role="status">{switchNotice ? "切换账号后已清除旧推荐；请重新生成。" : "填写条件后生成最多三个可审计候选队伍。"}</p> : null}
       <div className="recommendation-results">
         {results.map((result, index) => (
           <article key={result.team.join("|")} aria-label={`候选队伍 ${index + 1}`} className="recommendation-card">
