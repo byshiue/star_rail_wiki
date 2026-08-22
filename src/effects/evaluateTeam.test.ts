@@ -76,7 +76,13 @@ describe("evaluateTeam", () => {
     ));
     const zero = evaluateTeam(goldenTeam, allConditionsActive, bundle);
     const negative = evaluateTeam(
-      { ...goldenTeam, effectLevels: { "effect:damage": 2 } }, allConditionsActive, bundle,
+      {
+        ...goldenTeam,
+        members: goldenTeam.members.map((member) => ({
+          ...member, skillLevels: { "ability:synthetic-support-skill": 2 },
+        })),
+      },
+      allConditionsActive, bundle,
     );
     expect(groupTotal(zero, "damage_bonus")).toBe(0);
     expect(groupTotal(negative, "damage_bonus")).toBe(-0.25);

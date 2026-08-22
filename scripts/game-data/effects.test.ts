@@ -58,7 +58,10 @@ describe("reviewed effect overlays", () => {
     });
     expect(effects.find(({ id }) => id === "effect:4.4:0412")).toMatchObject({
       sourceRevisionId: "ability:110102@4.4-cn-2026-08-21",
-      metric: "damage_bonus", operation: "percent", value: { base: 0.33, scaling: [] },
+      metric: "damage_bonus", operation: "percent", value: {
+        base: 0.33,
+        scaling: [0.363, 0.396, 0.429, 0.462, 0.495, 0.5363, 0.5775, 0.6188, 0.66, 0.693, 0.726, 0.759, 0.792, 0.825],
+      },
       target: { type: "single-ally" }, trigger: { type: "event", event: "skill:ability:110102" },
       duration: { type: "turns", value: 1 }, stacking: { type: "refresh", maxStacks: 1 },
       reviewStatus: "reviewed",
@@ -66,7 +69,10 @@ describe("reviewed effect overlays", () => {
     });
     expect(effects.find(({ id }) => id === "effect:4.4:0437")).toMatchObject({
       sourceRevisionId: "ability:110603@4.4-cn-2026-08-21",
-      metric: "defense_reduction", operation: "percent", value: { base: 0.3, scaling: [] },
+      metric: "defense_reduction", operation: "percent", value: {
+        base: 0.3,
+        scaling: [0.31, 0.32, 0.33, 0.34, 0.35, 0.3625, 0.375, 0.3875, 0.4, 0.41, 0.42, 0.43, 0.44, 0.45],
+      },
       target: { type: "all-enemies" }, trigger: { type: "event", event: "ultimate:ability:110603" },
       duration: { type: "turns", value: 2 }, stacking: { type: "refresh", maxStacks: 1 },
       reviewStatus: "reviewed",

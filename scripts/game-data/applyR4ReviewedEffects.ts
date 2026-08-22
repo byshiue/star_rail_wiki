@@ -1,6 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { EffectOverlayFileSchema, type EffectOverlay } from "./applyEffectOverlays";
+import {
+  deriveReviewedSkillScaling, ReviewedSkillScalingSnapshotSchema,
+} from "./reviewedSkillScaling";
 
 const reviewed: Record<string, {
   sourceRevisionId: string; originalText: string;
@@ -27,8 +30,12 @@ const reviewed: Record<string, {
   },
 };
 
-export async function applyR4ReviewedEffects(file = "data/manual/effects.json"): Promise<void> {
+export async function applyR4ReviewedEffects(
+  file = "data/manual/effects.json",
+  scalingFile = "data/releases/4.4-cn-2026-08-21/reviewed-skill-scaling.json",
+): Promise<void> {
   const value = EffectOverlayFileSchema.parse(JSON.parse(await readFile(file, "utf8")));
+  const scaling = ReviewedSkillScalingSnapshotSchema.parse(JSON.parse(await readFile(scalingFile, "utf8")));
   const found = new Set<string>();
   value.overlays = value.overlays.map((overlay) => {
     const review = reviewed[overlay.candidateId];
@@ -37,8 +44,12 @@ export async function applyR4ReviewedEffects(file = "data/manual/effects.json"):
       throw new Error(`reviewed candidate source/text drift: ${overlay.candidateId}`);
     }
     found.add(overlay.candidateId);
+    const featureLogicalId = review.sourceRevisionId.split("@")[0]!;
+    const reviewedValue = featureLogicalId.startsWith("ability:")
+      ? deriveReviewedSkillScaling(scaling, featureLogicalId)
+      : overlay.value;
     return EffectOverlayFileSchema.shape.overlays.element.parse({
-      ...overlay, target: review.target, trigger: review.trigger, duration: review.duration,
+      ...overlay, value: reviewedValue, target: review.target, trigger: review.trigger, duration: review.duration,
       stacking: review.stacking, conditions: [], dispellable: null, reviewStatus: "reviewed",
     });
   });

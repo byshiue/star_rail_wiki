@@ -21,7 +21,15 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
 
   function selectCharacter(slot: number, event: ChangeEvent<HTMLSelectElement>) {
     const characterLogicalId = event.target.value;
-    onChange(slot, characterLogicalId ? { characterLogicalId, eidolon: 0, lightCone: undefined, relicSets: undefined } : null);
+    onChange(slot, characterLogicalId ? {
+      characterLogicalId, eidolon: 0, lightCone: undefined, relicSets: undefined, skillLevels: undefined,
+    } : null);
+  }
+
+  function updateSkillLevel(
+    slot: number, member: TeamMemberBuild, featureLogicalId: string, level: number,
+  ) {
+    onChange(slot, { skillLevels: { ...(member.skillLevels ?? {}), [featureLogicalId]: level } });
   }
 
   function updateRelic(slot: number, member: TeamMemberBuild, index: number, logicalId: string) {
@@ -53,6 +61,21 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
           const member = memberAt(slot);
           const character = characters.find(({ logicalId }) => logicalId === member?.characterLogicalId);
           const selectedCone = cones.find(({ logicalId }) => logicalId === member?.lightCone?.logicalId);
+          const characterFeatures = character && member ? [
+            ...character.abilities,
+            ...character.traces,
+            ...character.eidolons.slice(0, member.eidolon),
+          ] : [];
+          const scalingFeatures = characterFeatures.flatMap((feature) => {
+            const reviewed = bundle.entities.effects.filter((effect) => (
+              effect.sourceRevisionId === feature.revisionId
+              && effect.reviewStatus === "reviewed" && effect.value.scaling.length > 0
+            ));
+            if (!reviewed.length) return [];
+            const maximumLevels = new Set(reviewed.map(({ value }) => value.scaling.length + 1));
+            if (maximumLevels.size !== 1) return [];
+            return [{ feature, maximumLevel: [...maximumLevels][0]! }];
+          }) ?? [];
           return (
             <fieldset className="team-slot" key={slot}>
               <legend>{slot}号位</legend>
@@ -83,6 +106,23 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
                       ))}
                     </select>
                   </label>
+                  {scalingFeatures.map(({ feature, maximumLevel }) => {
+                    const explicit = member.skillLevels?.[feature.logicalId];
+                    const selectedLevel = explicit ?? 1;
+                    return <label key={feature.logicalId}>
+                      <span>{feature.name}技能等级</span>
+                      <select
+                        aria-label={`${character.name}${feature.name}技能等级`}
+                        value={selectedLevel}
+                        onChange={(event) => updateSkillLevel(slot, member, feature.logicalId, Number(event.target.value))}
+                      >
+                        {Array.from({ length: maximumLevel }, (_, level) => (
+                          <option key={level + 1} value={level + 1}>等级 {level + 1}</option>
+                        ))}
+                      </select>
+                      <small>当前等级：{selectedLevel}{explicit === undefined ? "（默认）" : "（明确选择）"}</small>
+                    </label>;
+                  })}
                   <label>
                     <span>光锥</span>
                     <select

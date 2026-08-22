@@ -28,9 +28,9 @@
 - Modify: `scripts/validate-production-audit.ts`
 - Modify: reviewed 4.4 effects and bundles
 
-- [ ] Write RED tests for source identity, exact parameter rows, endpoints and drift.
-- [ ] Implement checksum-bound extraction and repository validation.
-- [ ] Rebuild 4.4 and prove Bronya/Pela arrays contain all levels 1..15.
+- [x] Write RED tests for source identity, exact parameter rows, endpoints and drift.
+- [x] Implement checksum-bound extraction and repository validation.
+- [x] Rebuild 4.4 and prove Bronya/Pela arrays contain all levels 1..15.
 
 ### Task 2: Member feature-level build contract
 
@@ -40,9 +40,9 @@
 - Modify: `src/simulator/teamBuild.ts`
 - Test: `src/effects/evaluateTeam*.test.ts`, `src/simulator/simulator*.test.tsx`
 
-- [ ] Write RED tests for default level 1, range, ownership, stale ID and URL roundtrip.
-- [ ] Add canonical `TeamMemberBuild.skillLevels` and strict validation.
-- [ ] Route selected/default feature levels into evaluation and evidence.
+- [x] Write RED tests for default level 1, range, ownership, stale ID and URL roundtrip.
+- [x] Add canonical `TeamMemberBuild.skillLevels` and strict validation.
+- [x] Route selected/default feature levels into evaluation and evidence.
 
 ### Task 3: Accessible simulator controls and disclosure
 
@@ -51,9 +51,9 @@
 - Modify: `src/simulator/EvidenceDrawer.tsx`
 - Modify: profile/community/recommendation build producers and tests as required
 
-- [ ] Write RED interaction tests for visible selectors, edits and default evidence.
-- [ ] Implement reviewed-scaling-only selectors and character-change cleanup.
-- [ ] Show selected maximum and explicit/default status in evidence.
+- [x] Write RED interaction tests for visible selectors, edits and default evidence.
+- [x] Implement reviewed-scaling-only selectors and character-change cleanup.
+- [x] Show selected maximum and explicit/default status in evidence.
 
 ### Task 4: Production acceptance and handoff
 
@@ -62,9 +62,8 @@
 - Modify: `README.md`, `src/wiki/WikiPage.tsx`
 - Modify: Task 12/R5 ledgers
 
-- [ ] Extend the four-person E2E to select level 15 and verify 82.5%/45%.
-- [ ] Verify share reload retains both selected levels and evidence.
-- [ ] Update honest skill-level-aware coverage copy.
-- [ ] Run full Vitest, CI-mode E2E, data audit, build, scanner, npm audit and diff checks.
-- [ ] Request independent review, fix blockers, commit on `main`, report DONE without push.
-
+- [x] Extend the four-person E2E to select level 15 and verify 82.5%/45%.
+- [x] Verify share reload retains both selected levels and evidence.
+- [x] Update honest skill-level-aware coverage copy.
+- [x] Run full Vitest, CI-mode E2E, data audit, build, scanner, npm audit and diff checks.
+- [x] Request independent review, fix blockers, commit on `main`, report DONE without push.

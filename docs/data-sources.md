@@ -50,6 +50,8 @@ evidence `d5c40c0095bc5fdef9ce968c078304a95caab235`; 4.4 points to it directly.
 
 Coverage is deliberately candid: all 2,780 source descriptions containing auditable numeric tokens produce 4,667 numeric-effect candidates. These map one-to-one to 42 reviewed effects and 4,625 explicit unsupported effects. Of the reviewed effects, exactly one has team scope; the newly reviewed production sample also contains one single-ally effect and one all-enemies effect. Unsupported entries retain the complete Chinese clause and a mechanic-specific reason and never enter arithmetic. Silent numeric descriptions, `unmappedEffects`, and unresolved StarRailRes parameter tokens are all zero; this does not mean that every mechanic is simulated.
 
+Skill-level arithmetic is narrower than effect coverage. The reviewed snapshot `data/releases/4.4-cn-2026-08-21/reviewed-skill-scaling.json` is bound to the same StarRailRes revision, source path and full-file SHA-256 as the production manifest. It records every parameter row for Bronya's `ability:110102` and Pela's `ability:110603`; repository validation re-derives their exact 15-level arrays and rejects drift. No other skill currently claims level-aware arithmetic. Missing member levels are intentionally evaluated as level 1 and disclosed as a default in evidence.
+
 Production updates require a new release ID, official channel evidence, immutable revisions, checksums, entity diff, role review and separate reviewed/unsupported coverage in a Pull Request. Scheduled automation never deploys or overwrites current data directly.
 
 The weekly workflow queries the public HoYoLAB official-notice feed, accepts only a

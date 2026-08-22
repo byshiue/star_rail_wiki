@@ -143,6 +143,7 @@ test("every member, eidolon, equipment, or relic edit clears community provenanc
     { eidolon: 0 },
     { lightCone: undefined },
     { relicSets: [] },
+    { skillLevels: { "ability:a": 1 } },
   ];
 
   for (const edit of edits) {

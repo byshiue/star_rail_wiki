@@ -22,6 +22,7 @@ const TeamMemberBuildSchema = z.strictObject({
   }).optional(),
   relicSets: z.array(RelicSetBuildSchema).max(3).optional(),
   consumableMetrics: z.array(EffectMetricSchema).optional(),
+  skillLevels: z.record(z.string().regex(/^(?:ability|trace|eidolon):/), z.number()).optional(),
 });
 const TeamBuildSchema = z.strictObject({
   releaseId: z.string().min(1),
@@ -63,6 +64,9 @@ function normalizedBuild(build: TeamBuild): TeamBuild {
           ? [...member.relicSets].map((set) => ({ ...set })).sort((a, b) => a.logicalId.localeCompare(b.logicalId))
           : undefined,
         consumableMetrics: member.consumableMetrics ? [...member.consumableMetrics].sort() : undefined,
+        skillLevels: member.skillLevels ? Object.fromEntries(
+          Object.entries(member.skillLevels).sort(([left], [right]) => left.localeCompare(right)),
+        ) : undefined,
       }))
       .sort((a, b) => (a.slotId ?? "").localeCompare(b.slotId ?? "")),
   };
@@ -75,6 +79,7 @@ function assertCommunityPresetConsistency(build: TeamBuild): void {
     const assumption = preset.memberAssumptions[index];
     if (member.slotId !== `slot-${index + 1}` || member.characterLogicalId !== preset.slots[index]
       || member.eidolon !== assumption.eidolon || member.relicSets?.length
+      || Object.keys(member.skillLevels ?? {}).length
       || member.consumableMetrics?.length) return false;
     if (assumption.equipment.status === "none") return member.lightCone === undefined;
     return member.lightCone?.logicalId === assumption.equipment.logicalId

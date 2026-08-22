@@ -61,4 +61,3 @@ No selector is rendered for generated, unsupported or non-scaling effects.
 - Production four-person E2E selects level 15 for both skills and verifies
   values, targets, evidence and reload persistence.
 - Full tests, E2E, data audit, build, secret scan and dependency audit pass.
-

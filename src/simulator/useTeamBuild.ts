@@ -49,6 +49,9 @@ export function useTeamBuild(
         eidolon: update.eidolon ?? existing?.eidolon ?? 0,
         lightCone: Object.prototype.hasOwnProperty.call(update, "lightCone") ? update.lightCone : existing?.lightCone,
         relicSets: Object.prototype.hasOwnProperty.call(update, "relicSets") ? update.relicSets : existing?.relicSets,
+        skillLevels: Object.prototype.hasOwnProperty.call(update, "skillLevels") ? update.skillLevels : existing?.skillLevels,
+        consumableMetrics: Object.prototype.hasOwnProperty.call(update, "consumableMetrics")
+          ? update.consumableMetrics : existing?.consumableMetrics,
       };
       return {
         ...current, communityPreset: undefined,

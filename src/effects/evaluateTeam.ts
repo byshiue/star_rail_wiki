@@ -95,10 +95,9 @@ export function evaluateTeam(
         });
         continue;
       }
-      const explicitLevel = build.effectLevels?.[effect.id];
       const evaluationId = `${source.sourceInstanceId}:${effect.id}`;
       const requestedStacks = scenario.stacks?.[evaluationId] ?? scenario.stacks?.[effect.id];
-      const scaling = resolveEffectValue(effect, explicitLevel ?? source.scalingLevel, requestedStacks);
+      const scaling = resolveEffectValue(effect, source.scalingLevel, requestedStacks);
       warnings.push(...scaling.warnings);
       if (scaling.stacks === 0) {
         inactive.push({

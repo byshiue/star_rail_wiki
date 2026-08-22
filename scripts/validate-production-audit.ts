@@ -9,6 +9,9 @@ import {
   CharacterRankOrphanAuditSchema,
   validateCharacterRankOrphanAudit,
 } from "./game-data/orphanAudit";
+import {
+  assertReviewedSkillScalingEffects, ReviewedSkillScalingSnapshotSchema,
+} from "./game-data/reviewedSkillScaling";
 
 const DateString = z.string().refine((value) => Number.isFinite(Date.parse(value)), "invalid date");
 const AuditSchema = z.strictObject({
@@ -138,5 +141,28 @@ export async function validateProductionAudit(
   const unresolvedParameterTokens = JSON.stringify(bundle).match(/#\d+\[[^\]]+\]/g)?.length ?? 0;
   if (unresolvedParameterTokens !== audit.normalization.unresolvedParameterTokens) {
     throw new Error(`production unresolved parameter token count changed: ${unresolvedParameterTokens}`);
+  }
+  if (bundle.release.id === "4.4-cn-2026-08-21") {
+    const scaling = ReviewedSkillScalingSnapshotSchema.parse(
+      await json(path.join(auditRoot, "reviewed-skill-scaling.json")),
+    );
+    const scalingSource = manifest.sources.find(({ revision }) => revision === scaling.sourceRevision);
+    if (scaling.sourceRevision !== audit.contentSource.revision
+      || scaling.sourcePath !== "index_new/cn/character_skills.json"
+      || scalingSource?.fileChecksums[scaling.sourcePath] !== scaling.sourceChecksum) {
+      throw new Error("reviewed skill scaling snapshot is not bound to the immutable production source");
+    }
+    const features = bundle.entities.characters.flatMap((character) => (
+      [...character.abilities, ...character.traces, ...character.eidolons]
+    ));
+    for (const record of scaling.records) {
+      const feature = features.find(({ logicalId }) => logicalId === record.featureLogicalId);
+      if (!feature || feature.revisionId !== `${record.featureLogicalId}@${scaling.releaseId}`
+        || !feature.provenance.some((source) => source.sourceRevision === scaling.sourceRevision
+          && source.sourcePath === scaling.sourcePath && source.sourceChecksum === scaling.sourceChecksum)) {
+        throw new Error(`reviewed skill scaling feature provenance drift: ${record.featureLogicalId}`);
+      }
+    }
+    assertReviewedSkillScalingEffects(scaling, bundle.entities.effects);
   }
 }

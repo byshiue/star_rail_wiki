@@ -67,6 +67,7 @@ export function EvidenceDrawer({ evidence, bundle, onClose }: EvidenceDrawerProp
           <div><dt>来源修订</dt><dd>{evidence.sourceRevisionId}</dd></div>
           <div><dt>来源逻辑 ID</dt><dd>{evidence.sourceLogicalId}</dd></div>
           <div><dt>评审状态</dt><dd>{evidence.effectReviewStatus} / {evidence.sourceReviewStatus}</dd></div>
+          {evidence.maximumLevel ? <div><dt>技能等级</dt><dd>等级 {evidence.selectedLevel}（{evidence.levelSelection === "default" ? "默认" : "明确选择"}；最高 {evidence.maximumLevel}）</dd></div> : null}
           <div><dt>原文</dt><dd>{evidence.originalText}</dd></div>
         </dl>
         <h3>来源链接</h3>

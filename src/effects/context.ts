@@ -10,12 +10,12 @@ export interface TeamMemberBuild {
   lightCone?: { logicalId: string; superimposition: number };
   relicSets?: Array<{ logicalId: string; pieces: number }>;
   consumableMetrics?: EffectMetric[];
+  skillLevels?: Record<string, number>;
 }
 
 export interface TeamBuild {
   releaseId: string;
   members: TeamMemberBuild[];
-  effectLevels?: Record<string, number>;
   communityPreset?: CommunityPresetReference;
 }
 
@@ -60,6 +60,9 @@ export interface EffectEvidence {
   provenanceIds: string[];
   provenance: EntityProvenance[];
   originalText: string;
+  selectedLevel?: number;
+  maximumLevel?: number;
+  levelSelection?: "default" | "explicit";
 }
 
 export interface EvaluatedEffect {
@@ -127,7 +130,7 @@ export interface TeamBuildIssue {
     | "ambiguous_character_revision" | "invalid_eidolon" | "unknown_light_cone"
     | "ambiguous_light_cone_revision" | "invalid_superimposition" | "unknown_relic_set"
     | "ambiguous_relic_revision" | "invalid_set_pieces" | "duplicate_relic_set"
-    | "unknown_effect_level" | "invalid_effect_level";
+    | "unknown_skill_level" | "invalid_skill_level";
   path: string;
   message: string;
 }
@@ -151,6 +154,8 @@ export interface SourceSelection {
   legal: boolean;
   reason?: EvaluationReason;
   scalingLevel: number;
+  maximumLevel?: number;
+  levelSelection?: "default" | "explicit";
   setPieces?: number;
 }
 
@@ -209,12 +214,17 @@ function selectedEquipment(
 
 function addFeatureSources(
   sources: SourceSelection[], features: FeatureRevision[], member: TeamMemberBuild,
-  memberId: string, legal = true,
+  memberId: string, maximumLevels: ReadonlyMap<string, number>, legal = true,
 ): void {
-  for (const revision of features) sources.push({
-    sourceInstanceId: `${memberId}:${revision.revisionId}`, memberId, revision, member, legal,
-    reason: legal ? undefined : "eidolon_locked", scalingLevel: 1,
-  });
+  for (const revision of features) {
+    const maximumLevel = maximumLevels.get(revision.revisionId);
+    const explicit = member.skillLevels?.[revision.logicalId];
+    sources.push({
+      sourceInstanceId: `${memberId}:${revision.revisionId}`, memberId, revision, member, legal,
+      reason: legal ? undefined : "eidolon_locked", scalingLevel: explicit ?? 1,
+      maximumLevel, levelSelection: maximumLevel ? (explicit === undefined ? "default" : "explicit") : undefined,
+    });
+  }
 }
 
 function addEquipmentSource(
@@ -225,6 +235,20 @@ function addEquipmentSource(
     sourceInstanceId: `${memberId}:${revision.revisionId}`, memberId, revision, member,
     legal, reason: legal ? undefined : "illegal_equipment", scalingLevel, setPieces,
   });
+}
+
+function reviewedSkillMaximumLevels(bundle: GameReleaseBundle): Map<string, number> {
+  const maximumLevels = new Map<string, number>();
+  for (const effect of bundle.entities.effects) {
+    if (effect.reviewStatus !== "reviewed" || effect.value.scaling.length === 0) continue;
+    const maximumLevel = effect.value.scaling.length + 1;
+    const existing = maximumLevels.get(effect.sourceRevisionId);
+    if (existing !== undefined && existing !== maximumLevel) {
+      throw new Error(`inconsistent reviewed scaling ranges for ${effect.sourceRevisionId}`);
+    }
+    maximumLevels.set(effect.sourceRevisionId, maximumLevel);
+  }
+  return maximumLevels;
 }
 
 export function createEvaluationContext(
@@ -241,6 +265,7 @@ export function createEvaluationContext(
 
   const sources: SourceSelection[] = [];
   const members = new Map<string, TeamMemberBuild>();
+  const maximumLevels = reviewedSkillMaximumLevels(bundle);
   for (const [index, member] of build.members.entries()) {
     const path = `members[${index}]`;
     const memberId = member.slotId ?? `slot-${index + 1}`;
@@ -251,10 +276,24 @@ export function createEvaluationContext(
     if (!Number.isInteger(member.eidolon) || member.eidolon < 0 || member.eidolon > character.eidolons.length) {
       issues.push({ code: "invalid_eidolon", path: `${path}.eidolon`, message: `eidolon must be 0..${character.eidolons.length}` });
     }
-    addFeatureSources(sources, character.abilities, member, memberId);
-    addFeatureSources(sources, character.traces, member, memberId);
+    const features = [...character.abilities, ...character.traces, ...character.eidolons];
+    for (const [featureLogicalId, level] of Object.entries(member.skillLevels ?? {})) {
+      const levelPath = `${path}.skillLevels.${featureLogicalId}`;
+      const feature = features.find(({ logicalId }) => logicalId === featureLogicalId);
+      const maximumLevel = feature ? maximumLevels.get(feature.revisionId) : undefined;
+      if (!feature || maximumLevel === undefined) {
+        issues.push({ code: "unknown_skill_level", path: levelPath, message: `unknown reviewed scaling feature ${featureLogicalId}` });
+        continue;
+      }
+      if (!Number.isInteger(level) || level < 1 || level > maximumLevel) issues.push({
+        code: "invalid_skill_level", path: levelPath,
+        message: `skill level must be 1..${maximumLevel}`,
+      });
+    }
+    addFeatureSources(sources, character.abilities, member, memberId, maximumLevels);
+    addFeatureSources(sources, character.traces, member, memberId, maximumLevels);
     character.eidolons.forEach((revision, eidolonIndex) => {
-      addFeatureSources(sources, [revision], member, memberId, member.eidolon >= eidolonIndex + 1);
+      addFeatureSources(sources, [revision], member, memberId, maximumLevels, member.eidolon >= eidolonIndex + 1);
     });
 
     if (member.lightCone) {
@@ -292,14 +331,6 @@ export function createEvaluationContext(
     }
   }
 
-  for (const [effectId, level] of Object.entries(build.effectLevels ?? {})) {
-    const effect = bundle.entities.effects.find(({ id }) => id === effectId);
-    if (!effect) issues.push({ code: "unknown_effect_level", path: `effectLevels.${effectId}`, message: `unknown effect ${effectId}` });
-    else if (!Number.isInteger(level) || level < 1 || level > effect.value.scaling.length + 1) issues.push({
-      code: "invalid_effect_level", path: `effectLevels.${effectId}`,
-      message: `effect level must be 1..${effect.value.scaling.length + 1}`,
-    });
-  }
   if (issues.length) throw new TeamBuildValidationError(issues);
 
   sources.sort((a, b) => a.sourceInstanceId.localeCompare(b.sourceInstanceId));
@@ -329,5 +360,8 @@ export function buildEvidence(
     sourceReviewStatus: source.revision.reviewStatus,
     releaseId: context.bundle.release.id,
     provenanceIds, provenance, originalText: effect.originalText,
+    selectedLevel: source.maximumLevel ? source.scalingLevel : undefined,
+    maximumLevel: source.maximumLevel,
+    levelSelection: source.levelSelection,
   };
 }
