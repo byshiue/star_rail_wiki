@@ -66,7 +66,7 @@ repository policy test.
 ### Task 6: Verification and handoff
 
 - [x] Run `npm run check`, `npm run test:e2e`, production audit and `npm audit --audit-level=high` sequentially.
-- [ ] Review diffs, commit on main, and report exact coverage totals and residual risk.
+- [x] Review diffs, commit on main, and report exact coverage totals and residual risk.
 
 R4 locked totals: 4.3 is 4,501 candidates / 0 reviewed / 4,501
 unsupported / 0 unmapped; 4.4 is 4,667 candidates / 42 reviewed / 4,625

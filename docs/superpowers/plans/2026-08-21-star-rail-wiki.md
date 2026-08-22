@@ -980,7 +980,7 @@ all-enemies target. Local verification passed 335 Vitest tests, 8 CI-mode
 Playwright tests, repository validation, production build, full repository
 secret scanning, `npm audit --audit-level=high`, and `git diff --check`.
 
-- [ ] **Step 7: Commit the release candidate**
+- [x] **Step 7: Commit the release candidate**
 
 ```bash
 git add tests .github/workflows README.md NOTICE LICENSE data public docs/data-sources.md
