@@ -8,6 +8,7 @@ import { EffectOverlayFileSchema, applyEffectOverlays } from "./game-data/applyE
 import { assertComplete, buildCoverageReport, collectEffectSources, CoverageReportSchema } from "./game-data/checkEffectCoverage";
 import { extractCandidateEffects, type CandidateEffect } from "./game-data/extractEffects";
 import { validateCommunityRepository } from "./validate-community-teams";
+import { assertRoleAnnotations, loadRoleAnnotations } from "./game-data/applyRoleAnnotations";
 
 async function readJson(file: string): Promise<unknown> {
   return JSON.parse(await readFile(file, "utf8"));
@@ -31,6 +32,7 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
   );
   const allCandidates: CandidateEffect[] = [];
   const allReviewedEffects: Effect[] = [];
+  const roleAnnotations = await loadRoleAnnotations(path.join(repositoryRoot, "data/manual/character-roles.json"));
   const bundles = new Map<string, GameReleaseBundle>();
 
   for (const indexedRelease of releaseIndex.releases) {
@@ -47,6 +49,7 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
     }
     const bundle = GameReleaseBundleSchema.parse({ release, entities });
     bundles.set(bundle.release.id, bundle);
+    assertRoleAnnotations(bundle, roleAnnotations);
 
     const checkedInCoverage = CoverageReportSchema.parse(
       await readJson(path.join(directory, "coverage.json")),

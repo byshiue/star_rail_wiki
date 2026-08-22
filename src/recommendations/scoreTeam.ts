@@ -1,13 +1,17 @@
 import { validatePresetForBundle } from "../community/teamRepository";
-import type { TeamPreset } from "../domain/community";
+import { MAX_COMMUNITY_TEAM_PRESETS, type TeamPreset } from "../domain/community";
 import type { CharacterRevision } from "../domain/entities";
 import type { GameReleaseBundle } from "../domain/releases";
-import type { TeamEvaluation } from "../effects/evaluateTeam";
+import type { TeamBuild, TeamEvaluation } from "../effects/evaluateTeam";
 import { characterRoles } from "./enumerateTeams";
-import type { RecommendationContext, RecommendationRequest } from "./request";
+import {
+  RecommendationCancelledError, RecommendationConstraintError,
+  type RecommendationContext, type RecommendationRequest,
+} from "./request";
 
 export const WEIGHTS_VERSION = "recommendation-weights-v2" as const;
 export const COMMUNITY_PRIOR_WEIGHT_CAP = 5;
+export const MAX_COMMUNITY_PRESETS = MAX_COMMUNITY_TEAM_PRESETS;
 
 export interface ScoreComponents {
   roleCoverage: number;
@@ -57,6 +61,11 @@ export interface CommunityReference {
   eligibilityIssues: string[];
 }
 
+export interface PreparedCommunityPreset {
+  preset: TeamPreset;
+  baseEligibilityIssues: string[];
+}
+
 export interface ScoredTeam {
   components: ScoreComponents;
   weighted: WeightedScoreComponents;
@@ -64,8 +73,14 @@ export interface ScoredTeam {
   communityReferences: CommunityReference[];
 }
 
+type PresetValidator = (preset: TeamPreset, bundle: GameReleaseBundle) => string[];
+
 function rounded(value: number): number {
   return Math.round(value * 10_000) / 10_000;
+}
+
+function clamped01(value: number): number {
+  return Math.max(0, Math.min(1, rounded(value)));
 }
 
 function teamCharacters(team: readonly string[], bundle: GameReleaseBundle): CharacterRevision[] {
@@ -75,28 +90,78 @@ function teamCharacters(team: readonly string[], bundle: GameReleaseBundle): Cha
   )).sort((left, right) => left.logicalId.localeCompare(right.logicalId));
 }
 
-function communityEligibility(preset: TeamPreset, request: RecommendationRequest, context: RecommendationContext): string[] {
-  const issues = validatePresetForBundle(preset, context.bundle);
+function baseCommunityEligibility(
+  preset: TeamPreset, request: RecommendationRequest, context: RecommendationContext, validator: PresetValidator,
+): string[] {
+  const issues = validator(preset, context.bundle);
   const excluded = new Set(request.excludedCharacterIds);
   const owned = request.roster.mode === "owned-only" ? new Set(request.roster.characterIds) : null;
   if (preset.slots.some((id) => excluded.has(id))) issues.push("preset contains an excluded character");
   if (owned && preset.slots.some((id) => !owned.has(id))) issues.push("preset contains an unowned character");
   if (request.objective === "low-investment" && preset.investment !== "low") issues.push("preset is not low investment");
   for (const assumption of preset.memberAssumptions) {
-    if (request.investment?.maxEidolon !== undefined && assumption.eidolon > request.investment.maxEidolon) issues.push("preset exceeds max eidolon");
+    if (request.investment?.maxEidolon !== undefined && assumption.eidolon > request.investment.maxEidolon) {
+      issues.push("preset exceeds max eidolon");
+    }
     if (assumption.equipment.status === "specified" && request.investment?.allowedLightConeIds
-      && !request.investment.allowedLightConeIds.includes(assumption.equipment.logicalId)) issues.push("preset uses a disallowed light cone");
+      && !request.investment.allowedLightConeIds.includes(assumption.equipment.logicalId)) {
+      issues.push("preset uses a disallowed light cone");
+    }
   }
   return [...new Set(issues)].sort();
 }
 
+export function prepareCommunityPresets(
+  request: RecommendationRequest, context: RecommendationContext,
+  validator: PresetValidator = context.communityPresetValidator ?? validatePresetForBundle,
+): PreparedCommunityPreset[] {
+  if (context.communityPresets.length > MAX_COMMUNITY_PRESETS) {
+    throw new RecommendationConstraintError([{
+      code: "community_library_too_large",
+      message: `社区配队资料最多允许 ${MAX_COMMUNITY_PRESETS} 条；当前为 ${context.communityPresets.length} 条`,
+    }]);
+  }
+  const relevant = [...context.communityPresets]
+    .filter(({ releaseId }) => releaseId === request.releaseId)
+    .sort((left, right) => left.id.localeCompare(right.id));
+  return relevant.map((preset, index) => {
+    if ((index & 31) === 0 && context.signal?.aborted) throw new RecommendationCancelledError();
+    return { preset, baseEligibilityIssues: baseCommunityEligibility(preset, request, context, validator) };
+  });
+}
+
+function assumptionIssues(preset: TeamPreset, build: TeamBuild): string[] {
+  const members = new Map(build.members.map((member) => [member.characterLogicalId, member]));
+  const issues: string[] = [];
+  for (const [index, characterLogicalId] of preset.slots.entries()) {
+    const member = members.get(characterLogicalId);
+    if (!member) continue;
+    const assumption = preset.memberAssumptions[index];
+    if (member.characterLogicalId !== characterLogicalId) issues.push(`${characterLogicalId} character mismatch`);
+    if (member.eidolon !== assumption.eidolon) issues.push(`${characterLogicalId} eidolon mismatch`);
+    if (assumption.equipment.status === "none") {
+      if (member.lightCone) issues.push(`${characterLogicalId} light cone mismatch`);
+    } else if (!member.lightCone
+      || member.lightCone.logicalId !== assumption.equipment.logicalId
+      || member.lightCone.superimposition !== assumption.equipment.superimposition) {
+      issues.push(`${characterLogicalId} light cone or superimposition mismatch`);
+    }
+    if (member.relicSets?.length) issues.push(`${characterLogicalId} relic sets are outside preset assumptions`);
+    if (member.consumableMetrics?.length) issues.push(`${characterLogicalId} consumable metrics are outside preset assumptions`);
+  }
+  return issues.sort();
+}
+
 function communityEvidence(
-  team: readonly string[], presets: readonly TeamPreset[], request: RecommendationRequest, context: RecommendationContext,
+  team: readonly string[], build: TeamBuild, prepared: readonly PreparedCommunityPreset[], signal?: AbortSignal,
 ): CommunityReference[] {
   const ids = new Set(team);
-  return presets.filter((preset) => preset.releaseId === request.releaseId).map((preset) => {
+  return prepared.map(({ preset, baseEligibilityIssues }, index) => {
+    if ((index & 31) === 0 && signal?.aborted) throw new RecommendationCancelledError();
     const overlapCount = preset.slots.filter((id) => ids.has(id)).length;
-    const eligibilityIssues = communityEligibility(preset, request, context);
+    const eligibilityIssues = overlapCount >= 3
+      ? [...new Set([...baseEligibilityIssues, ...assumptionIssues(preset, build)])].sort()
+      : baseEligibilityIssues;
     const boundedContribution = eligibilityIssues.length ? 0 : overlapCount === 4 ? 1 : overlapCount === 3 ? 0.5 : 0;
     return {
       presetId: preset.id, sourceUrl: preset.source.url, author: preset.source.author,
@@ -112,15 +177,15 @@ function communityEvidence(
 }
 
 export function scoreTeam(
-  team: readonly string[], evaluation: TeamEvaluation, request: RecommendationRequest,
-  context: RecommendationContext,
+  team: readonly string[], build: TeamBuild, evaluation: TeamEvaluation, request: RecommendationRequest,
+  context: RecommendationContext, preparedCommunity: readonly PreparedCommunityPreset[],
 ): ScoredTeam {
   const characters = teamCharacters(team, context.bundle);
   const roles = characters.flatMap(characterRoles);
   const relevant = evaluation.active.length + evaluation.conditional.length
     + evaluation.inactive.length + evaluation.wasted.length;
   const applicable = evaluation.active.length + evaluation.conditional.length;
-  const references = communityEvidence(team, context.communityPresets, request, context);
+  const references = communityEvidence(team, build, preparedCommunity, context.signal);
   const mechanicMetrics = request.encounter.mode === "break" ? new Set(["break_effect", "resistance_reduction"])
     : request.encounter.mode === "follow-up" ? new Set(["action_advance", "critical_damage"])
       : request.encounter.mode === "damage-over-time" ? new Set(["vulnerability", "effect_hit_rate"])
@@ -131,23 +196,23 @@ export function scoreTeam(
   const supportCount = roles.filter((role) => role === "support").length;
   const sustainCount = roles.filter((role) => role === "sustain").length;
   const damageCount = roles.filter((role) => role === "damage").length;
-  const investmentCost = rounded(team.reduce((total, characterId) => {
-    const build = context.memberBuilds?.[characterId];
-    return total + (build?.eidolon ?? 0) / 6 + (build?.lightCone ? 0.25 : 0)
-      + Math.min(0.25, (build?.relicSets?.length ?? 0) * 0.1);
+  const investmentCost = clamped01(team.reduce((total, characterId) => {
+    const member = context.memberBuilds?.[characterId];
+    return total + (member?.eidolon ?? 0) / 6 + (member?.lightCone ? 0.25 : 0)
+      + Math.min(0.25, (member?.relicSets?.length ?? 0) * 0.1);
   }, 0) / team.length);
   const desiredDealer = request.desiredDamageDealerId ? team.includes(request.desiredDamageDealerId) : true;
   const components: ScoreComponents = {
-    roleCoverage: rounded((desiredDealer ? 0.4 : 0) + Math.min(1, damageCount) * 0.25
+    roleCoverage: clamped01((desiredDealer ? 0.4 : 0) + Math.min(1, damageCount) * 0.25
       + Math.min(1, supportCount) * 0.2 + Math.min(1, sustainCount) * 0.15),
-    buffApplicability: relevant ? rounded(applicable / relevant) : 0,
-    mechanicSynergy: rounded(Math.min(1, mechanicMatches / 2)),
-    skillPointEconomy: rounded(Math.min(1, (supportCount + sustainCount) / 3)),
+    buffApplicability: relevant ? clamped01(applicable / relevant) : 0,
+    mechanicSynergy: clamped01(mechanicMatches / 2),
+    skillPointEconomy: clamped01((supportCount + sustainCount) / 3),
     actionCompatibility: evaluation.groups.some(({ metric }) => metric === "speed" || metric === "action_advance") ? 1 : 0.5,
-    weaknessCoverage: request.encounter.enemyWeaknesses.length ? rounded(weaknessMatches / 4) : 0.5,
-    survivability: rounded(Math.min(1, sustainCount * (request.objective === "comfort" ? 1 : 0.8))),
-    activationCost: Math.max(relevant ? rounded(evaluation.inactive.length / relevant) : 0, investmentCost),
-    wastedEffects: relevant ? rounded(evaluation.wasted.length / relevant) : 0,
+    weaknessCoverage: request.encounter.enemyWeaknesses.length ? clamped01(weaknessMatches / 4) : 0.5,
+    survivability: clamped01(sustainCount * (request.objective === "comfort" ? 1 : 0.8)),
+    activationCost: clamped01(Math.max(relevant ? evaluation.inactive.length / relevant : 0, investmentCost)),
+    wastedEffects: relevant ? clamped01(evaluation.wasted.length / relevant) : 0,
     communityPrior: references[0]?.boundedContribution ?? 0,
   };
   const appliedWeights = weightsForRequest(request);

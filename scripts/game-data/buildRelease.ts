@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { fetchSource } from "./fetchSource";
 import { importStarRailRes } from "./importStarRailRes";
+import { applyRoleAnnotations, loadRoleAnnotations, type RoleAnnotationRecord } from "./applyRoleAnnotations";
 import { assertReleasedChannel } from "./releaseGuard";
 import { assertRequiredPaths, loadSourceManifest, type ApprovedSourceManifest } from "./sourceManifest";
 import { GameReleaseBundleSchema, type GameReleaseBundle } from "../../src/domain/releases";
@@ -13,12 +14,14 @@ export interface BuildReleaseInput {
   manifest: ApprovedSourceManifest;
   sourceRoot?: string;
   overlays?: readonly EffectOverlay[];
+  roleAnnotations?: readonly RoleAnnotationRecord[];
 }
 
 export async function buildRelease(input: BuildReleaseInput): Promise<GameReleaseBundle> {
   assertReleasedChannel(input.manifest);
   assertRequiredPaths(input.manifest);
-  const bundle = importStarRailRes(await fetchSource(input.manifest, input.sourceRoot));
+  const unannotated = importStarRailRes(await fetchSource(input.manifest, input.sourceRoot));
+  const bundle = applyRoleAnnotations(unannotated, input.roleAnnotations ?? await loadRoleAnnotations());
   if (input.overlays === undefined) return bundle;
 
   const candidates = collectEffectSources(bundle.entities).flatMap(extractCandidateEffects);
@@ -65,6 +68,9 @@ async function main(): Promise<void> {
   const output = option("--output");
   const sourceRootIndex = process.argv.indexOf("--source-root");
   const sourceRoot = sourceRootIndex >= 0 ? process.argv[sourceRootIndex + 1] : undefined;
+  const rolesIndex = process.argv.indexOf("--roles");
+  const rolesFile = rolesIndex >= 0 ? process.argv[rolesIndex + 1] : undefined;
+  if (rolesIndex >= 0 && !rolesFile) throw new Error("missing required option --roles");
   const overlaysIndex = process.argv.indexOf("--overlays");
   const overlaysFile = overlaysIndex >= 0 ? process.argv[overlaysIndex + 1] : undefined;
   if (overlaysIndex >= 0 && !overlaysFile) throw new Error("missing required option --overlays");
@@ -75,7 +81,7 @@ async function main(): Promise<void> {
   if (!manifest.sources.some((source) => source.revision === sourceRevision)) {
     throw new Error(`source revision ${sourceRevision} is not present in the reviewed manifest`);
   }
-  await writeRelease(await buildRelease({ manifest, sourceRoot, overlays: await loadEffectOverlays(overlaysFile) }), output);
+  await writeRelease(await buildRelease({ manifest, sourceRoot, overlays: await loadEffectOverlays(overlaysFile), roleAnnotations: await loadRoleAnnotations(rolesFile) }), output);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

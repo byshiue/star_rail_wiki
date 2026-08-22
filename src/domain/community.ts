@@ -1,4 +1,5 @@
 import { z } from "zod";
+export const MAX_COMMUNITY_TEAM_PRESETS = 500;
 
 const boundedText = (max: number) => z.string().trim().min(1).max(max);
 const LogicalIdSchema = boundedText(120);
@@ -94,7 +95,7 @@ export type TeamPreset = z.infer<typeof TeamPresetSchema>;
 export const CommunityTeamLibrarySchema = z.strictObject({
   schemaVersion: z.literal(1), libraryKind: z.enum(["fixture-only", "mixed"]),
   currentReleaseId: boundedText(120).nullable(),
-  presets: z.array(TeamPresetSchema),
+  presets: z.array(TeamPresetSchema).max(MAX_COMMUNITY_TEAM_PRESETS),
 }).superRefine((library, context) => {
   const presetIds = new Set<string>();
   for (const [index, preset] of library.presets.entries()) {

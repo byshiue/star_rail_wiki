@@ -4,7 +4,7 @@ import { characterRoles, enumerateTeams, type CharacterRole, type ExcludedCandid
 import { explainRecommendation, type RecommendationExplanation } from "./explainRecommendation";
 import { recommendationScenario, RecommendationCancelledError, RecommendationConstraintError, stableUnique, type RecommendationContext, type RecommendationRequest } from "./request";
 import {
-  scoreTeam, WEIGHTS_VERSION, type CommunityReference, type ScoreComponents,
+  prepareCommunityPresets, scoreTeam, WEIGHTS_VERSION, type CommunityReference, type ScoreComponents,
   type ScoreWeights, type WeightedScoreComponents, weightsForRequest,
 } from "./scoreTeam";
 
@@ -76,6 +76,7 @@ export function recommendTeams(
   request: RecommendationRequest, context: RecommendationContext,
 ): RecommendationResult[] {
   if (context.signal?.aborted) throw new RecommendationCancelledError();
+  const preparedCommunity = prepareCommunityPresets(request, context);
   const enumeration = enumerateTeams(request, context);
   const scenario = recommendationScenario(request, context);
   const candidateExclusions: ExcludedCandidate[] = [];
@@ -96,7 +97,7 @@ export function recommendTeams(
       continue;
     }
     const evaluation = evaluateTeam(build, scenario, context.bundle);
-    scored.push({ team, build, evaluation, ...scoreTeam(team, evaluation, request, context) });
+    scored.push({ team, build, evaluation, ...scoreTeam(team, build, evaluation, request, context, preparedCommunity) });
   }
   scored.sort((left, right) => right.totalScore - left.totalScore || left.team.join("|").localeCompare(right.team.join("|")));
   if (!scored.length) throw new RecommendationConstraintError([{ code: "no_legal_team", message: "候选构筑均不满足装备或投入约束" }]);

@@ -1,4 +1,4 @@
-import type { CharacterRevision } from "../domain/entities";
+import type { CharacterRevision, CharacterRole } from "../domain/entities";
 import { RecommendationCancelledError, RecommendationConstraintError, stableUnique, type RecommendationContext, type RecommendationRequest } from "./request";
 
 export interface ExcludedCandidate {
@@ -15,10 +15,10 @@ export interface EnumerationResult {
   truncated: boolean;
 }
 
-export type CharacterRole = "damage" | "support" | "sustain";
+export type { CharacterRole } from "../domain/entities";
 
 export function characterRoles(character: CharacterRevision): readonly CharacterRole[] {
-  return character.roles;
+  return character.roleAnnotation.roles;
 }
 
 function validatePool(request: RecommendationRequest, context: RecommendationContext) {

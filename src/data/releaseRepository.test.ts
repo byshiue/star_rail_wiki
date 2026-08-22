@@ -41,9 +41,11 @@ describe("release repository", () => {
   it("encodes the release ID independently while accepting a matching response", async () => {
     const requestedId = "4.3 fixture/评审";
     const requestedRelease = { ...releaseFixture, id: requestedId };
+    const requestedEntities = structuredClone(entitiesFixture);
+    for (const character of requestedEntities.characters) character.roleAnnotation.releaseId = requestedId;
     const fetchStub = vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify(requestedRelease), { status: 200 }))
-      .mockResolvedValueOnce(new Response(JSON.stringify(entitiesFixture), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(requestedEntities), { status: 200 }))
       .mockResolvedValueOnce(new Response(JSON.stringify(
         releaseIndexFor(requestedRelease, releaseFixture),
       ), { status: 200 }));

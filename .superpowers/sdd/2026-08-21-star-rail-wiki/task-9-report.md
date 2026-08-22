@@ -77,3 +77,26 @@ Verification after fixes:
 - `npm run validate:data`: passed.
 - `npm run build`: passed.
 - Focused recommendation suite after final adversarial additions: 2 files, 15 tests passed.
+
+## Fix round 2 — community assumptions, bounded preprocessing, and role provenance
+
+Addressed every remaining and newly raised review finding.
+
+- Community legality is prepared once at recommendation start. `validatePresetForBundle()` and request-level owned/excluded/investment checks run once per relevant preset; candidate scoring performs only overlap plus four-slot assumption checks. A 400-preset/multi-candidate regression records exactly 400 validator calls.
+- Candidate assumptions are matched by character logical ID against the actual validated `TeamBuild`: eidolon, light-cone ID, superimposition, and the preset contract exclusion of relic/consumable fields. Any mismatch contributes zero and retains a reason.
+- Community data is capped at 500 presets in both the Zod library schema and direct recommendation context. Preparation and candidate scans check `AbortSignal` every 32 presets.
+- Removed project-invented `roles` from the upstream StarRailRes schema and restored the reviewed raw fixture checksums. `data/manual/character-roles.json` is now the versioned reviewed overlay; each record contains release, roles, review status, and immutable evidence provenance. Composition and repository validation require exactly one matching record for every active character, with missing/duplicate tests.
+- Character bundles retain the complete `roleAnnotation`, and the bundle schema rejects annotation/release mismatches. Public and source fixtures were synchronized without broad formatting churn.
+- All score components, including activation cost, are clamped to `[0,1]`. A maximum E6 + cone + relic input yields activation cost `1` and the UI percentage/weight interpretation remains consistent.
+- Added true permutation coverage with at least two required and two excluded characters plus a seven-character owned roster, along with assumption mismatch, maximum investment, large community library, call-count, hard-limit, and cancellation regressions.
+
+Final Fix R2 verification:
+
+- `npm test -- --maxWorkers=2`: 32 files, 219 tests passed.
+- Focused recommendations: 2 files, 20 tests passed.
+- Game-data suite: 8 files, 76 tests passed.
+- `npm run typecheck`: passed.
+- `npm run lint`: passed.
+- `npm run validate:data`: passed.
+- `npm run build`: passed.
+- `git diff --check`: passed.

@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { buildRelease, writeRelease } from "./buildRelease";
+import { loadRoleAnnotations } from "./applyRoleAnnotations";
 import { diffReleases } from "./diffReleases";
 import { loadSourceManifest } from "./sourceManifest";
 
@@ -113,5 +114,21 @@ describe("released game-data importer", () => {
         changes: [{ path: "$", before: expect.objectContaining({ name: "幽锁深牢的系囚" }), after: undefined }],
       },
     ]);
+  });
+});
+
+it("keeps roles out of the upstream contract and requires exactly one reviewed annotation", async () => {
+  const upstream = JSON.parse(await readFile(path.join(fixtureRoot, "index_new/cn/characters.json"), "utf8"));
+  expect(upstream[0]).not.toHaveProperty("roles");
+  expect(upstream[0]).not.toHaveProperty("roleAnnotation");
+  const manifest = await loadSourceManifest(path.join(fixtureRoot, "manifest.json"));
+  await expect(buildRelease({ manifest, sourceRoot: fixtureRoot, roleAnnotations: [] })).rejects.toThrow(/exactly one role annotation.*got 0/i);
+  const annotations = await loadRoleAnnotations();
+  const match = annotations.find((entry) => entry.releaseId === manifest.releaseId && entry.characterLogicalId === "character:1001")!;
+  await expect(buildRelease({ manifest, sourceRoot: fixtureRoot, roleAnnotations: [...annotations, structuredClone(match)] })).rejects.toThrow(/exactly one role annotation.*got 2/i);
+  const bundle = await buildRelease({ manifest, sourceRoot: fixtureRoot, roleAnnotations: annotations });
+  expect(bundle.entities.characters[0].roleAnnotation).toMatchObject({
+    releaseId: manifest.releaseId, roles: ["support"], reviewStatus: "reviewed",
+    provenance: [expect.objectContaining({ sourcePath: "index_new/cn/characters.json" })],
   });
 });

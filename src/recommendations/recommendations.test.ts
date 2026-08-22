@@ -4,6 +4,7 @@ import { CommunityTeamLibrarySchema, type TeamPreset } from "../domain/community
 import { fixtureBundle } from "../effects/__fixtures__/goldenTeams";
 import { RecommendationConstraintError } from "./request";
 import { recommendTeams } from "./recommendTeams";
+import { MAX_COMMUNITY_PRESETS, prepareCommunityPresets, scoreTeam } from "./scoreTeam";
 
 const allCharacters = fixtureBundle.entities.characters.map(({ logicalId }) => logicalId);
 const context = {
@@ -167,10 +168,75 @@ it("uses explicit versioned mixed roles and is invariant to weakness and allowli
   const equipment = bundle.entities.equipment[0]!;
   bundle.entities.equipment.push({ ...structuredClone(equipment), logicalId: "light-cone:other", revisionId: "light-cone:other@4.3-fixture", pathRestriction: null });
   const memberBuilds = { "character:synthetic-support": { eidolon: 0, lightCone: { logicalId: "light-cone:synthetic-cone", superimposition: 1 } } };
-  mixed.name = "无职责名称"; mixed.path = "unknown"; mixed.roles = ["damage", "support"];
+  mixed.name = "无职责名称"; mixed.path = "unknown"; mixed.roleAnnotation.roles = ["damage", "support"];
   const reorderedBundle = structuredClone(bundle); reorderedBundle.entities.equipment.reverse();
   const first = recommendTeams({ ...request, encounter: { mode: "standard", enemyWeaknesses: ["wind", "synthetic"] }, investment: { allowedLightConeIds: ["light-cone:other", "light-cone:synthetic-cone"] } }, { ...context, bundle, memberBuilds });
   const second = recommendTeams({ ...request, encounter: { mode: "standard", enemyWeaknesses: ["synthetic", "wind"] }, investment: { allowedLightConeIds: ["light-cone:synthetic-cone", "light-cone:other"] } }, { ...context, bundle: reorderedBundle, memberBuilds });
   expect(second).toEqual(first);
   expect(first.find((result) => result.team.includes("character:synthetic-sub-dps"))!.roles["character:synthetic-sub-dps"]).toEqual(["damage", "support"]);
+});
+
+it("matches community assumptions against the actual candidate by character and equipment rank", () => {
+  const assumptions = structuredClone(eligiblePreset().memberAssumptions);
+  assumptions[1] = { eidolon: 0, equipment: { status: "specified", logicalId: "light-cone:synthetic-cone", superimposition: 2 } };
+  const preset = eligiblePreset({ memberAssumptions: assumptions });
+  const bundle = structuredClone(fixtureBundle);
+  const cone = bundle.entities.equipment[0]!;
+  bundle.entities.equipment.push({ ...structuredClone(cone), logicalId: "relic-set:synthetic", revisionId: "relic-set:synthetic@4.3-fixture", kind: "relic-set", pathRestriction: null, superimpositionValues: [], setThresholds: [2] });
+  const [result] = recommendTeams({ ...request, requiredCharacterIds: ["character:synthetic-dps", "character:synthetic-support"] }, {
+    ...context, bundle, communityPresets: [preset], memberBuilds: {
+      "character:synthetic-support": { eidolon: 0, lightCone: { logicalId: "light-cone:synthetic-cone", superimposition: 1 }, relicSets: [{ logicalId: "relic-set:synthetic", pieces: 2 }], consumableMetrics: ["damage_bonus" as const] },
+    },
+  });
+  expect(result.communityReferences[0]).toMatchObject({
+    presetId: preset.id, boundedContribution: 0,
+    eligibilityIssues: expect.arrayContaining([expect.stringContaining("light cone or superimposition mismatch"), expect.stringContaining("relic sets"), expect.stringContaining("consumable metrics")]),
+  });
+});
+
+it("precomputes each relevant preset once, enforces the library limit, and aborts bounded scans", () => {
+  const library = Array.from({ length: 400 }, (_, index) => eligiblePreset({ id: `team:perf-${index}` }));
+  let calls = 0;
+  const prepared = prepareCommunityPresets(request, { ...context, communityPresets: library }, () => { calls += 1; return []; });
+  expect(prepared).toHaveLength(400);
+  expect(calls).toBe(400);
+  calls = 0;
+  const recommendations = recommendTeams({ ...request, maxCombinations: 3, maxResults: 1 }, { ...context, communityPresets: library, communityPresetValidator: () => { calls += 1; return []; } });
+  expect(recommendations).toHaveLength(1);
+  expect(calls).toBe(400);
+  expect(() => prepareCommunityPresets(request, { ...context, communityPresets: Array.from({ length: MAX_COMMUNITY_PRESETS + 1 }, (_, index) => eligiblePreset({ id: `team:over-${index}` })) })).toThrow(/最多允许 500 条/);
+  const controller = new AbortController();
+  let scanned = 0;
+  expect(() => prepareCommunityPresets(request, { ...context, communityPresets: library, signal: controller.signal }, () => {
+    scanned += 1; if (scanned === 33) controller.abort(); return [];
+  })).toThrow(/cancelled/i);
+  expect(scanned).toBeLessThan(100);
+});
+
+it("clamps maximum configured investment to one", () => {
+  const [baseline] = recommendTeams(request, { ...context, communityPresets: [] });
+  const memberBuilds = Object.fromEntries(baseline.team.map((id) => [id, {
+    eidolon: 6, lightCone: { logicalId: "light-cone:any", superimposition: 5 },
+    relicSets: [{ logicalId: "relic-set:any", pieces: 6 }],
+  }]));
+  const scored = scoreTeam(baseline.team, baseline.build, baseline.evaluation, request, { ...context, communityPresets: [], memberBuilds }, []);
+  expect(scored.components.activationCost).toBe(1);
+  expect(scored.weighted.activationCost).toBe(-8);
+});
+
+it("is invariant when roster, required, and excluded constraints each permute two or more items", () => {
+  const bundle = structuredClone(fixtureBundle);
+  const template = bundle.entities.characters.find(({ logicalId }) => logicalId === "character:synthetic-dps")!;
+  bundle.entities.characters.push(
+    { ...structuredClone(template), logicalId: "character:extra-a", revisionId: "character:extra-a@4.3-fixture" },
+    { ...structuredClone(template), logicalId: "character:extra-b", revisionId: "character:extra-b@4.3-fixture" },
+  );
+  const roster = bundle.entities.characters.map(({ logicalId }) => logicalId);
+  const constrained = { ...request, roster: { mode: "owned-only" as const, characterIds: roster },
+    requiredCharacterIds: ["character:synthetic-dps", "character:synthetic-support"],
+    excludedCharacterIds: ["character:synthetic-breaker", "character:extra-a"] };
+  const first = recommendTeams(constrained, { bundle, communityPresets: [] });
+  const second = recommendTeams({ ...constrained, roster: { mode: "owned-only", characterIds: [...roster].reverse() },
+    requiredCharacterIds: [...constrained.requiredCharacterIds].reverse(), excludedCharacterIds: [...constrained.excludedCharacterIds].reverse() }, { bundle, communityPresets: [] });
+  expect(second).toEqual(first);
 });

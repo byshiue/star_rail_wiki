@@ -26,6 +26,7 @@ export interface RecommendationRequest {
 export interface RecommendationContext {
   bundle: GameReleaseBundle;
   communityPresets: TeamPreset[];
+  communityPresetValidator?: (preset: TeamPreset, bundle: GameReleaseBundle) => string[];
   memberBuilds?: Record<string, Omit<TeamMemberBuild, "characterLogicalId" | "slotId">>;
   scenario?: BattleScenario;
   signal?: AbortSignal;
@@ -33,7 +34,8 @@ export interface RecommendationContext {
 
 export interface ConstraintIssue {
   code: "release_mismatch" | "unknown_character" | "required_excluded_conflict"
-    | "required_not_owned" | "too_many_required" | "insufficient_roster" | "no_legal_team";
+    | "required_not_owned" | "too_many_required" | "insufficient_roster" | "no_legal_team"
+    | "community_library_too_large";
   message: string;
   characterId?: string;
   availableCount?: number;

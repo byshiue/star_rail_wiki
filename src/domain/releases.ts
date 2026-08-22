@@ -106,6 +106,12 @@ function collectKindedRevisionIdentities(entities: ReleaseEntities) {
 export const GameReleaseBundleSchema = z.strictObject({
   release: DataReleaseSchema, entities: ReleaseEntitiesSchema,
 }).superRefine((bundle, context) => {
+  for (const [characterIndex, character] of bundle.entities.characters.entries()) {
+    if (character.roleAnnotation.releaseId !== bundle.release.id) context.addIssue({
+      code: "custom", path: ["entities", "characters", characterIndex, "roleAnnotation", "releaseId"],
+      message: `role annotation release ${character.roleAnnotation.releaseId} does not match ${bundle.release.id}`,
+    });
+  }
   const revisionIds = new Set<string>();
   for (const revision of collectRevisionIdentities(bundle.entities)) {
     if (revisionIds.has(revision.revisionId)) {

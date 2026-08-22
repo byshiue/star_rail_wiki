@@ -10,6 +10,17 @@ export const EntityProvenanceSchema = z.strictObject({
 });
 export type EntityProvenance = z.infer<typeof EntityProvenanceSchema>;
 
+export const CharacterRoleSchema = z.enum(["damage", "support", "sustain"]);
+export type CharacterRole = z.infer<typeof CharacterRoleSchema>;
+export const CharacterRoleAnnotationSchema = z.strictObject({
+  releaseId: z.string().min(1),
+  roles: z.array(CharacterRoleSchema).min(1).max(3)
+    .refine((roles) => new Set(roles).size === roles.length, "duplicate character roles are not allowed"),
+  reviewStatus: ReviewStatusSchema,
+  provenance: z.array(EntityProvenanceSchema).min(1),
+});
+export type CharacterRoleAnnotation = z.infer<typeof CharacterRoleAnnotationSchema>;
+
 export const RevisionIdentitySchema = z.strictObject({
   logicalId: z.string().min(1), revisionId: z.string().min(1),
   validFromReleaseId: z.string().min(1), validToReleaseId: z.string().min(1).nullable(),
@@ -26,8 +37,7 @@ export type FeatureRevision = z.infer<typeof FeatureRevisionSchema>;
 export const CharacterRevisionSchema = RevisionIdentitySchema.extend({
   name: z.string().min(1), rarity: z.union([z.literal(4), z.literal(5)]),
   element: z.string().min(1), path: z.string().min(1), description: z.string().min(1),
-  roles: z.array(z.enum(["damage", "support", "sustain"])).min(1).max(3)
-    .refine((roles) => new Set(roles).size === roles.length, "duplicate character roles are not allowed"),
+  roleAnnotation: CharacterRoleAnnotationSchema,
   reviewStatus: ReviewStatusSchema, abilities: z.array(FeatureRevisionSchema),
   traces: z.array(FeatureRevisionSchema), eidolons: z.array(FeatureRevisionSchema),
 });

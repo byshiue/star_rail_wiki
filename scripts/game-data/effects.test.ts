@@ -304,6 +304,7 @@ describe("effect completeness gate", () => {
     await cp("public/data/releases/4.3-fixture/coverage.json", path.join(directory, "coverage.json"));
     await cp("data/community/teams.json", path.join(root, "data/community/teams.json"));
     await cp("data/manual/effects.json", path.join(root, "data/manual/effects.json"));
+    await cp("data/manual/character-roles.json", path.join(root, "data/manual/character-roles.json"));
 
     await expect(validateRepository(root)).rejects.toThrow(/fixture release|current release.*fixture/i);
   });
@@ -333,6 +334,7 @@ describe("effect completeness gate", () => {
       unmappedEffects: 0,
     }));
     await cp("data/community/teams.json", path.join(root, "data/community/teams.json"));
+    await cp("data/manual/character-roles.json", path.join(root, "data/manual/character-roles.json"));
     await writeFile(path.join(root, "data/manual/effects.json"), '{"schemaVersion":1,"overlays":[]}\n');
 
     await expect(validateRepository(root)).rejects.toThrow(/unmapped numeric effect|coverage report mismatch/i);

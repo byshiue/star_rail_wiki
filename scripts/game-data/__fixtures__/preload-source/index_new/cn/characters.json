@@ -5,7 +5,6 @@
     "rarity": 5,
     "element": "物理",
     "path": "同谐",
-    "roles": ["support"],
     "description": "来自4.4预载文本的混合输入。"
   }
 ]

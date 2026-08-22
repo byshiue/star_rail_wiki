@@ -57,6 +57,7 @@ function releasedTestData() {
     revision.validFromReleaseId = releaseId;
     revision.validToReleaseId = null;
   }
+  for (const character of entities.characters) character.roleAnnotation.releaseId = releaseId;
   const release = {
     ...fixture.release, id: releaseId, channel: "released" as const,
     sources: fixture.release.sources.map((source) => ({

@@ -13,6 +13,10 @@ The fixture manifest deliberately keeps source identities separate:
 
 Task 12 must audit matching immutable upstream revisions, licensing, and every changed description before a full real snapshot can be published.
 
+## Reviewed character role annotations
+
+Upstream character indexes are kept byte-for-byte free of project-invented role fields. Versioned damage, support, and sustain tags live in `data/manual/character-roles.json`; every annotation records its release, review status, and evidence provenance. Release composition fails unless each active character has exactly one matching annotation, and repository validation verifies the checked-in bundle against this overlay.
+
 Exact deterministic invocation:
 
 ```bash
@@ -21,6 +25,7 @@ npm run data:import -- \
   --source-revision d5c40c00 \
   --manifest scripts/game-data/__fixtures__/source/manifest.json \
   --source-root scripts/game-data/__fixtures__/source \
+  --roles data/manual/character-roles.json \
   --output /tmp/star-rail-release-a
 ```
 

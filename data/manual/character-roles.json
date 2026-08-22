@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "annotations": [
+    {
+      "characterLogicalId": "character:1001",
+      "releaseId": "4.3-reviewed-local-fixture",
+      "roles": [
+        "support"
+      ],
+      "reviewStatus": "reviewed",
+      "provenance": [
+        {
+          "sourceName": "StarRailRes index fixture reviewed role classification",
+          "sourceUrl": "https://github.com/Mar-7th/StarRailRes",
+          "sourceRevision": "93fa10b7",
+          "sourcePath": "index_new/cn/characters.json",
+          "sourceChecksum": "sha256:2231d45155c19f2cef3c8a7c97b6ce1c66951a71ac52ae5a5b516fd2156180f2"
+        }
+      ]
+    },
+    {
+      "characterLogicalId": "character:synthetic-breaker",
+      "releaseId": "4.3-fixture",
+      "roles": [
+        "damage",
+        "support"
+      ],
+      "reviewStatus": "reviewed",
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ]
+    },
+    {
+      "characterLogicalId": "character:synthetic-dps",
+      "releaseId": "4.3-fixture",
+      "roles": [
+        "damage"
+      ],
+      "reviewStatus": "reviewed",
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ]
+    },
+    {
+      "characterLogicalId": "character:synthetic-sub-dps",
+      "releaseId": "4.3-fixture",
+      "roles": [
+        "damage",
+        "support"
+      ],
+      "reviewStatus": "reviewed",
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ]
+    },
+    {
+      "characterLogicalId": "character:synthetic-support",
+      "releaseId": "4.3-fixture",
+      "roles": [
+        "support"
+      ],
+      "reviewStatus": "reviewed",
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ]
+    },
+    {
+      "characterLogicalId": "character:synthetic-sustain",
+      "releaseId": "4.3-fixture",
+      "roles": [
+        "sustain"
+      ],
+      "reviewStatus": "reviewed",
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ]
+    }
+  ]
+}

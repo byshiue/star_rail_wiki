@@ -16,7 +16,7 @@
       "rarity": 5,
       "element": "synthetic",
       "path": "synthetic-support",
-      "roles": ["support"],
+      "roleAnnotation": {"releaseId":"4.3-fixture","roles":["support"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
       "description": "仅用于自动化测试的合成角色，不代表任何真实游戏内容。",
       "reviewStatus": "reviewed",
       "abilities": [{
@@ -56,7 +56,7 @@
       "rarity": 5,
       "element": "synthetic",
       "path": "synthetic-dps",
-      "roles": ["damage"],
+      "roleAnnotation": {"releaseId":"4.3-fixture","roles":["damage"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
       "description": "仅用于自动化测试的合成输出角色，不代表任何真实游戏内容。",
       "reviewStatus": "reviewed",
       "abilities": [], "traces": [], "eidolons": []
@@ -72,7 +72,7 @@
         "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
       }],
       "name": "测试副输出", "rarity": 5, "element": "synthetic", "path": "synthetic-sub-dps",
-      "roles": ["damage", "support"],
+      "roleAnnotation": {"releaseId":"4.3-fixture","roles":["damage","support"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
       "description": "仅用于自动化测试的合成副输出角色，不代表任何真实游戏内容。",
       "reviewStatus": "reviewed", "abilities": [], "traces": [], "eidolons": []
     },
@@ -87,7 +87,7 @@
         "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
       }],
       "name": "测试生存", "rarity": 5, "element": "synthetic", "path": "synthetic-sustain",
-      "roles": ["sustain"],
+      "roleAnnotation": {"releaseId":"4.3-fixture","roles":["sustain"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
       "description": "仅用于自动化测试的合成生存角色，不代表任何真实游戏内容。",
       "reviewStatus": "reviewed", "abilities": [], "traces": [], "eidolons": []
     },
@@ -102,7 +102,7 @@
         "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
       }],
       "name": "测试削韧", "rarity": 5, "element": "synthetic", "path": "synthetic-breaker",
-      "roles": ["damage", "support"],
+      "roleAnnotation": {"releaseId":"4.3-fixture","roles":["damage","support"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
       "description": "仅用于自动化测试的合成削韧角色，不代表任何真实游戏内容。",
       "reviewStatus": "reviewed", "abilities": [], "traces": [], "eidolons": []
     }
