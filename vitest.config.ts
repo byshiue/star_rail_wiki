@@ -6,6 +6,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
+    maxWorkers: 1,
     setupFiles: ["@testing-library/jest-dom/vitest"],
     exclude: ["tests/e2e/**", "node_modules/**", "dist/**"],
   },
