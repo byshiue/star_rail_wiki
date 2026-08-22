@@ -3,7 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type { ZodIssue } from "zod";
 import { GameReleaseBundleSchema, ReleaseEntitiesSchema, ReleaseIndexSchema, type GameReleaseBundle, type ReleaseIndex } from "../src/domain/releases";
-import { PublicAccountProfileSchema, PUBLIC_PROFILE_INDEX_SCHEMA_VERSION } from "../src/profiles/publication";
+import { PublicAccountProfileSchema, PublicProfileIndexSchema, PUBLIC_PROFILE_INDEX_SCHEMA_VERSION } from "../src/profiles/publication";
 
 export type PublicProfileIssueCode = "invalid_path" | "uid_path_mismatch" | "invalid_profile" | "unexpected_field" | "secret" | "unknown_release" | "unreleased_release" | "unknown_character" | "unknown_equipment" | "duplicate_reference" | "file_too_large" | "unsupported_index_version" | "invalid_index" | "duplicate_uid" | "missing_profile_file" | "unindexed_profile_file" | "index_reference_mismatch";
 export type PublicProfileValidationIssue = { code: PublicProfileIssueCode; path: string; message: string };
@@ -53,6 +53,11 @@ export function validatePublicProfileFile(file: string, value: unknown, context?
 
 export function validatePublicProfileIndex(value: unknown, files: ReadonlyMap<string, unknown>): PublicProfileValidationIssue[] {
   const issues: PublicProfileValidationIssue[] = []; const record = typeof value === "object" && value !== null ? value as Record<string, unknown> : {};
+  issues.push(...scanSecrets(value));
+  const parsed = PublicProfileIndexSchema.safeParse(value);
+  if (!parsed.success) for (const detail of parsed.error.issues) {
+    issues.push(issue("invalid_index", zodPath(detail), detail.message));
+  }
   if (record.schemaVersion !== PUBLIC_PROFILE_INDEX_SCHEMA_VERSION) issues.push(issue("unsupported_index_version", "schemaVersion", `index schemaVersion must be ${PUBLIC_PROFILE_INDEX_SCHEMA_VERSION}`));
   const entries = Array.isArray(record.profiles) ? record.profiles : [];
   if (!Array.isArray(record.profiles)) issues.push(issue("invalid_index", "profiles", "profiles must be an array"));

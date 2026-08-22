@@ -27,7 +27,7 @@ const releaseIndex = { currentReleaseId: "release-4.3", releases: [release] } sa
 const context: PublicProfileReferenceContext = { releaseIndex, bundles: new Map([[release.id, bundle]]) };
 const valid = {
   schemaVersion: 1, uid: "100000001", releaseId: "release-4.3",
-  updatedAt: "2026-08-21T01:00:00.000Z", consentAt: "2026-08-21T02:00:00.000Z",
+  updatedAt: "2026-08-21T01:00:00.000Z", publication: { visibility: "public", consentedAt: "2026-08-21T02:00:00.000Z" },
   characters: [{ logicalId: "character:a", eidolon: 2, level: 80 }],
   lightCones: [{ logicalId: "light-cone:a", superimposition: 1, level: 80 }],
   relics: [{ setLogicalId: "relic-set:a", slot: "head" }],
@@ -46,7 +46,7 @@ describe("public profile file validation", () => {
   });
 
   it.each([
-    [{ ...valid, consentAt: undefined }, "invalid_profile"],
+    [{ ...valid, publication: undefined }, "invalid_profile"],
     [{ ...valid, label: "private" }, "unexpected_field"],
     [{ ...valid, token: "ghp_not_a_real_token" }, "secret"],
     [{ ...valid, releaseId: "unknown" }, "unknown_release"],

@@ -30,7 +30,7 @@ const publicProfile = {
   uid: "100000001",
   releaseId: "release-4.3",
   updatedAt: "2026-08-21T01:00:00.000Z",
-  consentAt: "2026-08-21T02:00:00.000Z",
+  publication: { visibility: "public" as const, consentedAt: "2026-08-21T02:00:00.000Z" },
   characters: [{ logicalId: "character:a", eidolon: 2, level: 80 }],
   lightCones: [{ logicalId: "light-cone:a", superimposition: 3, level: 80 }],
   relics: [{ setLogicalId: "relic-set:a", slot: "head" }],
