@@ -1,0 +1,69 @@
+# Star Rail Wiki R1 Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use test-driven-development and execute each task inline.
+
+**Goal:** Implement the approved R1 audit design with fail-closed deterministic data.
+
+**Architecture:** Strict normalization feeds a two-layer effect candidate gate.
+Independent immutable release bundles form the history chain. License and release
+discovery policies are executable repository checks.
+
+**Tech Stack:** TypeScript, Zod, Vitest, Playwright, GitHub Actions.
+
+**Spec:** `docs/superpowers/specs/2026-08-21-star-rail-wiki-r1-design.md`
+
+## Global constraints
+
+- Never accept mutable source refs, preload, beta, generated effects or unmapped candidates.
+- Use Dimbreath `d5c40c0095bc5fdef9ce968c078304a95caab235` and StarRailRes `7b349e39ee0f6f3bf814567995829b99c95e7a93` for 4.3.
+- Keep all release manifests, checksums, provenance and audits independent.
+
+### Task 1: Strict parameter normalization
+
+**Files:** `scripts/game-data/normalizeStarRailRes.ts`,
+`scripts/game-data/production-format.test.ts`, validation tests.
+
+- [ ] Add RED tests for `#N[f1]`, exact one-based columns, missing params and residual tokens.
+- [ ] Implement format-aware replacement and fail-closed scans.
+- [ ] Rebuild 4.4 and assert zero unresolved tokens.
+
+### Task 2: Residual numeric-effect completeness
+
+**Files:** `scripts/game-data/extractEffects.ts`, coverage/build scripts,
+`scripts/game-data/effects.test.ts`, reviewed overlay data.
+
+- [ ] Add RED tests for Dan Heng slow and representative delay/duration/heal/resistance clauses.
+- [ ] Add stable non-overlapping residual candidates.
+- [ ] Generate explicit unsupported overlays with mechanism-specific reasons.
+- [ ] Rebuild and lock the new reviewed/unsupported/unmapped totals.
+
+### Task 3: Real immutable 4.3 history
+
+**Files:** `data/releases/4.3-*/`, `public/data/releases/4.3-*/`, release index,
+audit validator, release diff UI and E2E.
+
+- [ ] Add RED chain/provenance tests using only checked-in Pages data.
+- [ ] Pin seven 4.3 checksums and independent audit evidence.
+- [ ] Build 4.3, link 4.4 previousReleaseId, and expose real before/after revisions.
+- [ ] Remove route-injected historical E2E data and verify a genuine entity diff.
+
+### Task 4: Third-party license boundary
+
+**Files:** `THIRD_PARTY_LICENSES/AGPL-3.0.txt`, `NOTICE`, source docs,
+repository policy test.
+
+- [ ] Add RED checks for full AGPL text, scope and immutable source offer.
+- [ ] Add the license and precise non-legal-advice notice.
+
+### Task 5: Fail-closed scheduled discovery
+
+**Files:** discovery script/tests, `.github/workflows/sync-game-data.yml`, docs.
+
+- [ ] Add RED dry-run tests for no-change, released update and preload/beta rejection.
+- [ ] Implement deterministic discovery/rebuild metadata.
+- [ ] Restrict workflow permissions and use `gh pr create --draft` only after audit.
+
+### Task 6: Verification and handoff
+
+- [ ] Run `npm run check`, `npm run test:e2e`, production audit and `npm audit --audit-level=high` sequentially.
+- [ ] Review diffs, commit on main, and report exact coverage totals and residual risk.
