@@ -48,6 +48,35 @@ describe("allocateProfileMemberBuilds", () => {
     ]));
   });
 
+  it("deduplicates configured relic sets and caps deterministic cross-character consumption", () => {
+    const { profile, bundle } = accountProfile();
+    profile.characters = profile.characters.slice(0, 2);
+    const relic = profile.relics[0]!;
+    profile.relics = Array.from({ length: 8 }, (_, index) => ({
+      ...relic, instanceId: `configured-relic:${index}`, slot: `slot:${index}`,
+    }));
+    const [first, second] = profile.characters.map(({ logicalId }) => logicalId);
+    const allocation = allocateProfileMemberBuilds(profile, bundle, {
+      [second!]: { eidolon: 1, relicSets: [{ logicalId: relic.setLogicalId, pieces: 4 }] },
+      [first!]: { eidolon: 1, relicSets: [
+        { logicalId: relic.setLogicalId, pieces: 2 },
+        { logicalId: relic.setLogicalId, pieces: 4 },
+      ] },
+    });
+    expect(allocation.memberBuilds[first!]!.relicSets).toEqual([
+      { logicalId: relic.setLogicalId, pieces: 6 },
+    ]);
+    expect(allocation.memberBuilds[second!]!.relicSets).toEqual([
+      { logicalId: relic.setLogicalId, pieces: 2 },
+    ]);
+    const allocated = Object.values(allocation.memberBuilds).flatMap(({ relicSets }) => relicSets ?? []);
+    expect(allocated.reduce((sum, item) => sum + item.pieces, 0)).toBe(8);
+    for (const build of Object.values(allocation.memberBuilds)) {
+      const ids = (build.relicSets ?? []).map(({ logicalId }) => logicalId);
+      expect(new Set(ids).size).toBe(ids.length);
+    }
+  });
+
   it("round-robins a large same-set inventory without duplicate sets or hanging", () => {
     const { profile, bundle } = accountProfile();
     profile.characters = profile.characters.slice(0, 2);

@@ -40,6 +40,27 @@ describe("IndexedDB profile adapter", () => {
     await deleteDB(name);
   });
 
+  it("rejects a genuinely blocked open with a structured retryable error", async () => {
+    const name = "profile-open-blocked";
+    const blocker = await openDB(name, 1, { upgrade(db) {
+      const store = db.createObjectStore("profiles", { keyPath: "uid" });
+      store.createIndex("by-updatedAt", "updatedAt");
+    } });
+    const adapter = createIndexedDbProfileDatabase({ name });
+    const pending = adapter.list();
+    const outcome = await Promise.race([
+      pending.then(() => ({ status: "fulfilled" as const }), (error: unknown) => ({ status: "rejected" as const, error })),
+      new Promise<{ status: "timeout" }>((resolve) => setTimeout(() => resolve({ status: "timeout" }), 50)),
+    ]);
+    blocker.close();
+    if (outcome.status === "timeout") await pending;
+    expect(outcome).toMatchObject({
+      status: "rejected", error: { code: "indexeddb_open_blocked", retryable: true },
+    });
+    adapter.close();
+    await deleteDB(name);
+  });
+
   it("reports blocked upgrades and closes on a later versionchange", async () => {
     const name = "profile-version-events";
     const blocker = await openDB(name, 1, { upgrade(db) {
@@ -50,9 +71,11 @@ describe("IndexedDB profile adapter", () => {
     const onBlocking = vi.fn();
     const adapter = createIndexedDbProfileDatabase({ name, onBlocked, onBlocking });
     const opening = adapter.list();
+    const blockedResult = expect(opening).rejects.toMatchObject({ code: "indexeddb_open_blocked", retryable: true });
     await vi.waitFor(() => expect(onBlocked).toHaveBeenCalledOnce());
+    await blockedResult;
     blocker.close();
-    await opening;
+    await expect(adapter.list()).resolves.toEqual({ profiles: [], issues: [] });
 
     const upgrade = openDB(name, PROFILE_DATABASE_VERSION + 1);
     await vi.waitFor(() => expect(onBlocking).toHaveBeenCalledOnce());

@@ -5,8 +5,11 @@ import { describe, expect, it } from "vitest";
 import { ReleaseProvider } from "../app/ReleaseProvider";
 import { fixtureBundle } from "../effects/__fixtures__/goldenTeams";
 import { createMemoryProfileDatabase } from "./profileDatabase";
+import "fake-indexeddb/auto";
+import { IDBFactory } from "fake-indexeddb";
+import { deleteDB, openDB } from "idb";
 import { ProfilePage } from "./ProfilePage";
-import { createProfileService } from "./profileService";
+import { createProfileService, defaultProfileService } from "./profileService";
 import { readFileSync } from "node:fs";
 const profileCss = readFileSync("src/styles/profiles.css", "utf8");
 
@@ -70,6 +73,30 @@ describe("ProfilePage", () => {
     expect(await screen.findByText(/还没有本地账号/)).toBeInTheDocument();
     expect(document.querySelector(".profile-page")).toHaveFocus();
     appHeader.remove(); skipLink.remove();
+  });
+
+  it("reports a real blocked IndexedDB open accessibly and retries after the old tab closes", async () => {
+    Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: new IDBFactory() });
+    const name = "star-rail-wiki";
+    const blocker = await openDB(name, 1, { upgrade(db) {
+      const store = db.createObjectStore("profiles", { keyPath: "uid" });
+      store.createIndex("by-updatedAt", "updatedAt");
+    } });
+    const service = defaultProfileService;
+    const user = userEvent.setup();
+    render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+      <ProfilePage service={service} />
+    </ReleaseProvider></MemoryRouter>);
+
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent("关闭其他已打开的本站标签页");
+    const retry = screen.getByRole("button", { name: "重试读取本地档案" });
+    expect(screen.queryByText("正在加载本地账号与版本资料…")).not.toBeInTheDocument();
+    blocker.close();
+    await user.click(retry);
+    expect(await screen.findByText(/还没有本地账号/)).toBeInTheDocument();
+    service.close();
+    await deleteDB(name);
   });
 
   it("reports isolated invalid stored records instead of silently hiding them", async () => {

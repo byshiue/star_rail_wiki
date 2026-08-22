@@ -19,17 +19,23 @@ Implemented private browser-local profiles keyed by exact nine-digit UIDs, with 
 - The delete dialog traps Tab/Shift+Tab, closes on Escape, restores focus to the opener, and marks the background inert while open.
 - `/profiles` retains creation, selection, rename, inventory editing, version provenance, backup/import, mismatch warnings, and 320px responsive behavior.
 
+## Fix R2 deterministic allocation and blocked-open recovery
+
+- Configured relic entries are aggregated by `logicalId` before allocation. Duplicate entries produce one output set, consume their deterministic summed request (capped at six pieces per character), and share the authoritative global instance count across characters without over-allocation.
+- A genuinely blocked IndexedDB open now rejects immediately with structured `ProfileStorageBlockedError` state (`code: indexeddb_open_blocked`, `retryable: true`) while the abandoned native request is closed if it later opens. The cached connection promise is cleared so a later attempt can reopen.
+- The production `defaultProfileService` path is covered against a real fake-indexeddb blocker. `/profiles` leaves its loading state, announces an accessible instruction to close older site tabs, exposes a retry button, and succeeds after the blocker closes.
+
 ## TDD and review evidence
 
 RED regressions covered authoritative allocation and exclusion, concurrent duplicate create/stale update, real v0 migration, real IndexedDB upgrade events and corrupt-record isolation, atomic invalid-reference imports, persisted recommendation selection after remount, and delete-modal keyboard behavior.
 
-An independent reviewer approved the original Task 10 implementation. Fix R1 received a second independent read-only review. Its initial pass found six edge cases; all were fixed with regressions, and the final pass approved the diff with 29/29 focused tests plus typecheck, lint, and diff checks passing.
+An independent reviewer approved the original Task 10 implementation. Fix R1 received a second independent read-only review. Its initial pass found six edge cases; all were fixed with regressions, and the final pass approved the diff with 29/29 focused tests. Fix R2 then received a separate final approval with 13/13 focused tests, typecheck, and diff checks passing.
 
 ## Final verification
 
 - `npm run typecheck`: passed.
 - `npm run lint`: passed.
-- `npm test -- --maxWorkers=2`: 36/36 files and 247/247 tests passed.
+- `npm test -- --maxWorkers=2`: 36/36 files and 250/250 tests passed.
 - `npm run validate:data`: passed.
 - `npm run build`: passed; Vite transformed 157 modules.
 - `git diff --check`: passed.

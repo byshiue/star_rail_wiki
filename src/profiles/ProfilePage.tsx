@@ -5,7 +5,7 @@ import { ProfileInventoryEditor } from "./ProfileInventoryEditor";
 import { CURRENT_PROFILE_SCHEMA_VERSION } from "./profileJson";
 import { readSelectedProfileUid, selectProfileUid } from "./profileSelection";
 import { defaultProfileService, type ImportStrategy, type ProfileService } from "./profileService";
-import type { ProfileStorageIssue } from "./profileDatabase";
+import { ProfileStorageBlockedError, type ProfileStorageIssue } from "./profileDatabase";
 
 type ProfilePageProps = { service?: ProfileService };
 
@@ -65,6 +65,8 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
   const [selectedUid, setSelectedUid] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [storageBlocked, setStorageBlocked] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [newUid, setNewUid] = useState("");
   const [newLabel, setNewLabel] = useState("");
   const releaseIds = useMemo(() => index?.releases.map(({ id }) => id).sort() ?? (bundle ? [bundle.release.id] : []), [bundle, index]);
@@ -98,12 +100,18 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
       const next = remembered && loaded.some(({ uid }) => uid === remembered) ? remembered : loaded[0]?.uid ?? null;
       setSelectedUid(next);
       selectProfileUid(next);
-      setError(null);
+      setError(null); setStorageBlocked(false);
     }).catch((caught: unknown) => {
-      if (active) setError(caught instanceof Error ? caught.message : "本地档案读取失败");
+      if (!active) return;
+      const blocked = caught instanceof ProfileStorageBlockedError
+        || (typeof caught === "object" && caught !== null && "code" in caught && caught.code === "indexeddb_open_blocked");
+      setStorageBlocked(blocked);
+      setError(blocked
+        ? "本地档案数据库正被其他标签页的旧版本占用。请关闭其他已打开的本站标签页，然后重试。"
+        : caught instanceof Error ? caught.message : "本地档案读取失败");
     }).finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [service]);
+  }, [loadAttempt, service]);
 
   useEffect(() => {
     if (!releaseId && releaseIds.length) setReleaseId(bundle?.release.id ?? releaseIds[0]!);
@@ -145,7 +153,7 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
       <header><p className="eyebrow">仅存于此浏览器 · 不联网 · 不保存凭证</p><h1 id="profile-title">账号与版本</h1><p>每个九位数字 UID 使用独立 IndexedDB 记录；切换账号不会共享库存。</p></header>
       {releaseError ? <p role="alert">版本资料加载失败：{releaseError}</p> : null}
       {!bundle && index?.currentReleaseId === null ? <div className="version-warning" role="status"><strong>暂无已发布 current 版本。</strong><p>仍可按所选历史或测试版本保存本地档案；版本来源会写入 dataReleaseId。</p></div> : null}
-      {error ? <div role="alert" className="build-error">{error}</div> : null}
+      {error ? <div role="alert" className="build-error"><p>{error}</p>{storageBlocked ? <button type="button" onClick={() => { setLoading(true); setLoadAttempt((attempt) => attempt + 1); }}>重试读取本地档案</button> : null}</div> : null}
       {storageIssues.length ? <div role="alert" className="build-error"><strong>部分本地档案已隔离</strong><ul>{storageIssues.map((issue) => <li key={issue.uid}><code>{issue.uid}</code>：{issue.message}</li>)}</ul></div> : null}
 
       <form className="profile-create" onSubmit={create}>

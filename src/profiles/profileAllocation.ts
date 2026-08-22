@@ -90,7 +90,12 @@ export function allocateProfileMemberBuilds(
     }
 
     const relicSets: Array<{ logicalId: string; pieces: number }> = [];
-    for (const relic of [...(requested?.relicSets ?? [])].sort((left, right) => left.logicalId.localeCompare(right.logicalId))) {
+    const requestedRelics = new Map<string, number>();
+    for (const relic of requested?.relicSets ?? []) {
+      requestedRelics.set(relic.logicalId, (requestedRelics.get(relic.logicalId) ?? 0) + relic.pieces);
+    }
+    for (const [logicalId, requestedPieces] of [...requestedRelics].sort(([left], [right]) => left.localeCompare(right))) {
+      const relic = { logicalId, pieces: requestedPieces };
       const revision = equipmentById.get(relic.logicalId);
       const available = remainingRelics.get(relic.logicalId) ?? 0;
       if (revision?.kind !== "relic-set" || !profile.relics.some(({ setLogicalId }) => setLogicalId === relic.logicalId)) {

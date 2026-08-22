@@ -20,6 +20,15 @@ export class ProfileConflictError extends Error {
   constructor(message: string) { super(message); this.name = "ProfileConflictError"; }
 }
 
+export class ProfileStorageBlockedError extends Error {
+  readonly code = "indexeddb_open_blocked";
+  readonly retryable = true;
+  constructor() {
+    super("IndexedDB open is blocked by another tab; close older tabs and retry");
+    this.name = "ProfileStorageBlockedError";
+  }
+}
+
 export interface ProfileDatabase {
   list(): Promise<ProfileListResult>;
   get(uid: string): Promise<AccountProfile | null>;
@@ -105,20 +114,31 @@ export function createIndexedDbProfileDatabase(
   const name = normalized.name ?? PROFILE_DATABASE_NAME;
   let databasePromise: Promise<IDBPDatabase<StarRailWikiDb>> | null = null;
   function database() {
-    databasePromise ??= openDB<StarRailWikiDb>(name, PROFILE_DATABASE_VERSION, {
+    if (databasePromise) return databasePromise;
+    let blocked = false;
+    let rejectBlocked!: (error: ProfileStorageBlockedError) => void;
+    const blockedPromise = new Promise<never>((_resolve, reject) => { rejectBlocked = reject; });
+    const opening = openDB<StarRailWikiDb>(name, PROFILE_DATABASE_VERSION, {
       upgrade(db, oldVersion) {
         if (oldVersion < 1) {
           const store = db.createObjectStore("profiles", { keyPath: "uid" });
           store.createIndex("by-updatedAt", "updatedAt");
         }
       },
-      blocked() { normalized.onBlocked?.(); },
+      blocked() {
+        blocked = true;
+        normalized.onBlocked?.();
+        databasePromise = null;
+        rejectBlocked(new ProfileStorageBlockedError());
+      },
       blocking(_currentVersion, _blockedVersion, event) {
         normalized.onBlocking?.();
         (event.target as IDBDatabase).close();
         databasePromise = null;
       },
     });
+    void opening.then((db) => { if (blocked) db.close(); }, () => undefined);
+    databasePromise = Promise.race([opening, blockedPromise]);
     return databasePromise;
   }
   return {
@@ -206,7 +226,7 @@ export function createIndexedDbProfileDatabase(
       await transaction.done;
     },
     close() {
-      if (databasePromise) void databasePromise.then((db) => db.close());
+      if (databasePromise) void databasePromise.then((db) => db.close(), () => undefined);
       databasePromise = null;
     },
   };

@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { AccountProfile, OwnedCharacter, OwnedLightCone, OwnedRelic } from "../domain/profiles";
 import type { GameReleaseBundle } from "../domain/releases";
 import { loadRelease } from "../data/releaseRepository";
-import { createIndexedDbProfileDatabase, type ProfileDatabase, type ProfileStorageIssue } from "./profileDatabase";
+import { createIndexedDbProfileDatabase, type IndexedDbProfileDatabaseOptions, type ProfileDatabase, type ProfileStorageIssue } from "./profileDatabase";
 import { parseProfileExport, serializeProfile, validateCurrentProfile } from "./profileJson";
 
 const UidSchema = z.string().regex(/^\d{9}$/, "UID must contain exactly 9 digits");
@@ -125,4 +125,8 @@ export function createProfileService(database: ProfileDatabase, resolveRelease: 
   };
 }
 
-export const defaultProfileService = createProfileService(createIndexedDbProfileDatabase(), loadRelease);
+export function createDefaultProfileService(options: string | IndexedDbProfileDatabaseOptions = {}): ProfileService {
+  return createProfileService(createIndexedDbProfileDatabase(options), loadRelease);
+}
+
+export const defaultProfileService = createDefaultProfileService();
