@@ -37,5 +37,15 @@
     },
     "characterSkills": { "count": 0, "classification": "none" },
     "characterSkillTrees": { "count": 0, "classification": "none" }
-  }
+  },
+  "expectedEntityCounts": { "characters": 95, "abilities": 762, "traces": 1912, "eidolons": 570, "equipment": 225 },
+  "expectedCoverage": {
+    "totalSourceDescriptions": 3469,
+    "candidateNumericEffects": 3672,
+    "reviewedEffects": 39,
+    "generatedEffects": 0,
+    "explicitUnsupportedEffects": 3633,
+    "unmappedEffects": 0
+  },
+  "normalization": { "unresolvedParameterTokens": 0 }
 }

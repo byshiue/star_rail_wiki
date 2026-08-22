@@ -62,6 +62,42 @@ describe("reviewed effect overlays", () => {
     ))).toEqual([]);
   });
 
+  it("creates a stable residual candidate for Dan Heng's numeric slow clause", () => {
+    const candidates = extractCandidateEffects(feature(
+      "ability:100102@4.4-cn-2026-08-21",
+      "对指定敌方单体造成伤害，并使其速度降低12%，持续2回合。",
+    ));
+
+    expect(candidates).toEqual([
+      expect.objectContaining({
+        candidateId: "ability:100102@4.4-cn-2026-08-21#residual-1",
+        metric: "unclassified_numeric",
+        originalText: "对指定敌方单体造成伤害，并使其速度降低12%，持续2回合",
+        reviewStatus: "generated",
+      }),
+    ]);
+  });
+
+  it("adds one residual candidate when a recognized buff leaves duration numeric prose uncovered", () => {
+    const candidates = extractCandidateEffects(feature(
+      "ability:duration@4.3-fixture",
+      "攻击力提高20%，持续2回合。",
+    ));
+
+    expect(candidates.map(({ candidateId, metric }) => [candidateId, metric])).toEqual([
+      ["ability:duration@4.3-fixture#effect-1", "attack"],
+      ["ability:duration@4.3-fixture#residual-1", "unclassified_numeric"],
+    ]);
+  });
+  it("does not classify relic set-piece headings as numeric effects", () => {
+    const candidates = extractCandidateEffects(feature(
+      "relic-set:fixture@4.3-fixture",
+      "2件套：攻击力提高12%。4件套：使我方全体造成的伤害提高12%。",
+    ));
+    expect(candidates.map(({ candidateId }) => candidateId).some((id) => id.includes("#residual-"))).toBe(false);
+  });
+
+
   it("binds every metric to its local numeric value when one segment contains multiple effects", () => {
     const candidates = extractCandidateEffects(feature(
       "ability:multi@4.3-fixture",

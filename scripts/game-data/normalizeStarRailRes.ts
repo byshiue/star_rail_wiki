@@ -12,18 +12,37 @@ function numberText(value: number): string {
   return Number(value.toFixed(4)).toString();
 }
 
-function resolveParams(text: string, input: unknown): string {
+const parameterToken = /#(\d+)\[(i|f(\d+))\](%?)/g;
+const unresolvedParameterToken = /#\d+\[[^\]]+\]/;
+const reviewedSparseParameterColumns = new Map<string, number>([
+  // Upstream 4.4 keeps the original #5 token but publishes only that one value column.
+  ["index_new/cn/character_skills.json record 1140710#5", 0],
+  ["index_new/cn/character_skills.json record 1140711#5", 0],
+]);
+
+function resolveParams(text: string, input: unknown, context: string): string {
+  if (!unresolvedParameterToken.test(text)) return text;
   const params = z.array(z.array(z.number().finite())).safeParse(input);
-  if (!params.success || params.data.length === 0) return text;
-  return text.replace(/#(\d+)\[i\](%?)/g, (match, rawIndex: string, percent: string) => {
-    const index = Number(rawIndex) - 1;
-    const values = params.data.map((row) => row[index]).filter((value): value is number => value !== undefined);
-    if (values.length === 0) return match;
+  if (!params.success || params.data.length === 0) {
+    throw new Error(`${context}: parameter tokens require a non-empty params matrix`);
+  }
+  const resolved = text.replace(parameterToken, (match, rawIndex: string, format: string, rawPrecision: string | undefined, percent: string) => {
+    const reviewedSparseIndex = reviewedSparseParameterColumns.get(`${context}#${rawIndex}`);
+    const index = reviewedSparseIndex ?? Number(rawIndex) - 1;
+    if (index < 0 || params.data.some((row) => row[index] === undefined)) {
+      throw new Error(`${context}: ${match} references missing parameter column ${rawIndex}`);
+    }
+    const values = params.data.map((row) => row[index]!);
     const scale = percent ? 100 : 1;
-    const first = numberText(values[0]! * scale);
-    const last = numberText(values.at(-1)! * scale);
+    const precision = format === "i" ? null : Number(rawPrecision);
+    const render = (value: number) => precision === null ? numberText(value * scale) : (value * scale).toFixed(precision);
+    const first = render(values[0]!);
+    const last = render(values.at(-1)!);
     return first === last ? `${first}${percent}` : `${first}${percent}→${last}${percent}`;
   });
+  const unresolved = resolved.match(unresolvedParameterToken)?.[0];
+  if (unresolved) throw new Error(`${context}: unsupported or unresolved parameter token ${unresolved}`);
+  return resolved;
 }
 
 function propertyDescription(input: unknown): string {
@@ -62,7 +81,7 @@ function normalizeChildren(value: unknown, owners: Map<string, string>, kind: "r
     if (!characterId) return [];
     const rawDescription = String(record.description ?? record.desc ?? record.simple_desc ?? "");
     const description = rawDescription
-      ? resolveParams(rawDescription, record.params)
+      ? resolveParams(rawDescription, record.params, `index_new/cn/character_${kind === "rank" ? "ranks" : kind === "skill" ? "skills" : "skill_trees"}.json record ${id}`)
       : propertyDescription(record.levels);
     return [{
       id,
@@ -109,7 +128,9 @@ export function normalizeStarRailResSource(source: FetchedSource): FetchedSource
   const cones = objectRecords(source.files.get("index_new/cn/light_cones.json")?.value);
   if (cones) replace("index_new/cn/light_cones.json", cones.map((cone) => {
     const rank = coneRanks.get(String(cone.id));
-    const rankDescription = rank ? resolveParams(String(rank.desc ?? ""), rank.params) : "";
+    const rankDescription = rank
+      ? resolveParams(String(rank.desc ?? ""), rank.params, `index_new/cn/light_cone_ranks.json record ${String(rank.id)}`)
+      : "";
     return {
       id: cone.id, name: cone.name, rarity: cone.rarity, path: cone.path,
       description: `${rank?.skill ? `${String(rank.skill)}：` : ""}${rankDescription || String(cone.desc ?? "上游索引未提供光锥技能说明。")}`,

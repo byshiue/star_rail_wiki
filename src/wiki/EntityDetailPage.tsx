@@ -17,7 +17,7 @@ function Changes({ revision, peers, position, kind }: {
 }
 
 export function EntityDetailPage() {
-  const { bundle, index, loading, error } = useRelease();
+  const { bundle, historyBundles, index, loading, error } = useRelease();
   const { kind, logicalId } = useParams();
   const [searchParams] = useSearchParams();
   if (loading) return <p role="status">正在加载版本资料…</p>;
@@ -25,10 +25,14 @@ export function EntityDetailPage() {
   if (!bundle) return <section><h1>尚未导入正式版本</h1><p>没有可浏览的版本资料。</p></section>;
   const decodedId = logicalId ? decodeURIComponent(logicalId) : "";
   const characterRevisions = sortRevisions(
-    kind === "character" ? bundle.entities.characters.filter((item) => item.logicalId === decodedId) : [], index,
+    kind === "character" ? historyBundles.flatMap(({ entities }) => (
+      entities.characters.filter((item) => item.logicalId === decodedId)
+    )) : [], index,
   );
   const equipmentRevisions = sortRevisions(
-    kind !== "character" ? bundle.entities.equipment.filter((item) => item.kind === kind && item.logicalId === decodedId) : [], index,
+    kind !== "character" ? historyBundles.flatMap(({ entities }) => (
+      entities.equipment.filter((item) => item.kind === kind && item.logicalId === decodedId)
+    )) : [], index,
   );
   const peers: RevisionIdentity[] = characterRevisions.length ? characterRevisions : equipmentRevisions;
   const comparison = adjacentRevision(
@@ -36,7 +40,9 @@ export function EntityDetailPage() {
     searchParams.get("revision") ?? "",
     searchParams.get("compare") ?? "",
   );
-  const effectsFor = (revisionId: string) => bundle.entities.effects.filter((effect) => effect.sourceRevisionId === revisionId);
+  const effectsFor = (revisionId: string) => historyBundles.flatMap(({ entities }) => (
+    entities.effects.filter((effect) => effect.sourceRevisionId === revisionId)
+  ));
   const character = characterRevisions[characterRevisions.length - 1];
   const equipment = equipmentRevisions[equipmentRevisions.length - 1];
 

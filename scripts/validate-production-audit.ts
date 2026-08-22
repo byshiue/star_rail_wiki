@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
-import type { CoverageReport } from "./game-data/checkEffectCoverage";
+import { CoverageReportSchema, type CoverageReport } from "./game-data/checkEffectCoverage";
 import type { GameReleaseBundle } from "../src/domain/releases";
 import { ApprovedSourceManifestSchema } from "./game-data/sourceManifest";
 
@@ -9,12 +9,12 @@ const DateString = z.string().refine((value) => Number.isFinite(Date.parse(value
 const AuditSchema = z.strictObject({
   schemaVersion: z.literal(1), asOf: DateString, region: z.literal("cn"), decision: z.string().min(1),
   channelAuthority: z.strictObject({
-    name: z.string().min(1), url: z.literal("https://www.hoyolab.com/article/45851903"),
+    name: z.string().min(1), url: z.url(),
     publishedAt: DateString, retrievedAt: DateString, releaseStartsAt: DateString, releaseEndsAt: DateString,
   }),
   releasedClientEvidence: z.strictObject({
     name: z.string().min(1), url: z.url(), revision: z.string().regex(/^[a-f0-9]{40}$/),
-    committedAt: DateString, label: z.string().regex(/^OSPRODWin4\.4\.0_/), retrievedAt: DateString,
+    committedAt: DateString, label: z.string().regex(/^OSPRODWin\d+\.\d+\.0_/), retrievedAt: DateString,
   }),
   contentSource: z.strictObject({
     name: z.string().min(1), url: z.url(), revision: z.string().regex(/^[a-f0-9]{40}$/),
@@ -29,6 +29,13 @@ const AuditSchema = z.strictObject({
     characterSkills: z.strictObject({ count: z.literal(0), classification: z.literal("none") }),
     characterSkillTrees: z.strictObject({ count: z.literal(0), classification: z.literal("none") }),
   }),
+  expectedEntityCounts: z.strictObject({
+    characters: z.number().int().nonnegative(), abilities: z.number().int().nonnegative(),
+    traces: z.number().int().nonnegative(), eidolons: z.number().int().nonnegative(),
+    equipment: z.number().int().nonnegative(),
+  }),
+  expectedCoverage: CoverageReportSchema,
+  normalization: z.strictObject({ unresolvedParameterTokens: z.literal(0) }),
 });
 
 async function json(file: string): Promise<unknown> {
@@ -38,12 +45,18 @@ async function json(file: string): Promise<unknown> {
 export async function validateProductionAudit(
   root: string, bundle: GameReleaseBundle, coverage: CoverageReport,
 ): Promise<void> {
-  if (bundle.release.id !== "4.4-cn-2026-08-21") return;
+  if (bundle.release.channel !== "released") return;
   const auditRoot = path.join(root, "data/releases", bundle.release.id);
   const audit = AuditSchema.parse(await json(path.join(auditRoot, "audit.json")));
   const manifest = ApprovedSourceManifestSchema.parse(await json(path.join(auditRoot, "source-manifest.json")));
   if (manifest.releaseId !== bundle.release.id || manifest.gameVersion !== bundle.release.gameVersion) {
     throw new Error("production source manifest does not match release identity");
+  }
+  if (manifest.previousReleaseId !== bundle.release.previousReleaseId) {
+    throw new Error("production source manifest previous release does not match release chain");
+  }
+  if (!audit.releasedClientEvidence.label.startsWith(`OSPRODWin${bundle.release.gameVersion}.0_`)) {
+    throw new Error("released-client evidence label does not match game version");
   }
   const source = bundle.release.sources.find(({ revision }) => revision === audit.contentSource.revision);
   if (!source || !manifest.sources.some(({ revision }) => revision === audit.contentSource.revision)) {
@@ -60,12 +73,14 @@ export async function validateProductionAudit(
     eidolons: bundle.entities.characters.reduce((total, character) => total + character.eidolons.length, 0),
     equipment: bundle.entities.equipment.length,
   };
-  if (JSON.stringify(counts) !== JSON.stringify({ characters: 95, abilities: 762, traces: 1912, eidolons: 570, equipment: 225 })) {
+  if (JSON.stringify(counts) !== JSON.stringify(audit.expectedEntityCounts)) {
     throw new Error(`production entity audit changed: ${JSON.stringify(counts)}`);
   }
-  if (audit.excludedSourceRecords.characterRanks.count !== 60) throw new Error("production orphan classification count changed");
-  if (coverage.candidateNumericEffects !== 939 || coverage.reviewedEffects !== 39
-    || coverage.explicitUnsupportedEffects !== 900 || coverage.generatedEffects !== 0 || coverage.unmappedEffects !== 0) {
+  if (JSON.stringify(coverage) !== JSON.stringify(audit.expectedCoverage)) {
     throw new Error(`production effect audit changed: ${JSON.stringify(coverage)}`);
+  }
+  const unresolvedParameterTokens = JSON.stringify(bundle).match(/#\d+\[[^\]]+\]/g)?.length ?? 0;
+  if (unresolvedParameterTokens !== audit.normalization.unresolvedParameterTokens) {
+    throw new Error(`production unresolved parameter token count changed: ${unresolvedParameterTokens}`);
   }
 }

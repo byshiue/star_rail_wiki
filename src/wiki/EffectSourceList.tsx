@@ -10,7 +10,7 @@ const metricLabels: Record<Effect["metric"], string> = {
   effect_resistance: "效果抵抗", energy: "能量", damage_bonus: "伤害加成", vulnerability: "易伤",
   defense_reduction: "防御降低", defense_ignore: "无视防御", resistance_reduction: "抗性降低",
   resistance_penetration: "抗性穿透", action_advance: "行动提前", action_delay: "行动延后",
-  healing: "治疗", shielding: "护盾", skill_points: "战技点", mechanic_counter: "机制计数",
+  healing: "治疗", shielding: "护盾", skill_points: "战技点", mechanic_counter: "机制计数", unclassified_numeric: "未分类数值机制",
 };
 const targetLabels: Record<Effect["target"]["type"], string> = {
   self: "自身", "single-ally": "单体队友", team: "全队", "single-enemy": "单体敌人", "all-enemies": "敌方全体",

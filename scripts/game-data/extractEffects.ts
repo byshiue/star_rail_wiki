@@ -87,18 +87,27 @@ function clauseAt(text: string, index: number): string {
   }
   return text.slice(start);
 }
+
+const numericToken = /#\d+\[[^\]]+\]|\d+(?:\.\d+)?(?:%|(?:→\d+(?:\.\d+)?%?))?/g;
+const effectCue = /提高|降低|延后|提前|持续|回复|恢复|治疗|伤害|防御|抗性|速度|能量|战技点|生命值|攻击力|暴击|击破|命中|护盾|叠加|层|回合|概率|倍率|上限|消耗|increas|reduc|delay|advance|duration|turn|heal|recover|damage|resistance|speed|energy|attack|critical|shield|stack/i;
+
+function numericValue(token: string): number {
+  const value = Number(token.match(/\d+(?:\.\d+)?/)?.[0] ?? 0);
+  return Number.isFinite(value) ? value : 0;
+}
+
 export function extractCandidateEffects(entity: EffectSourceRevision): CandidateEffect[] {
   const sourceText = entity.originalText ?? entity.description;
   if (!sourceText) return [];
 
-  const matches: Array<{ segmentIndex: number; index: number; ruleIndex: number; segment: string; rule: PhraseRule; value: number }> = [];
+  const matches: Array<{ segmentIndex: number; index: number; end: number; ruleIndex: number; segment: string; rule: PhraseRule; value: number }> = [];
   const segments = sourceText.split(/[。；;\n]+/).map((segment) => segment.trim()).filter(Boolean);
   for (const [segmentIndex, segment] of segments.entries()) {
     for (const [ruleIndex, phraseRule] of rules.entries()) {
       phraseRule.pattern.lastIndex = 0;
       for (const match of segment.matchAll(phraseRule.pattern)) {
         const value = Number(match[1]);
-        if (Number.isFinite(value)) matches.push({ segmentIndex, index: match.index, ruleIndex, segment, rule: phraseRule, value });
+        if (Number.isFinite(value)) matches.push({ segmentIndex, index: match.index, end: match.index + match[0].length, ruleIndex, segment, rule: phraseRule, value });
       }
     }
   }
@@ -106,7 +115,7 @@ export function extractCandidateEffects(entity: EffectSourceRevision): Candidate
     left.segmentIndex - right.segmentIndex || left.index - right.index || left.ruleIndex - right.ruleIndex
   ));
 
-  return matches.map((match, index) => ({
+  const extracted: CandidateEffect[] = matches.map((match, index) => ({
     candidateId: `${entity.revisionId}#effect-${index + 1}`,
     sourceRevisionId: entity.revisionId,
     originalText: segments.length === 1 ? sourceText : match.segment,
@@ -116,4 +125,36 @@ export function extractCandidateEffects(entity: EffectSourceRevision): Candidate
     target: targetFor(match.rule, clauseAt(match.segment, match.index)),
     reviewStatus: "generated",
   }));
+
+  for (const [segmentIndex, segment] of segments.entries()) {
+    if (!effectCue.test(segment)) continue;
+    numericToken.lastIndex = 0;
+    const uncovered = [...segment.matchAll(numericToken)].filter((token) => {
+      const start = token.index;
+      const end = start + token[0].length;
+      if (segment.slice(0, start).trim() === "" && /^\s*件套[:：]?/.test(segment.slice(end))) {
+        return false;
+      }
+      return !matches.some((match) => (
+        match.segmentIndex === segmentIndex && start >= match.index && end <= match.end
+      ));
+    });
+    if (uncovered.length === 0) continue;
+    const first = uncovered[0]![0];
+    const percentOperation = first.includes("%");
+    extracted.push({
+      candidateId: `${entity.revisionId}#residual-${segmentIndex + 1}`,
+      sourceRevisionId: entity.revisionId,
+      originalText: segment,
+      metric: "unclassified_numeric",
+      operation: percentOperation ? "percent" : "flat",
+      value: {
+        base: numericValue(first) / (percentOperation ? 100 : 1),
+        scaling: [],
+      },
+      target: undefined,
+      reviewStatus: "generated",
+    });
+  }
+  return extracted;
 }

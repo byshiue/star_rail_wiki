@@ -1,17 +1,36 @@
-Star Rail Wiki — third-party notices
+Star Rail Wiki — third-party notices and source offer
 
-The MIT license in LICENSE applies only to original project code and writing.
+Project license boundary
+------------------------
+LICENSE (MIT) applies to original application code and project-authored writing,
+except for material expressly identified below as AGPL-3.0-covered or owned by
+other rights holders.
 
-Honkai: Star Rail game names and Chinese game text are property of their
-respective rights holders. This is an unofficial community project.
+StarRailRes-derived material (AGPL-3.0)
+--------------------------------------
+The structured Chinese data under these paths is derived from
+Mar-7th/StarRailRes and is distributed under GNU AGPL-3.0, not MIT:
 
-Chinese structured indexes are derived from Mar-7th/StarRailRes at immutable
-commit b95e75c7e1273d819d20c530c0b7e13a3ef19fb4. That upstream repository is
-licensed AGPL-3.0; its data is not relicensed under this project's MIT license.
-Source: https://github.com/Mar-7th/StarRailRes
+  public/data/releases/4.3-cn-2026-06-10/
+  public/data/releases/4.4-cn-2026-08-21/
 
-Released-client evidence is attributed to DimbreathBot/TurnBasedGameData at
-commit 648b08fbdb2e49739ebbf1210c9a189fcfc5e2d7. Version dates come from the
-official HoYoLAB Version 4.4 update notice. Community records contain only
-project-authored short summaries, factual team structures and source links.
-No third-party images are included.
+For clarity and corresponding-source availability, the source/transform
+pipeline and review inputs used to create those covered outputs are distributed
+under GNU AGPL-3.0 when used with those outputs:
+
+  scripts/game-data/
+  data/releases/4.3-cn-2026-06-10/
+  data/releases/4.4-cn-2026-08-21/
+  data/manual/character-roles.json
+  data/manual/effects.json
+
+The complete license is included at THIRD_PARTY_LICENSES/AGPL-3.0.txt.
+The corresponding source is provided in this same repository, including the
+transform scripts, manifests, checksums, review overlays, and generated JSON.
+Immutable upstream source snapshots are available at:
+
+  https://github.com/Mar-7th/StarRailRes/commit/7b349e39ee0f6f3bf814567995829b99c95e7a93
+  https://github.com/Mar-7th/StarRailRes/commit/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4
+
+Other attribution
+-----------------

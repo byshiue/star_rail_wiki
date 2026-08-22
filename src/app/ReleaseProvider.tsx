@@ -4,6 +4,7 @@ import type { GameReleaseBundle, ReleaseIndex } from "../domain/releases";
 
 export type ReleaseContextValue = {
   bundle: GameReleaseBundle | null;
+  historyBundles: GameReleaseBundle[];
   index: ReleaseIndex | null;
   loading: boolean;
   error: string | null;
@@ -16,12 +17,13 @@ export function ReleaseProvider({ bundle: explicitBundle, index: explicitIndex, 
   const hasExplicitState = explicitBundle !== undefined || explicitIndex !== undefined;
   const explicitState: ReleaseContextValue | null = hasExplicitState ? {
     bundle: explicitBundle ?? null,
+    historyBundles: explicitBundle ? [explicitBundle] : [],
     index: explicitIndex ?? (explicitBundle ? { currentReleaseId: null, releases: [explicitBundle.release] } : null),
     loading: false,
     error: null,
   } : null;
   const [state, setState] = useState<ReleaseContextValue>(explicitState ?? {
-    bundle: null, index: null, loading: true, error: null,
+    bundle: null, historyBundles: [], index: null, loading: true, error: null,
   });
   useEffect(() => {
     if (explicitState) {
@@ -31,9 +33,21 @@ export function ReleaseProvider({ bundle: explicitBundle, index: explicitIndex, 
     let active = true;
     void loadReleaseIndex().then(async (index) => {
       const bundle = index.currentReleaseId === null ? null : await loadRelease(index.currentReleaseId);
-      if (active) setState({ bundle, index, loading: false, error: null });
+      const historyBundles = bundle ? [bundle] : [];
+      const seen = new Set(historyBundles.map(({ release }) => release.id));
+      let previousReleaseId = bundle?.release.previousReleaseId ?? null;
+      while (previousReleaseId !== null && !seen.has(previousReleaseId)) {
+        const historical = await loadRelease(previousReleaseId);
+        historyBundles.unshift(historical);
+        seen.add(previousReleaseId);
+        previousReleaseId = historical.release.previousReleaseId;
+      }
+      if (active) setState({ bundle, historyBundles, index, loading: false, error: null });
     }).catch((error: unknown) => {
-      if (active) setState({ bundle: null, index: null, loading: false, error: error instanceof Error ? error.message : "版本资料加载失败" });
+      if (active) setState({
+        bundle: null, historyBundles: [], index: null, loading: false,
+        error: error instanceof Error ? error.message : "版本资料加载失败",
+      });
     });
     return () => { active = false; };
   }, [explicitBundle, explicitIndex]);

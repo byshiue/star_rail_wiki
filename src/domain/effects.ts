@@ -8,7 +8,7 @@ export const EffectMetricSchema = z.enum([
   "break_effect", "effect_hit_rate", "effect_resistance", "energy",
   "damage_bonus", "vulnerability", "defense_reduction", "defense_ignore",
   "resistance_reduction", "resistance_penetration", "action_advance", "action_delay",
-  "healing", "shielding", "skill_points", "mechanic_counter",
+  "healing", "shielding", "skill_points", "mechanic_counter", "unclassified_numeric",
 ]);
 export type EffectMetric = z.infer<typeof EffectMetricSchema>;
 

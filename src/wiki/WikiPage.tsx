@@ -15,7 +15,7 @@ function WikiBrowser() {
   return <section className="wiki-page" aria-labelledby="wiki-title">
     <div className="wiki-heading"><div><p className="eyebrow">可追溯资料库</p><h1 id="wiki-title">角色与装备</h1></div><VersionBadge release={bundle.release} /></div>
     {bundle.release.channel === "fixture" && <p className="fixture-notice">当前浏览的是显式测试夹具，不是正式版本。</p>}
-    {bundle.release.id === "4.4-cn-2026-08-21" && <div className="version-warning" role="status"><strong>资料浏览完整，模拟覆盖有限。</strong><p>939 条已识别数值效果中，39 条已审核为可计算，900 条保留原文并明确标为不支持；不支持效果不会计入配队数值。</p></div>}
+    {bundle.release.id === "4.4-cn-2026-08-21" && <div className="version-warning" role="status"><strong>资料浏览完整，模拟覆盖有限。</strong><p>3,672 条数值效果候选中，39 条已审核为可计算，3,633 条保留原文与具体不支持原因；未映射候选为 0，不支持效果不会计入配队数值。</p></div>}
     <div className="wiki-controls">
       <label>搜索资料<input type="search" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
       <label>资料类型<select value={selectedKind} onChange={(event) => setFilters({ ...filters, kinds: event.target.value ? [event.target.value as WikiEntityKind] : undefined })}>

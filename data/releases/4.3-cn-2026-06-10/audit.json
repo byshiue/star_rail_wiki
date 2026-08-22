@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-06-10T06:35:53.000Z",
+  "region": "cn",
+  "decision": "4.3 is the released Mainland China version at this timestamp; preload, beta, and later records are excluded.",
+  "channelAuthority": {
+    "name": "HoYoLAB official Version 4.3 update details",
+    "url": "https://www.hoyolab.com/article_pre/18014398241023357",
+    "publishedAt": "2026-05-31T00:00:00+08:00",
+    "retrievedAt": "2026-08-21T13:00:00.000Z",
+    "releaseStartsAt": "2026-06-01T06:00:00+08:00",
+    "releaseEndsAt": "2026-07-15T06:00:00+08:00"
+  },
+  "releasedClientEvidence": {
+    "name": "DimbreathBot/TurnBasedGameData OSPRODWin4.3.0",
+    "url": "https://github.com/DimbreathBot/TurnBasedGameData/commit/d5c40c0095bc5fdef9ce968c078304a95caab235",
+    "revision": "d5c40c0095bc5fdef9ce968c078304a95caab235",
+    "committedAt": "2026-06-10T06:35:53Z",
+    "label": "OSPRODWin4.3.0_D15333800_A15267128_L15257484",
+    "retrievedAt": "2026-08-21T13:00:00.000Z"
+  },
+  "contentSource": {
+    "name": "Mar-7th/StarRailRes",
+    "url": "https://github.com/Mar-7th/StarRailRes/commit/7b349e39ee0f6f3bf814567995829b99c95e7a93",
+    "revision": "7b349e39ee0f6f3bf814567995829b99c95e7a93",
+    "committedAt": "2026-06-01T08:55:56+08:00",
+    "versionCommit": "7b349e39ee0f6f3bf814567995829b99c95e7a93",
+    "license": "AGPL-3.0",
+    "retrievedAt": "2026-08-21T13:00:00.000Z"
+  },
+  "excludedSourceRecords": {
+    "characterRanks": {
+      "count": 60,
+      "classification": "enhanced-alternate",
+      "reason": "These rank IDs are not referenced by any character.ranks list in the pinned 4.3 Chinese index and are excluded as alternate enhanced configurations.",
+      "idListSha256": "sha256:43cd2099a147aa7bab01307ecfdf8a182151ec04ccd40b9dd2fc258ae2ad70c4"
+    },
+    "characterSkills": { "count": 0, "classification": "none" },
+    "characterSkillTrees": { "count": 0, "classification": "none" }
+  },
+  "expectedEntityCounts": { "characters": 92, "abilities": 734, "traces": 1858, "eidolons": 552, "equipment": 220 },
+  "expectedCoverage": {
+    "totalSourceDescriptions": 3364,
+    "candidateNumericEffects": 3537,
+    "reviewedEffects": 0,
+    "generatedEffects": 0,
+    "explicitUnsupportedEffects": 3537,
+    "unmappedEffects": 0
+  },
+  "normalization": { "unresolvedParameterTokens": 0 }
+}

@@ -23,6 +23,32 @@
       "previousReleaseId": null
     },
     {
+      "id": "4.3-cn-2026-06-10",
+      "gameVersion": "4.3",
+      "region": "cn",
+      "channel": "released",
+      "importedAt": "2026-08-21T13:00:00.000Z",
+      "reviewedAt": "2026-08-21T13:00:00.000Z",
+      "sources": [
+        {
+          "name": "Mar-7th/StarRailRes 4.3 Chinese indexes",
+          "url": "https://raw.githubusercontent.com/Mar-7th/StarRailRes",
+          "revision": "7b349e39ee0f6f3bf814567995829b99c95e7a93",
+          "fileChecksums": {
+            "index_new/cn/characters.json": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53",
+            "index_new/cn/character_ranks.json": "sha256:a27d135eaef590e4e018731881d41809609a4ed71748e88beb26924d7e4fb325",
+            "index_new/cn/character_skills.json": "sha256:9f084f01ee54a3f20e64d744ee54115682dafb248d4bba764f6aff1b777a6911",
+            "index_new/cn/character_skill_trees.json": "sha256:8fa668d8f63eaa84647b8dc252af9db517c8de43d99b92846cc82f0762ad3b82",
+            "index_new/cn/light_cones.json": "sha256:deb0bca514faefa20f9457deb199eb91fc7ba367c67ed35b52ab4c599a8e2770",
+            "index_new/cn/light_cone_ranks.json": "sha256:01624500a64ad625293c507c230e4f7b0a7b6f078afcef0b0f61dfebd43ab92f",
+            "index_new/cn/relic_sets.json": "sha256:e1fca83721faecd91cbcefdb640535f51e80b831b77d90ccbccdb57250a372d2"
+          },
+          "retrievedAt": "2026-08-21T13:00:00.000Z"
+        }
+      ],
+      "previousReleaseId": null
+    },
+    {
       "id": "4.4-cn-2026-08-21",
       "gameVersion": "4.4",
       "region": "cn",
@@ -46,7 +72,7 @@
           "retrievedAt": "2026-08-21T12:00:00.000Z"
         }
       ],
-      "previousReleaseId": null
+      "previousReleaseId": "4.3-cn-2026-06-10"
     }
   ]
 }

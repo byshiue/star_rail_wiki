@@ -42,6 +42,16 @@ Production current is `4.4-cn-2026-08-21`. The official HoYoLAB Version 4.4 noti
 
 The bundle contains 95 characters, 762 skills, 1,912 trace nodes, 570 canonical eidolons, 165 light cones and 60 relic/planar sets. Sixty unreferenced seven-digit alternate enhanced eidolon records are excluded with a reason and ID-list checksum in the audit; skill and trace orphan counts are zero.
 
-Coverage is deliberately candid: 939 recognized numeric candidates map one-to-one to 39 reviewed unconditional effects and 900 explicit unsupported effects. Unsupported entries retain the complete Chinese clause and visible reason and never enter arithmetic. Thus zero `unmappedEffects` means no recognized candidate disappeared, not that every mechanic is simulated.
+The immutable predecessor `4.3-cn-2026-06-10` uses StarRailRes commit
+`7b349e39ee0f6f3bf814567995829b99c95e7a93` and Dimbreath released-client
+evidence `d5c40c0095bc5fdef9ce968c078304a95caab235`; 4.4 points to it directly.
+
+Coverage is deliberately candid: 3,672 numeric-effect candidates map one-to-one to 39 reviewed unconditional effects and 3,633 explicit unsupported effects. Unsupported entries retain the complete Chinese clause and a mechanic-specific reason and never enter arithmetic. Both `unmappedEffects` and unresolved StarRailRes parameter tokens are zero; this does not mean that every mechanic is simulated.
 
 Production updates require a new release ID, official channel evidence, immutable revisions, checksums, entity diff, role review and separate reviewed/unsupported coverage in a Pull Request. Scheduled automation never deploys or overwrites current data directly.
+
+The weekly workflow queries the public HoYoLAB official-notice feed, accepts only a
+published `Version X.Y … Update Details` article, and requires matching 40-character
+Dimbreath and StarRailRes commits. No change exits cleanly. A candidate is written only
+to an automation branch, the checked-in releases are rebuilt/audited with `npm run check`,
+and `gh pr create --draft` opens the human review gate; it never pushes `main`.

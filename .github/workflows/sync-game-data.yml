@@ -1,4 +1,4 @@
-name: Review pinned game data
+name: Discover released game data
 
 on:
   schedule:
@@ -10,11 +10,11 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: game-data-review
+  group: released-game-data-review
   cancel-in-progress: false
 
 jobs:
-  rebuild-reviewed-manifest:
+  discover-and-review:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,28 +23,49 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Rebuild only the already reviewed released manifest
+      - name: Discover official released version and immutable source revisions
+        id: discover
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          npm run data:import -- \
-            --version 4.4 \
-            --source-revision b95e75c7e1273d819d20c530c0b7e13a3ef19fb4 \
-            --manifest data/releases/4.4-cn-2026-08-21/source-manifest.json \
-            --roles data/manual/character-roles.json \
-            --overlays data/manual/effects.json \
-            --output /tmp/star-rail-reviewed-release
-          diff -ru public/data/releases/4.4-cn-2026-08-21 /tmp/star-rail-reviewed-release || true
-          rsync -a --delete /tmp/star-rail-reviewed-release/ public/data/releases/4.4-cn-2026-08-21/
-      - run: npm run validate:data
-      - name: Open review PR only when deterministic output changed
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: automation/review-pinned-game-data
-          delete-branch: true
-          commit-message: "chore: review pinned released game data"
-          title: "chore: review pinned released game data"
-          body: |
-            Automated rebuild of the already-approved released manifest.
-            This workflow does not promote latest/master, preload, beta, or a new game version.
-            A new release still requires official channel evidence, immutable revisions,
-            reviewed checksums, role/effect review, and a maintainer-approved release index change.
-          labels: data-review
+          CURRENT_VERSION=$(jq -r '.currentReleaseId as $id | .releases[] | select(.id == $id) | .gameVersion' public/data/releases/index.json)
+          npx tsx scripts/game-data/discoverReleasedVersion.ts --current-version "$CURRENT_VERSION" --output /tmp/released-discovery.json
+          STATUS=$(jq -r .status /tmp/released-discovery.json)
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+          if [ "$STATUS" = "candidate" ]; then
+            echo "version=$(jq -r .gameVersion /tmp/released-discovery.json)" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Exit cleanly when released version is unchanged
+        if: steps.discover.outputs.status == 'no-change'
+        run: echo "No newer official released version with matching immutable upstream revisions."
+      - name: Stage immutable candidate evidence on a review branch
+        if: steps.discover.outputs.status == 'candidate'
+        env:
+          VERSION: ${{ steps.discover.outputs.version }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          BRANCH="automation/review-released-${VERSION}-${RUN_ID}"
+          git switch -c "$BRANCH"
+          mkdir -p "data/release-candidates/${VERSION}"
+          cp /tmp/released-discovery.json "data/release-candidates/${VERSION}/discovery.json"
+          echo "branch=$BRANCH" >> "$GITHUB_ENV"
+      - name: Audit current branch before opening the manual release gate
+        if: steps.discover.outputs.status == 'candidate'
+        run: npm run check
+      - name: Commit candidate evidence
+        if: steps.discover.outputs.status == 'candidate'
+        env:
+          VERSION: ${{ steps.discover.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "data/release-candidates/${VERSION}/discovery.json"
+          git commit -m "chore: review released ${VERSION} data"
+          git push origin "HEAD:${branch}"
+      - name: Open draft review PR
+        if: steps.discover.outputs.status == 'candidate'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.discover.outputs.version }}
+        run: |
+          gh pr create --draft --base main --head "$branch" --title "chore: review released ${VERSION} game data" --label data-review --body "Official released-version evidence and immutable upstream revisions were discovered automatically. Maintainers must review checksums, entity diffs, role/effect overlays, complete candidate rebuild/audit, and release-index promotion. This workflow never updates main."
