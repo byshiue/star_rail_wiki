@@ -103,7 +103,7 @@ describe("StarRailRes production object indexes", () => {
     skills.value = {
       "1140710": {
         id: "1140710", name: "燎尽黯泽的焰息", type_text: "忆灵技",
-        desc: "生命值小于等于#5[i]%时触发。", params: [[0.25], [0.25]],
+        desc: "生命值小于等于#5[i]%时触发。", params: Array.from({ length: 10 }, () => [0.25]),
       },
     };
 
@@ -111,3 +111,29 @@ describe("StarRailRes production object indexes", () => {
       .toBe("生命值小于等于25%时触发。");
   });
 });
+  it.each([
+    ["different release", "4.5-cn-2026-09-01", "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4", Array.from({ length: 10 }, () => [0.25])],
+    ["future revision", "4.4-cn-2026-08-21", "c95e75c7e1273d819d20c530c0b7e13a3ef19fb4", Array.from({ length: 10 }, () => [0.25])],
+    ["wrong row count", "4.4-cn-2026-08-21", "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4", [[0.25]]],
+    ["wrong column shape", "4.4-cn-2026-08-21", "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4", Array.from({ length: 10 }, () => [0.25, 0.25])],
+    ["wrong matrix value", "4.4-cn-2026-08-21", "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4", Array.from({ length: 10 }, () => [0.5])],
+  ])("fails closed for audited sparse mapping with %s", (_name, releaseId, revision, params) => {
+    const input = realShapeSource();
+    input.manifest.releaseId = releaseId;
+    const characters = input.files.get("index_new/cn/characters.json")!;
+    characters.value = {
+      "1001": {
+        id: "1001", name: "三月七", rarity: 4, path: "Knight", element: "Ice",
+        ranks: ["100101"], skills: ["1140710"], skill_trees: ["1001101"],
+      },
+    };
+    const skills = input.files.get("index_new/cn/character_skills.json")!;
+    skills.source = { ...skills.source, revision };
+    skills.value = {
+      "1140710": {
+        id: "1140710", name: "燎尽黯泽的焰息", type_text: "忆灵技",
+        desc: "生命值小于等于#5[i]%时触发。", params,
+      },
+    };
+    expect(() => importStarRailRes(input)).toThrow(/missing parameter|sparse parameter matrix/i);
+  });

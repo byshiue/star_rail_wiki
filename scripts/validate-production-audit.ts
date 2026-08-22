@@ -4,6 +4,10 @@ import { z } from "zod";
 import { CoverageReportSchema, type CoverageReport } from "./game-data/checkEffectCoverage";
 import type { GameReleaseBundle } from "../src/domain/releases";
 import { ApprovedSourceManifestSchema } from "./game-data/sourceManifest";
+import {
+  CharacterRankOrphanAuditSchema,
+  validateCharacterRankOrphanAudit,
+} from "./game-data/orphanAudit";
 
 const DateString = z.string().refine((value) => Number.isFinite(Date.parse(value)), "invalid date");
 const AuditSchema = z.strictObject({
@@ -61,6 +65,29 @@ export async function validateProductionAudit(
   const source = bundle.release.sources.find(({ revision }) => revision === audit.contentSource.revision);
   if (!source || !manifest.sources.some(({ revision }) => revision === audit.contentSource.revision)) {
     throw new Error("production content revision is not pinned by release and manifest");
+  }
+  const orphanReport = CharacterRankOrphanAuditSchema.parse(
+    await json(path.join(auditRoot, "orphan-character-ranks.json")),
+  );
+  const manifestSource = manifest.sources.find(({ revision }) => revision === orphanReport.sourceRevision);
+  if (
+    orphanReport.releaseId !== bundle.release.id
+    || orphanReport.sourceRevision !== audit.contentSource.revision
+    || !manifestSource
+    || manifestSource.fileChecksums[orphanReport.charactersPath] !== orphanReport.charactersFileChecksum
+    || manifestSource.fileChecksums[orphanReport.characterRanksPath] !== orphanReport.characterRanksFileChecksum
+  ) {
+    throw new Error("orphan rank snapshot is not bound to the audited immutable source");
+  }
+  const canonicalRankIds = bundle.entities.characters.flatMap((character) => (
+    character.eidolons.map(({ logicalId }) => logicalId.replace(/^eidolon:/, ""))
+  ));
+  const validatedOrphans = validateCharacterRankOrphanAudit(orphanReport, canonicalRankIds);
+  if (
+    validatedOrphans.orphanRankIds.length !== audit.excludedSourceRecords.characterRanks.count
+    || validatedOrphans.orphanIdsSha256 !== audit.excludedSourceRecords.characterRanks.idListSha256
+  ) {
+    throw new Error("orphan rank count or sorted-list SHA-256 does not match production audit");
   }
   const asOf = Date.parse(audit.asOf);
   if (asOf < Date.parse(audit.channelAuthority.releaseStartsAt) || asOf >= Date.parse(audit.channelAuthority.releaseEndsAt)) {

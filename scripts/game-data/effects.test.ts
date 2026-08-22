@@ -55,11 +55,11 @@ describe("reviewed effect overlays", () => {
     });
   });
 
-  it("does not treat unrelated numeric prose as an effect candidate", () => {
+  it("audits even unrelated numeric prose instead of silently dropping it", () => {
     expect(extractCandidateEffects(feature(
       "ability:lore@4.3-fixture",
       "Synthetic character number 7 entered room 12.",
-    ))).toEqual([]);
+    ))).toEqual([expect.objectContaining({ metric: "unclassified_numeric", originalText: "Synthetic character number 7 entered room 12." })]);
   });
 
   it("creates a stable residual candidate for Dan Heng's numeric slow clause", () => {
@@ -95,6 +95,30 @@ describe("reviewed effect overlays", () => {
       "2件套：攻击力提高12%。4件套：使我方全体造成的伤害提高12%。",
     ));
     expect(candidates.map(({ candidateId }) => candidateId).some((id) => id.includes("#residual-"))).toBe(false);
+  });
+
+  it.each([
+    ["行迹属性：IceAddedRatio +3.2%", 0.032],
+    ["忆质2/12", 2],
+    ["每次恢复3点资源", 3],
+    ["持续2回合", 2],
+  ])("creates an explicit residual candidate for numeric clause without a phrase cue: %s", (text, base) => {
+    expect(extractCandidateEffects(feature("trace:numeric@4.4", text))).toEqual([
+      expect.objectContaining({
+        candidateId: "trace:numeric@4.4#residual-1",
+        metric: "unclassified_numeric",
+        value: expect.objectContaining({ base }),
+        originalText: text,
+      }),
+    ]);
+  });
+
+  it("does not duplicate the same structured percentage while auditing structural set headings", () => {
+    const candidates = extractCandidateEffects(feature(
+      "relic-set:structured@4.4", "2件套：攻击力提高12%。",
+    ));
+    expect(candidates).toHaveLength(1);
+    expect(candidates[0]).toMatchObject({ metric: "attack", value: { base: 0.12 } });
   });
 
 
@@ -283,6 +307,9 @@ describe("effect completeness gate", () => {
     expect(report).toEqual({
       totalSourceDescriptions: 3,
       candidateNumericEffects: 2,
+      numericSourceDescriptions: 2,
+      silentNumericSourceDescriptions: 0,
+      excludedStructuralNumericTokens: 0,
       reviewedEffects: 1,
       generatedEffects: 0,
       explicitUnsupportedEffects: 1,
@@ -365,6 +392,9 @@ describe("effect completeness gate", () => {
       totalSourceDescriptions: 2,
       candidateNumericEffects: 1,
       reviewedEffects: 0,
+      numericSourceDescriptions: 1,
+      silentNumericSourceDescriptions: 0,
+      excludedStructuralNumericTokens: 0,
       generatedEffects: 0,
       explicitUnsupportedEffects: 0,
       unmappedEffects: 0,

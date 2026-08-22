@@ -33,7 +33,7 @@
       "count": 60,
       "classification": "enhanced-alternate",
       "reason": "These seven-digit rank IDs are not referenced by any character.ranks list in the pinned 4.4 Chinese index. They are alternate enhanced configurations, not active canonical eidolons in this release bundle.",
-      "idListSha256": "sha256:b6e69b63ac4795d9916f863b06a710f8a4a09e70640941c72570731e4a20656d"
+      "idListSha256": "sha256:43cd2099a147aa7bab01307ecfdf8a182151ec04ccd40b9dd2fc258ae2ad70c4"
     },
     "characterSkills": { "count": 0, "classification": "none" },
     "characterSkillTrees": { "count": 0, "classification": "none" }
@@ -41,10 +41,13 @@
   "expectedEntityCounts": { "characters": 95, "abilities": 762, "traces": 1912, "eidolons": 570, "equipment": 225 },
   "expectedCoverage": {
     "totalSourceDescriptions": 3469,
-    "candidateNumericEffects": 3672,
+    "numericSourceDescriptions": 2780,
+    "silentNumericSourceDescriptions": 0,
+    "excludedStructuralNumericTokens": 0,
+    "candidateNumericEffects": 4667,
     "reviewedEffects": 39,
     "generatedEffects": 0,
-    "explicitUnsupportedEffects": 3633,
+    "explicitUnsupportedEffects": 4628,
     "unmappedEffects": 0
   },
   "normalization": { "unresolvedParameterTokens": 0 }

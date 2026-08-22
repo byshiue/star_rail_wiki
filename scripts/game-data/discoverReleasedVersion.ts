@@ -65,7 +65,6 @@ async function fetchJson(url: string): Promise<unknown> {
   const headers: Record<string, string> = {
     Accept: "application/json", "User-Agent": "star-rail-wiki-release-audit",
   };
-  if (new URL(url).host === "api.github.com" && process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   const response = await fetch(url, { headers });
   if (!response.ok) throw new Error(`release discovery failed (${response.status}) for ${new URL(url).host}`);
   return response.json();

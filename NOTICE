@@ -34,3 +34,35 @@ Immutable upstream source snapshots are available at:
 
 Other attribution
 -----------------
+Honkai: Star Rail game software, character names, artwork and images, and the
+Simplified Chinese in-game text represented by the reviewed indexes are owned
+by or licensed to COGNOSPHERE PTE. LTD. / HoYoverse. This unofficial project is
+not endorsed by or affiliated with HoYoverse. The material is used for
+reference, provenance-preserving search, and analysis. No game artwork or image
+asset is currently copied into the published release bundles.
+
+  https://hsr.hoyoverse.com/
+
+DimbreathBot/TurnBasedGameData released-client metadata is used only to
+cross-check that the Mainland China client version was released. The exact raw
+evidence revisions are:
+
+  https://github.com/DimbreathBot/TurnBasedGameData/commit/d5c40c0095bc5fdef9ce968c078304a95caab235
+  https://github.com/DimbreathBot/TurnBasedGameData/commit/648b08fbdb2e49739ebbf1210c9a189fcfc5e2d7
+
+Official HoYoLAB update notices establish the released channel and release
+window for each recorded version:
+
+  Version 4.3: https://www.hoyolab.com/article_pre/18014398241023357
+  Version 4.4: https://www.hoyolab.com/article/45851903
+
+The community-team records contain project-authored summaries and preserve the
+article title, author, publisher, publication/retrieval metadata, and link in
+data/community/teams.json. The released recommendations currently reference:
+
+  https://www.hoyolab.com/article/45855384
+  https://www.hoyolab.com/article/45977086
+
+Those linked articles remain the property of their respective authors and
+publishers; their inclusion as attribution does not place article text under
+this project's MIT license.

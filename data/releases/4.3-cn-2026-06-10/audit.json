@@ -41,10 +41,13 @@
   "expectedEntityCounts": { "characters": 92, "abilities": 734, "traces": 1858, "eidolons": 552, "equipment": 220 },
   "expectedCoverage": {
     "totalSourceDescriptions": 3364,
-    "candidateNumericEffects": 3537,
+    "numericSourceDescriptions": 2694,
+    "silentNumericSourceDescriptions": 0,
+    "excludedStructuralNumericTokens": 0,
+    "candidateNumericEffects": 4501,
     "reviewedEffects": 0,
     "generatedEffects": 0,
-    "explicitUnsupportedEffects": 3537,
+    "explicitUnsupportedEffects": 4501,
     "unmappedEffects": 0
   },
   "normalization": { "unresolvedParameterTokens": 0 }

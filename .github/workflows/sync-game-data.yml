@@ -5,19 +5,24 @@ on:
     - cron: "23 4 * * 3"
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: {}
 
 concurrency:
   group: released-game-data-review
   cancel-in-progress: false
 
 jobs:
-  discover-and-review:
+  discover-build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      status: ${{ steps.discover.outputs.status }}
+      version: ${{ steps.discover.outputs.version }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -25,8 +30,6 @@ jobs:
       - run: npm ci
       - name: Discover official released version and immutable source revisions
         id: discover
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
         run: |
           CURRENT_VERSION=$(jq -r '.currentReleaseId as $id | .releases[] | select(.id == $id) | .gameVersion' public/data/releases/index.json)
           npx tsx scripts/game-data/discoverReleasedVersion.ts --current-version "$CURRENT_VERSION" --output /tmp/released-discovery.json
@@ -38,34 +41,60 @@ jobs:
       - name: Exit cleanly when released version is unchanged
         if: steps.discover.outputs.status == 'no-change'
         run: echo "No newer official released version with matching immutable upstream revisions."
-      - name: Stage immutable candidate evidence on a review branch
+      - name: Verify repository before candidate import
         if: steps.discover.outputs.status == 'candidate'
+        run: npm run check
+      - name: Download exact candidate snapshot and run dry-run build audit
+        if: steps.discover.outputs.status == 'candidate'
+        run: |
+          CURRENT_RELEASE_ID=$(jq -r .currentReleaseId public/data/releases/index.json)
+          npx tsx scripts/game-data/prepareReleaseCandidate.ts \
+            --discovery /tmp/released-discovery.json \
+            --current-release-root "public/data/releases/${CURRENT_RELEASE_ID}" \
+            --output /tmp/release-candidate
+      - name: Upload verified machine review artifact
+        if: steps.discover.outputs.status == 'candidate'
+        uses: actions/upload-artifact@v4
+        with:
+          name: released-candidate-${{ steps.discover.outputs.version }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            /tmp/release-candidate/discovery.json
+            /tmp/release-candidate/source-manifest.json
+            /tmp/release-candidate/candidate-audit.json
+            /tmp/release-candidate/coverage.json
+            /tmp/release-candidate/entity-diff.json
+
+  open-review-pr:
+    needs: discover-build
+    if: needs.discover-build.outputs.status == 'candidate'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: released-candidate-${{ needs.discover-build.outputs.version }}
+          path: /tmp/release-candidate
+      - name: Commit verified artifact and open draft review PR
         env:
-          VERSION: ${{ steps.discover.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.discover-build.outputs.version }}
           RUN_ID: ${{ github.run_id }}
         run: |
           BRANCH="automation/review-released-${VERSION}-${RUN_ID}"
-          git switch -c "$BRANCH"
           mkdir -p "data/release-candidates/${VERSION}"
-          cp /tmp/released-discovery.json "data/release-candidates/${VERSION}/discovery.json"
-          echo "branch=$BRANCH" >> "$GITHUB_ENV"
-      - name: Audit current branch before opening the manual release gate
-        if: steps.discover.outputs.status == 'candidate'
-        run: npm run check
-      - name: Commit candidate evidence
-        if: steps.discover.outputs.status == 'candidate'
-        env:
-          VERSION: ${{ steps.discover.outputs.version }}
-        run: |
+          cp /tmp/release-candidate/*.json "data/release-candidates/${VERSION}/"
+          git switch -c "$BRANCH"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "data/release-candidates/${VERSION}/discovery.json"
+          git add "data/release-candidates/${VERSION}"
           git commit -m "chore: review released ${VERSION} data"
-          git push origin "HEAD:${branch}"
-      - name: Open draft review PR
-        if: steps.discover.outputs.status == 'candidate'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ steps.discover.outputs.version }}
-        run: |
-          gh pr create --draft --base main --head "$branch" --title "chore: review released ${VERSION} game data" --label data-review --body "Official released-version evidence and immutable upstream revisions were discovered automatically. Maintainers must review checksums, entity diffs, role/effect overlays, complete candidate rebuild/audit, and release-index promotion. This workflow never updates main."
+          gh auth setup-git
+          git push origin "HEAD:${BRANCH}"
+          gh pr create --draft --base main --head "$BRANCH" --title "chore: review released ${VERSION} game data" --body "The read-only discovery job downloaded the exact immutable candidate paths, verified their SHA-256 manifest, and produced machine coverage/entity-diff artifacts. Maintainers must still review source checksums, entity changes, sparse parameters, role/effect overlays, orphan evidence, and release-index promotion. This workflow never updates main."

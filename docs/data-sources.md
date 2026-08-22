@@ -46,12 +46,16 @@ The immutable predecessor `4.3-cn-2026-06-10` uses StarRailRes commit
 `7b349e39ee0f6f3bf814567995829b99c95e7a93` and Dimbreath released-client
 evidence `d5c40c0095bc5fdef9ce968c078304a95caab235`; 4.4 points to it directly.
 
-Coverage is deliberately candid: 3,672 numeric-effect candidates map one-to-one to 39 reviewed unconditional effects and 3,633 explicit unsupported effects. Unsupported entries retain the complete Chinese clause and a mechanic-specific reason and never enter arithmetic. Both `unmappedEffects` and unresolved StarRailRes parameter tokens are zero; this does not mean that every mechanic is simulated.
+Coverage is deliberately candid: all 2,780 source descriptions containing auditable numeric tokens produce 4,667 numeric-effect candidates. These map one-to-one to 39 reviewed unconditional effects and 4,628 explicit unsupported effects. Unsupported entries retain the complete Chinese clause and a mechanic-specific reason and never enter arithmetic. Silent numeric descriptions, `unmappedEffects`, and unresolved StarRailRes parameter tokens are all zero; this does not mean that every mechanic is simulated.
 
 Production updates require a new release ID, official channel evidence, immutable revisions, checksums, entity diff, role review and separate reviewed/unsupported coverage in a Pull Request. Scheduled automation never deploys or overwrites current data directly.
 
 The weekly workflow queries the public HoYoLAB official-notice feed, accepts only a
 published `Version X.Y … Update Details` article, and requires matching 40-character
-Dimbreath and StarRailRes commits. No change exits cleanly. A candidate is written only
-to an automation branch, the checked-in releases are rebuilt/audited with `npm run check`,
-and `gh pr create --draft` opens the human review gate; it never pushes `main`.
+Dimbreath and StarRailRes commits. No change exits cleanly. Its first job has read-only
+repository permission and disabled checkout credentials: it checks the repository,
+downloads only the seven allowlisted paths at the exact StarRailRes revision, fixes and
+re-verifies every SHA-256 value, performs a dry-run import/numeric audit, and uploads
+machine coverage and entity-diff artifacts. Any failure prevents the PR job. Only the
+second job has `contents`/`pull-requests` write permission; its token exists only in the
+final commit/push/draft-PR step. The workflow never pushes `main` or deploys Pages.

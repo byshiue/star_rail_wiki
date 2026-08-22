@@ -1,5 +1,8 @@
 {
   "totalSourceDescriptions": 2,
+  "numericSourceDescriptions": 1,
+  "silentNumericSourceDescriptions": 0,
+  "excludedStructuralNumericTokens": 0,
   "candidateNumericEffects": 1,
   "reviewedEffects": 1,
   "generatedEffects": 0,

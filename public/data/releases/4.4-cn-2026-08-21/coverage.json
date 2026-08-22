@@ -1,8 +1,11 @@
 {
   "totalSourceDescriptions": 3469,
-  "candidateNumericEffects": 3672,
+  "numericSourceDescriptions": 2780,
+  "silentNumericSourceDescriptions": 0,
+  "excludedStructuralNumericTokens": 0,
+  "candidateNumericEffects": 4667,
   "reviewedEffects": 39,
   "generatedEffects": 0,
-  "explicitUnsupportedEffects": 3633,
+  "explicitUnsupportedEffects": 4628,
   "unmappedEffects": 0
 }

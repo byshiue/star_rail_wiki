@@ -1,6 +1,16 @@
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react";
 import { loadRelease, loadReleaseIndex } from "../data/releaseRepository";
-import type { GameReleaseBundle, ReleaseIndex } from "../domain/releases";
+import { collectRevisionIdentities, type GameReleaseBundle, type ReleaseIndex } from "../domain/releases";
+
+export function closeHistoricalBundle(
+  bundle: GameReleaseBundle, nextReleaseId: string,
+): GameReleaseBundle {
+  const closed = structuredClone(bundle);
+  for (const revision of collectRevisionIdentities(closed.entities)) {
+    revision.validToReleaseId = nextReleaseId;
+  }
+  return closed;
+}
 
 export type ReleaseContextValue = {
   bundle: GameReleaseBundle | null;
@@ -38,7 +48,8 @@ export function ReleaseProvider({ bundle: explicitBundle, index: explicitIndex, 
       let previousReleaseId = bundle?.release.previousReleaseId ?? null;
       while (previousReleaseId !== null && !seen.has(previousReleaseId)) {
         const historical = await loadRelease(previousReleaseId);
-        historyBundles.unshift(historical);
+        const nextReleaseId = historyBundles[0]!.release.id;
+        historyBundles.unshift(closeHistoricalBundle(historical, nextReleaseId));
         seen.add(previousReleaseId);
         previousReleaseId = historical.release.previousReleaseId;
       }

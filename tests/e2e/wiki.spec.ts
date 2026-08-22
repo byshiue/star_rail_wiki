@@ -20,6 +20,7 @@ test("navigates a real 4.3 to 4.4 before/after diff without network injection", 
   await page.getByRole("link", { name: "查看前后修订" }).click();
   await expect(page.getByRole("region", { name: "版本变化", exact: true })).toContainText("4.3 → 4.4");
   await expect(page.getByRole("region", { name: "版本变化明细" })).toContainText("abilities[ability:150702].originalText");
+  await expect(page.getByText("4.3-cn-2026-06-10 → 4.4-cn-2026-08-21").first()).toBeVisible();
 });
 
 test("remains usable at 320px", async ({ page }) => {

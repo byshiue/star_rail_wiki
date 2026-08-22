@@ -2,10 +2,13 @@ import { z } from "zod";
 import type { FeatureRevision, EquipmentRevision } from "../../src/domain/entities";
 import type { Effect } from "../../src/domain/effects";
 import type { ReleaseEntities } from "../../src/domain/releases";
-import { extractCandidateEffects, type EffectSourceRevision } from "./extractEffects";
+import { auditNumericTokens, extractCandidateEffects, type EffectSourceRevision } from "./extractEffects";
 
 export const CoverageReportSchema = z.strictObject({
   totalSourceDescriptions: z.number().int().nonnegative(),
+  numericSourceDescriptions: z.number().int().nonnegative(),
+  silentNumericSourceDescriptions: z.literal(0),
+  excludedStructuralNumericTokens: z.number().int().nonnegative(),
   candidateNumericEffects: z.number().int().nonnegative(),
   reviewedEffects: z.number().int().nonnegative(),
   generatedEffects: z.number().int().nonnegative(),
@@ -41,6 +44,14 @@ export function buildCoverageReport(
 ): CoverageReport {
   const sourceList = sources(entities);
   const candidates = sourceList.flatMap(extractCandidateEffects);
+  const numericAudits = sourceList.map((source) => ({
+    audit: auditNumericTokens(source),
+    candidates: extractCandidateEffects(source),
+  }));
+  const numericSourceDescriptions = numericAudits.filter(({ audit }) => audit.auditableTokens > 0).length;
+  const silentNumericSourceDescriptions = numericAudits.filter(({ audit, candidates: found }) => (
+    audit.auditableTokens > 0 && found.length === 0
+  )).length;
   const mappedCounts = new Map<string, number>();
   for (const effect of effects.filter((entry) => entry.reviewStatus !== "generated")) {
     const key = coverageKey(effect);
@@ -57,6 +68,9 @@ export function buildCoverageReport(
 
   return CoverageReportSchema.parse({
     totalSourceDescriptions: sourceList.length,
+    numericSourceDescriptions,
+    silentNumericSourceDescriptions,
+    excludedStructuralNumericTokens: numericAudits.reduce((total, { audit }) => total + audit.excludedStructuralTokens, 0),
     candidateNumericEffects: candidates.length,
     reviewedEffects: effects.filter((effect) => effect.reviewStatus === "reviewed").length,
     generatedEffects: effects.filter((effect) => effect.reviewStatus === "generated").length,

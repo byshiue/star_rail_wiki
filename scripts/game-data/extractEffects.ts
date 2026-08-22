@@ -89,11 +89,36 @@ function clauseAt(text: string, index: number): string {
 }
 
 const numericToken = /#\d+\[[^\]]+\]|\d+(?:\.\d+)?(?:%|(?:→\d+(?:\.\d+)?%?))?/g;
-const effectCue = /提高|降低|延后|提前|持续|回复|恢复|治疗|伤害|防御|抗性|速度|能量|战技点|生命值|攻击力|暴击|击破|命中|护盾|叠加|层|回合|概率|倍率|上限|消耗|increas|reduc|delay|advance|duration|turn|heal|recover|damage|resistance|speed|energy|attack|critical|shield|stack/i;
 
 function numericValue(token: string): number {
   const value = Number(token.match(/\d+(?:\.\d+)?/)?.[0] ?? 0);
   return Number.isFinite(value) ? value : 0;
+}
+
+function sourceSegments(entity: EffectSourceRevision): string[] {
+  const sourceText = entity.originalText ?? entity.description ?? "";
+  return sourceText.split(/[。；;\n]+/).map((segment) => segment.trim()).filter(Boolean);
+}
+
+function structuralNumericToken(segment: string, start: number, end: number): boolean {
+  return segment.slice(0, start).trim() === "" && /^\s*件套[:：]?/.test(segment.slice(end));
+}
+
+export function auditNumericTokens(entity: EffectSourceRevision): {
+  auditableTokens: number; excludedStructuralTokens: number;
+} {
+  let auditableTokens = 0;
+  let excludedStructuralTokens = 0;
+  for (const segment of sourceSegments(entity)) {
+    numericToken.lastIndex = 0;
+    for (const token of segment.matchAll(numericToken)) {
+      const start = token.index;
+      const end = start + token[0].length;
+      if (structuralNumericToken(segment, start, end)) excludedStructuralTokens += 1;
+      else auditableTokens += 1;
+    }
+  }
+  return { auditableTokens, excludedStructuralTokens };
 }
 
 export function extractCandidateEffects(entity: EffectSourceRevision): CandidateEffect[] {
@@ -101,7 +126,7 @@ export function extractCandidateEffects(entity: EffectSourceRevision): Candidate
   if (!sourceText) return [];
 
   const matches: Array<{ segmentIndex: number; index: number; end: number; ruleIndex: number; segment: string; rule: PhraseRule; value: number }> = [];
-  const segments = sourceText.split(/[。；;\n]+/).map((segment) => segment.trim()).filter(Boolean);
+  const segments = sourceSegments(entity);
   for (const [segmentIndex, segment] of segments.entries()) {
     for (const [ruleIndex, phraseRule] of rules.entries()) {
       phraseRule.pattern.lastIndex = 0;
@@ -127,12 +152,11 @@ export function extractCandidateEffects(entity: EffectSourceRevision): Candidate
   }));
 
   for (const [segmentIndex, segment] of segments.entries()) {
-    if (!effectCue.test(segment)) continue;
     numericToken.lastIndex = 0;
     const uncovered = [...segment.matchAll(numericToken)].filter((token) => {
       const start = token.index;
       const end = start + token[0].length;
-      if (segment.slice(0, start).trim() === "" && /^\s*件套[:：]?/.test(segment.slice(end))) {
+      if (structuralNumericToken(segment, start, end)) {
         return false;
       }
       return !matches.some((match) => (
