@@ -42,6 +42,8 @@ Production current is `4.4-cn-2026-08-21`. The official HoYoLAB Version 4.4 noti
 
 The bundle contains 95 characters, 762 skills, 1,912 trace nodes, 570 canonical eidolons, 165 light cones and 60 relic/planar sets. Sixty unreferenced seven-digit alternate enhanced eidolon records are excluded with a reason and ID-list checksum in the audit; skill and trace orphan counts are zero.
 
+The orphan-rank audit is not self-attesting. Each production audit directory checks in the exact immutable `characters.json` and `character_ranks.json` bytes under `source/index_new/cn/`. Repository validation verifies those bytes against both the source manifest and generated release source checksums, then recomputes raw rank IDs, character `ranks` references, the exact set difference, count, and sorted-list SHA-256 before comparing the report and audit summary. Coordinated edits to the report and summary therefore fail while the pinned raw snapshot remains unchanged.
+
 The immutable predecessor `4.3-cn-2026-06-10` uses StarRailRes commit
 `7b349e39ee0f6f3bf814567995829b99c95e7a93` and Dimbreath released-client
 evidence `d5c40c0095bc5fdef9ce968c078304a95caab235`; 4.4 points to it directly.
@@ -56,6 +58,9 @@ Dimbreath and StarRailRes commits. No change exits cleanly. Its first job has re
 repository permission and disabled checkout credentials: it checks the repository,
 downloads only the seven allowlisted paths at the exact StarRailRes revision, fixes and
 re-verifies every SHA-256 value, performs a dry-run import/numeric audit, and uploads
-machine coverage and entity-diff artifacts. Any failure prevents the PR job. Only the
+machine coverage and stable Task 3 field-level entity-diff artifacts. The diff includes
+added/removed/changed counts, top-level changed-field summaries, per-entry and aggregate
+checksums, and full logical-revision details for text, features, equipment values, effects,
+and provenance/source changes. Any failure prevents the PR job. Only the
 second job has `contents`/`pull-requests` write permission; its token exists only in the
 final commit/push/draft-PR step. The workflow never pushes `main` or deploys Pages.

@@ -25,6 +25,12 @@ export const CharacterRankOrphanAuditSchema = z.strictObject({
   orphanIdsSha256: z.string().regex(/^sha256:[a-f0-9]{64}$/),
 });
 export type CharacterRankOrphanAudit = z.infer<typeof CharacterRankOrphanAuditSchema>;
+export type CharacterRankRawSnapshot = {
+  charactersValue: unknown;
+  characterRanksValue: unknown;
+  charactersChecksum: string;
+  characterRanksChecksum: string;
+};
 
 function records(value: unknown): Array<Record<string, unknown>> {
   return Object.values(z.record(z.string(), z.record(z.string(), z.unknown())).parse(value));
@@ -73,22 +79,28 @@ function sameIds(left: readonly string[], right: readonly string[]): boolean {
 
 export function validateCharacterRankOrphanAudit(
   input: CharacterRankOrphanAudit,
+  snapshot: CharacterRankRawSnapshot,
   bundleCanonicalRankIds: readonly string[],
 ): CharacterRankOrphanAudit {
   const audit = CharacterRankOrphanAuditSchema.parse(input);
-  const raw = new Set(audit.rawRankIds);
-  const canonical = new Set(audit.canonicalReferencedRankIds);
-  if (audit.canonicalReferencedRankIds.some((id) => !raw.has(id))) {
-    throw new Error("canonical rank list contains an ID absent from raw rank snapshot");
+  const recomputed = buildCharacterRankOrphanAudit(
+    audit.releaseId,
+    audit.sourceRevision,
+    snapshot.charactersValue,
+    snapshot.characterRanksValue,
+    { characters: snapshot.charactersChecksum, characterRanks: snapshot.characterRanksChecksum },
+  );
+  if (
+    audit.charactersFileChecksum !== recomputed.charactersFileChecksum
+    || audit.characterRanksFileChecksum !== recomputed.characterRanksFileChecksum
+    || !sameIds(audit.rawRankIds, recomputed.rawRankIds)
+    || !sameIds(audit.canonicalReferencedRankIds, recomputed.canonicalReferencedRankIds)
+    || !sameIds(audit.orphanRankIds, recomputed.orphanRankIds)
+    || audit.orphanIdsSha256 !== recomputed.orphanIdsSha256
+  ) {
+    throw new Error("orphan report does not match the immutable raw source snapshot recomputation");
   }
-  const recomputedOrphans = audit.rawRankIds.filter((id) => !canonical.has(id));
-  if (!sameIds(recomputedOrphans, audit.orphanRankIds)) {
-    throw new Error("orphan rank list is not the exact raw-minus-canonical set difference");
-  }
-  if (sortedIdListSha256(audit.orphanRankIds) !== audit.orphanIdsSha256) {
-    throw new Error("orphan rank sorted-list SHA-256 mismatch");
-  }
-  if (!sameIds(sorted(bundleCanonicalRankIds), audit.canonicalReferencedRankIds)) {
+  if (!sameIds(sorted(bundleCanonicalRankIds), recomputed.canonicalReferencedRankIds)) {
     throw new Error("canonical rank list does not match generated bundle eidolons");
   }
   return audit;

@@ -17,7 +17,12 @@ it("recomputes canonical and orphan rank IDs from immutable raw object indexes",
     canonicalReferencedRankIds: ["100101", "100102", "100201"],
     orphanRankIds: ["9000001"],
   });
-  expect(() => validateCharacterRankOrphanAudit(report, ["100101", "100102", "100201"])).not.toThrow();
+  expect(() => validateCharacterRankOrphanAudit(report, {
+    charactersValue: characters,
+    characterRanksValue: ranks,
+    charactersChecksum: report.charactersFileChecksum,
+    characterRanksChecksum: report.characterRanksFileChecksum,
+  }, ["100101", "100102", "100201"])).not.toThrow();
 });
 
 it.each(["rawRankIds", "canonicalReferencedRankIds", "orphanRankIds"] as const)(
@@ -25,7 +30,30 @@ it.each(["rawRankIds", "canonicalReferencedRankIds", "orphanRankIds"] as const)(
   (field) => {
     const report = buildCharacterRankOrphanAudit("release", "a".repeat(40), characters, ranks);
     report[field] = report[field].slice(1);
-    expect(() => validateCharacterRankOrphanAudit(report, ["100101", "100102", "100201"]))
+    expect(() => validateCharacterRankOrphanAudit(report, {
+      charactersValue: characters,
+      characterRanksValue: ranks,
+      charactersChecksum: report.charactersFileChecksum,
+      characterRanksChecksum: report.characterRanksFileChecksum,
+    }, ["100101", "100102", "100201"]))
       .toThrow(/orphan|canonical|raw rank/i);
   },
 );
+
+it("rejects coordinated deletion and rewritten summary when immutable raw files are unchanged", () => {
+  const report = buildCharacterRankOrphanAudit("release", "a".repeat(40), characters, ranks);
+  report.rawRankIds = report.rawRankIds.filter((id) => id !== "9000001");
+  report.orphanRankIds = [];
+  report.orphanIdsSha256 = buildCharacterRankOrphanAudit(
+    "release", "a".repeat(40), characters, {
+      "100101": ranks["100101"], "100102": ranks["100102"], "100201": ranks["100201"],
+    },
+  ).orphanIdsSha256;
+
+  expect(() => validateCharacterRankOrphanAudit(report, {
+    charactersValue: characters,
+    characterRanksValue: ranks,
+    charactersChecksum: report.charactersFileChecksum,
+    characterRanksChecksum: report.characterRanksFileChecksum,
+  }, ["100101", "100102", "100201"])).toThrow(/immutable raw|raw snapshot/i);
+});

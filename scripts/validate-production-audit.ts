@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
@@ -46,6 +47,17 @@ async function json(file: string): Promise<unknown> {
   return JSON.parse(await readFile(file, "utf8"));
 }
 
+async function immutableRawFile(
+  auditRoot: string, sourcePath: string, expectedChecksum: string,
+): Promise<{ value: unknown; checksum: string }> {
+  const bytes = await readFile(path.join(auditRoot, "source", sourcePath));
+  const checksum = `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
+  if (checksum !== expectedChecksum) {
+    throw new Error(`checked immutable raw source checksum mismatch for ${sourcePath}`);
+  }
+  return { value: JSON.parse(bytes.toString("utf8")), checksum };
+}
+
 export async function validateProductionAudit(
   root: string, bundle: GameReleaseBundle, coverage: CoverageReport,
 ): Promise<void> {
@@ -79,10 +91,27 @@ export async function validateProductionAudit(
   ) {
     throw new Error("orphan rank snapshot is not bound to the audited immutable source");
   }
+  if (
+    source.fileChecksums[orphanReport.charactersPath] !== orphanReport.charactersFileChecksum
+    || source.fileChecksums[orphanReport.characterRanksPath] !== orphanReport.characterRanksFileChecksum
+  ) {
+    throw new Error("bundle source checksums do not match the immutable orphan source manifest");
+  }
+  const charactersRaw = await immutableRawFile(
+    auditRoot, orphanReport.charactersPath, orphanReport.charactersFileChecksum,
+  );
+  const characterRanksRaw = await immutableRawFile(
+    auditRoot, orphanReport.characterRanksPath, orphanReport.characterRanksFileChecksum,
+  );
   const canonicalRankIds = bundle.entities.characters.flatMap((character) => (
     character.eidolons.map(({ logicalId }) => logicalId.replace(/^eidolon:/, ""))
   ));
-  const validatedOrphans = validateCharacterRankOrphanAudit(orphanReport, canonicalRankIds);
+  const validatedOrphans = validateCharacterRankOrphanAudit(orphanReport, {
+    charactersValue: charactersRaw.value,
+    characterRanksValue: characterRanksRaw.value,
+    charactersChecksum: charactersRaw.checksum,
+    characterRanksChecksum: characterRanksRaw.checksum,
+  }, canonicalRankIds);
   if (
     validatedOrphans.orphanRankIds.length !== audit.excludedSourceRecords.characterRanks.count
     || validatedOrphans.orphanIdsSha256 !== audit.excludedSourceRecords.characterRanks.idListSha256

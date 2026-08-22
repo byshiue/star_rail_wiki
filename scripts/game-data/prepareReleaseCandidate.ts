@@ -4,6 +4,8 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { z } from "zod";
 import type { FeatureRevision, EquipmentRevision } from "../../src/domain/entities";
+import type { GameReleaseBundle } from "../../src/domain/releases";
+import { diffReleases } from "./diffReleases";
 import { auditNumericTokens, extractCandidateEffects, type EffectSourceRevision } from "./extractEffects";
 import { fetchSource } from "./fetchSource";
 import { importStarRailRes } from "./importStarRailRes";
@@ -22,7 +24,6 @@ const CandidateDiscoverySchema = z.strictObject({
 });
 
 type CandidateDiscovery = z.infer<typeof CandidateDiscoverySchema>;
-type LogicalEntity = { logicalId: string; name: string };
 
 function sha256(bytes: Uint8Array): string {
   return `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
@@ -30,6 +31,50 @@ function sha256(bytes: Uint8Array): string {
 
 function format(value: unknown): string {
   return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+function jsonSha256(value: unknown): string {
+  return sha256(new TextEncoder().encode(JSON.stringify(value)));
+}
+
+function topLevelField(pathValue: string): string {
+  if (pathValue === "$") return "$";
+  return pathValue.split(/[.[]/, 1)[0] ?? pathValue;
+}
+
+export function buildStableEntityDiff(previous: GameReleaseBundle, next: GameReleaseBundle) {
+  const details = diffReleases(previous, next);
+  const entries = details.map((entry) => ({
+    logicalId: entry.logicalId,
+    kind: entry.kind,
+    changedFields: [...new Set(entry.changes.map(({ path: changePath }) => topLevelField(changePath)))].sort(),
+    changeCount: entry.changes.length,
+    changesSha256: jsonSha256(entry.changes),
+  }));
+  const kinds = ["added", "removed", "changed"] as const;
+  const counts = Object.fromEntries(kinds.map((kind) => [
+    kind, entries.filter((entry) => entry.kind === kind).length,
+  ])) as Record<(typeof kinds)[number], number>;
+  const fieldCounts = Object.fromEntries(kinds.map((kind) => {
+    const fields = new Map<string, number>();
+    for (const entry of entries.filter((candidate) => candidate.kind === kind)) {
+      for (const field of entry.changedFields) fields.set(field, (fields.get(field) ?? 0) + 1);
+    }
+    return [kind, Object.fromEntries([...fields].sort(([left], [right]) => left.localeCompare(right)))];
+  }));
+  const summary = {
+    counts: { ...counts, total: entries.length },
+    fieldCounts,
+    entries,
+  };
+  return {
+    ...summary,
+    checksums: {
+      detailsSha256: jsonSha256(details),
+      summarySha256: jsonSha256(summary),
+    },
+    details,
+  };
 }
 
 export function validateCandidateIdentity(value: unknown, paths: readonly string[]): CandidateDiscovery {
@@ -70,14 +115,6 @@ async function downloadImmutableSnapshot(
     checksums[sourcePath] = sha256(bytes);
   }
   return checksums;
-}
-
-function ids(entries: readonly LogicalEntity[]): Set<string> {
-  return new Set(entries.map(({ logicalId }) => logicalId));
-}
-
-function sortedDifference(left: Set<string>, right: Set<string>): string[] {
-  return [...left].filter((id) => !right.has(id)).sort();
 }
 
 async function prepare(discoveryPath: string, output: string, currentReleaseRoot: string): Promise<void> {
@@ -127,29 +164,16 @@ async function prepare(discoveryPath: string, output: string, currentReleaseRoot
     throw new Error(`candidate dry-run has ${coverage.silentNumericSourceDescriptions} silent numeric descriptions`);
   }
 
-  const current = JSON.parse(await readFile(path.join(currentReleaseRoot, "entities.json"), "utf8")) as {
-    characters: LogicalEntity[]; equipment: LogicalEntity[];
-  };
-  const candidateCharacters = bundle.entities.characters as LogicalEntity[];
-  const candidateEquipment = bundle.entities.equipment as LogicalEntity[];
-  const currentCharacters = ids(current.characters);
-  const currentEquipment = ids(current.equipment);
-  const nextCharacters = ids(candidateCharacters);
-  const nextEquipment = ids(candidateEquipment);
-  const entityDiff = {
-    characters: {
-      before: currentCharacters.size,
-      after: nextCharacters.size,
-      added: sortedDifference(nextCharacters, currentCharacters),
-      removed: sortedDifference(currentCharacters, nextCharacters),
-    },
-    equipment: {
-      before: currentEquipment.size,
-      after: nextEquipment.size,
-      added: sortedDifference(nextEquipment, currentEquipment),
-      removed: sortedDifference(currentEquipment, nextEquipment),
-    },
-  };
+  const current = {
+    release: JSON.parse(await readFile(path.join(currentReleaseRoot, "release.json"), "utf8")),
+    entities: JSON.parse(await readFile(path.join(currentReleaseRoot, "entities.json"), "utf8")),
+  } as GameReleaseBundle;
+  const candidateBundle = structuredClone(bundle) as unknown as GameReleaseBundle;
+  candidateBundle.entities.effects = candidates.map((candidate) => ({
+    id: candidate.candidateId,
+    ...candidate,
+  })) as unknown as GameReleaseBundle["entities"]["effects"];
+  const entityDiff = buildStableEntityDiff(current, candidateBundle);
   await Promise.all([
     writeFile(path.join(output, "discovery.json"), format(candidate), "utf8"),
     writeFile(path.join(output, "coverage.json"), format(coverage), "utf8"),
