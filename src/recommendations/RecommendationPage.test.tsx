@@ -6,6 +6,7 @@ import communityJson from "../../data/community/teams.json";
 import { ReleaseProvider } from "../app/ReleaseProvider";
 import { CommunityTeamLibrarySchema } from "../domain/community";
 import { fixtureBundle } from "../effects/__fixtures__/goldenTeams";
+import { maxInvestmentFixture } from "./__fixtures__/maxInvestment";
 import { RecommendationPage } from "./RecommendationPage";
 
 const presets = CommunityTeamLibrarySchema.parse(communityJson).presets;
@@ -44,6 +45,22 @@ describe("RecommendationPage", () => {
     expect(screen.getAllByText(/来源修订/).length).toBeGreaterThan(0);
     expect(screen.queryByRole("link", { name: "team:synthetic-follow-up-fixture" })).not.toBeInTheDocument();
     expect(screen.getAllByText(/检索 2026-08-21/).length).toBeGreaterThan(0);
+  });
+
+  it("renders a clamped 100% activation cost for maximum valid investment", async () => {
+    const user = userEvent.setup();
+    const { bundle, memberBuilds } = maxInvestmentFixture();
+    render(
+      <MemoryRouter>
+        <ReleaseProvider bundle={bundle}>
+          <RecommendationPage loadPresets={async () => []} memberBuilds={memberBuilds} />
+        </ReleaseProvider>
+      </MemoryRouter>,
+    );
+
+    await user.click(await screen.findByRole("button", { name: "生成推荐" }));
+    const [activationCost] = await screen.findAllByText("启动成本");
+    expect(activationCost.parentElement).toHaveTextContent("100%（权重 -8；加权 -8）");
   });
 
   it("shows a structured constraint conflict rather than inventing a team", async () => {

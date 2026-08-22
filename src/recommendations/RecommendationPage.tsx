@@ -5,9 +5,12 @@ import { loadCommunityTeams } from "../community/teamRepository";
 import type { TeamPreset } from "../domain/community";
 import { encodeTeamBuild } from "../simulator/teamBuild";
 import { recommendTeams, type RecommendationResult } from "./recommendTeams";
-import { RecommendationConstraintError, type EncounterMode, type RecommendationObjective } from "./request";
+import { RecommendationConstraintError, type EncounterMode, type RecommendationContext, type RecommendationObjective } from "./request";
 
-type RecommendationPageProps = { loadPresets?: (releaseId: string) => Promise<TeamPreset[]> };
+type RecommendationPageProps = {
+  loadPresets?: (releaseId: string) => Promise<TeamPreset[]>;
+  memberBuilds?: RecommendationContext["memberBuilds"];
+};
 
 function ids(value: string): string[] {
   return [...new Set(value.split(/[\s,，\n]+/).map((item) => item.trim()).filter(Boolean))].sort();
@@ -19,7 +22,7 @@ const componentLabels = {
   survivability: "生存", activationCost: "启动成本", wastedEffects: "浪费效果", communityPrior: "社区先验",
 } as const;
 
-export function RecommendationPage({ loadPresets = loadCommunityTeams }: RecommendationPageProps) {
+export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBuilds }: RecommendationPageProps) {
   const { bundle, loading, error: releaseError } = useRelease();
   const [presets, setPresets] = useState<TeamPreset[]>([]);
   const [presetError, setPresetError] = useState<string | null>(null);
@@ -66,7 +69,7 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams }: Recomme
         requiredCharacterIds: ids(required), excludedCharacterIds: ids(excluded),
         encounter: { mode: encounter, enemyWeaknesses: ids(weaknesses) }, objective,
         archetype: archetype.trim() || undefined, maxResults: 3, maxCombinations: 5_000,
-      }, { bundle, communityPresets: presets }));
+      }, { bundle, communityPresets: presets, memberBuilds }));
       setConstraintError(null);
     } catch (caught) {
       setResults([]);

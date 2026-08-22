@@ -100,3 +100,25 @@ Final Fix R2 verification:
 - `npm run validate:data`: passed.
 - `npm run build`: passed.
 - `git diff --check`: passed.
+
+## Fix round 3 — authoritative validation, annotation identity, and real maximum-investment coverage
+
+Addressed all three remaining review findings.
+
+- Removed the replaceable community-preset validator from `RecommendationContext`. `prepareCommunityPresets()` always calls the authoritative `validatePresetForBundle()`; optional instrumentation only observes completed validations. The 400-preset regression verifies exactly 400 authoritative calls without exposing a bypass hook.
+- Embedded `roleAnnotation.characterLogicalId` is retained in every character revision. `GameReleaseBundleSchema` rejects annotations whose embedded character ID differs from their owner, rejects non-reviewed annotations on active characters, and still enforces release identity. Typed schema and repository-copy tests cover swapped and generated/unreviewed annotations.
+- Maximum investment is now exercised through the real `recommendTeams()` pipeline with a schema-valid bundle containing six eidolons per character, a legal S5 light cone, and a legal relic set. Core tests assert the component clamp at `1` and weighted value `-8`; the UI regression asserts `100%（权重 -8；加权 -8）`.
+- `RecommendationPage` accepts typed `memberBuilds`, allowing account inventory/build data to affect recommendations without bypassing build validation or scoring authority.
+
+Final Fix R3 verification:
+
+- `npm run typecheck`: passed.
+- `npm run lint`: passed.
+- Focused recommendations and UI: 2 files, 21 tests passed.
+- Focused annotation schema/repository tests: 2 files, 67 tests passed.
+- `npm test -- --maxWorkers=2`: 32 files, 223 tests passed.
+- `npm run validate:data`: passed.
+- `npm run build`: passed.
+- `git diff --check`: passed.
+
+The default unconstrained Vitest run initially timed out in two unrelated 5-second tests under host contention (221 passed). Both timed-out tests passed together with one worker (8/8), and the full suite passed with the repository's established two-worker verification command; no timeout masking or product-code workaround was added.

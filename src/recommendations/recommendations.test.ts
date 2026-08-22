@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import communityJson from "../../data/community/teams.json";
 import { CommunityTeamLibrarySchema, type TeamPreset } from "../domain/community";
 import { fixtureBundle } from "../effects/__fixtures__/goldenTeams";
+import { maxInvestmentFixture } from "./__fixtures__/maxInvestment";
 import { RecommendationConstraintError } from "./request";
 import { recommendTeams } from "./recommendTeams";
-import { MAX_COMMUNITY_PRESETS, prepareCommunityPresets, scoreTeam } from "./scoreTeam";
+import { MAX_COMMUNITY_PRESETS, prepareCommunityPresets } from "./scoreTeam";
 
 const allCharacters = fixtureBundle.entities.characters.map(({ logicalId }) => logicalId);
 const context = {
@@ -197,39 +198,38 @@ it("matches community assumptions against the actual candidate by character and 
 it("precomputes each relevant preset once, enforces the library limit, and aborts bounded scans", () => {
   const library = Array.from({ length: 400 }, (_, index) => eligiblePreset({ id: `team:perf-${index}` }));
   let calls = 0;
-  const prepared = prepareCommunityPresets(request, { ...context, communityPresets: library }, () => { calls += 1; return []; });
+  const prepared = prepareCommunityPresets(request, { ...context, communityPresets: library }, { onCommunityPresetValidated: () => { calls += 1; } });
   expect(prepared).toHaveLength(400);
   expect(calls).toBe(400);
   calls = 0;
-  const recommendations = recommendTeams({ ...request, maxCombinations: 3, maxResults: 1 }, { ...context, communityPresets: library, communityPresetValidator: () => { calls += 1; return []; } });
+  const recommendations = recommendTeams({ ...request, maxCombinations: 3, maxResults: 1 }, { ...context, communityPresets: library }, { onCommunityPresetValidated: () => { calls += 1; } });
   expect(recommendations).toHaveLength(1);
   expect(calls).toBe(400);
   expect(() => prepareCommunityPresets(request, { ...context, communityPresets: Array.from({ length: MAX_COMMUNITY_PRESETS + 1 }, (_, index) => eligiblePreset({ id: `team:over-${index}` })) })).toThrow(/最多允许 500 条/);
   const controller = new AbortController();
   let scanned = 0;
-  expect(() => prepareCommunityPresets(request, { ...context, communityPresets: library, signal: controller.signal }, () => {
-    scanned += 1; if (scanned === 33) controller.abort(); return [];
-  })).toThrow(/cancelled/i);
+  expect(() => prepareCommunityPresets(request, { ...context, communityPresets: library, signal: controller.signal }, { onCommunityPresetValidated: () => {
+    scanned += 1; if (scanned === 33) controller.abort();
+  } })).toThrow(/cancelled/i);
   expect(scanned).toBeLessThan(100);
 });
-
-it("clamps maximum configured investment to one", () => {
-  const [baseline] = recommendTeams(request, { ...context, communityPresets: [] });
-  const memberBuilds = Object.fromEntries(baseline.team.map((id) => [id, {
-    eidolon: 6, lightCone: { logicalId: "light-cone:any", superimposition: 5 },
-    relicSets: [{ logicalId: "relic-set:any", pieces: 6 }],
-  }]));
-  const scored = scoreTeam(baseline.team, baseline.build, baseline.evaluation, request, { ...context, communityPresets: [], memberBuilds }, []);
-  expect(scored.components.activationCost).toBe(1);
-  expect(scored.weighted.activationCost).toBe(-8);
+it("clamps maximum valid investment through the real recommendation pipeline", () => {
+  const { bundle, memberBuilds } = maxInvestmentFixture();
+  const [result] = recommendTeams({ ...request, requiredCharacterIds: ["character:synthetic-dps", "character:synthetic-support"] }, {
+    bundle, communityPresets: [], memberBuilds,
+  });
+  expect(result.components.activationCost).toBe(1);
+  expect(result.weighted.activationCost).toBe(-8);
+  expect(result.build.members.every(({ eidolon }) => eidolon === 6)).toBe(true);
 });
-
 it("is invariant when roster, required, and excluded constraints each permute two or more items", () => {
   const bundle = structuredClone(fixtureBundle);
   const template = bundle.entities.characters.find(({ logicalId }) => logicalId === "character:synthetic-dps")!;
   bundle.entities.characters.push(
-    { ...structuredClone(template), logicalId: "character:extra-a", revisionId: "character:extra-a@4.3-fixture" },
-    { ...structuredClone(template), logicalId: "character:extra-b", revisionId: "character:extra-b@4.3-fixture" },
+    { ...structuredClone(template), logicalId: "character:extra-a", revisionId: "character:extra-a@4.3-fixture",
+      roleAnnotation: { ...structuredClone(template.roleAnnotation), characterLogicalId: "character:extra-a" } },
+    { ...structuredClone(template), logicalId: "character:extra-b", revisionId: "character:extra-b@4.3-fixture",
+      roleAnnotation: { ...structuredClone(template.roleAnnotation), characterLogicalId: "character:extra-b" } },
   );
   const roster = bundle.entities.characters.map(({ logicalId }) => logicalId);
   const constrained = { ...request, roster: { mode: "owned-only" as const, characterIds: roster },

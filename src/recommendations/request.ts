@@ -26,7 +26,6 @@ export interface RecommendationRequest {
 export interface RecommendationContext {
   bundle: GameReleaseBundle;
   communityPresets: TeamPreset[];
-  communityPresetValidator?: (preset: TeamPreset, bundle: GameReleaseBundle) => string[];
   memberBuilds?: Record<string, Omit<TeamMemberBuild, "characterLogicalId" | "slotId">>;
   scenario?: BattleScenario;
   signal?: AbortSignal;

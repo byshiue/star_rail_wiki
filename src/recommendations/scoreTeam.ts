@@ -73,7 +73,7 @@ export interface ScoredTeam {
   communityReferences: CommunityReference[];
 }
 
-type PresetValidator = (preset: TeamPreset, bundle: GameReleaseBundle) => string[];
+export interface RecommendationInstrumentation { onCommunityPresetValidated?: (preset: TeamPreset) => void }
 
 function rounded(value: number): number {
   return Math.round(value * 10_000) / 10_000;
@@ -91,9 +91,9 @@ function teamCharacters(team: readonly string[], bundle: GameReleaseBundle): Cha
 }
 
 function baseCommunityEligibility(
-  preset: TeamPreset, request: RecommendationRequest, context: RecommendationContext, validator: PresetValidator,
+  preset: TeamPreset, request: RecommendationRequest, context: RecommendationContext,
 ): string[] {
-  const issues = validator(preset, context.bundle);
+  const issues = validatePresetForBundle(preset, context.bundle);
   const excluded = new Set(request.excludedCharacterIds);
   const owned = request.roster.mode === "owned-only" ? new Set(request.roster.characterIds) : null;
   if (preset.slots.some((id) => excluded.has(id))) issues.push("preset contains an excluded character");
@@ -113,7 +113,7 @@ function baseCommunityEligibility(
 
 export function prepareCommunityPresets(
   request: RecommendationRequest, context: RecommendationContext,
-  validator: PresetValidator = context.communityPresetValidator ?? validatePresetForBundle,
+  instrumentation?: RecommendationInstrumentation,
 ): PreparedCommunityPreset[] {
   if (context.communityPresets.length > MAX_COMMUNITY_PRESETS) {
     throw new RecommendationConstraintError([{
@@ -126,7 +126,9 @@ export function prepareCommunityPresets(
     .sort((left, right) => left.id.localeCompare(right.id));
   return relevant.map((preset, index) => {
     if ((index & 31) === 0 && context.signal?.aborted) throw new RecommendationCancelledError();
-    return { preset, baseEligibilityIssues: baseCommunityEligibility(preset, request, context, validator) };
+    const prepared = { preset, baseEligibilityIssues: baseCommunityEligibility(preset, request, context) };
+    instrumentation?.onCommunityPresetValidated?.(preset);
+    return prepared;
   });
 }
 

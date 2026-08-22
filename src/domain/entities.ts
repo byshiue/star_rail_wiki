@@ -13,6 +13,7 @@ export type EntityProvenance = z.infer<typeof EntityProvenanceSchema>;
 export const CharacterRoleSchema = z.enum(["damage", "support", "sustain"]);
 export type CharacterRole = z.infer<typeof CharacterRoleSchema>;
 export const CharacterRoleAnnotationSchema = z.strictObject({
+  characterLogicalId: z.string().regex(/^character:/),
   releaseId: z.string().min(1),
   roles: z.array(CharacterRoleSchema).min(1).max(3)
     .refine((roles) => new Set(roles).size === roles.length, "duplicate character roles are not allowed"),

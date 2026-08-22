@@ -31,7 +31,7 @@ function releasedBundle(): GameReleaseBundle {
     rarity: 5,
     element: "虚数",
     path: "harmony",
-    roleAnnotation: { releaseId: "release-4.3", roles: ["support"], reviewStatus: "reviewed", provenance },
+    roleAnnotation: { characterLogicalId: logicalId, releaseId: "release-4.3", roles: ["support"], reviewStatus: "reviewed", provenance },
     description: `${name}测试资料。`,
     reviewStatus: "reviewed",
     abilities: [],

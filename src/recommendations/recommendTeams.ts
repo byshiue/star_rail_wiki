@@ -5,7 +5,7 @@ import { explainRecommendation, type RecommendationExplanation } from "./explain
 import { recommendationScenario, RecommendationCancelledError, RecommendationConstraintError, stableUnique, type RecommendationContext, type RecommendationRequest } from "./request";
 import {
   prepareCommunityPresets, scoreTeam, WEIGHTS_VERSION, type CommunityReference, type ScoreComponents,
-  type ScoreWeights, type WeightedScoreComponents, weightsForRequest,
+  type RecommendationInstrumentation, type ScoreWeights, type WeightedScoreComponents, weightsForRequest,
 } from "./scoreTeam";
 
 export interface RecommendationSubstitution {
@@ -73,10 +73,10 @@ function changedComponents(first: ScoreComponents, second: ScoreComponents): Par
 }
 
 export function recommendTeams(
-  request: RecommendationRequest, context: RecommendationContext,
+  request: RecommendationRequest, context: RecommendationContext, instrumentation?: RecommendationInstrumentation,
 ): RecommendationResult[] {
   if (context.signal?.aborted) throw new RecommendationCancelledError();
-  const preparedCommunity = prepareCommunityPresets(request, context);
+  const preparedCommunity = prepareCommunityPresets(request, context, instrumentation);
   const enumeration = enumerateTeams(request, context);
   const scenario = recommendationScenario(request, context);
   const candidateExclusions: ExcludedCandidate[] = [];

@@ -340,3 +340,22 @@ describe("effect completeness gate", () => {
     await expect(validateRepository(root)).rejects.toThrow(/unmapped numeric effect|coverage report mismatch/i);
   });
 });
+
+it.each(["swapped", "unreviewed"])("repository rejects %s active role annotations", async (variant) => {
+  const root = await mkdtemp(path.join(tmpdir(), `star-rail-invalid-role-${variant}-`));
+  await mkdir(path.join(root, "public"), { recursive: true });
+  await mkdir(path.join(root, "data"), { recursive: true });
+  await cp("public/data", path.join(root, "public/data"), { recursive: true });
+  await cp("data/community", path.join(root, "data/community"), { recursive: true });
+  await cp("data/manual", path.join(root, "data/manual"), { recursive: true });
+  const entitiesPath = path.join(root, "public/data/releases/4.3-fixture/entities.json");
+  const entities = JSON.parse(await readFile(entitiesPath, "utf8"));
+  if (variant === "swapped") {
+    [entities.characters[0].roleAnnotation, entities.characters[1].roleAnnotation] =
+      [entities.characters[1].roleAnnotation, entities.characters[0].roleAnnotation];
+  } else {
+    entities.characters[0].roleAnnotation.reviewStatus = "generated";
+  }
+  await writeFile(entitiesPath, `${JSON.stringify(entities, null, 2)}\n`);
+  await expect(validateRepository(root)).rejects.toThrow(/role annotation character|reviewed role annotation|role annotation mismatch/i);
+});

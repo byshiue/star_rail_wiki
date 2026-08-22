@@ -72,6 +72,16 @@ describe("versioned domain schemas", () => {
     );
   });
 
+  it("rejects swapped or unreviewed active character role annotations", () => {
+    const swapped = validEntities();
+    [swapped.characters[0].roleAnnotation, swapped.characters[1].roleAnnotation] =
+      [swapped.characters[1].roleAnnotation, swapped.characters[0].roleAnnotation];
+    expect(() => GameReleaseBundleSchema.parse({ release: releaseFixture, entities: swapped })).toThrow(/role annotation character/);
+    const unreviewed = validEntities();
+    unreviewed.characters[0].roleAnnotation.reviewStatus = "generated";
+    expect(() => GameReleaseBundleSchema.parse({ release: releaseFixture, entities: unreviewed })).toThrow(/reviewed role annotation/);
+  });
+
   it("preserves a reviewed effect contract for later evaluation", () => {
     const effect = EffectSchema.parse(entitiesFixture.effects[0]);
     expect(effect).toMatchObject({

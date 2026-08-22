@@ -107,6 +107,14 @@ export const GameReleaseBundleSchema = z.strictObject({
   release: DataReleaseSchema, entities: ReleaseEntitiesSchema,
 }).superRefine((bundle, context) => {
   for (const [characterIndex, character] of bundle.entities.characters.entries()) {
+    if (character.roleAnnotation.characterLogicalId !== character.logicalId) context.addIssue({
+      code: "custom", path: ["entities", "characters", characterIndex, "roleAnnotation", "characterLogicalId"],
+      message: `role annotation character ${character.roleAnnotation.characterLogicalId} does not match ${character.logicalId}`,
+    });
+    if (character.validToReleaseId === null && character.roleAnnotation.reviewStatus !== "reviewed") context.addIssue({
+      code: "custom", path: ["entities", "characters", characterIndex, "roleAnnotation", "reviewStatus"],
+      message: `active character ${character.logicalId} requires a reviewed role annotation`,
+    });
     if (character.roleAnnotation.releaseId !== bundle.release.id) context.addIssue({
       code: "custom", path: ["entities", "characters", characterIndex, "roleAnnotation", "releaseId"],
       message: `role annotation release ${character.roleAnnotation.releaseId} does not match ${bundle.release.id}`,

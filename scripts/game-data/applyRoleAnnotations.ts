@@ -5,9 +5,7 @@ import {
 } from "../../src/domain/entities";
 import { GameReleaseBundleSchema, type GameReleaseBundle } from "../../src/domain/releases";
 
-export const RoleAnnotationRecordSchema = CharacterRoleAnnotationSchema.extend({
-  characterLogicalId: z.string().regex(/^character:/),
-});
+export const RoleAnnotationRecordSchema = CharacterRoleAnnotationSchema;
 export const RoleAnnotationFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
   annotations: z.array(RoleAnnotationRecordSchema).max(2_000),
@@ -42,8 +40,7 @@ export function applyRoleAnnotations(
     if (matches.length !== 1) {
       throw new Error(`character ${character.logicalId} requires exactly one role annotation for ${bundle.release.id}; got ${matches.length}`);
     }
-    const { characterLogicalId: _characterLogicalId, ...roleAnnotation } = matches[0]!;
-    return { ...character, roleAnnotation: structuredClone(roleAnnotation) };
+    return { ...character, roleAnnotation: structuredClone(matches[0]!) };
   });
   return GameReleaseBundleSchema.parse({ ...bundle, entities: { ...bundle.entities, characters } });
 }
@@ -56,8 +53,13 @@ export function assertRoleAnnotations(
     if (matches.length !== 1) {
       throw new Error(`active character ${character.logicalId} requires exactly one role annotation for ${bundle.release.id}; got ${matches.length}`);
     }
-    const { characterLogicalId: _characterLogicalId, ...expected } = matches[0]!;
-    if (JSON.stringify(character.roleAnnotation) !== JSON.stringify(expected)) {
+    if (character.roleAnnotation.characterLogicalId !== character.logicalId) {
+      throw new Error("role annotation character " + character.roleAnnotation.characterLogicalId + " does not match " + character.logicalId);
+    }
+    if (character.roleAnnotation.reviewStatus !== "reviewed") {
+      throw new Error("active character " + character.logicalId + " requires a reviewed role annotation");
+    }
+    if (JSON.stringify(character.roleAnnotation) !== JSON.stringify(matches[0]!)) {
       throw new Error(`role annotation mismatch for ${character.logicalId} in ${bundle.release.id}`);
     }
   }
