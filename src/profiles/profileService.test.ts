@@ -179,7 +179,8 @@ describe("profile service", () => {
     await service.importProfile(incomingJson, "merge");
     const merged = await service.getProfile("100000001");
     expect(merged?.characters[0]).toEqual({ logicalId: "character:a", eidolon: 4, level: 80 });
-    expect(merged?.lightCones[0]).toEqual({ logicalId: "light-cone:a", superimposition: 2, level: 80 });
+    expect(merged?.lightCones[0]).toEqual({ instanceId: "legacy:light-cone:a",
+      logicalId: "light-cone:a", superimposition: 2, level: 80 });
     expect(merged?.relics.map(({ instanceId }) => instanceId)).toEqual(["100000001:relic:1", "relic:new"]);
   });
 

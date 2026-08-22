@@ -4,9 +4,10 @@ import {
   type AccountProfile,
 } from "../domain/profiles";
 
-export const CURRENT_PROFILE_SCHEMA_VERSION = 1;
+export const CURRENT_PROFILE_SCHEMA_VERSION = 2;
 
 const LegacyAccountProfileV0CurrentFieldsSchema = AccountProfileSchema.extend({ schemaVersion: z.literal(0) });
+const LegacyAccountProfileV1Schema = AccountProfileSchema.extend({ schemaVersion: z.literal(1) });
 const LegacyAccountProfileV0RenamedFieldsSchema = z.strictObject({
   schemaVersion: z.literal(0), uid: z.string().regex(/^\d{9}$/),
   displayName: z.string().min(1).optional(),
@@ -26,7 +27,7 @@ const CurrentAccountProfileSchema = AccountProfileSchema.superRefine((profile, c
   });
   const inventories = [
     ["characters", profile.characters.map(({ logicalId }) => logicalId)],
-    ["lightCones", profile.lightCones.map(({ logicalId }) => logicalId)],
+    ["lightCones", profile.lightCones.map(({ instanceId, logicalId }) => instanceId ?? `legacy:${logicalId}`)],
     ["relics", profile.relics.map(({ instanceId }) => instanceId)],
   ] as const;
   for (const [field, ids] of inventories) {
@@ -66,10 +67,16 @@ function stableProfile(profile: AccountProfile): AccountProfile {
     updatedAt: profile.updatedAt,
     characters: [...profile.characters].map((item) => ({ ...item }))
       .sort((left, right) => left.logicalId.localeCompare(right.logicalId)),
-    lightCones: [...profile.lightCones].map((item) => ({ ...item }))
-      .sort((left, right) => left.logicalId.localeCompare(right.logicalId)),
+    lightCones: [...profile.lightCones].map((item) => ({
+      ...item, instanceId: item.instanceId ?? `legacy:${item.logicalId}`,
+    })).sort((left, right) => (left.instanceId ?? "").localeCompare(right.instanceId ?? "")),
     relics: [...profile.relics].map((item) => ({ ...item }))
       .sort((left, right) => left.instanceId.localeCompare(right.instanceId)),
+    ...(profile.inventorySources === undefined ? {} : {
+      inventorySources: profile.inventorySources.map((source) => ({
+        ...source, counts: { ...source.counts },
+      })).sort((left, right) => left.importedAt.localeCompare(right.importedAt)),
+    }),
     ...(profile.publication === undefined ? {} : { publication: { ...profile.publication } }),
   };
 }
@@ -92,6 +99,10 @@ export function migrateStoredProfile(value: unknown): AccountProfile {
       characters: legacy.characters, lightCones: legacy.lightCones, relics: legacy.relics,
     });
   }
+  if (typeof value === "object" && value !== null && "schemaVersion" in value && value.schemaVersion === 1) {
+    const legacy = LegacyAccountProfileV1Schema.parse(value);
+    return validateCurrentProfile({ ...legacy, schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION });
+  }
   return validateCurrentProfile(value);
 }
 
@@ -109,5 +120,21 @@ export function parseProfileExport(json: string): AccountProfile {
   let value: unknown;
   try { value = JSON.parse(json); }
   catch { throw new Error("Profile JSON is malformed"); }
-  return stableProfile(ProfileExportSchema.parse(value).profile);
+  const current = ProfileExportSchema.safeParse(value);
+  if (current.success) return stableProfile(current.data.profile);
+  if (typeof value === "object" && value !== null && "schemaVersion" in value && value.schemaVersion === 1
+    && "releaseId" in value && "updatedAt" in value && "profile" in value) {
+    const document = z.strictObject({
+      schemaVersion: z.literal(1), releaseId: z.string().min(1), updatedAt: z.iso.datetime(),
+      profile: LegacyAccountProfileV1Schema,
+    }).parse(value);
+    if (document.releaseId !== document.profile.dataReleaseId) {
+      throw new Error("export releaseId does not match profile dataReleaseId");
+    }
+    if (document.updatedAt !== document.profile.updatedAt) {
+      throw new Error("export updatedAt does not match profile updatedAt");
+    }
+    return migrateStoredProfile(document.profile);
+  }
+  throw current.error;
 }

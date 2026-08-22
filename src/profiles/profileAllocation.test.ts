@@ -101,4 +101,23 @@ describe("allocateProfileMemberBuilds", () => {
     const reverse = allocateProfileMemberBuilds(profile, bundle, Object.fromEntries([...entries].reverse()));
     expect(reverse).toEqual(forward);
   });
+
+  it("allocates two instances of the same light-cone kind to two characters", () => {
+    const { profile, bundle } = accountProfile();
+    profile.characters = profile.characters.slice(0, 2);
+    const logicalId = profile.lightCones[0]!.logicalId;
+    profile.lightCones = [
+      { instanceId: "cone:a", logicalId, superimposition: 5, level: 80 },
+      { instanceId: "cone:b", logicalId, superimposition: 1, level: 70 },
+    ];
+    const configured = Object.fromEntries(profile.characters.map(({ logicalId: characterId }) => [characterId, {
+      eidolon: 1, lightCone: { logicalId, superimposition: 5 },
+    }]));
+
+    const allocation = allocateProfileMemberBuilds(profile, bundle, configured);
+    expect(Object.values(allocation.memberBuilds).map(({ lightCone }) => lightCone)).toEqual([
+      { logicalId, superimposition: 5 }, { logicalId, superimposition: 1 },
+    ]);
+    expect(allocation.exclusions.filter(({ code }) => code === "light_cone_unavailable")).toEqual([]);
+  });
 });

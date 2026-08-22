@@ -23,6 +23,10 @@ export interface ProfileAllocation {
 
 type ConfiguredBuilds = RecommendationContext["memberBuilds"];
 
+function coneInstanceId(cone: AccountProfile["lightCones"][number]): string {
+  return cone.instanceId ?? `legacy:${cone.logicalId}`;
+}
+
 export function allocateProfileMemberBuilds(
   profile: AccountProfile, bundle: GameReleaseBundle, configured?: ConfiguredBuilds,
 ): ProfileAllocation {
@@ -31,7 +35,11 @@ export function allocateProfileMemberBuilds(
     .filter(({ validToReleaseId }) => validToReleaseId === null).map((item) => [item.logicalId, item]));
   const equipmentById = new Map(bundle.entities.equipment
     .filter(({ validToReleaseId }) => validToReleaseId === null).map((item) => [item.logicalId, item]));
-  const ownedCones = new Map(profile.lightCones.map((item) => [item.logicalId, item]));
+  const ownedCones = [...profile.lightCones].sort((left, right) =>
+    left.logicalId.localeCompare(right.logicalId)
+      || right.superimposition - left.superimposition
+      || right.level - left.level
+      || coneInstanceId(left).localeCompare(coneInstanceId(right)));
   const remainingRelics = new Map<string, number>();
   for (const relic of profile.relics) remainingRelics.set(relic.setLogicalId, (remainingRelics.get(relic.setLogicalId) ?? 0) + 1);
   const usedCones = new Set<string>();
@@ -52,23 +60,24 @@ export function allocateProfileMemberBuilds(
     let lightCone: { logicalId: string; superimposition: number } | undefined;
     const requestedCone = requested?.lightCone;
     if (requestedCone) {
-      const owned = ownedCones.get(requestedCone.logicalId);
+      const matching = ownedCones.filter(({ logicalId }) => logicalId === requestedCone.logicalId);
+      const owned = matching.find((cone) => !usedCones.has(coneInstanceId(cone)));
       const revision = equipmentById.get(requestedCone.logicalId);
-      if (!owned) exclusions.push({ code: "light_cone_unowned", characterId: character.logicalId,
+      if (!matching.length) exclusions.push({ code: "light_cone_unowned", characterId: character.logicalId,
         logicalId: requestedCone.logicalId, message: `${requestedCone.logicalId} 不在所选 UID 库存中` });
       else if (revision?.kind !== "light-cone" || (revision.pathRestriction !== null
         && revision.pathRestriction !== characterRevision?.path)) exclusions.push({
         code: "light_cone_incompatible", characterId: character.logicalId, logicalId: requestedCone.logicalId,
         message: `${requestedCone.logicalId} 与 ${character.logicalId} 命途不兼容`,
       });
-      else if (usedCones.has(requestedCone.logicalId)) exclusions.push({
+      else if (!owned) exclusions.push({
         code: "light_cone_unavailable", characterId: character.logicalId, logicalId: requestedCone.logicalId,
-        message: `${requestedCone.logicalId} 的唯一库存实例已被占用`,
+        message: `${requestedCone.logicalId} 的全部库存实例已被占用`,
       });
       else {
         const superimposition = Math.min(requestedCone.superimposition, owned.superimposition);
         lightCone = { logicalId: owned.logicalId, superimposition };
-        usedCones.add(owned.logicalId);
+        usedCones.add(coneInstanceId(owned));
         if (requestedCone.superimposition > owned.superimposition) exclusions.push({
           code: "superimposition_capped", characterId: character.logicalId, logicalId: owned.logicalId,
           requested: requestedCone.superimposition, allocated: superimposition,
@@ -77,15 +86,14 @@ export function allocateProfileMemberBuilds(
       }
     }
     if (!lightCone) {
-      const automatic = [...ownedCones.values()].sort((left, right) => left.logicalId.localeCompare(right.logicalId))
-        .find((cone) => {
-          const revision = equipmentById.get(cone.logicalId);
-          return !usedCones.has(cone.logicalId) && revision?.kind === "light-cone"
-            && (revision.pathRestriction === null || revision.pathRestriction === characterRevision?.path);
-        });
+      const automatic = ownedCones.find((cone) => {
+        const revision = equipmentById.get(cone.logicalId);
+        return !usedCones.has(coneInstanceId(cone)) && revision?.kind === "light-cone"
+          && (revision.pathRestriction === null || revision.pathRestriction === characterRevision?.path);
+      });
       if (automatic) {
         lightCone = { logicalId: automatic.logicalId, superimposition: automatic.superimposition };
-        usedCones.add(automatic.logicalId);
+        usedCones.add(coneInstanceId(automatic));
       }
     }
 

@@ -10,6 +10,7 @@ import { IDBFactory } from "fake-indexeddb";
 import { deleteDB, openDB } from "idb";
 import { ProfilePage } from "./ProfilePage";
 import { createProfileService, defaultProfileService } from "./profileService";
+import { CURRENT_PROFILE_SCHEMA_VERSION } from "./profileJson";
 import { readFileSync } from "node:fs";
 const profileCss = readFileSync("src/styles/profiles.css", "utf8");
 
@@ -114,7 +115,7 @@ describe("ProfilePage", () => {
 
   it("disables additions from a different release while preserving the local profile", async () => {
     const service = createProfileService(createMemoryProfileDatabase());
-    await service.putProfile({ schemaVersion: 1, uid: "100000001", dataReleaseId: "older-release",
+    await service.putProfile({ schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION, uid: "100000001", dataReleaseId: "older-release",
       updatedAt: "2026-08-21T00:00:00.000Z", characters: [], lightCones: [], relics: [] });
     render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
       <ProfilePage service={service} />
@@ -135,5 +136,32 @@ describe("ProfilePage", () => {
     expect(await screen.findByText(/暂无已发布 current 版本/)).toBeInTheDocument();
     expect(screen.getByLabelText("档案数据版本")).toHaveValue(fixtureBundle.release.id);
     expect(screen.getByText(/仍可按所选历史或测试版本保存本地档案/)).toBeInTheDocument();
+  });
+
+  it("imports a partial HSR-Scanner file into an explicit UID without publication", async () => {
+    const user = userEvent.setup();
+    const service = createProfileService(createMemoryProfileDatabase(), async () => fixtureBundle);
+    const character = fixtureBundle.entities.characters[0]!;
+    const scannerId = character.logicalId.replace(/^character:/, "");
+    const file = new File([JSON.stringify({
+      source: "HSR-Scanner", build: "v1.5.0", version: 4,
+      metadata: { uid: null, trailblazer: "Stelle" },
+      characters: [{ id: scannerId, level: 80, eidolon: 3 }], light_cones: [], relics: [],
+    })], "scan.json", { type: "application/json" });
+    render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+      <ProfilePage service={service} />
+    </ReleaseProvider></MemoryRouter>);
+
+    await screen.findByText(/还没有本地账号/);
+    await user.type(screen.getByLabelText("HSR-Scanner 目标 UID"), "100000001");
+    await user.upload(screen.getByLabelText("HSR-Scanner JSON 文件"), file);
+    await user.click(screen.getByRole("button", { name: "合并扫描资料" }));
+
+    expect(await screen.findByRole("status", { name: "HSR-Scanner 导入结果" }))
+      .toHaveTextContent("角色 1");
+    expect((await service.getProfile("100000001"))?.characters).toEqual([
+      { logicalId: character.logicalId, eidolon: 3, level: 80 },
+    ]);
+    expect((await service.getProfile("100000001"))?.publication).toBeUndefined();
   });
 });

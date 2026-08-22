@@ -4,6 +4,7 @@ import type { GameReleaseBundle } from "../domain/releases";
 import { loadRelease } from "../data/releaseRepository";
 import { createIndexedDbProfileDatabase, type IndexedDbProfileDatabaseOptions, type ProfileDatabase, type ProfileStorageIssue } from "./profileDatabase";
 import { parseProfileExport, serializeProfile, validateCurrentProfile } from "./profileJson";
+import { convertHsrScannerJson, type HsrScannerConversionOptions } from "./hsrScanner";
 
 const UidSchema = z.string().regex(/^\d{9}$/, "UID must contain exactly 9 digits");
 export type ImportStrategy = "merge" | "replace";
@@ -17,6 +18,7 @@ export interface ProfileService {
   deleteProfile(uid: string, confirmationUid?: string, expectedUpdatedAt?: string): Promise<void>;
   exportProfile(uid: string): Promise<string>;
   importProfile(json: string, strategy?: ImportStrategy): Promise<AccountProfile>;
+  importHsrScanner(json: string, options: HsrScannerConversionOptions): Promise<AccountProfile>;
   close(): void;
 }
 
@@ -48,7 +50,8 @@ function mergeProfiles(current: AccountProfile, incoming: AccountProfile): Accou
   }
   const characters = mergeById<OwnedCharacter>(current.characters, incoming.characters, (item) => item.logicalId,
     (left, right) => ({ ...left, eidolon: Math.max(left.eidolon, right.eidolon), level: Math.max(left.level, right.level) }));
-  const lightCones = mergeById<OwnedLightCone>(current.lightCones, incoming.lightCones, (item) => item.logicalId,
+  const lightCones = mergeById<OwnedLightCone>(current.lightCones, incoming.lightCones,
+    (item) => item.instanceId ?? `legacy:${item.logicalId}`,
     (left, right) => ({ ...left, superimposition: Math.max(left.superimposition, right.superimposition), level: Math.max(left.level, right.level) }));
   const relics = mergeById<OwnedRelic>(current.relics, incoming.relics, (item) => item.instanceId,
     (_left, right) => ({ ...right }));
@@ -59,6 +62,7 @@ function mergeProfiles(current: AccountProfile, incoming: AccountProfile): Accou
     updatedAt: current.updatedAt > incoming.updatedAt ? current.updatedAt : incoming.updatedAt,
     characters, lightCones, relics,
     publication: incoming.publication ?? current.publication,
+    inventorySources: [...(current.inventorySources ?? []), ...(incoming.inventorySources ?? [])].slice(-100),
   });
 }
 
@@ -122,6 +126,19 @@ export function createProfileService(database: ProfileDatabase, resolveRelease: 
       });
     },
     close() { database.close(); },
+    async importHsrScanner(json, options) {
+      const targetUid = uid(options.uid);
+      const incoming = convertHsrScannerJson(json, { ...options, uid: targetUid });
+      validateProfileReferences(incoming, await resolveRelease(incoming.dataReleaseId));
+      return database.transact(targetUid, (current) => {
+        if (current === null) return incoming;
+        if (current.dataReleaseId !== incoming.dataReleaseId) {
+          throw new Error("cannot merge HSR-Scanner inventory into a profile from a different release");
+        }
+        const imported = mergeProfiles(current, incoming);
+        return { ...imported, updatedAt: advancedRevision(current.updatedAt, incoming.updatedAt) };
+      });
+    },
   };
 }
 

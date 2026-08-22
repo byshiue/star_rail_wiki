@@ -1,6 +1,6 @@
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 import type { AccountProfile } from "../domain/profiles";
-import { migrateStoredProfile, validateCurrentProfile } from "./profileJson";
+import { CURRENT_PROFILE_SCHEMA_VERSION, migrateStoredProfile, validateCurrentProfile } from "./profileJson";
 
 export const PROFILE_DATABASE_VERSION = 2;
 const PROFILE_DATABASE_NAME = "star-rail-wiki";
@@ -48,6 +48,10 @@ export interface IndexedDbProfileDatabaseOptions {
 
 function clone(profile: AccountProfile): AccountProfile { return structuredClone(profile); }
 function message(error: unknown): string { return error instanceof Error ? error.message : "invalid stored profile"; }
+function needsMigration(value: unknown): boolean {
+  return typeof value === "object" && value !== null && "schemaVersion" in value
+    && typeof value.schemaVersion === "number" && value.schemaVersion < CURRENT_PROFILE_SCHEMA_VERSION;
+}
 
 export function createMemoryProfileDatabase(
   source: Map<string, AccountProfile> | Map<string, unknown> = new Map<string, unknown>(),
@@ -57,7 +61,7 @@ export function createMemoryProfileDatabase(
     const raw = records.get(uid);
     if (raw === undefined) return null;
     const migrated = migrateStoredProfile(raw);
-    if (typeof raw === "object" && raw !== null && "schemaVersion" in raw && raw.schemaVersion === 0) {
+    if (needsMigration(raw)) {
       records.set(uid, clone(migrated));
     }
     return clone(migrated);
@@ -153,7 +157,7 @@ export function createIndexedDbProfileDatabase(
         try {
           const migrated = migrateStoredProfile(raw);
           profiles.push(migrated);
-          if (typeof raw === "object" && raw !== null && "schemaVersion" in raw && raw.schemaVersion === 0) {
+          if (needsMigration(raw)) {
             await transaction.store.put(migrated);
           }
         } catch (error) { issues.push({ uid, message: message(error) }); }
@@ -166,7 +170,7 @@ export function createIndexedDbProfileDatabase(
       const raw = await transaction.store.get(uid);
       if (raw === undefined) { await transaction.done; return null; }
       const migrated = migrateStoredProfile(raw);
-      if (typeof raw === "object" && raw !== null && "schemaVersion" in raw && raw.schemaVersion === 0) {
+      if (needsMigration(raw)) {
         await transaction.store.put(migrated);
       }
       await transaction.done;

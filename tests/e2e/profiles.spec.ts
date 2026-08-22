@@ -12,7 +12,7 @@ test("keeps two UIDs isolated, rejects invalid JSON atomically and requires publ
   await expect(page.getByRole("button", { name: /主账号.*100000001/ })).toBeVisible();
   await expect(page.getByRole("button", { name: /副账号.*100000002/ })).toBeVisible();
 
-  await page.getByLabel("JSON 文件").setInputFiles({ name: "invalid.json", mimeType: "application/json", buffer: Buffer.from('{"uid":"bad"}') });
+  await page.getByLabel("JSON 文件", { exact: true }).setInputFiles({ name: "invalid.json", mimeType: "application/json", buffer: Buffer.from('{"uid":"bad"}') });
   await page.getByRole("combobox", { name: "冲突处理" }).selectOption("replace");
   await page.getByRole("button", { name: "验证并导入" }).click();
   await expect(page.getByRole("alert").first()).toBeVisible();

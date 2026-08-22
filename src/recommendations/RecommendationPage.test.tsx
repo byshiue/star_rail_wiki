@@ -12,6 +12,7 @@ import { RecommendationPage } from "./RecommendationPage";
 import { decodeTeamBuild } from "../simulator/teamBuild";
 import { createMemoryProfileDatabase } from "../profiles/profileDatabase";
 import { createProfileService } from "../profiles/profileService";
+import { CURRENT_PROFILE_SCHEMA_VERSION } from "../profiles/profileJson";
 
 const presets = CommunityTeamLibrarySchema.parse(communityJson).presets;
 
@@ -30,11 +31,11 @@ describe("RecommendationPage", () => {
     const user = userEvent.setup();
     const service = createProfileService(createMemoryProfileDatabase());
     const characterIds = fixtureBundle.entities.characters.map(({ logicalId }) => logicalId);
-    await service.putProfile({ schemaVersion: 1, uid: "100000001", label: "账号 A",
+    await service.putProfile({ schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION, uid: "100000001", label: "账号 A",
       dataReleaseId: fixtureBundle.release.id, updatedAt: "2026-08-21T00:00:00.000Z",
       characters: characterIds.slice(0, 4).map((logicalId) => ({ logicalId, eidolon: 0, level: 80 })),
       lightCones: [{ logicalId: "light-cone:synthetic-cone", superimposition: 4, level: 80 }], relics: [] });
-    await service.putProfile({ schemaVersion: 1, uid: "100000002", label: "账号 B",
+    await service.putProfile({ schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION, uid: "100000002", label: "账号 B",
       dataReleaseId: fixtureBundle.release.id, updatedAt: "2026-08-21T00:00:00.000Z",
       characters: characterIds.slice(1, 5).map((logicalId) => ({ logicalId, eidolon: 2, level: 80 })),
       lightCones: [], relics: [] });
@@ -65,7 +66,7 @@ describe("RecommendationPage", () => {
   it("clears the previous UID immediately when a profile reload fails", async () => {
     const service = createProfileService(createMemoryProfileDatabase());
     const characterIds = fixtureBundle.entities.characters.map(({ logicalId }) => logicalId);
-    await service.putProfile({ schemaVersion: 1, uid: "100000001", dataReleaseId: fixtureBundle.release.id,
+    await service.putProfile({ schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION, uid: "100000001", dataReleaseId: fixtureBundle.release.id,
       updatedAt: "2026-08-21T00:00:00.000Z", characters: characterIds.slice(0, 4).map((logicalId) => ({ logicalId, eidolon: 1, level: 80 })), lightCones: [], relics: [] });
     const listProfiles = service.listProfiles.bind(service);
     let calls = 0;

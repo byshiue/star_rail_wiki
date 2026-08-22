@@ -3,6 +3,7 @@ import "fake-indexeddb/auto";
 import { IDBFactory } from "fake-indexeddb";
 import { deleteDB, openDB } from "idb";
 import { createIndexedDbProfileDatabase, PROFILE_DATABASE_VERSION } from "./profileDatabase";
+import { CURRENT_PROFILE_SCHEMA_VERSION } from "./profileJson";
 
 const legacy = {
   schemaVersion: 0 as const, uid: "100000001", displayName: "旧档案", releaseId: "4.3-fixture",
@@ -27,14 +28,15 @@ describe("IndexedDB profile adapter", () => {
     const adapter = createIndexedDbProfileDatabase(name);
     const result = await adapter.list();
     expect(result.profiles).toEqual([expect.objectContaining({
-      uid: legacy.uid, schemaVersion: 1, label: legacy.displayName, dataReleaseId: legacy.releaseId,
+      uid: legacy.uid, schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION,
+      label: legacy.displayName, dataReleaseId: legacy.releaseId,
     })]);
     expect(result.issues).toEqual([expect.objectContaining({ uid: "100000002" })]);
     adapter.close();
 
     const inspect = await openDB(name, PROFILE_DATABASE_VERSION);
     expect(await inspect.get("profiles", legacy.uid)).toEqual(expect.objectContaining({
-      schemaVersion: 1, label: legacy.displayName, dataReleaseId: legacy.releaseId,
+      schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION, label: legacy.displayName, dataReleaseId: legacy.releaseId,
     }));
     inspect.close();
     await deleteDB(name);

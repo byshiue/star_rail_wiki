@@ -8,6 +8,10 @@ type ProfileInventoryEditorProps = {
   onSave: (profile: AccountProfile) => Promise<void>;
 };
 
+function coneInstanceId(cone: OwnedLightCone): string {
+  return cone.instanceId ?? `legacy:${cone.logicalId}`;
+}
+
 export function ProfileInventoryEditor({ profile, bundle, onSave }: ProfileInventoryEditorProps) {
   const [characters, setCharacters] = useState<OwnedCharacter[]>(profile.characters);
   const [lightCones, setLightCones] = useState<OwnedLightCone[]>(profile.lightCones);
@@ -40,9 +44,10 @@ export function ProfileInventoryEditor({ profile, bundle, onSave }: ProfileInven
   }
 
   function addLightCone() {
-    if (!additionsEnabled || !lightConeId || lightCones.some((item) => item.logicalId === lightConeId)) return;
-    setLightCones((current) => [...current, { logicalId: lightConeId, superimposition: 1, level: 1 }]
-      .sort((left, right) => left.logicalId.localeCompare(right.logicalId)));
+    if (!additionsEnabled || !lightConeId) return;
+    const instanceId = `manual:light-cone:${crypto.randomUUID()}`;
+    setLightCones((current) => [...current, { instanceId, logicalId: lightConeId, superimposition: 1, level: 1 }]
+      .sort((left, right) => coneInstanceId(left).localeCompare(coneInstanceId(right))));
   }
 
   function addRelic() {
@@ -76,7 +81,7 @@ export function ProfileInventoryEditor({ profile, bundle, onSave }: ProfileInven
 
       <fieldset><legend>光锥、等级与叠影</legend>
         <div className="inventory-add"><label>添加光锥<select aria-label="添加光锥" value={lightConeId} onChange={(event) => setLightConeId(event.target.value)}><option value="">请选择</option>{equipment.filter(({ kind }) => kind === "light-cone").map((item) => <option key={item.logicalId} value={item.logicalId}>{item.name} · {item.logicalId}</option>)}</select></label><button type="button" disabled={!additionsEnabled} onClick={addLightCone}>添加光锥</button></div>
-        {lightCones.length === 0 ? <p>尚未记录光锥。</p> : lightCones.map((cone, index) => <div className="inventory-row" key={cone.logicalId}><strong>{cone.logicalId}</strong><label>叠影<input aria-label={`${cone.logicalId} 叠影`} type="number" min="1" max="5" value={cone.superimposition} onChange={(event) => setLightCones((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, superimposition: Number(event.target.value) } : item))} /></label><label>等级<input aria-label={`${cone.logicalId} 等级`} type="number" min="1" value={cone.level} onChange={(event) => setLightCones((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, level: Number(event.target.value) } : item))} /></label><button type="button" onClick={() => setLightCones((current) => current.filter((_, itemIndex) => itemIndex !== index))}>移除 {cone.logicalId}</button></div>)}
+        {lightCones.length === 0 ? <p>尚未记录光锥。</p> : lightCones.map((cone, index) => { const instanceId = coneInstanceId(cone); return <div className="inventory-row" key={instanceId}><strong>{cone.logicalId}</strong><small>实例 {instanceId}</small><label>叠影<input aria-label={`${instanceId} 叠影`} type="number" min="1" max="5" value={cone.superimposition} onChange={(event) => setLightCones((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, superimposition: Number(event.target.value) } : item))} /></label><label>等级<input aria-label={`${instanceId} 等级`} type="number" min="1" value={cone.level} onChange={(event) => setLightCones((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, level: Number(event.target.value) } : item))} /></label><button type="button" onClick={() => setLightCones((current) => current.filter((_, itemIndex) => itemIndex !== index))}>移除实例 {instanceId}</button></div>; })}
       </fieldset>
 
       <fieldset><legend>遗器库存</legend>
