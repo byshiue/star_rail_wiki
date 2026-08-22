@@ -122,3 +122,23 @@ Final Fix R3 verification:
 - `git diff --check`: passed.
 
 The default unconstrained Vitest run initially timed out in two unrelated 5-second tests under host contention (221 passed). Both timed-out tests passed together with one worker (8/8), and the full suite passed with the repository's established two-worker verification command; no timeout masking or product-code workaround was added.
+
+## Fix round 4 — mutation-safe recommendation instrumentation
+
+Closed the remaining observer mutation boundary.
+
+- `RecommendationInstrumentation.onCommunityPresetValidated` now receives only the primitive `presetId: string`; no callback can retain or mutate the internal `TeamPreset` used by precomputed community scoring.
+- Added a TDD regression with an unavailable source and a malicious observer branch. The old implementation failed by exposing and mutating the complete preset object; the new implementation reports only the ID, preserves the source as unavailable, keeps its bounded contribution at zero, and retains the authoritative eligibility reason.
+- The same suite continues to verify exactly one observer event per relevant preset (400 for preparation and 400 through recommendation), without making the observer authoritative.
+
+Fix R4 verification:
+
+- RED runtime: new regression failed because the observer received the complete `TeamPreset` object.
+- RED typecheck: failed because the callback argument was not assignable to `string`.
+- GREEN focused recommendations: 1 file, 16 tests passed.
+- `npm run typecheck`: passed.
+- `npm run lint`: passed.
+- `npm test -- --maxWorkers=2`: 32 files, 224 tests passed.
+- `npm run validate:data`: passed.
+- `npm run build`: passed.
+- `git diff --check`: passed.

@@ -5,7 +5,7 @@ import { fixtureBundle } from "../effects/__fixtures__/goldenTeams";
 import { maxInvestmentFixture } from "./__fixtures__/maxInvestment";
 import { RecommendationConstraintError } from "./request";
 import { recommendTeams } from "./recommendTeams";
-import { MAX_COMMUNITY_PRESETS, prepareCommunityPresets } from "./scoreTeam";
+import { MAX_COMMUNITY_PRESETS, prepareCommunityPresets, type RecommendationInstrumentation } from "./scoreTeam";
 
 const allCharacters = fixtureBundle.entities.characters.map(({ logicalId }) => logicalId);
 const context = {
@@ -213,6 +213,31 @@ it("precomputes each relevant preset once, enforces the library limit, and abort
   } })).toThrow(/cancelled/i);
   expect(scanned).toBeLessThan(100);
 });
+it("exposes only primitive preset IDs and cannot mutate unavailable community data", () => {
+  const available = eligiblePreset({ id: "team:observer-unavailable" });
+  const unavailable = { ...available, source: { ...available.source, availability: "unavailable" as const } };
+  const observed: unknown[] = [];
+  const instrumentation: RecommendationInstrumentation = {
+    onCommunityPresetValidated: (presetId) => {
+      const typedPresetId: string = presetId;
+      observed.push(typedPresetId);
+      if (typeof presetId === "object" && presetId !== null && "source" in presetId) {
+        (presetId as TeamPreset).source.availability = "available";
+      }
+    },
+  };
+  const [result] = recommendTeams({ ...request, requiredCharacterIds: [...unavailable.slots] }, {
+    ...context, communityPresets: [unavailable],
+  }, instrumentation);
+
+  expect(observed).toEqual([unavailable.id]);
+  expect(unavailable.source.availability).toBe("unavailable");
+  expect(result.communityReferences[0]).toMatchObject({
+    presetId: unavailable.id, availability: "unavailable", boundedContribution: 0,
+    eligibilityIssues: expect.arrayContaining(["source is unavailable"]),
+  });
+});
+
 it("clamps maximum valid investment through the real recommendation pipeline", () => {
   const { bundle, memberBuilds } = maxInvestmentFixture();
   const [result] = recommendTeams({ ...request, requiredCharacterIds: ["character:synthetic-dps", "character:synthetic-support"] }, {

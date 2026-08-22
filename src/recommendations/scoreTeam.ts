@@ -73,7 +73,7 @@ export interface ScoredTeam {
   communityReferences: CommunityReference[];
 }
 
-export interface RecommendationInstrumentation { onCommunityPresetValidated?: (preset: TeamPreset) => void }
+export interface RecommendationInstrumentation { onCommunityPresetValidated?: (presetId: string) => void }
 
 function rounded(value: number): number {
   return Math.round(value * 10_000) / 10_000;
@@ -127,7 +127,7 @@ export function prepareCommunityPresets(
   return relevant.map((preset, index) => {
     if ((index & 31) === 0 && context.signal?.aborted) throw new RecommendationCancelledError();
     const prepared = { preset, baseEligibilityIssues: baseCommunityEligibility(preset, request, context) };
-    instrumentation?.onCommunityPresetValidated?.(preset);
+    instrumentation?.onCommunityPresetValidated?.(preset.id);
     return prepared;
   });
 }
