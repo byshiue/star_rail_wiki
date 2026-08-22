@@ -3,6 +3,7 @@ import type { AccountProfile } from "../domain/profiles";
 
 export const PUBLIC_PROFILE_SCHEMA_VERSION = 1;
 export const PUBLIC_PROFILE_INDEX_SCHEMA_VERSION = 1;
+export const MAX_CONSENT_FUTURE_SKEW_MS = 5 * 60 * 1000;
 
 export const PublicAccountProfileSchema = z.strictObject({
   schemaVersion: z.literal(PUBLIC_PROFILE_SCHEMA_VERSION), uid: z.string().regex(/^\d{9}$/),
@@ -15,7 +16,6 @@ export const PublicAccountProfileSchema = z.strictObject({
   const updatedAt = Date.parse(profile.updatedAt);
   const consentedAt = Date.parse(profile.publication.consentedAt);
   if (consentedAt < updatedAt) context.addIssue({ code: "custom", path: ["publication", "consentedAt"], message: "publication consent must not precede updatedAt" });
-  if (consentedAt > Date.now() + 5 * 60 * 1000) context.addIssue({ code: "custom", path: ["publication", "consentedAt"], message: "publication consent cannot be in the future" });
 });
 export type PublicAccountProfile = z.infer<typeof PublicAccountProfileSchema>;
 
@@ -36,8 +36,13 @@ function stable(profile: PublicAccountProfile): PublicAccountProfile {
   };
 }
 
+export function isConsentTimestampTooFarInFuture(consentedAt: string, nowMs = Date.now()): boolean {
+  return Date.parse(consentedAt) > nowMs + MAX_CONSENT_FUTURE_SKEW_MS;
+}
+
 export function createPublicProfileExport(profile: AccountProfile, consentAt: string | null): PublicAccountProfile {
   if (consentAt === null) throw new Error("Public consent required before creating a publication artifact");
+  if (isConsentTimestampTooFarInFuture(consentAt)) throw new Error("Publication consent cannot be in the future");
   return stable(PublicAccountProfileSchema.parse({ schemaVersion: PUBLIC_PROFILE_SCHEMA_VERSION, uid: profile.uid,
     releaseId: profile.dataReleaseId, updatedAt: profile.updatedAt,
     publication: { visibility: "public", consentedAt: consentAt },

@@ -3,9 +3,9 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type { ZodIssue } from "zod";
 import { GameReleaseBundleSchema, ReleaseEntitiesSchema, ReleaseIndexSchema, type GameReleaseBundle, type ReleaseIndex } from "../src/domain/releases";
-import { PublicAccountProfileSchema, PublicProfileIndexSchema, PUBLIC_PROFILE_INDEX_SCHEMA_VERSION } from "../src/profiles/publication";
+import { isConsentTimestampTooFarInFuture, PublicAccountProfileSchema, PublicProfileIndexSchema, PUBLIC_PROFILE_INDEX_SCHEMA_VERSION } from "../src/profiles/publication";
 
-export type PublicProfileIssueCode = "invalid_path" | "uid_path_mismatch" | "invalid_profile" | "unexpected_field" | "secret" | "unknown_release" | "unreleased_release" | "unknown_character" | "unknown_equipment" | "duplicate_reference" | "file_too_large" | "unsupported_index_version" | "invalid_index" | "duplicate_uid" | "missing_profile_file" | "unindexed_profile_file" | "index_reference_mismatch";
+export type PublicProfileIssueCode = "invalid_path" | "uid_path_mismatch" | "invalid_profile" | "unexpected_field" | "secret" | "future_consent" | "unknown_release" | "unreleased_release" | "unknown_character" | "unknown_equipment" | "duplicate_reference" | "file_too_large" | "unsupported_index_version" | "invalid_index" | "duplicate_uid" | "missing_profile_file" | "unindexed_profile_file" | "index_reference_mismatch";
 export type PublicProfileValidationIssue = { code: PublicProfileIssueCode; path: string; message: string };
 export type PublicProfileReferenceContext = { releaseIndex: ReleaseIndex; bundles: ReadonlyMap<string, GameReleaseBundle> };
 
@@ -23,7 +23,7 @@ function scanSecrets(value: unknown, currentPath = ""): PublicProfileValidationI
   return Object.entries(value).flatMap(([key, child]) => { const childPath = currentPath ? `${currentPath}.${key}` : key; return [...(secretKey.test(key) ? [issue("secret", childPath, "credential-like field is forbidden")] : []), ...scanSecrets(child, childPath)]; });
 }
 
-export function validatePublicProfileFile(file: string, value: unknown, context?: PublicProfileReferenceContext, byteLength = Buffer.byteLength(JSON.stringify(value))): PublicProfileValidationIssue[] {
+export function validatePublicProfileFile(file: string, value: unknown, context?: PublicProfileReferenceContext, byteLength = Buffer.byteLength(JSON.stringify(value)), nowMs = Date.now()): PublicProfileValidationIssue[] {
   const issues: PublicProfileValidationIssue[] = [];
   const match = profilePathPattern.exec(file);
   if (!match) issues.push(issue("invalid_path", file, "profile path must be public/profiles/<9-digit-uid>.json"));
@@ -35,6 +35,7 @@ export function validatePublicProfileFile(file: string, value: unknown, context?
     return issues;
   }
   const profile = parsed.data;
+  if (isConsentTimestampTooFarInFuture(profile.publication.consentedAt, nowMs)) issues.push(issue("future_consent", "publication.consentedAt", "publication consent cannot be more than five minutes in the future"));
   if (match && match[1] !== profile.uid) issues.push(issue("uid_path_mismatch", file, `path UID ${match[1]} does not match body UID ${profile.uid}`));
   for (const [field, ids] of [["characters", profile.characters.map((item) => item.logicalId)], ["lightCones", profile.lightCones.map((item) => item.logicalId)]] as const) {
     const seen = new Set<string>(); ids.forEach((id, index) => { if (seen.has(id)) issues.push(issue("duplicate_reference", `${field}[${index}]`, `duplicate ${field} ID ${id}`)); seen.add(id); });
