@@ -9,6 +9,7 @@ import { assertComplete, buildCoverageReport, collectEffectSources, CoverageRepo
 import { extractCandidateEffects, type CandidateEffect } from "./game-data/extractEffects";
 import { validateCommunityRepository } from "./validate-community-teams";
 import { assertRoleAnnotations, loadRoleAnnotations } from "./game-data/applyRoleAnnotations";
+import { validatePublicProfileRepository } from "./validate-public-profiles";
 
 async function readJson(file: string): Promise<unknown> {
   return JSON.parse(await readFile(file, "utf8"));
@@ -77,6 +78,7 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
     throw new Error("public community team payload mismatch");
   }
   validateCommunityRepository(community, releaseIndex, bundles);
+  await validatePublicProfileRepository(repositoryRoot);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

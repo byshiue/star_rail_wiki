@@ -1,6 +1,7 @@
 import type { RouteObject } from "react-router-dom";
 import { RecommendationPage } from "../recommendations/RecommendationPage";
 import { ProfilePage } from "../profiles/ProfilePage";
+import { PublicProfilePage } from "../profiles/PublicProfilePage";
 import { CommunityTeamsPage } from "../community/CommunityTeamsPage";
 import { CharacterBuilderPage } from "../simulator/CharacterBuilderPage";
 import { TeamSimulatorPage } from "../simulator/TeamSimulatorPage";
@@ -36,5 +37,9 @@ export const appRoutes: RouteObject[] = [
   {
     path: "/profiles",
     element: <ReleaseProvider><ProfilePage /></ReleaseProvider>,
+  },
+  {
+    path: "/profiles/public/:uid",
+    element: <PublicProfilePage />,
   },
 ];

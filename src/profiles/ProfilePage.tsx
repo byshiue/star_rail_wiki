@@ -6,6 +6,7 @@ import { CURRENT_PROFILE_SCHEMA_VERSION } from "./profileJson";
 import { readSelectedProfileUid, selectProfileUid } from "./profileSelection";
 import { defaultProfileService, type ImportStrategy, type ProfileService } from "./profileService";
 import { ProfileStorageBlockedError, type ProfileStorageIssue } from "./profileDatabase";
+import { PublicProfileConsent } from "./PublicProfileConsent";
 
 type ProfilePageProps = { service?: ProfileService };
 
@@ -172,6 +173,7 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
           <div className="profile-actions"><label>账号显示名<input aria-label="账号显示名" value={rename} onChange={(event) => setRename(event.target.value)} /></label><button type="button" onClick={() => void act(async () => { await service.updateProfile(selected.uid, selected.updatedAt, (current) => ({ ...current, label: rename.trim() || undefined, updatedAt: nextUpdatedAt(current.updatedAt) })); await refresh(selected.uid); })}>保存显示名</button><button type="button" onClick={() => void act(async () => setExportedJson(await service.exportProfile(selected.uid)))}>生成 JSON 备份</button><button type="button" onClick={() => { setDeleteConfirmation(""); setDeleteOpen(true); }}>删除账号</button></div>
           {exportedJson ? <label>JSON 备份<textarea aria-label="JSON 备份" readOnly value={exportedJson} onFocus={(event) => event.currentTarget.select()} /></label> : null}
           <ProfileInventoryEditor profile={selected} bundle={bundle} onSave={async (profile) => { await act(async () => { await service.updateProfile(profile.uid, selected.updatedAt, (current) => ({ ...current, characters: profile.characters, lightCones: profile.lightCones, relics: profile.relics, updatedAt: nextUpdatedAt(current.updatedAt) })); await refresh(profile.uid); }); }} />
+          <PublicProfileConsent profile={selected} />
         </div> : null}
       </div>}
 
