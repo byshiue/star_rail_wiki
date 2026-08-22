@@ -1,8 +1,23 @@
 import { describe, expect, it } from "vitest";
 import type { AccountProfile } from "../domain/profiles";
+import type { GameReleaseBundle } from "../domain/releases";
 import { createMemoryProfileDatabase } from "./profileDatabase";
 import { CURRENT_PROFILE_SCHEMA_VERSION, migrateStoredProfile } from "./profileJson";
 import { createProfileService } from "./profileService";
+import { maxInvestmentFixture } from "../recommendations/__fixtures__/maxInvestment";
+
+async function permissiveRelease(releaseId: string): Promise<GameReleaseBundle> {
+  return {
+    release: { id: releaseId },
+    entities: {
+      characters: ["character:a", "character:b", "character:z"].map((logicalId) => ({ logicalId, validToReleaseId: null })),
+      equipment: [
+        ...["light-cone:a"].map((logicalId) => ({ logicalId, validToReleaseId: null, kind: "light-cone" })),
+        ...["relic-set:a", "relic-set:b", "relic-set:z"].map((logicalId) => ({ logicalId, validToReleaseId: null, kind: "relic-set" })),
+      ],
+    },
+  } as GameReleaseBundle;
+}
 
 function profile(uid: string, characterId = "character:a"): AccountProfile {
   return {
@@ -32,8 +47,20 @@ describe("profile service", () => {
   });
 
   it("migrates the explicitly versioned legacy record before validation", () => {
-    const legacy = { ...profile("100000001"), schemaVersion: 0 };
-    expect(migrateStoredProfile(legacy).schemaVersion).toBe(CURRENT_PROFILE_SCHEMA_VERSION);
+    const current = profile("100000001");
+    const legacy = {
+      schemaVersion: 0, uid: current.uid, displayName: current.label, region: current.region,
+      releaseId: current.dataReleaseId, updatedAt: current.updatedAt, characters: current.characters,
+      lightCones: current.lightCones, relics: current.relics,
+    };
+    expect(migrateStoredProfile(legacy)).toMatchObject({ schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION,
+      uid: current.uid, label: current.label, dataReleaseId: current.dataReleaseId });
+    const baselineLegacy = { ...current, schemaVersion: 0, publication: {
+      consentedAt: "2026-08-21T00:00:00.000Z", visibility: "public" as const,
+    } };
+    expect(migrateStoredProfile(baselineLegacy)).toMatchObject({ schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION,
+      uid: current.uid, label: current.label, dataReleaseId: current.dataReleaseId,
+      publication: baselineLegacy.publication });
   });
 
   it("validates UID and the complete runtime schema before every write", async () => {
@@ -52,6 +79,49 @@ describe("profile service", () => {
     duplicate.characters.push({ ...duplicate.characters[0]! });
     await expect(service.putProfile(duplicate)).rejects.toThrow(/duplicate/i);
     expect(await service.listProfiles()).toEqual([]);
+  });
+
+  it("rejects concurrent duplicate creates and stale partial updates", async () => {
+    const records = new Map<string, AccountProfile>();
+    const first = createProfileService(createMemoryProfileDatabase(records));
+    const second = createProfileService(createMemoryProfileDatabase(records));
+    const createResults = await Promise.allSettled([
+      first.putProfile(profile("100000001", "character:a")),
+      second.putProfile(profile("100000001", "character:b")),
+    ]);
+    expect(createResults.filter(({ status }) => status === "fulfilled")).toHaveLength(1);
+    expect(createResults.filter(({ status }) => status === "rejected")).toHaveLength(1);
+
+    const firstSnapshot = (await first.getProfile("100000001"))!;
+    const secondSnapshot = (await second.getProfile("100000001"))!;
+    await first.updateProfile(firstSnapshot.uid, firstSnapshot.updatedAt, (current) => ({
+      ...current, label: "renamed", updatedAt: "2026-08-21T00:00:01.000Z",
+    }));
+    await expect(second.updateProfile(secondSnapshot.uid, secondSnapshot.updatedAt, (current) => ({
+      ...current, characters: [], updatedAt: "2026-08-21T00:00:02.000Z",
+    }))).rejects.toThrow(/stale|conflict/i);
+    const afterConflict = (await second.getProfile("100000001"))!;
+    expect(afterConflict.label).toBe("renamed");
+    expect(afterConflict.characters).toHaveLength(1);
+  });
+
+  it("advances the CAS token on import so a stale tab cannot overwrite merged inventory", async () => {
+    const service = createProfileService(createMemoryProfileDatabase(), permissiveRelease);
+    await service.putProfile(profile("100000001"));
+    const stale = (await service.getProfile("100000001"))!;
+    const incoming = { ...profile("100000001", "character:b"), updatedAt: "2020-01-01T00:00:00.000Z" };
+    await service.importProfile(JSON.stringify({
+      schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION, releaseId: incoming.dataReleaseId,
+      updatedAt: incoming.updatedAt, profile: incoming,
+    }), "merge");
+    const imported = (await service.getProfile(stale.uid))!;
+    expect(imported.updatedAt).not.toBe(stale.updatedAt);
+    expect(imported.characters.map(({ logicalId }) => logicalId)).toContain("character:b");
+    await expect(service.updateProfile(stale.uid, stale.updatedAt, (current) => ({
+      ...current, characters: [], updatedAt: "2030-01-01T00:00:00.000Z",
+    }))).rejects.toThrow(/stale|conflict/i);
+    expect((await service.getProfile(stale.uid))!.characters.map(({ logicalId }) => logicalId))
+      .toContain("character:b");
   });
 
   it("exports deterministic sorted JSON with version provenance", async () => {
@@ -89,7 +159,7 @@ describe("profile service", () => {
   });
 
   it("requires an explicit conflict strategy and merges investments deterministically", async () => {
-    const service = createProfileService(createMemoryProfileDatabase());
+    const service = createProfileService(createMemoryProfileDatabase(), permissiveRelease);
     await service.putProfile(profile("100000001"));
     const incoming: AccountProfile = {
       ...profile("100000001"),
@@ -114,7 +184,7 @@ describe("profile service", () => {
   });
 
   it("never overwrites another UID and requires an exact UID deletion confirmation", async () => {
-    const service = createProfileService(createMemoryProfileDatabase());
+    const service = createProfileService(createMemoryProfileDatabase(), permissiveRelease);
     await service.putProfile(profile("100000001", "character:a"));
     const second = profile("100000002", "character:b");
     await service.importProfile(JSON.stringify({
@@ -129,4 +199,33 @@ describe("profile service", () => {
     await service.deleteProfile("100000001", "100000001");
     expect(await service.getProfile("100000001")).toBeNull();
   });
+
+  it("validates imported release and active inventory references before an atomic write", async () => {
+    const { bundle } = maxInvestmentFixture();
+    const service = createProfileService(createMemoryProfileDatabase(), async (releaseId) => {
+      if (releaseId !== bundle.release.id) throw new Error(`unknown release: ${releaseId}`);
+      return bundle;
+    });
+    const character = bundle.entities.characters.find(({ validToReleaseId }) => validToReleaseId === null)!;
+    const cone = bundle.entities.equipment.find(({ kind, validToReleaseId }) => kind === "light-cone" && validToReleaseId === null)!;
+    const relicSet = bundle.entities.equipment.find(({ kind, validToReleaseId }) => kind === "relic-set" && validToReleaseId === null)!;
+    const valid = {
+      ...profile("100000003", character.logicalId), dataReleaseId: bundle.release.id,
+      lightCones: [{ logicalId: cone.logicalId, superimposition: 1, level: 1 }],
+      relics: [{ instanceId: "relic:valid", setLogicalId: relicSet.logicalId, slot: "head" as const }],
+    };
+    const exportJson = (candidate: AccountProfile) => JSON.stringify({
+      schemaVersion: CURRENT_PROFILE_SCHEMA_VERSION, releaseId: candidate.dataReleaseId,
+      updatedAt: candidate.updatedAt, profile: candidate,
+    });
+
+    const invalid = { ...valid, characters: [{ logicalId: "character:missing", eidolon: 0, level: 1 }] };
+    await expect(service.importProfile(exportJson(invalid), "replace")).rejects.toThrow(/character:missing/);
+    expect(await service.listProfiles()).toEqual([]);
+    await expect(service.importProfile(exportJson({ ...valid, dataReleaseId: "missing-release" }), "replace"))
+      .rejects.toThrow(/unknown release/);
+    expect(await service.listProfiles()).toEqual([]);
+    await expect(service.importProfile(exportJson(valid), "replace")).resolves.toMatchObject({ uid: valid.uid });
+  });
+
 });

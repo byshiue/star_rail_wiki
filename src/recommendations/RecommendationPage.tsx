@@ -4,7 +4,8 @@ import { useRelease } from "../app/ReleaseProvider";
 import { loadCommunityTeams } from "../community/teamRepository";
 import type { TeamPreset } from "../domain/community";
 import type { AccountProfile } from "../domain/profiles";
-import { PROFILE_SELECTION_EVENT, readSelectedProfileUid } from "../profiles/profileSelection";
+import { allocateProfileMemberBuilds } from "../profiles/profileAllocation";
+import { PROFILE_SELECTION_EVENT, readSelectedProfileUid, selectProfileUid } from "../profiles/profileSelection";
 import { defaultProfileService, type ProfileService } from "../profiles/profileService";
 import { encodeTeamBuild } from "../simulator/teamBuild";
 import { recommendTeams, type RecommendationResult } from "./recommendTeams";
@@ -103,46 +104,12 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
     return () => { active = false; window.removeEventListener(PROFILE_SELECTION_EVENT, selectionListener); };
   }, [activeProfileService, defaultRoster]);
 
-  const effectiveMemberBuilds = useMemo<RecommendationContext["memberBuilds"]>(() => {
-    if (!selectedProfile) return memberBuilds;
-    const coneIds = new Set(selectedProfile.lightCones.map(({ logicalId }) => logicalId));
-    const relicIds = new Set(selectedProfile.relics.map(({ setLogicalId }) => setLogicalId));
-    const equipment = new Map(bundle?.entities.equipment.filter(({ validToReleaseId }) => validToReleaseId === null)
-      .map((item) => [item.logicalId, item]) ?? []);
-    const availableCones = selectedProfile.lightCones.filter(({ logicalId }) => equipment.get(logicalId)?.kind === "light-cone")
-      .sort((left, right) => left.logicalId.localeCompare(right.logicalId));
-    const relicGroups = [...relicIds].filter((logicalId) => equipment.get(logicalId)?.kind === "relic-set")
-      .map((logicalId) => ({ logicalId, pieces: Math.min(6, selectedProfile.relics.filter(({ setLogicalId }) => setLogicalId === logicalId).length) }))
-      .sort((left, right) => left.logicalId.localeCompare(right.logicalId));
-    const usedCones = new Set<string>();
-    return Object.fromEntries(selectedProfile.characters.map((character, characterIndex) => {
-      const configured = memberBuilds?.[character.logicalId];
-      const revision = bundle?.entities.characters.find((item) => item.logicalId === character.logicalId && item.validToReleaseId === null);
-      const configuredCone = configured?.lightCone && coneIds.has(configured.lightCone.logicalId) ? configured.lightCone : undefined;
-      const ownedCone = configuredCone ?? availableCones.find((cone) => {
-        const item = equipment.get(cone.logicalId);
-        return !usedCones.has(cone.logicalId) && item?.kind === "light-cone"
-          && (item.pathRestriction === null || item.pathRestriction === revision?.path);
-      });
-      if (ownedCone) usedCones.add(ownedCone.logicalId);
-      const configuredRelics = configured?.relicSets?.filter(({ logicalId }) => relicIds.has(logicalId));
-      const assignedRelics = configuredRelics?.length ? configuredRelics
-        : relicGroups.filter((_item, index) => index % selectedProfile.characters.length === characterIndex);
-      return [character.logicalId, {
-        ...configured, eidolon: character.eidolon,
-        lightCone: ownedCone ? { logicalId: ownedCone.logicalId, superimposition: ownedCone.superimposition } : undefined,
-        relicSets: assignedRelics.length ? assignedRelics.map((item) => ({ ...item })) : undefined,
-      }];
-    }));
-  }, [bundle, memberBuilds, selectedProfile]);
+  const profileAllocation = useMemo(() => selectedProfile && bundle
+    ? allocateProfileMemberBuilds(selectedProfile, bundle, memberBuilds) : null, [bundle, memberBuilds, selectedProfile]);
+  const effectiveMemberBuilds = profileAllocation?.memberBuilds ?? memberBuilds;
 
   function chooseProfile(nextUid: string) {
-    const profile = profiles.find(({ uid }) => uid === nextUid) ?? null;
-    setSelectedUid(nextUid); setSelectedProfile(profile); setResults([]); setConstraintError(null); setSwitchNotice(true);
-    if (profile) {
-      setOwned(profile.characters.map(({ logicalId }) => logicalId).sort().join(", "));
-      setOwnedOnly(true);
-    } else { setOwned(defaultRoster); setOwnedOnly(false); }
+    selectProfileUid(nextUid || null);
   }
 
   function submit(event: FormEvent) {
@@ -180,7 +147,7 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
   return (
     <section className="recommendation-page" aria-labelledby="recommendation-title">
       <header><p className="eyebrow">本地规则 · 确定评分 · 无需 API 密钥</p><h1 id="recommendation-title">Agent 推荐</h1><p>固定到 {bundle.release.gameVersion}（{bundle.release.id}）；Buff 数值只来自配队实验室 evaluator。</p></header>
-      {selectedProfile ? <p className="profile-allocation-note">档案装备按 stable ID 顺序自动分配：光锥只分给兼容命途且不重复，遗器实例按套装汇总后分配给角色。</p> : null}
+      {selectedProfile ? <div className="profile-allocation-note"><p>档案资源按 stable ID 确定分配；配置值只会与真实库存、叠影上限、命途和剩余实例取交集。</p>{profileAllocation?.exclusions.length ? <details><summary>未采用或受限配置（{profileAllocation.exclusions.length}）</summary><ul>{profileAllocation.exclusions.map((item, index) => <li key={item.characterId + ":" + item.code + ":" + (item.logicalId ?? "") + ":" + index}>{item.message}</li>)}</ul></details> : null}</div> : null}
       <form className="recommendation-controls" onSubmit={submit}>
         <label>本地账号 UID<select aria-label="本地账号 UID" value={selectedUid} disabled={profileLoading} onChange={(event) => chooseProfile(event.target.value)}><option value="">不使用本地档案</option>{profiles.map((profile) => <option key={profile.uid} value={profile.uid}>{profile.label ?? "未命名账号"} · {profile.uid}</option>)}</select></label>
         <label className="owned-toggle"><input type="checkbox" checked={ownedOnly} disabled={selectedProfile !== null} onChange={(event) => setOwnedOnly(event.target.checked)} />仅使用已拥有角色</label>

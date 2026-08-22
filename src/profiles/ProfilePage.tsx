@@ -1,16 +1,67 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useRelease } from "../app/ReleaseProvider";
 import type { AccountProfile } from "../domain/profiles";
 import { ProfileInventoryEditor } from "./ProfileInventoryEditor";
 import { CURRENT_PROFILE_SCHEMA_VERSION } from "./profileJson";
 import { readSelectedProfileUid, selectProfileUid } from "./profileSelection";
 import { defaultProfileService, type ImportStrategy, type ProfileService } from "./profileService";
+import type { ProfileStorageIssue } from "./profileDatabase";
 
 type ProfilePageProps = { service?: ProfileService };
+
+const focusableSelector = "button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])";
+
+function DeleteProfileDialog({ profile, confirmation, onConfirmation, onClose, onDelete }: {
+  profile: AccountProfile; confirmation: string; onConfirmation: (value: string) => void;
+  onClose: () => void; onDelete: () => void;
+}) {
+  const dialogRef = useRef<HTMLElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const background = [...document.querySelectorAll<HTMLElement>(".skip-link, .site-header")];
+    const previousAriaHidden = background.map((element) => element.getAttribute("aria-hidden"));
+    const previousInert = background.map((element) => element.hasAttribute("inert"));
+    for (const element of background) { element.setAttribute("inert", ""); element.setAttribute("aria-hidden", "true"); }
+    dialogRef.current?.querySelector<HTMLElement>(focusableSelector)?.focus();
+    function handleKey(event: KeyboardEvent) {
+      if (event.key === "Escape") { event.preventDefault(); onClose(); return; }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = [...dialogRef.current.querySelectorAll<HTMLElement>(focusableSelector)];
+      const first = focusable[0]; const last = focusable.at(-1);
+      if (!first || !last) { event.preventDefault(); dialogRef.current.focus(); return; }
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || !dialogRef.current.contains(active))) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && active === last) { event.preventDefault(); first.focus(); }
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      background.forEach((element, index) => {
+        if (!previousInert[index]) element.removeAttribute("inert");
+        const previous = previousAriaHidden[index];
+        if (previous === null) element.removeAttribute("aria-hidden"); else element.setAttribute("aria-hidden", previous);
+      });
+      const opener = openerRef.current;
+      queueMicrotask(() => {
+        const target = opener?.isConnected ? opener : document.querySelector<HTMLElement>(".profile-page") ?? document.querySelector<HTMLElement>("main");
+        target?.focus();
+      });
+    };
+  }, [onClose]);
+  return <div className="dialog-backdrop"><section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="delete-title" className="delete-dialog" tabIndex={-1}><h2 id="delete-title">删除账号 {profile.uid}</h2><p>此操作仅删除该精确 UID 的本地档案，且无法在站内恢复。请输入完整 UID 确认。</p><label>输入 UID 确认删除<input aria-label="输入 UID 确认删除" value={confirmation} onChange={(event) => onConfirmation(event.target.value)} /></label><button type="button" onClick={onClose}>取消</button><button type="button" disabled={confirmation !== profile.uid} onClick={onDelete}>永久删除 {profile.uid}</button></section></div>;
+}
+
+
+function nextUpdatedAt(current: string): string {
+  return new Date(Math.max(Date.now(), Date.parse(current) + 1)).toISOString();
+}
 
 export function ProfilePage({ service = defaultProfileService }: ProfilePageProps) {
   const { bundle, index, loading: releaseLoading, error: releaseError } = useRelease();
   const [profiles, setProfiles] = useState<AccountProfile[]>([]);
+  const [storageIssues, setStorageIssues] = useState<ProfileStorageIssue[]>([]);
   const [selectedUid, setSelectedUid] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,10 +77,11 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
   const [exportedJson, setExportedJson] = useState("");
 
   const selected = profiles.find(({ uid }) => uid === selectedUid) ?? null;
+  const closeDelete = useCallback(() => setDeleteOpen(false), []);
 
   async function refresh(preferredUid?: string | null) {
-    const loaded = await service.listProfiles();
-    setProfiles(loaded);
+    const [loaded, issues] = await Promise.all([service.listProfiles(), service.listProfileIssues()]);
+    setProfiles(loaded); setStorageIssues(issues);
     const requested = preferredUid === undefined ? readSelectedProfileUid() : preferredUid;
     const next = requested && loaded.some(({ uid }) => uid === requested) ? requested : loaded[0]?.uid ?? null;
     setSelectedUid(next);
@@ -39,9 +91,9 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
   useEffect(() => {
     let active = true;
     setLoading(true);
-    void service.listProfiles().then((loaded) => {
+    void Promise.all([service.listProfiles(), service.listProfileIssues()]).then(([loaded, issues]) => {
       if (!active) return;
-      setProfiles(loaded);
+      setProfiles(loaded); setStorageIssues(issues);
       const remembered = readSelectedProfileUid();
       const next = remembered && loaded.some(({ uid }) => uid === remembered) ? remembered : loaded[0]?.uid ?? null;
       setSelectedUid(next);
@@ -88,11 +140,13 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
   if (loading || releaseLoading) return <p role="status">正在加载本地账号与版本资料…</p>;
 
   return (
-    <section className="profile-page" aria-labelledby="profile-title">
+    <>
+    <section className="profile-page" aria-labelledby="profile-title" inert={deleteOpen ? true : undefined} tabIndex={-1}>
       <header><p className="eyebrow">仅存于此浏览器 · 不联网 · 不保存凭证</p><h1 id="profile-title">账号与版本</h1><p>每个九位数字 UID 使用独立 IndexedDB 记录；切换账号不会共享库存。</p></header>
       {releaseError ? <p role="alert">版本资料加载失败：{releaseError}</p> : null}
       {!bundle && index?.currentReleaseId === null ? <div className="version-warning" role="status"><strong>暂无已发布 current 版本。</strong><p>仍可按所选历史或测试版本保存本地档案；版本来源会写入 dataReleaseId。</p></div> : null}
       {error ? <div role="alert" className="build-error">{error}</div> : null}
+      {storageIssues.length ? <div role="alert" className="build-error"><strong>部分本地档案已隔离</strong><ul>{storageIssues.map((issue) => <li key={issue.uid}><code>{issue.uid}</code>：{issue.message}</li>)}</ul></div> : null}
 
       <form className="profile-create" onSubmit={create}>
         <h2>新建本地账号</h2>
@@ -107,16 +161,17 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
         {selected ? <div className="profile-detail">
           <h2>{selected.label ?? "未命名账号"} · {selected.uid}</h2>
           <p>档案版本 <code>{selected.dataReleaseId}</code> · schema v{selected.schemaVersion} · 更新 {selected.updatedAt}</p>
-          <div className="profile-actions"><label>账号显示名<input aria-label="账号显示名" value={rename} onChange={(event) => setRename(event.target.value)} /></label><button type="button" onClick={() => void act(async () => { await service.putProfile({ ...selected, label: rename.trim() || undefined, updatedAt: new Date().toISOString() }); await refresh(selected.uid); })}>保存显示名</button><button type="button" onClick={() => void act(async () => setExportedJson(await service.exportProfile(selected.uid)))}>生成 JSON 备份</button><button type="button" onClick={() => { setDeleteConfirmation(""); setDeleteOpen(true); }}>删除账号</button></div>
+          <div className="profile-actions"><label>账号显示名<input aria-label="账号显示名" value={rename} onChange={(event) => setRename(event.target.value)} /></label><button type="button" onClick={() => void act(async () => { await service.updateProfile(selected.uid, selected.updatedAt, (current) => ({ ...current, label: rename.trim() || undefined, updatedAt: nextUpdatedAt(current.updatedAt) })); await refresh(selected.uid); })}>保存显示名</button><button type="button" onClick={() => void act(async () => setExportedJson(await service.exportProfile(selected.uid)))}>生成 JSON 备份</button><button type="button" onClick={() => { setDeleteConfirmation(""); setDeleteOpen(true); }}>删除账号</button></div>
           {exportedJson ? <label>JSON 备份<textarea aria-label="JSON 备份" readOnly value={exportedJson} onFocus={(event) => event.currentTarget.select()} /></label> : null}
-          <ProfileInventoryEditor profile={selected} bundle={bundle} onSave={async (profile) => { await act(async () => { await service.putProfile(profile); await refresh(profile.uid); }); }} />
+          <ProfileInventoryEditor profile={selected} bundle={bundle} onSave={async (profile) => { await act(async () => { await service.updateProfile(profile.uid, selected.updatedAt, (current) => ({ ...current, characters: profile.characters, lightCones: profile.lightCones, relics: profile.relics, updatedAt: nextUpdatedAt(current.updatedAt) })); await refresh(profile.uid); }); }} />
         </div> : null}
       </div>}
 
       <section className="profile-import" aria-labelledby="import-title"><h2 id="import-title">导入 JSON 备份</h2><p>文件在浏览器内验证，不会上传。若 UID 已存在，必须明确选择合并或替换。</p><label>JSON 文件<input aria-label="JSON 文件" type="file" accept="application/json,.json" onChange={(event) => setImportFile(event.target.files?.[0] ?? null)} /></label><label>冲突处理<select aria-label="冲突处理" value={importStrategy} onChange={(event) => setImportStrategy(event.target.value as ImportStrategy | "")}><option value="">请选择</option><option value="merge">合并（保留较高投入）</option><option value="replace">替换该 UID</option></select></label><button type="button" disabled={!importFile || !importStrategy} onClick={() => void act(async () => { if (!importFile || !importStrategy) return; const imported = await service.importProfile(await importFile.text(), importStrategy); await refresh(imported.uid); setImportFile(null); setImportStrategy(""); })}>验证并导入</button></section>
 
-      {deleteOpen && selected ? <div className="dialog-backdrop"><section role="dialog" aria-modal="true" aria-labelledby="delete-title" className="delete-dialog"><h2 id="delete-title">删除账号 {selected.uid}</h2><p>此操作仅删除该精确 UID 的本地档案，且无法在站内恢复。请输入完整 UID 确认。</p><label>输入 UID 确认删除<input autoFocus aria-label="输入 UID 确认删除" value={deleteConfirmation} onChange={(event) => setDeleteConfirmation(event.target.value)} /></label><button type="button" onClick={() => setDeleteOpen(false)}>取消</button><button type="button" disabled={deleteConfirmation !== selected.uid} onClick={() => void act(async () => { await service.deleteProfile(selected.uid, deleteConfirmation); setDeleteOpen(false); await refresh(null); })}>永久删除 {selected.uid}</button></section></div> : null}
       <span className="visually-hidden" aria-live="polite">{selectedUid ? `已选择 UID ${selectedUid}` : "未选择 UID"}</span>
     </section>
+    {deleteOpen && selected ? <DeleteProfileDialog profile={selected} confirmation={deleteConfirmation} onConfirmation={setDeleteConfirmation} onClose={closeDelete} onDelete={() => void act(async () => { await service.deleteProfile(selected.uid, deleteConfirmation, selected.updatedAt); closeDelete(); await refresh(null); })} /> : null}
+    </>
   );
 }

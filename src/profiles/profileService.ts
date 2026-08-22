@@ -1,6 +1,8 @@
 import { z } from "zod";
 import type { AccountProfile, OwnedCharacter, OwnedLightCone, OwnedRelic } from "../domain/profiles";
-import { createIndexedDbProfileDatabase, type ProfileDatabase } from "./profileDatabase";
+import type { GameReleaseBundle } from "../domain/releases";
+import { loadRelease } from "../data/releaseRepository";
+import { createIndexedDbProfileDatabase, type ProfileDatabase, type ProfileStorageIssue } from "./profileDatabase";
 import { parseProfileExport, serializeProfile, validateCurrentProfile } from "./profileJson";
 
 const UidSchema = z.string().regex(/^\d{9}$/, "UID must contain exactly 9 digits");
@@ -8,9 +10,11 @@ export type ImportStrategy = "merge" | "replace";
 
 export interface ProfileService {
   listProfiles(): Promise<AccountProfile[]>;
+  listProfileIssues(): Promise<ProfileStorageIssue[]>;
   getProfile(uid: string): Promise<AccountProfile | null>;
   putProfile(profile: AccountProfile): Promise<AccountProfile>;
-  deleteProfile(uid: string, confirmationUid?: string): Promise<void>;
+  updateProfile(uid: string, expectedUpdatedAt: string, updater: (current: AccountProfile) => AccountProfile): Promise<AccountProfile>;
+  deleteProfile(uid: string, confirmationUid?: string, expectedUpdatedAt?: string): Promise<void>;
   exportProfile(uid: string): Promise<string>;
   importProfile(json: string, strategy?: ImportStrategy): Promise<AccountProfile>;
   close(): void;
@@ -30,6 +34,11 @@ function mergeById<T>(
     values.set(id(item), existing === undefined ? structuredClone(item) : merge(existing, item));
   }
   return [...values.values()].sort((left, right) => id(left).localeCompare(id(right)));
+}
+
+function advancedRevision(...timestamps: string[]): string {
+  const latest = Math.max(Date.now(), ...timestamps.map((value) => Date.parse(value) + 1));
+  return new Date(latest).toISOString();
 }
 
 function mergeProfiles(current: AccountProfile, incoming: AccountProfile): AccountProfile {
@@ -53,19 +62,46 @@ function mergeProfiles(current: AccountProfile, incoming: AccountProfile): Accou
   });
 }
 
-export function createProfileService(database: ProfileDatabase): ProfileService {
+export type ProfileReleaseResolver = (releaseId: string) => Promise<GameReleaseBundle>;
+
+function validateProfileReferences(profile: AccountProfile, bundle: GameReleaseBundle): void {
+  if (bundle.release.id !== profile.dataReleaseId) throw new Error(`release ${profile.dataReleaseId} was not resolved`);
+  const characters = new Set(bundle.entities.characters
+    .filter(({ validToReleaseId }) => validToReleaseId === null).map(({ logicalId }) => logicalId));
+  const cones = new Set(bundle.entities.equipment
+    .filter(({ validToReleaseId, kind }) => validToReleaseId === null && kind === "light-cone")
+    .map(({ logicalId }) => logicalId));
+  const relicSets = new Set(bundle.entities.equipment
+    .filter(({ validToReleaseId, kind }) => validToReleaseId === null && kind === "relic-set")
+    .map(({ logicalId }) => logicalId));
+  for (const item of profile.characters) if (!characters.has(item.logicalId)) {
+    throw new Error(`unknown or inactive character reference: ${item.logicalId}`);
+  }
+  for (const item of profile.lightCones) if (!cones.has(item.logicalId)) {
+    throw new Error(`unknown, inactive, or wrong-kind light cone reference: ${item.logicalId}`);
+  }
+  for (const item of profile.relics) if (!relicSets.has(item.setLogicalId)) {
+    throw new Error(`unknown, inactive, or wrong-kind relic set reference: ${item.setLogicalId}`);
+  }
+}
+
+export function createProfileService(database: ProfileDatabase, resolveRelease: ProfileReleaseResolver = loadRelease): ProfileService {
   return {
-    async listProfiles() { return database.list(); },
+    async listProfiles() { return (await database.list()).profiles; },
+    async listProfileIssues() { return (await database.list()).issues; },
     async getProfile(rawUid) { return database.get(uid(rawUid)); },
     async putProfile(profile) {
       const parsed = validateCurrentProfile(profile);
-      await database.put(parsed);
-      return parsed;
+      return database.create(parsed);
     },
-    async deleteProfile(rawUid, confirmationUid) {
+    async updateProfile(rawUid, expectedUpdatedAt, updater) {
+      const parsedUid = uid(rawUid);
+      return database.compareAndSwap(parsedUid, expectedUpdatedAt, (current) => validateCurrentProfile(updater(current)));
+    },
+    async deleteProfile(rawUid, confirmationUid, expectedUpdatedAt) {
       const parsedUid = uid(rawUid);
       if (confirmationUid !== parsedUid) throw new Error("exact UID confirmation is required for deletion");
-      await database.delete(parsedUid);
+      await database.delete(parsedUid, expectedUpdatedAt);
     },
     async exportProfile(rawUid) {
       const profile = await database.get(uid(rawUid));
@@ -75,16 +111,18 @@ export function createProfileService(database: ProfileDatabase): ProfileService 
     async importProfile(json, strategy) {
       const incoming = parseProfileExport(json);
       const importedUid = uid(incoming.uid);
-      return database.update(importedUid, (current) => {
+      validateProfileReferences(incoming, await resolveRelease(incoming.dataReleaseId));
+      return database.transact(importedUid, (current) => {
         if (current === null) return incoming;
         if (strategy !== "merge" && strategy !== "replace") {
           throw new Error("existing profile requires an explicit merge or replace strategy");
         }
-        return strategy === "merge" ? mergeProfiles(current, incoming) : incoming;
+        const imported = strategy === "merge" ? mergeProfiles(current, incoming) : incoming;
+        return { ...imported, updatedAt: advancedRevision(current.updatedAt, incoming.updatedAt) };
       });
     },
     close() { database.close(); },
   };
 }
 
-export const defaultProfileService = createProfileService(createIndexedDbProfileDatabase());
+export const defaultProfileService = createProfileService(createIndexedDbProfileDatabase(), loadRelease);

@@ -2,49 +2,38 @@
 
 ## Scope
 
-Implemented private browser-local account profiles keyed by an exact nine-digit UID. The production adapter uses IndexedDB through `idb`; tests inject a deterministic memory adapter. No profile workflow performs network writes or stores credentials.
+Implemented private browser-local profiles keyed by exact nine-digit UIDs, with IndexedDB persistence, deterministic JSON backup, inventory-aware recommendation allocation, optimistic concurrency, and accessible destructive confirmation. No credentials are stored and profile writes remain local.
 
-## Data and transaction contract
+## Fix R1 data and concurrency contract
 
-- `ProfileDatabase` provides UID-keyed list/get/put/delete/update operations. IndexedDB schema version 1 stores profiles by UID and indexes `updatedAt`; the service exposes an explicit schema migration hook for legacy version 0 records.
-- Every stored profile passes the runtime `AccountProfileSchema` plus current schema-version and inventory stable-ID uniqueness checks before a write.
-- UID values remain strings and are never converted to JavaScript numbers.
-- Import parses and validates the complete strict JSON document before opening its write transaction. Existing same-UID records require explicit `merge` or `replace`; invalid JSON, schema failure, version conflicts, and transaction errors do not partially mutate storage.
-- Merge takes the greater character eidolon/level and light-cone superimposition/level, retains distinct relic instance IDs, and rejects cross-release merges. A different imported UID writes only its own key.
-- Export is deterministic and sorted. The strict envelope carries `schemaVersion`, `releaseId`, `updatedAt`, and the approved profile payload; browser selection metadata is excluded.
-- Deletion requires an exact repeated UID. Creating an already existing UID is rejected rather than silently replacing inventory.
+- `ProfileDatabase` is schema version 2 and exposes create-only `create`, compare-and-swap `compareAndSwap`, atomic `transact`, and revision-checked deletion. Duplicate concurrent creates and stale partial edits fail with `ProfileConflictError`; rename and inventory edits merge only their owned fields inside the transaction.
+- Both baseline v0 (`label`/`dataReleaseId`/optional publication) and renamed-field v0 (`displayName`/`releaseId`) are strictly parsed, migrated to v1, and written back lazily. Invalid stored records are isolated from healthy profiles and returned as `ProfileStorageIssue` entries.
+- Real `fake-indexeddb` tests exercise v1-to-v2 open, v0 writeback, invalid-record isolation, blocked upgrade notification, and closing the active connection on `versionchange`.
+- Import strictly validates the envelope and then resolves its `dataReleaseId` through the release bundle repository. Every character, light cone, and relic set must be an active revision of the correct kind before the single atomic transaction begins. Invalid release or stable-ID references leave storage unchanged.
+- Export remains deterministic and sorted. Same-UID import requires explicit merge or replace; cross-release merge is rejected; deletion requires the exact UID and can reject a stale revision.
 
-## UI and recommendation integration
+## Recommendation and UI integration
 
-- `/profiles` now supports loading/error/empty states, creation, selection, display-name editing, character/eidolon/level inventory, light-cone/superimposition/level inventory, relic instances, deterministic JSON backup, explicit merge/replace import, and an exact-UID deletion dialog.
-- A null current release is reported honestly while profiles remain locally creatable with explicit data-release provenance. When a loaded bundle does not match a profile release, existing stable IDs remain readable/savable but additions from the wrong release are disabled.
-- The selected UID is browser-local and shared with the recommendation page. Selection or reload starts by clearing the previous UID's roster and investment data; request tokens prevent stale asynchronous loads from writing back after a newer selection.
-- Task 9 receives owned-only character IDs, actual eidolons, allowed light-cone/relic IDs, and deterministic stable-ID equipment allocation. Compatible owned light cones are assigned once with their real superimposition; relic instances are grouped by set and assigned deterministically. The UI discloses this allocation rule, and the simulator link regression proves the selected S4 cone reaches the candidate build.
-- Profile styles use project tokens, hide live-region text accessibly, and collapse to one column for a 320px viewport under the 720px breakpoint.
+- Selected UID changes use the shared `selectProfileUid` path, which persists browser selection and broadcasts the selection event. Tests cover page switching, immediate old-state clearing on reload failure, and restoring the chosen UID and roster after remount.
+- `allocateProfileMemberBuilds` intersects configured builds with authoritative inventory: eidolons and superimposition are capped, light cones require active correct-kind/path-compatible unique ownership, and relic pieces are globally consumed by instance count without reuse. Allocation/exclusion ordering is stable and the UI reports rejected or capped configuration.
+- The delete dialog traps Tab/Shift+Tab, closes on Escape, restores focus to the opener, and marks the background inert while open.
+- `/profiles` retains creation, selection, rename, inventory editing, version provenance, backup/import, mismatch warnings, and 320px responsive behavior.
 
 ## TDD and review evidence
 
-Initial RED failed because all profile modules were absent. Subsequent RED cases proved the old behavior accepted duplicate inventory IDs, silently overwrote duplicate UID creation, allowed cross-release additions, retained an old UID after reload failure, and omitted owned equipment from production recommendation builds.
+RED regressions covered authoritative allocation and exclusion, concurrent duplicate create/stale update, real v0 migration, real IndexedDB upgrade events and corrupt-record isolation, atomic invalid-reference imports, persisted recommendation selection after remount, and delete-modal keyboard behavior.
 
-Final focused command:
-
-```text
-npm test -- src/profiles src/recommendations/RecommendationPage.test.tsx --maxWorkers=2
-```
-
-Result: 3 files and 20 tests passed.
-
-An independent read-only reviewer initially found five issues. Fixes added duplicate-create rejection, immediate old-profile clearing plus request sequencing, version-safe inventory additions, real equipment allocation into Task 9, and a closed responsive CSS rule with a source-backed regression. Reviewer re-ran the focused tests and approved the final diff.
+An independent reviewer approved the original Task 10 implementation. Fix R1 received a second independent read-only review. Its initial pass found six edge cases; all were fixed with regressions, and the final pass approved the diff with 29/29 focused tests plus typecheck, lint, and diff checks passing.
 
 ## Final verification
 
 - `npm run typecheck`: passed.
 - `npm run lint`: passed.
-- `npx vitest run --maxWorkers=2 --reporter=json`: 53/53 suites and 238/238 tests passed.
+- `npm test -- --maxWorkers=2`: 36/36 files and 247/247 tests passed.
 - `npm run validate:data`: passed.
-- `npm run build`: passed; Vite transformed 156 modules.
+- `npm run build`: passed; Vite transformed 157 modules.
 - `git diff --check`: passed.
 
 ## Residual non-blocking gaps
 
-Task 12 browser E2E should add a real 320px visual/interaction pass and real IndexedDB multi-tab concurrency coverage. Unit tests already cover reopen persistence through the injectable adapter, atomic import behavior, selection-race isolation, and responsive CSS source invariants.
+Task 12 browser E2E can add a true two-window IndexedDB contention scenario and a 320px visual pass. The adapter tests already use the browser IndexedDB API model for upgrade/blocking behavior, while service tests cover atomic duplicate creation and stale partial-update rejection.

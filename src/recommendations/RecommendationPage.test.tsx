@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
-import { PROFILE_SELECTION_EVENT } from "../profiles/profileSelection";
+import { PROFILE_SELECTION_EVENT, readSelectedProfileUid } from "../profiles/profileSelection";
 import communityJson from "../../data/community/teams.json";
 import { ReleaseProvider } from "../app/ReleaseProvider";
 import { CommunityTeamLibrarySchema } from "../domain/community";
@@ -38,7 +38,7 @@ describe("RecommendationPage", () => {
       dataReleaseId: fixtureBundle.release.id, updatedAt: "2026-08-21T00:00:00.000Z",
       characters: characterIds.slice(1, 5).map((logicalId) => ({ logicalId, eidolon: 2, level: 80 })),
       lightCones: [], relics: [] });
-    render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+    const view = render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
       <RecommendationPage loadPresets={async () => []} profileService={service} />
     </ReleaseProvider></MemoryRouter>);
 
@@ -52,6 +52,14 @@ describe("RecommendationPage", () => {
     await user.selectOptions(screen.getByLabelText("本地账号 UID"), "100000002");
     expect(screen.getByLabelText("已拥有角色 logical ID")).toHaveValue(characterIds.slice(1, 5).sort().join(", "));
     expect(screen.getByRole("status")).toHaveTextContent("切换账号后已清除旧推荐");
+    expect(readSelectedProfileUid()).toBe("100000002");
+
+    view.unmount();
+    render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+      <RecommendationPage loadPresets={async () => []} profileService={service} />
+    </ReleaseProvider></MemoryRouter>);
+    expect(await screen.findByLabelText("本地账号 UID")).toHaveValue("100000002");
+    expect(screen.getByLabelText("已拥有角色 logical ID")).toHaveValue(characterIds.slice(1, 5).sort().join(", "));
   });
 
   it("clears the previous UID immediately when a profile reload fails", async () => {
