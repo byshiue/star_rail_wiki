@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { EntityProvenance, FeatureRevision } from "../../src/domain/entities";
 import type { UnannotatedGameReleaseBundle } from "./applyRoleAnnotations";
 import type { FetchedSource, FetchedSourceFile } from "./fetchSource";
+import { normalizeStarRailResSource } from "./normalizeStarRailRes";
 
 const CharacterSchema = z.object({
   id: z.union([z.string(), z.number()]), name: z.string().min(1), rarity: z.union([z.literal(4), z.literal(5)]),
@@ -37,7 +38,7 @@ function file(source: FetchedSource, sourcePath: string): FetchedSourceFile {
 function provenance(input: FetchedSourceFile): EntityProvenance {
   return {
     sourceName: input.source.name,
-    sourceUrl: input.source.baseUrl,
+    sourceUrl: `${input.source.baseUrl.replace(/\/$/, "")}/${input.source.revision}/${input.path}`,
     sourceRevision: input.source.revision,
     sourcePath: input.path,
     sourceChecksum: input.checksum,
@@ -132,6 +133,7 @@ function feature(
 }
 
 export function importStarRailRes(source: FetchedSource): UnannotatedGameReleaseBundle {
+  source = normalizeStarRailResSource(source);
   const releaseId = source.manifest.releaseId;
   const charactersFile = file(source, "index_new/cn/characters.json");
   const ranksFile = file(source, "index_new/cn/character_ranks.json");

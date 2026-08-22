@@ -1,0 +1,17 @@
+Star Rail Wiki — third-party notices
+
+The MIT license in LICENSE applies only to original project code and writing.
+
+Honkai: Star Rail game names and Chinese game text are property of their
+respective rights holders. This is an unofficial community project.
+
+Chinese structured indexes are derived from Mar-7th/StarRailRes at immutable
+commit b95e75c7e1273d819d20c530c0b7e13a3ef19fb4. That upstream repository is
+licensed AGPL-3.0; its data is not relicensed under this project's MIT license.
+Source: https://github.com/Mar-7th/StarRailRes
+
+Released-client evidence is attributed to DimbreathBot/TurnBasedGameData at
+commit 648b08fbdb2e49739ebbf1210c9a189fcfc5e2d7. Version dates come from the
+official HoYoLAB Version 4.4 update notice. Community records contain only
+project-authored short summaries, factual team structures and source links.
+No third-party images are included.

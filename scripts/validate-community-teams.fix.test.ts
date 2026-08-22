@@ -16,7 +16,11 @@ function repositoryInputs() {
 describe("community repository composition", () => {
   it("accepts the checked fixture only when every release and character reference resolves", () => {
     const { index, bundles } = repositoryInputs();
-    const library = validateCommunityRepository(teamsJson, index, bundles);
+    const fixtureLibrary = {
+      ...teamsJson, libraryKind: "fixture-only" as const, currentReleaseId: null,
+      presets: teamsJson.presets.filter((preset) => preset.channel === "fixture"),
+    };
+    const library = validateCommunityRepository(fixtureLibrary, index, bundles);
 
     expect(library.libraryKind).toBe("fixture-only");
     expect(library.currentReleaseId).toBeNull();
@@ -154,7 +158,10 @@ describe("bounded preset schema", () => {
   });
 
   it("keeps fixture-only mode explicit and rejects released records in it", () => {
-    const input = structuredClone(teamsJson);
+    const input = structuredClone({
+      ...teamsJson, libraryKind: "fixture-only" as const, currentReleaseId: null,
+      presets: teamsJson.presets.filter((preset) => preset.channel === "fixture"),
+    });
     input.presets[0]!.channel = "released";
     expect(() => CommunityTeamLibrarySchema.parse(input)).toThrow(/fixture-only/i);
   });

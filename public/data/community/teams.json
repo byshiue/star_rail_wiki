@@ -1,37 +1,219 @@
 {
   "schemaVersion": 1,
-  "libraryKind": "fixture-only",
-  "currentReleaseId": null,
+  "libraryKind": "mixed",
+  "currentReleaseId": "4.4-cn-2026-08-21",
   "presets": [
     {
       "id": "team:synthetic-follow-up-fixture",
       "releaseId": "4.3-fixture",
       "gameVersion": "4.3",
       "channel": "fixture",
-      "slots": ["character:synthetic-dps", "character:synthetic-support", "character:synthetic-sub-dps", "character:synthetic-sustain"],
-      "memberAssumptions": [
-        { "eidolon": 0, "equipment": { "status": "none", "reason": "合成来源明确未指定光锥。" } },
-        { "eidolon": 0, "equipment": { "status": "specified", "logicalId": "light-cone:synthetic-cone", "superimposition": 1 } },
-        { "eidolon": 0, "equipment": { "status": "none", "reason": "合成来源明确未指定光锥。" } },
-        { "eidolon": 0, "equipment": { "status": "none", "reason": "合成来源明确未指定光锥。" } }
+      "slots": [
+        "character:synthetic-dps",
+        "character:synthetic-support",
+        "character:synthetic-sub-dps",
+        "character:synthetic-sustain"
       ],
-      "substitutions": [{
-        "slot": 2,
-        "characterLogicalId": "character:synthetic-breaker",
-        "note": "合成夹具替代位：需要更多削韧时替换副输出。"
-      }],
-      "requirements": ["合成夹具：全员零星魂", "合成夹具：不依赖限定光锥"],
+      "memberAssumptions": [
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "合成来源明确未指定光锥。"
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "specified",
+            "logicalId": "light-cone:synthetic-cone",
+            "superimposition": 1
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "合成来源明确未指定光锥。"
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "合成来源明确未指定光锥。"
+          }
+        }
+      ],
+      "substitutions": [
+        {
+          "slot": 2,
+          "characterLogicalId": "character:synthetic-breaker",
+          "note": "合成夹具替代位：需要更多削韧时替换副输出。"
+        }
+      ],
+      "requirements": [
+        "合成夹具：全员零星魂",
+        "合成夹具：不依赖限定光锥"
+      ],
       "investment": "low",
-      "tags": ["追击", "低配", "合成夹具"],
+      "tags": [
+        "追击",
+        "低配",
+        "合成夹具"
+      ],
       "summary": "项目自写的合成配队摘要，仅用于验证来源、筛选与模拟器载入流程，不代表正式版本推荐。",
       "source": {
         "url": "https://example.invalid/star-rail-synthetic-community-fixture",
         "title": "Synthetic Follow-up Team Fixture",
         "author": "Star Rail Wiki Test Maintainers",
         "publisher": "Star Rail Wiki Synthetic Fixtures",
-        "publication": { "status": "unknown", "reason": "合成夹具没有独立公开发布日期。" },
+        "publication": {
+          "status": "unknown",
+          "reason": "合成夹具没有独立公开发布日期。"
+        },
         "retrievedAt": "2026-08-21T00:00:00.000Z",
         "availability": "unavailable"
+      }
+    },
+    {
+      "id": "team:4.4-himeko-nova-judgment",
+      "releaseId": "4.4-cn-2026-08-21",
+      "gameVersion": "4.4",
+      "channel": "released",
+      "slots": [
+        "character:1510",
+        "character:8007",
+        "character:1313",
+        "character:1217"
+      ],
+      "memberAssumptions": [
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "来源未指定光锥；按零星魂记录。"
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "来源以记忆开拓者为裁决同行位，未指定光锥。"
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "来源未指定光锥。"
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "来源未指定光锥。"
+          }
+        }
+      ],
+      "substitutions": [
+        {
+          "slot": 2,
+          "characterLogicalId": "character:1306",
+          "note": "原文列为星期日的可替代辅助。"
+        }
+      ],
+      "requirements": [
+        "姬子•启行裁决队",
+        "零星魂基准；光锥未指定",
+        "记忆开拓者使用 8007 形态"
+      ],
+      "investment": "moderate",
+      "tags": [
+        "裁决",
+        "对群",
+        "4.4"
+      ],
+      "summary": "项目依据来源整理：姬子•启行与记忆开拓者构成裁决核心，星期日负责行动与增益，藿藿提供生存和能量；花火可替换星期日。",
+      "source": {
+        "url": "https://www.hoyolab.com/article/45855384",
+        "title": "4.4 姬子•启行光锥、队伍与遗器配置推荐",
+        "author": "Focalors_Kuro",
+        "publisher": "HoYoLAB",
+        "publication": {
+          "status": "published",
+          "publishedAt": "2026-07-14T16:00:00.000Z"
+        },
+        "retrievedAt": "2026-08-21T12:00:00.000Z",
+        "availability": "available"
+      }
+    },
+    {
+      "id": "team:4.4-rin-archer-skillpoint",
+      "releaseId": "4.4-cn-2026-08-21",
+      "gameVersion": "4.4",
+      "channel": "released",
+      "slots": [
+        "character:1015",
+        "character:1508",
+        "character:1306",
+        "character:1217"
+      ],
+      "memberAssumptions": [
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "来源未指定光锥。"
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "来源以低星魂远坂凛为基准，未指定光锥。"
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "来源未指定光锥。"
+          }
+        },
+        {
+          "eidolon": 0,
+          "equipment": {
+            "status": "none",
+            "reason": "来源未指定光锥。"
+          }
+        }
+      ],
+      "substitutions": [],
+      "requirements": [
+        "低星魂远坂凛与 Archer 联携",
+        "零星魂基准；光锥未指定",
+        "以战技点循环为主要协同"
+      ],
+      "investment": "moderate",
+      "tags": [
+        "联携",
+        "战技点",
+        "4.4"
+      ],
+      "summary": "项目依据来源整理：Archer 与低星魂远坂凛组成联携输出核心，花火补充战技点与行动支持，藿藿承担生存位。",
+      "source": {
+        "url": "https://www.hoyolab.com/article/45977086",
+        "title": "V4.4 Fate 二期联动远坂凛角色解析与配队",
+        "author": "攻略好用真君_CN",
+        "publisher": "HoYoLAB",
+        "publication": {
+          "status": "published",
+          "publishedAt": "2026-07-23T16:00:00.000Z"
+        },
+        "retrievedAt": "2026-08-21T12:00:00.000Z",
+        "availability": "available"
       }
     }
   ]

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-08-21T12:00:00.000Z",
+  "region": "cn",
+  "decision": "4.4 is the current released Mainland China version; 4.5 preview, preload and beta records are excluded.",
+  "channelAuthority": {
+    "name": "HoYoLAB official Version 4.4 update details",
+    "url": "https://www.hoyolab.com/article/45851903",
+    "publishedAt": "2026-07-14T00:00:00+08:00",
+    "retrievedAt": "2026-08-21T12:00:00.000Z",
+    "releaseStartsAt": "2026-07-15T06:00:00+08:00",
+    "releaseEndsAt": "2026-08-26T06:00:00+08:00"
+  },
+  "releasedClientEvidence": {
+    "name": "DimbreathBot/TurnBasedGameData OSPRODWin4.4.0",
+    "url": "https://github.com/DimbreathBot/TurnBasedGameData/commit/648b08fbdb2e49739ebbf1210c9a189fcfc5e2d7",
+    "revision": "648b08fbdb2e49739ebbf1210c9a189fcfc5e2d7",
+    "committedAt": "2026-07-29T09:22:06+02:00",
+    "label": "OSPRODWin4.4.0_D15909703_A15802547_L15874300",
+    "retrievedAt": "2026-08-21T12:00:00.000Z"
+  },
+  "contentSource": {
+    "name": "Mar-7th/StarRailRes",
+    "url": "https://github.com/Mar-7th/StarRailRes/commit/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+    "revision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+    "committedAt": "2026-07-19T01:08:44+08:00",
+    "versionCommit": "02bdd75e1e3cf4272cea94165275c98a17ff1719",
+    "license": "AGPL-3.0",
+    "retrievedAt": "2026-08-21T12:00:00.000Z"
+  },
+  "excludedSourceRecords": {
+    "characterRanks": {
+      "count": 60,
+      "classification": "enhanced-alternate",
+      "reason": "These seven-digit rank IDs are not referenced by any character.ranks list in the pinned 4.4 Chinese index. They are alternate enhanced configurations, not active canonical eidolons in this release bundle.",
+      "idListSha256": "sha256:b6e69b63ac4795d9916f863b06a710f8a4a09e70640941c72570731e4a20656d"
+    },
+    "characterSkills": { "count": 0, "classification": "none" },
+    "characterSkillTrees": { "count": 0, "classification": "none" }
+  }
+}

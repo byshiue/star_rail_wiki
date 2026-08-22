@@ -10,6 +10,7 @@ import { extractCandidateEffects, type CandidateEffect } from "./game-data/extra
 import { validateCommunityRepository } from "./validate-community-teams";
 import { assertRoleAnnotations, loadRoleAnnotations } from "./game-data/applyRoleAnnotations";
 import { validatePublicProfileRepository } from "./validate-public-profiles";
+import { validateProductionAudit } from "./validate-production-audit";
 
 async function readJson(file: string): Promise<unknown> {
   return JSON.parse(await readFile(file, "utf8"));
@@ -60,6 +61,7 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
       throw new Error(`coverage report mismatch for ${indexedRelease.id}`);
     }
     assertComplete(actualCoverage);
+    await validateProductionAudit(repositoryRoot, bundle, actualCoverage);
 
     allCandidates.push(...collectEffectSources(entities).flatMap(extractCandidateEffects));
     allReviewedEffects.push(...effects.filter((effect) => effect.reviewStatus !== "generated"));

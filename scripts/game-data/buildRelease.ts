@@ -25,7 +25,19 @@ export async function buildRelease(input: BuildReleaseInput): Promise<GameReleas
   if (input.overlays === undefined) return bundle;
 
   const candidates = collectEffectSources(bundle.entities).flatMap(extractCandidateEffects);
-  bundle.entities.effects = applyEffectOverlays(candidates, input.overlays);
+  const candidateIds = new Set(candidates.map((candidate) => candidate.candidateId));
+  bundle.entities.effects = applyEffectOverlays(candidates, input.overlays.filter((overlay) => candidateIds.has(overlay.candidateId)));
+  const reviewStatusesByRevision = new Map<string, Set<"reviewed" | "unsupported">>();
+  for (const effect of bundle.entities.effects) {
+    const statuses = reviewStatusesByRevision.get(effect.sourceRevisionId) ?? new Set<"reviewed" | "unsupported">();
+    if (effect.reviewStatus !== "generated") statuses.add(effect.reviewStatus);
+    reviewStatusesByRevision.set(effect.sourceRevisionId, statuses);
+  }
+  for (const source of collectEffectSources(bundle.entities)) {
+    const statuses = reviewStatusesByRevision.get(source.revisionId);
+    if (statuses?.has("reviewed")) source.reviewStatus = "reviewed";
+    else if (statuses?.has("unsupported")) source.reviewStatus = "unsupported";
+  }
   const effectIdsByRevision = new Map<string, string[]>();
   for (const effect of bundle.entities.effects) {
     const ids = effectIdsByRevision.get(effect.sourceRevisionId) ?? [];

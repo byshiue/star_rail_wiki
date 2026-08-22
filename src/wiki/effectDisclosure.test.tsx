@@ -20,6 +20,7 @@ test("separates unsupported original text and discloses structured effect semant
     id: "effect:unsupported-test",
     reviewStatus: "unsupported" as const,
     originalText: "复杂机制仅保留原文。",
+    conditions: [{ type: "不支持：触发与叠层机制尚未完成逐机制建模" }],
   };
 
   render(<EffectSourceList revision={revision} effects={[supported, unsupported]} release={bundle.release} />);
@@ -30,5 +31,6 @@ test("separates unsupported original text and discloses structured effect semant
   expect(screen.getByRole("list", { name: "可用效果" })).toHaveTextContent("条件：target-state equals 灼烧");
   expect(screen.getByRole("list", { name: "可用效果" })).toHaveTextContent("可驱散：是");
   expect(screen.getByRole("list", { name: "不支持的效果" })).toHaveTextContent("复杂机制仅保留原文。");
+  expect(screen.getByRole("list", { name: "不支持的效果" })).toHaveTextContent("原因：触发与叠层机制尚未完成逐机制建模");
   expect(screen.getByRole("list", { name: "可用效果" })).not.toHaveTextContent("复杂机制仅保留原文。");
 });

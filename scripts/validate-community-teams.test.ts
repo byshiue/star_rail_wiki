@@ -27,9 +27,12 @@ describe("community team source validation", () => {
   it("keeps representative fixture presets out of the production current selection", () => {
     const library = CommunityTeamLibrarySchema.parse(teamsJson);
 
-    expect(library.currentReleaseId).toBeNull();
+    expect(library.currentReleaseId).toBe("4.4-cn-2026-08-21");
     expect(library.presets.length).toBeGreaterThan(0);
-    expect(library.presets.every((preset) => preset.channel === "fixture")).toBe(true);
+    expect(library.presets.filter((preset) => preset.channel === "fixture")
+      .every((preset) => preset.releaseId !== library.currentReleaseId)).toBe(true);
+    expect(library.presets.some((preset) => preset.releaseId === library.currentReleaseId
+      && preset.channel === "released" && preset.source.availability === "available")).toBe(true);
     expect(validateCommunitySources(library.presets)).toEqual([]);
   });
 

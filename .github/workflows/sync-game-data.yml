@@ -1,0 +1,50 @@
+name: Review pinned game data
+
+on:
+  schedule:
+    - cron: "23 4 * * 3"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: game-data-review
+  cancel-in-progress: false
+
+jobs:
+  rebuild-reviewed-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Rebuild only the already reviewed released manifest
+        run: |
+          npm run data:import -- \
+            --version 4.4 \
+            --source-revision b95e75c7e1273d819d20c530c0b7e13a3ef19fb4 \
+            --manifest data/releases/4.4-cn-2026-08-21/source-manifest.json \
+            --roles data/manual/character-roles.json \
+            --overlays data/manual/effects.json \
+            --output /tmp/star-rail-reviewed-release
+          diff -ru public/data/releases/4.4-cn-2026-08-21 /tmp/star-rail-reviewed-release || true
+          rsync -a --delete /tmp/star-rail-reviewed-release/ public/data/releases/4.4-cn-2026-08-21/
+      - run: npm run validate:data
+      - name: Open review PR only when deterministic output changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/review-pinned-game-data
+          delete-branch: true
+          commit-message: "chore: review pinned released game data"
+          title: "chore: review pinned released game data"
+          body: |
+            Automated rebuild of the already-approved released manifest.
+            This workflow does not promote latest/master, preload, beta, or a new game version.
+            A new release still requires official channel evidence, immutable revisions,
+            reviewed checksums, role/effect review, and a maintainer-approved release index change.
+          labels: data-review

@@ -19,6 +19,11 @@ function formatValue(effect: Effect): string {
   return effect.operation === "percent" || effect.operation === "multiplier" ? `${effect.value.base * 100}%` : String(effect.value.base);
 }
 
+function unsupportedReason(effect: Effect): string {
+  const reason = effect.conditions.find(({ type }) => type.startsWith("不支持："))?.type;
+  return reason ? reason.slice("不支持：".length) : "该效果的触发、目标、持续或叠层机制尚未完成逐机制建模";
+}
+
 export function EffectSourceList({ revision, effects, release }: { revision: RevisionIdentity; effects: Effect[]; release?: DataRelease }) {
   const supportedEffects = effects.filter((effect) => effect.reviewStatus !== "unsupported");
   const unsupportedEffects = effects.filter((effect) => effect.reviewStatus === "unsupported");
@@ -34,7 +39,7 @@ export function EffectSourceList({ revision, effects, release }: { revision: Rev
     </li>)}</ul>}
     {unsupportedEffects.length > 0 && <section className="unsupported-effects" aria-labelledby={`unsupported-${revision.revisionId}`}>
       <h4 id={`unsupported-${revision.revisionId}`}>不支持解析，仅展示原文</h4>
-      <ul aria-label="不支持的效果">{unsupportedEffects.map((effect) => <li key={effect.id}><p>{effect.originalText}</p><span>状态：unsupported</span></li>)}</ul>
+      <ul aria-label="不支持的效果">{unsupportedEffects.map((effect) => <li key={effect.id}><p>{effect.originalText}</p><p>原因：{unsupportedReason(effect)}</p><span>状态：unsupported；不会纳入模拟数值</span></li>)}</ul>
     </section>}
     <ul className="provenance-list">{revision.provenance.map((source) => <li key={`${source.sourceUrl}:${source.sourcePath}`}>
       <a href={source.sourceUrl} target="_blank" rel="noreferrer">资料来源：{source.sourceName}</a>
