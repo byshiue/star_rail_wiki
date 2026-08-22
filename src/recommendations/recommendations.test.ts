@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import communityJson from "../../data/community/teams.json";
-import { CommunityTeamLibrarySchema } from "../domain/community";
+import { CommunityTeamLibrarySchema, type TeamPreset } from "../domain/community";
 import { fixtureBundle } from "../effects/__fixtures__/goldenTeams";
 import { RecommendationConstraintError } from "./request";
 import { recommendTeams } from "./recommendTeams";
@@ -30,7 +30,7 @@ describe("recommendTeams", () => {
     expect(second).toEqual(first);
     expect(first).toHaveLength(3);
     expect(first[0]).toMatchObject({
-      weightsVersion: "recommendation-weights-v1",
+      weightsVersion: "recommendation-weights-v2",
       components: { roleCoverage: expect.any(Number), buffApplicability: expect.any(Number) },
       explanation: { evidenceIds: expect.arrayContaining([expect.stringContaining("4.3-fixture")]) },
       audit: { evaluatedCombinationCount: expect.any(Number), excluded: expect.any(Array) },
@@ -123,4 +123,54 @@ describe("recommendTeams", () => {
     expect(result.audit.evaluatedCombinationCount).toBeLessThanOrEqual(1);
     expect(result.audit.truncated).toBe(true);
   });
+});
+
+function eligiblePreset(changes: Partial<TeamPreset> = {}): TeamPreset {
+  const slots: TeamPreset["slots"] = ["character:synthetic-dps", "character:synthetic-support", "character:synthetic-sub-dps", "character:synthetic-sustain"];
+  return { id: "team:eligible", releaseId: fixtureBundle.release.id, gameVersion: fixtureBundle.release.gameVersion, channel: "fixture", slots,
+    memberAssumptions: slots.map(() => ({ eidolon: 0, equipment: { status: "none" as const, reason: "test" } })) as TeamPreset["memberAssumptions"],
+    substitutions: [], requirements: ["test"], investment: "low", tags: ["test"], summary: "eligible test preset",
+    source: { url: "https://example.invalid/team", title: "test", author: "test", publisher: "test",
+      publication: { status: "published", publishedAt: "2026-08-01T00:00:00.000Z" }, retrievedAt: "2026-08-02T00:00:00.000Z", availability: "available" }, ...changes };
+}
+
+it("isolates illegal equipment and investment candidates instead of stopping or silently clamping", () => {
+  const illegal = recommendTeams({ ...request, requiredCharacterIds: [] }, { ...context, memberBuilds: {
+    "character:synthetic-breaker": { eidolon: 0, lightCone: { logicalId: "light-cone:synthetic-cone", superimposition: 1 } },
+  } });
+  expect(illegal.length).toBeGreaterThan(0);
+  expect(illegal[0].audit.excluded).toEqual(expect.arrayContaining([expect.objectContaining({ reason: "invalid_build", team: expect.arrayContaining(["character:synthetic-breaker"]) })]));
+  expect(illegal.every((result) => !result.team.includes("character:synthetic-breaker"))).toBe(true);
+  const invested = recommendTeams({ ...request, requiredCharacterIds: [], investment: { maxEidolon: 0 } }, { ...context, memberBuilds: { "character:synthetic-breaker": { eidolon: 6 } } });
+  expect(invested[0].audit.excluded).toEqual(expect.arrayContaining([expect.objectContaining({ reason: "investment_constraint", detail: expect.stringContaining("max eidolon") })]));
+});
+
+it("zeros an ineligible community prior with reasons", () => {
+  const [result] = recommendTeams({ ...request, objective: "low-investment" }, { ...context, communityPresets: [eligiblePreset({ investment: "high" })] });
+  expect(result.communityReferences[0]).toMatchObject({ boundedContribution: 0, eligibilityIssues: expect.arrayContaining([expect.stringContaining("low investment")]) });
+  expect(result.components.communityPrior).toBe(0);
+});
+
+it("returns all ten applied weights and low-investment scoring reacts to actual builds", () => {
+  const memberBuilds = { "character:synthetic-support": { eidolon: 0, lightCone: { logicalId: "light-cone:synthetic-cone", superimposition: 1 } } };
+  const normal = recommendTeams({ ...request, requiredCharacterIds: ["character:synthetic-dps", "character:synthetic-support"] }, { ...context, memberBuilds })[0];
+  const low = recommendTeams({ ...request, requiredCharacterIds: ["character:synthetic-dps", "character:synthetic-support"], objective: "low-investment" }, { ...context, memberBuilds })[0];
+  expect(Object.keys(low.appliedWeights).sort()).toEqual(Object.keys(low.components).sort());
+  expect(low.weightsVersion).toBe("recommendation-weights-v2");
+  expect(low.appliedWeights.activationCost).toBeLessThan(normal.appliedWeights.activationCost);
+  expect(low.totalScore).toBeLessThan(normal.totalScore);
+});
+
+it("uses explicit versioned mixed roles and is invariant to weakness and allowlist order", () => {
+  const bundle = structuredClone(fixtureBundle);
+  const mixed = bundle.entities.characters.find(({ logicalId }) => logicalId === "character:synthetic-sub-dps")!;
+  const equipment = bundle.entities.equipment[0]!;
+  bundle.entities.equipment.push({ ...structuredClone(equipment), logicalId: "light-cone:other", revisionId: "light-cone:other@4.3-fixture", pathRestriction: null });
+  const memberBuilds = { "character:synthetic-support": { eidolon: 0, lightCone: { logicalId: "light-cone:synthetic-cone", superimposition: 1 } } };
+  mixed.name = "无职责名称"; mixed.path = "unknown"; mixed.roles = ["damage", "support"];
+  const reorderedBundle = structuredClone(bundle); reorderedBundle.entities.equipment.reverse();
+  const first = recommendTeams({ ...request, encounter: { mode: "standard", enemyWeaknesses: ["wind", "synthetic"] }, investment: { allowedLightConeIds: ["light-cone:other", "light-cone:synthetic-cone"] } }, { ...context, bundle, memberBuilds });
+  const second = recommendTeams({ ...request, encounter: { mode: "standard", enemyWeaknesses: ["synthetic", "wind"] }, investment: { allowedLightConeIds: ["light-cone:synthetic-cone", "light-cone:other"] } }, { ...context, bundle: reorderedBundle, memberBuilds });
+  expect(second).toEqual(first);
+  expect(first.find((result) => result.team.includes("character:synthetic-sub-dps"))!.roles["character:synthetic-sub-dps"]).toEqual(["damage", "support"]);
 });

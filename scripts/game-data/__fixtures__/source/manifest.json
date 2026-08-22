@@ -25,7 +25,7 @@
       "channel": "released",
       "retrievedAt": "2026-08-21T00:00:00.000Z",
       "fileChecksums": {
-        "index_new/cn/characters.json": "sha256:2231d45155c19f2cef3c8a7c97b6ce1c66951a71ac52ae5a5b516fd2156180f2",
+        "index_new/cn/characters.json": "sha256:22344037cd0d6ac6485883b2eeea2abed6e3f380e48dbae658f449acb2b89c35",
         "index_new/cn/character_skills.json": "sha256:bd642e2531ddd0b11a79e046c9edb5b1589f819eeea6bad1b226af231bb21d79",
         "index_new/cn/character_skill_trees.json": "sha256:0933f4041d059c8f3095d8c6cdca4145d4872565de65f15cf301a4721c8459b6",
         "index_new/cn/light_cones.json": "sha256:198c2fa7cc67a88f917b72eb9e7d1da85bfa717a21fcecb58e67ff7673ba6ab9",

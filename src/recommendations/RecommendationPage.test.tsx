@@ -38,6 +38,12 @@ describe("RecommendationPage", () => {
     expect(screen.getAllByText(/Buff 证据/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/社区参考/).length).toBeGreaterThan(0);
     expect(screen.getAllByRole("link", { name: "载入模拟器" })[0]).toHaveAttribute("href", expect.stringContaining("/simulator?build="));
+    expect(screen.getAllByText(/目标／场景/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/角色职责/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/优势/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/来源修订/).length).toBeGreaterThan(0);
+    expect(screen.queryByRole("link", { name: "team:synthetic-follow-up-fixture" })).not.toBeInTheDocument();
+    expect(screen.getAllByText(/检索 2026-08-21/).length).toBeGreaterThan(0);
   });
 
   it("shows a structured constraint conflict rather than inventing a team", async () => {
@@ -60,6 +66,33 @@ describe("RecommendationPage", () => {
         </ReleaseProvider>
       </MemoryRouter>,
     );
-    expect(screen.getByRole("status")).toHaveTextContent(/正在加载|暂无已发布版本/);
+    expect(screen.getByRole("status")).toHaveTextContent("暂无已发布版本");
   });
+});
+
+it("disables submission while community presets are still loading", async () => {
+  let resolvePresets!: (value: typeof presets) => void;
+  const pending = new Promise<typeof presets>((resolve) => { resolvePresets = resolve; });
+  render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+    <RecommendationPage loadPresets={() => pending} />
+  </ReleaseProvider></MemoryRouter>);
+  const loadingButton = await screen.findByRole("button", { name: "正在加载社区参考…" });
+  expect(loadingButton).toBeDisabled();
+  expect(screen.queryByRole("article", { name: /候选队伍/ })).not.toBeInTheDocument();
+  resolvePresets(presets);
+  expect(await screen.findByRole("button", { name: "生成推荐" })).toBeEnabled();
+});
+
+it("clears old candidates and presets when a reload fails", async () => {
+  const user = userEvent.setup();
+  const view = render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+    <RecommendationPage loadPresets={async () => presets} />
+  </ReleaseProvider></MemoryRouter>);
+  await user.click(await screen.findByRole("button", { name: "生成推荐" }));
+  expect(await screen.findAllByRole("article", { name: /候选队伍/ })).toHaveLength(3);
+  view.rerender(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+    <RecommendationPage loadPresets={async () => { throw new Error("reload failed"); }} />
+  </ReleaseProvider></MemoryRouter>);
+  expect(await screen.findByText(/reload failed/)).toBeInTheDocument();
+  expect(screen.queryByRole("article", { name: /候选队伍/ })).not.toBeInTheDocument();
 });

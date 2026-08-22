@@ -13,9 +13,10 @@ const ReleaseContext = createContext<ReleaseContextValue | null>(null);
 type ReleaseProviderProps = PropsWithChildren<{ bundle?: GameReleaseBundle; index?: ReleaseIndex }>;
 
 export function ReleaseProvider({ bundle: explicitBundle, index: explicitIndex, children }: ReleaseProviderProps) {
-  const explicitState = explicitBundle ? {
-    bundle: explicitBundle,
-    index: explicitIndex ?? { currentReleaseId: null, releases: [explicitBundle.release] },
+  const hasExplicitState = explicitBundle !== undefined || explicitIndex !== undefined;
+  const explicitState: ReleaseContextValue | null = hasExplicitState ? {
+    bundle: explicitBundle ?? null,
+    index: explicitIndex ?? (explicitBundle ? { currentReleaseId: null, releases: [explicitBundle.release] } : null),
     loading: false,
     error: null,
   } : null;

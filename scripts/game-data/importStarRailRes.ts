@@ -6,6 +6,7 @@ import type { FetchedSource, FetchedSourceFile } from "./fetchSource";
 const CharacterSchema = z.object({
   id: z.union([z.string(), z.number()]), name: z.string().min(1), rarity: z.union([z.literal(4), z.literal(5)]),
   element: z.string().min(1), path: z.string().min(1), description: z.string().min(1),
+  roles: z.array(z.enum(["damage", "support", "sustain"])).min(1).max(3),
 });
 const FeatureSchema = z.object({
   id: z.union([z.string(), z.number()]), characterId: z.union([z.string(), z.number()]),
@@ -179,6 +180,7 @@ export function importStarRailRes(source: FetchedSource): GameReleaseBundle {
           rarity: item.rarity,
           element: item.element,
           path: item.path,
+          roles: item.roles,
           description: item.description,
           reviewStatus: "generated" as const,
           abilities: skills.filter((entry) => String(entry.characterId) === characterId)

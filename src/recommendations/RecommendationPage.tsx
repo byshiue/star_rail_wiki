@@ -23,6 +23,7 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams }: Recomme
   const { bundle, loading, error: releaseError } = useRelease();
   const [presets, setPresets] = useState<TeamPreset[]>([]);
   const [presetError, setPresetError] = useState<string | null>(null);
+  const [presetLoading, setPresetLoading] = useState(false);
   const [ownedOnly, setOwnedOnly] = useState(false);
   const defaultRoster = useMemo(() => bundle?.entities.characters
     .filter(({ validToReleaseId }) => validToReleaseId === null).map(({ logicalId }) => logicalId).sort().join(", ") ?? "", [bundle]);
@@ -38,23 +39,26 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams }: Recomme
   const [constraintError, setConstraintError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!bundle) return;
+    setPresets([]); setResults([]); setPresetError(null);
+    if (!bundle) { setPresetLoading(false); return; }
     let active = true;
+    setPresetLoading(true);
     setOwned(defaultRoster);
     void loadPresets(bundle.release.id).then((loaded) => {
       if (active) {
         setPresets([...loaded].sort((left, right) => left.id.localeCompare(right.id)));
         setPresetError(null);
+        setPresetLoading(false);
       }
     }).catch((caught: unknown) => {
-      if (active) setPresetError(caught instanceof Error ? caught.message : "社区参考加载失败");
+      if (active) { setPresets([]); setPresetError(caught instanceof Error ? caught.message : "社区参考加载失败"); setPresetLoading(false); }
     });
     return () => { active = false; };
   }, [bundle, defaultRoster, loadPresets]);
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    if (!bundle) return;
+    if (!bundle || presetLoading) return;
     try {
       setResults(recommendTeams({
         releaseId: bundle.release.id,
@@ -89,7 +93,7 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams }: Recomme
         <label>战斗场景<select aria-label="战斗场景" value={encounter} onChange={(event) => setEncounter(event.target.value as EncounterMode)}><option value="standard">常规</option><option value="break">击破</option><option value="follow-up">追击</option><option value="damage-over-time">持续伤害</option></select></label>
         <label>敌方弱点<input aria-label="敌方弱点" value={weaknesses} onChange={(event) => setWeaknesses(event.target.value)} /></label>
         <label>目标流派<input aria-label="目标流派" value={archetype} onChange={(event) => setArchetype(event.target.value)} /></label>
-        <button type="submit">生成推荐</button>
+        <button type="submit" disabled={presetLoading}>{presetLoading ? "正在加载社区参考…" : "生成推荐"}</button>
       </form>
       {presetError ? <p className="source-warning">社区参考未载入：{presetError}。核心计算仍可离线运行，社区先验记为 0。</p> : null}
       {constraintError ? <div role="alert" className="build-error"><strong>约束冲突</strong><p>{constraintError}</p></div> : null}
@@ -99,11 +103,14 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams }: Recomme
           <article key={result.team.join("|")} aria-label={`候选队伍 ${index + 1}`} className="recommendation-card">
             <div className="recommendation-heading"><div><p className="eyebrow">候选 {index + 1}</p><h2>{result.team.join(" / ")}</h2></div><strong>{result.totalScore} 分</strong></div>
             <p>{result.explanation.summary}</p>
-            <section><h3>评分分解 · {result.weightsVersion}</h3><dl className="score-components">{(Object.entries(result.components) as Array<[keyof typeof componentLabels, number]>).map(([key, value]) => <div key={key}><dt>{componentLabels[key]}</dt><dd>{Math.round(value * 100)}%（加权 {result.weighted[key]}）</dd></div>)}</dl></section>
-            <section><h3>Buff 证据</h3><p>已应用 {result.evaluation.active.length + result.evaluation.conditional.length}；未满足 {result.evaluation.inactive.length}；浪费 {result.evaluation.wasted.length}。</p><ul>{result.explanation.evidenceIds.map((id) => <li key={id}><code>{id}</code></li>)}</ul>{result.explanation.unmetConditions.map((item) => <p key={`${item.evidenceId}:unmet`}>{item.effectId}：{item.reason}</p>)}</section>
-            <section><h3>替代方案</h3>{result.substitutions.length ? <ul>{result.substitutions.map((item) => <li key={`${item.slot}:${item.replacement}`}>{item.slot + 1} 号位：{item.replacing} → {item.replacement}；总分变化 {item.scoreDelta >= 0 ? "+" : ""}{item.scoreDelta}</li>)}</ul> : <p>当前枚举范围没有单槽替代。</p>}</section>
-            <section><h3>社区参考（封顶 5 分，不能推翻合法性）</h3>{result.communityReferences.length ? <ul>{result.communityReferences.map((reference) => <li key={reference.presetId}><a href={reference.sourceUrl} target="_blank" rel="noreferrer">{reference.presetId}</a> — {reference.author} / {reference.publisher}；贡献 {reference.boundedContribution * 5} 分；来源 {reference.availability}</li>)}</ul> : <p>无匹配的同版本来源；社区先验为 0。</p>}</section>
-            <details><summary>枚举审计与排除理由</summary><p>评估 {result.audit.evaluatedCombinationCount} 个合法组合{result.audit.truncated ? "（已达组合上限）" : ""}。</p><ul>{result.audit.excluded.map((item, itemIndex) => <li key={`${item.reason}:${item.team.join("|")}:${itemIndex}`}>{item.team.join(" / ") || "其余组合"}：{item.reason}</li>)}</ul></details>
+            <p><strong>目标／场景：</strong>{result.requestSummary.objective} ／ {result.requestSummary.encounter.mode}{result.requestSummary.archetype ? ` ／ ${result.requestSummary.archetype}` : ""}</p>
+            <p><strong>角色职责：</strong>{result.team.map((id) => `${id}（${result.roles[id].join("+")}）`).join("；")}</p>
+            <section><h3>优势与弱点</h3><p><strong>优势：</strong>{result.explanation.strengths.join("；") || "无达到阈值的突出组件"}</p><p><strong>弱点：</strong>{result.explanation.weaknesses.join("；") || "没有已识别的主要弱点"}</p></section>
+            <section><h3>评分分解 · {result.weightsVersion}</h3><dl className="score-components">{(Object.entries(result.components) as Array<[keyof typeof componentLabels, number]>).map(([key, value]) => <div key={key}><dt>{componentLabels[key]}</dt><dd>{Math.round(value * 100)}%（权重 {result.appliedWeights[key]}；加权 {result.weighted[key]}）</dd></div>)}</dl></section>
+            <section><h3>Buff 证据</h3><p>已应用 {result.evaluation.active.length + result.evaluation.conditional.length}；未满足 {result.evaluation.inactive.length}；浪费 {result.evaluation.wasted.length}。</p><ul>{[...result.evaluation.active, ...result.evaluation.conditional].map((entry) => <li key={entry.evaluationId}><strong>{entry.metric}</strong> {entry.operation} {entry.value}；证据 <code>{entry.evidence.id}</code>；来源修订 <code>{entry.sourceRevisionId}</code></li>)}</ul>{result.explanation.unmetConditions.map((item) => <p key={`${item.evidenceId}:unmet`}>{item.effectId}：{item.reason}</p>)}</section>
+            <section><h3>替代方案</h3>{result.substitutions.length ? <ul>{result.substitutions.map((item) => <li key={`${item.slot}:${item.replacement}`}>{item.slot + 1} 号位：{item.replacing} → {item.replacement}；总分变化 {item.scoreDelta >= 0 ? "+" : ""}{item.scoreDelta}；组件变化 {Object.entries(item.componentDeltas).map(([key, value]) => `${componentLabels[key as keyof typeof componentLabels]} ${Number(value) >= 0 ? "+" : ""}${value}`).join("、") || "无"}</li>)}</ul> : <p>当前枚举范围没有单槽替代。</p>}</section>
+            <section><h3>社区参考（封顶 5 分，不能推翻合法性）</h3>{result.communityReferences.length ? <ul>{result.communityReferences.map((reference) => <li key={reference.presetId}>{reference.availability === "available" ? <a href={reference.sourceUrl} target="_blank" rel="noreferrer">{reference.presetId}</a> : <span>{reference.presetId}</span>} — {reference.author} / {reference.publisher}；贡献 {reference.boundedContribution * result.appliedWeights.communityPrior} 分；来源 {reference.availability}；发布 {reference.publication}；检索 {reference.retrievedAt}{reference.eligibilityIssues.length ? `；不合格：${reference.eligibilityIssues.join("、")}` : ""}</li>)}</ul> : <p>无匹配的同版本来源；社区先验为 0。</p>}</section>
+            <details><summary>枚举审计与排除理由</summary><p>评估 {result.audit.evaluatedCombinationCount} 个合法组合{result.audit.truncated ? "（已达组合上限）" : ""}。</p><ul>{result.audit.excluded.map((item, itemIndex) => <li key={`${item.reason}:${item.team.join("|")}:${itemIndex}`}>{item.team.join(" / ") || "其余组合"}：{item.reason}{item.detail ? `：${item.detail}` : ""}</li>)}</ul></details>
             <Link className="simulator-link" to={`/simulator?build=${encodeTeamBuild(result.build)}`}>载入模拟器</Link>
           </article>
         ))}

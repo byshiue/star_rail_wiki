@@ -31,6 +31,7 @@ function releasedBundle(): GameReleaseBundle {
     rarity: 5,
     element: "虚数",
     path: "harmony",
+    roles: ["support"],
     description: `${name}测试资料。`,
     reviewStatus: "reviewed",
     abilities: [],

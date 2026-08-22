@@ -56,3 +56,24 @@ Result: 2 files and 10 tests passed. Coverage includes repeated-input determinis
 - `src/main.tsx`
 
 No subagents were used, as required by the task assignment.
+
+## Fix round 1 — reviewer findings
+
+Addressed all eight findings from the initial review.
+
+- Every candidate now builds and passes `validateTeamBuild()` before its sole `evaluateTeam()` call. Invalid equipment and investment constraints create deterministic candidate exclusions and do not stop unrelated candidates.
+- Community priors reuse `validatePresetForBundle()` and additionally enforce owned, excluded, objective investment, eidolon, and light-cone constraints. Ineligible and unavailable sources contribute zero with retained reasons.
+- Preset loading is a submission gate; release/load changes and failures clear old presets and candidates. Explicit null release completion now renders the honest no-release state.
+- Recommendation cards show objective, encounter, explicit mixed roles, strengths, weaknesses, all ten applied weights, weighted values, buff metric/value/evidence/source revision, and substitution component deltas. Unavailable community URLs are plain text with publication and retrieval dates.
+- Score weights are complete and versioned as `recommendation-weights-v2`; low-investment changes the applied activation-cost weight and actual configured eidolon/equipment/relic cost affects the component.
+- Character revisions now carry required versioned `roles` metadata. Enumeration and scoring never infer roles from names, logical IDs, or paths. Import fixtures, public fixture data, and source checksums were synchronized.
+- Added adversarial coverage for null completion, two-element and equipment permutation, invalid equipment isolation, investment exclusion, slow loading, reload failure clearing, unavailable source rendering, low-investment scoring, and mixed roles.
+
+Verification after fixes:
+
+- `npm test -- --maxWorkers=2`: 32 files, 214 tests passed.
+- `npm run typecheck`: passed.
+- `npm run lint`: passed.
+- `npm run validate:data`: passed.
+- `npm run build`: passed.
+- Focused recommendation suite after final adversarial additions: 2 files, 15 tests passed.

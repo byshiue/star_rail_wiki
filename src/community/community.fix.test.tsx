@@ -25,7 +25,7 @@ const provenance = [{
 function releasedBundle(): GameReleaseBundle {
   const character = (logicalId: string, name: string): CharacterRevision => ({
     logicalId, revisionId: `${logicalId}@release-4.3`, validFromReleaseId: "release-4.3",
-    validToReleaseId: null, provenance, name, rarity: 5, element: "虚数", path: "harmony",
+    validToReleaseId: null, provenance, name, rarity: 5, element: "虚数", path: "harmony", roles: ["support"],
     description: `${name}测试资料。`, reviewStatus: "reviewed", abilities: [], traces: [], eidolons: [],
   });
   return {

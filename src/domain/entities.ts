@@ -26,6 +26,8 @@ export type FeatureRevision = z.infer<typeof FeatureRevisionSchema>;
 export const CharacterRevisionSchema = RevisionIdentitySchema.extend({
   name: z.string().min(1), rarity: z.union([z.literal(4), z.literal(5)]),
   element: z.string().min(1), path: z.string().min(1), description: z.string().min(1),
+  roles: z.array(z.enum(["damage", "support", "sustain"])).min(1).max(3)
+    .refine((roles) => new Set(roles).size === roles.length, "duplicate character roles are not allowed"),
   reviewStatus: ReviewStatusSchema, abilities: z.array(FeatureRevisionSchema),
   traces: z.array(FeatureRevisionSchema), eidolons: z.array(FeatureRevisionSchema),
 });

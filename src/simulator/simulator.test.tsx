@@ -32,7 +32,7 @@ function releasedBundle(): GameReleaseBundle {
   });
   const character = (logicalId: string, name: string, path: string): CharacterRevision => ({
     logicalId, revisionId: `${logicalId}@4.3`, validFromReleaseId: releaseId, validToReleaseId: null,
-    provenance, name, rarity: 5, element: "虚数", path, description: `${name}测试资料。`,
+    provenance, name, rarity: 5, element: "虚数", path, roles: path === "destruction" ? ["damage"] : ["support"], description: `${name}测试资料。`,
     reviewStatus: "reviewed", abilities: [], traces: [], eidolons: [],
   });
   const dps = character("character:dps", "测试输出", "destruction");

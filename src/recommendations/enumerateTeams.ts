@@ -3,7 +3,9 @@ import { RecommendationCancelledError, RecommendationConstraintError, stableUniq
 
 export interface ExcludedCandidate {
   team: string[];
-  reason: "missing_damage_dealer" | "missing_sustain" | "combination_budget";
+  reason: "missing_damage_dealer" | "missing_sustain" | "combination_budget"
+    | "invalid_build" | "investment_constraint";
+  detail?: string;
 }
 
 export interface EnumerationResult {
@@ -15,11 +17,8 @@ export interface EnumerationResult {
 
 export type CharacterRole = "damage" | "support" | "sustain";
 
-export function characterRole(character: CharacterRevision): CharacterRole {
-  const value = `${character.path} ${character.logicalId} ${character.name}`.toLowerCase();
-  if (["abundance", "preservation", "sustain", "healer", "shield"].some((part) => value.includes(part))) return "sustain";
-  if (["harmony", "nihility", "support", "amplifier"].some((part) => value.includes(part))) return "support";
-  return "damage";
+export function characterRoles(character: CharacterRevision): readonly CharacterRole[] {
+  return character.roles;
 }
 
 function validatePool(request: RecommendationRequest, context: RecommendationContext) {
@@ -83,7 +82,7 @@ export function enumerateTeams(request: RecommendationRequest, context: Recommen
           visitedCombinationCount += 1;
           const team = [pool[a].logicalId, pool[b].logicalId, pool[c].logicalId, pool[d].logicalId];
           if ([...required].some((id) => !team.includes(id))) continue;
-          const roles = team.map((id) => characterRole(characterById.get(id)!));
+          const roles = team.flatMap((id) => characterRoles(characterById.get(id)!));
           if (!roles.includes("damage")) {
             excluded.push({ team, reason: "missing_damage_dealer" });
           } else if (!roles.includes("sustain")) {
