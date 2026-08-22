@@ -42,25 +42,72 @@ describe("profile service HSR-Scanner import", () => {
 
     const profile = await service.getProfile("100000001");
     expect(profile?.characters).toHaveLength(1);
-    expect(profile?.lightCones.map(({ instanceId }) => instanceId)).toEqual([
-      "hsr-scanner:light-cone:cone-a", "hsr-scanner:light-cone:cone-b",
-    ]);
+    expect(profile?.lightCones).toHaveLength(2);
+    expect(profile?.lightCones.every(({ instanceId }) =>
+      instanceId?.startsWith("hsr-scanner:light-cone:2026-08-22T00:01:00.000Z:"))).toBe(true);
     expect(profile?.relics).toHaveLength(1);
     expect(profile?.inventorySources).toHaveLength(2);
   });
 
-  it("is idempotent for inventory instances when the same scan is imported again", async () => {
+  it("replaces scanner snapshots across _uid reorder, deletion, and upgrade without ghosts", async () => {
     const service = createProfileService(createMemoryProfileDatabase(), async () => bundle);
-    const json = scan({ light_cones: cones, relics: [relic] });
-    await service.importHsrScanner(json, {
+    await service.putProfile({
+      schemaVersion: 2, uid: "100000001", dataReleaseId: releaseId,
+      updatedAt: "2026-08-21T00:00:00.000Z", characters: [],
+      lightCones: [
+        { logicalId: "light-cone:20000", superimposition: 1, level: 1 },
+        { instanceId: "manual:cone", logicalId: "light-cone:20000", superimposition: 2, level: 20 },
+      ],
+      relics: [{ instanceId: "manual:relic", setLogicalId: "relic-set:101", slot: "Hands" }],
+    });
+    await service.importHsrScanner(scan({ light_cones: cones, relics: [relic] }), {
       uid: "100000001", dataReleaseId: releaseId, importedAt: "2026-08-22T00:00:00.000Z",
     });
-    await service.importHsrScanner(json, {
+    await service.importHsrScanner(scan({
+      light_cones: [
+        { ...cones[1]!, _uid: "reassigned-b" },
+        { ...cones[0]!, _uid: "reassigned-a" },
+      ],
+      relics: [{ ...relic, _uid: "reassigned-relic" }],
+    }), {
       uid: "100000001", dataReleaseId: releaseId, importedAt: "2026-08-22T00:01:00.000Z",
     });
+    const reassigned = await service.getProfile("100000001");
+    expect(reassigned?.lightCones.filter(({ instanceId }) =>
+      instanceId?.startsWith("hsr-scanner:light-cone:"))).toHaveLength(2);
+    expect(JSON.stringify(reassigned)).not.toMatch(/cone-a|cone-b|reassigned/);
+
+    await service.importHsrScanner(scan({
+      light_cones: [{ id: "20000", level: 80, superimposition: 3, _uid: "third-scan-id" }],
+      relics: [{ ...relic, _uid: "third-scan-relic-id" }],
+    }), {
+      uid: "100000001", dataReleaseId: releaseId, importedAt: "2026-08-22T00:02:00.000Z",
+    });
     const profile = await service.getProfile("100000001");
-    expect(profile?.lightCones).toHaveLength(2);
-    expect(profile?.relics).toHaveLength(1);
+    expect(profile?.lightCones).toEqual([
+      { instanceId: "hsr-scanner:light-cone:2026-08-22T00:02:00.000Z:0", logicalId: "light-cone:20000", superimposition: 3, level: 80 },
+      { instanceId: "legacy:light-cone:20000", logicalId: "light-cone:20000", superimposition: 1, level: 1 },
+      { instanceId: "manual:cone", logicalId: "light-cone:20000", superimposition: 2, level: 20 },
+    ]);
+    expect(profile?.relics).toEqual([
+      { instanceId: "hsr-scanner:relic:2026-08-22T00:02:00.000Z:0", setLogicalId: "relic-set:101", slot: "Head" },
+      { instanceId: "manual:relic", setLogicalId: "relic-set:101", slot: "Hands" },
+    ]);
+    expect(JSON.stringify(profile)).not.toMatch(/cone-a|cone-b|reassigned|third-scan/);
+  });
+
+  it("preserves an existing scanner category when the incoming category is empty", async () => {
+    const service = createProfileService(createMemoryProfileDatabase(), async () => bundle);
+    await service.importHsrScanner(scan({ light_cones: cones, relics: [relic] }), {
+      uid: "100000001", dataReleaseId: releaseId, importedAt: "2026-08-22T00:00:00.000Z",
+    });
+    const before = await service.getProfile("100000001");
+    await service.importHsrScanner(scan({ characters: [character] }), {
+      uid: "100000001", dataReleaseId: releaseId, importedAt: "2026-08-22T00:01:00.000Z",
+    });
+    const after = await service.getProfile("100000001");
+    expect(after?.lightCones).toEqual(before?.lightCones);
+    expect(after?.relics).toEqual(before?.relics);
   });
 
   it("rejects unknown references and release mismatches without mutating storage", async () => {

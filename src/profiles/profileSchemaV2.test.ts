@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CURRENT_PROFILE_SCHEMA_VERSION, migrateStoredProfile, validateCurrentProfile } from "./profileJson";
+import { CURRENT_PROFILE_SCHEMA_VERSION, migrateStoredProfile, parseProfileExport, validateCurrentProfile } from "./profileJson";
 import { createMemoryProfileDatabase } from "./profileDatabase";
 
 describe("profile schema v2", () => {
@@ -29,6 +29,21 @@ describe("profile schema v2", () => {
       { instanceId: "cone:a", logicalId: "light-cone:20000", superimposition: 1, level: 1 },
       { instanceId: "cone:a", logicalId: "light-cone:20001", superimposition: 1, level: 1 },
     ] })).toThrow(/duplicate/i);
+  });
+
+  it("migrates a direct v1 backup document through parseProfileExport", () => {
+    const updatedAt = "2026-08-21T00:00:00.000Z";
+    const parsed = parseProfileExport(JSON.stringify({
+      schemaVersion: 1, releaseId: "4.4-cn-2026-08-21", updatedAt,
+      profile: {
+        schemaVersion: 1, uid: "100000001", dataReleaseId: "4.4-cn-2026-08-21",
+        updatedAt, characters: [],
+        lightCones: [{ logicalId: "light-cone:20000", superimposition: 2, level: 70 }], relics: [],
+      },
+    }));
+    expect(parsed).toMatchObject({ schemaVersion: 2, lightCones: [{
+      instanceId: "legacy:light-cone:20000", logicalId: "light-cone:20000",
+    }] });
   });
 
   it("persists a migrated v1 record instead of re-migrating it on every read", async () => {

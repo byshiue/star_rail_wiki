@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ReleaseProvider } from "../app/ReleaseProvider";
 import { fixtureBundle } from "../effects/__fixtures__/goldenTeams";
 import { createMemoryProfileDatabase } from "./profileDatabase";
@@ -163,5 +163,25 @@ describe("ProfilePage", () => {
       { logicalId: character.logicalId, eidolon: 3, level: 80 },
     ]);
     expect((await service.getProfile("100000001"))?.publication).toBeUndefined();
+  });
+
+  it("rejects an HSR-Scanner file over 20 MiB before reading it", async () => {
+    const user = userEvent.setup();
+    const service = createProfileService(createMemoryProfileDatabase(), async () => fixtureBundle);
+    const file = new File(["{}"], "too-large.json", { type: "application/json" });
+    Object.defineProperty(file, "size", { value: 20 * 1024 * 1024 + 1 });
+    const text = vi.fn().mockResolvedValue("{}");
+    Object.defineProperty(file, "text", { value: text });
+    render(<MemoryRouter><ReleaseProvider bundle={fixtureBundle}>
+      <ProfilePage service={service} />
+    </ReleaseProvider></MemoryRouter>);
+
+    await screen.findByText(/还没有本地账号/);
+    await user.type(screen.getByLabelText("HSR-Scanner 目标 UID"), "100000001");
+    await user.upload(screen.getByLabelText("HSR-Scanner JSON 文件"), file);
+    await user.click(screen.getByRole("button", { name: "合并扫描资料" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/20 MiB/);
+    expect(text).not.toHaveBeenCalled();
   });
 });

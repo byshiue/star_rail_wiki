@@ -11,6 +11,12 @@ import { PublicProfileConsent } from "./PublicProfileConsent";
 type ProfilePageProps = { service?: ProfileService };
 
 const focusableSelector = "button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])";
+const MAX_LOCAL_JSON_FILE_BYTES = 20 * 1024 * 1024;
+
+async function readLocalJsonFile(file: File): Promise<string> {
+  if (file.size > MAX_LOCAL_JSON_FILE_BYTES) throw new Error("JSON 文件不得超过 20 MiB");
+  return file.text();
+}
 
 function DeleteProfileDialog({ profile, confirmation, onConfirmation, onClose, onDelete }: {
   profile: AccountProfile; confirmation: string; onConfirmation: (value: string) => void;
@@ -183,18 +189,18 @@ export function ProfilePage({ service = defaultProfileService }: ProfilePageProp
         </div> : null}
       </div>}
 
-      <section className="profile-import" aria-labelledby="import-title"><h2 id="import-title">导入 JSON 备份</h2><p>文件在浏览器内验证，不会上传。若 UID 已存在，必须明确选择合并或替换。</p><label>JSON 文件<input aria-label="JSON 文件" type="file" accept="application/json,.json" onChange={(event) => setImportFile(event.target.files?.[0] ?? null)} /></label><label>冲突处理<select aria-label="冲突处理" value={importStrategy} onChange={(event) => setImportStrategy(event.target.value as ImportStrategy | "")}><option value="">请选择</option><option value="merge">合并（保留较高投入）</option><option value="replace">替换该 UID</option></select></label><button type="button" disabled={!importFile || !importStrategy} onClick={() => void act(async () => { if (!importFile || !importStrategy) return; const imported = await service.importProfile(await importFile.text(), importStrategy); await refresh(imported.uid); setImportFile(null); setImportStrategy(""); })}>验证并导入</button></section>
+      <section className="profile-import" aria-labelledby="import-title"><h2 id="import-title">导入 JSON 备份</h2><p>文件在浏览器内验证，不会上传。若 UID 已存在，必须明确选择合并或替换。</p><label>JSON 文件<input aria-label="JSON 文件" type="file" accept="application/json,.json" onChange={(event) => setImportFile(event.target.files?.[0] ?? null)} /></label><label>冲突处理<select aria-label="冲突处理" value={importStrategy} onChange={(event) => setImportStrategy(event.target.value as ImportStrategy | "")}><option value="">请选择</option><option value="merge">合并（保留较高投入）</option><option value="replace">替换该 UID</option></select></label><button type="button" disabled={!importFile || !importStrategy} onClick={() => void act(async () => { if (!importFile || !importStrategy) return; const imported = await service.importProfile(await readLocalJsonFile(importFile), importStrategy); await refresh(imported.uid); setImportFile(null); setImportStrategy(""); })}>验证并导入</button></section>
       <section className="profile-import" aria-labelledby="scanner-import-title">
         <h2 id="scanner-import-title">导入 HSR-Scanner 扫描资料</h2>
-        <p>文件只在浏览器内解析，不会上传。扫描档没有 UID 时必须明确指定目标账号；空分类只表示本次未扫描，不会清空既有库存。</p>
+        <p>文件只在浏览器内解析，不会上传。扫描档没有 UID 时必须明确指定目标账号；非空光锥／遗器会替换先前扫描器快照，空分类会保留既有分类，手动与 legacy 库存不受影响。</p>
         <label>HSR-Scanner JSON 文件<input aria-label="HSR-Scanner JSON 文件" type="file" accept="application/json,.json" onChange={(event) => { setScannerFile(event.target.files?.[0] ?? null); setScannerSummary(""); }} /></label>
         <label>HSR-Scanner 目标 UID<input aria-label="HSR-Scanner 目标 UID" inputMode="numeric" pattern="[0-9]{9}" value={scannerUid} onChange={(event) => setScannerUid(event.target.value)} /></label>
         <label>HSR-Scanner 资料版本<select aria-label="HSR-Scanner 资料版本" value={scannerReleaseId} onChange={(event) => setScannerReleaseId(event.target.value)}>{releaseIds.map((id) => <option key={id}>{id}</option>)}</select></label>
         <button type="button" disabled={!scannerFile || !/^\d{9}$/.test(scannerUid.trim()) || !scannerReleaseId} onClick={() => void act(async () => {
           if (!scannerFile) return;
-          const imported = await service.importHsrScanner(await scannerFile.text(), { uid: scannerUid.trim(), dataReleaseId: scannerReleaseId });
+          const imported = await service.importHsrScanner(await readLocalJsonFile(scannerFile), { uid: scannerUid.trim(), dataReleaseId: scannerReleaseId });
           const source = imported.inventorySources?.at(-1);
-          setScannerSummary(source ? `本次已合并：角色 ${source.counts.characters}、光锥 ${source.counts.lightCones}、遗器 ${source.counts.relics}。` : "扫描资料已合并。");
+          setScannerSummary(source ? `本次已更新快照：角色 ${source.counts.characters}、光锥 ${source.counts.lightCones}、遗器 ${source.counts.relics}。` : "扫描资料快照已更新。");
           setScannerFile(null);
           await refresh(imported.uid);
         })}>合并扫描资料</button>

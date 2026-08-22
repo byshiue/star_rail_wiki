@@ -21,6 +21,8 @@ const localProfile: AccountProfile & Record<string, unknown> = {
   characters: [{ logicalId: "character:a", eidolon: 2, level: 80 }],
   lightCones: [{ logicalId: "light-cone:a", superimposition: 3, level: 80 }],
   relics: [{ instanceId: "local-relic-instance", setLogicalId: "relic-set:a", slot: "head" }],
+  inventorySources: [{ kind: "hsr-scanner", build: "v1.5.0", formatVersion: 4,
+    importedAt: "2026-08-21T00:00:00.000Z", counts: { characters: 1, lightCones: 1, relics: 1 } }],
   browserMetadata: { databaseRevision: 7 },
   accessToken: "secret",
 };
@@ -44,8 +46,14 @@ describe("public profile export", () => {
   });
 
   it("creates a strict minimal public payload without private or browser-only fields", () => {
-    expect(createPublicProfileExport(localProfile, "2026-08-21T02:00:00.000Z")).toEqual(publicProfile);
-    expect(JSON.stringify(publicProfile)).not.toMatch(/显示名|browserMetadata|accessToken|secret|instanceId/);
+    const scannerProfile = {
+      ...localProfile,
+      lightCones: [{ instanceId: "hsr-scanner:light-cone:snapshot:0", logicalId: "light-cone:a", superimposition: 3, level: 80 }],
+      relics: [{ instanceId: "hsr-scanner:relic:snapshot:0", setLogicalId: "relic-set:a", slot: "head" }],
+    };
+    const exported = createPublicProfileExport(scannerProfile, "2026-08-21T02:00:00.000Z");
+    expect(exported).toEqual(publicProfile);
+    expect(JSON.stringify(exported)).not.toMatch(/显示名|browserMetadata|accessToken|secret|instanceId|inventorySources|hsr-scanner|v1\.5\.0/);
   });
 
   it.each(["../100000001", "100000001/extra", "１０００００００１", "10000000"])(

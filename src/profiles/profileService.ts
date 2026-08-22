@@ -4,7 +4,12 @@ import type { GameReleaseBundle } from "../domain/releases";
 import { loadRelease } from "../data/releaseRepository";
 import { createIndexedDbProfileDatabase, type IndexedDbProfileDatabaseOptions, type ProfileDatabase, type ProfileStorageIssue } from "./profileDatabase";
 import { parseProfileExport, serializeProfile, validateCurrentProfile } from "./profileJson";
-import { convertHsrScannerJson, type HsrScannerConversionOptions } from "./hsrScanner";
+import {
+  convertHsrScannerJson,
+  HSR_SCANNER_LIGHT_CONE_INSTANCE_PREFIX,
+  HSR_SCANNER_RELIC_INSTANCE_PREFIX,
+  type HsrScannerConversionOptions,
+} from "./hsrScanner";
 
 const UidSchema = z.string().regex(/^\d{9}$/, "UID must contain exactly 9 digits");
 export type ImportStrategy = "merge" | "replace";
@@ -62,6 +67,29 @@ function mergeProfiles(current: AccountProfile, incoming: AccountProfile): Accou
     updatedAt: current.updatedAt > incoming.updatedAt ? current.updatedAt : incoming.updatedAt,
     characters, lightCones, relics,
     publication: incoming.publication ?? current.publication,
+    inventorySources: [...(current.inventorySources ?? []), ...(incoming.inventorySources ?? [])].slice(-100),
+  });
+}
+
+function mergeScannerSnapshot(current: AccountProfile, incoming: AccountProfile): AccountProfile {
+  if (current.uid !== incoming.uid) throw new Error("cannot merge profiles across UIDs");
+  if (current.dataReleaseId !== incoming.dataReleaseId) {
+    throw new Error("cannot merge profiles from different releases; choose replace explicitly");
+  }
+  const characters = mergeById<OwnedCharacter>(current.characters, incoming.characters, (item) => item.logicalId,
+    (left, right) => ({ ...left, eidolon: Math.max(left.eidolon, right.eidolon), level: Math.max(left.level, right.level) }));
+  const lightCones = incoming.lightCones.length === 0 ? current.lightCones : [
+    ...current.lightCones.filter(({ instanceId }) => !instanceId?.startsWith(HSR_SCANNER_LIGHT_CONE_INSTANCE_PREFIX)),
+    ...incoming.lightCones,
+  ];
+  const relics = incoming.relics.length === 0 ? current.relics : [
+    ...current.relics.filter(({ instanceId }) => !instanceId.startsWith(HSR_SCANNER_RELIC_INSTANCE_PREFIX)),
+    ...incoming.relics,
+  ];
+  return validateCurrentProfile({
+    ...current,
+    updatedAt: current.updatedAt > incoming.updatedAt ? current.updatedAt : incoming.updatedAt,
+    characters, lightCones, relics,
     inventorySources: [...(current.inventorySources ?? []), ...(incoming.inventorySources ?? [])].slice(-100),
   });
 }
@@ -135,7 +163,7 @@ export function createProfileService(database: ProfileDatabase, resolveRelease: 
         if (current.dataReleaseId !== incoming.dataReleaseId) {
           throw new Error("cannot merge HSR-Scanner inventory into a profile from a different release");
         }
-        const imported = mergeProfiles(current, incoming);
+        const imported = mergeScannerSnapshot(current, incoming);
         return { ...imported, updatedAt: advancedRevision(current.updatedAt, incoming.updatedAt) };
       });
     },

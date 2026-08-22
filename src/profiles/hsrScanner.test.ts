@@ -25,7 +25,7 @@ function scanner(overrides: Record<string, unknown> = {}) {
 }
 
 describe("HSR-Scanner conversion", () => {
-  it("maps canonical IDs, preserves equipment instances, and records minimal provenance", () => {
+  it("maps canonical IDs, assigns snapshot-local equipment IDs, and records minimal provenance", () => {
     const converted = convertHsrScannerJson(scanner(), {
       uid: "100000001", dataReleaseId: "4.4-cn-2026-08-21",
       importedAt: "2026-08-22T00:00:00.000Z",
@@ -35,12 +35,13 @@ describe("HSR-Scanner conversion", () => {
       { logicalId: "character:1001", eidolon: 4, level: 80 },
     ]);
     expect(converted.lightCones).toEqual([
-      { instanceId: "hsr-scanner:light-cone:cone-a", logicalId: "light-cone:20000", superimposition: 5, level: 80 },
-      { instanceId: "hsr-scanner:light-cone:cone-b", logicalId: "light-cone:20000", superimposition: 1, level: 70 },
+      { instanceId: "hsr-scanner:light-cone:2026-08-22T00:00:00.000Z:0", logicalId: "light-cone:20000", superimposition: 5, level: 80 },
+      { instanceId: "hsr-scanner:light-cone:2026-08-22T00:00:00.000Z:1", logicalId: "light-cone:20000", superimposition: 1, level: 70 },
     ]);
     expect(converted.relics).toEqual([
-      { instanceId: "hsr-scanner:relic:relic-a", setLogicalId: "relic-set:101", slot: "Head" },
+      { instanceId: "hsr-scanner:relic:2026-08-22T00:00:00.000Z:0", setLogicalId: "relic-set:101", slot: "Head" },
     ]);
+    expect(JSON.stringify(converted)).not.toMatch(/cone-a|cone-b|relic-a/);
     expect(converted.inventorySources).toEqual([{
       kind: "hsr-scanner", build: "v1.5.0", formatVersion: 4,
       importedAt: "2026-08-22T00:00:00.000Z",
@@ -59,6 +60,43 @@ describe("HSR-Scanner conversion", () => {
       uid: "100000001", dataReleaseId: "4.4-cn-2026-08-21",
       importedAt: "2026-08-22T00:00:00.000Z",
     })).toThrow(/UID.*match/i);
+  });
+
+  it.each(["100000001", 100000001, null])("accepts and normalizes supported metadata UID %s", (metadataUid) => {
+    expect(convertHsrScannerJson(scanner({ metadata: { uid: metadataUid, trailblazer: "Stelle" } }), {
+      uid: "100000001", dataReleaseId: "4.4-cn-2026-08-21",
+      importedAt: "2026-08-22T00:00:00.000Z",
+    }).uid).toBe("100000001");
+  });
+
+  it("rejects a numeric metadata UID that differs from the explicit target", () => {
+    expect(() => convertHsrScannerJson(scanner({ metadata: { uid: 100000002 } }), {
+      uid: "100000001", dataReleaseId: "4.4-cn-2026-08-21",
+      importedAt: "2026-08-22T00:00:00.000Z",
+    })).toThrow(/UID.*match/i);
+  });
+
+  it.each([
+    ["characters", 1001],
+    ["light_cones", 5001],
+    ["relics", 10001],
+  ])("rejects oversized %s arrays", (field, count) => {
+    const items = Array.from({ length: count }, (_, index) => field === "characters"
+      ? { id: String(index), level: 1, eidolon: 0 }
+      : field === "light_cones"
+        ? { id: "20000", level: 1, superimposition: 1, _uid: String(index) }
+        : { set_id: "101", slot: "Head", _uid: String(index) });
+    expect(() => convertHsrScannerJson(scanner({ [field]: items }), {
+      uid: "100000001", dataReleaseId: "4.4-cn-2026-08-21",
+      importedAt: "2026-08-22T00:00:00.000Z",
+    })).toThrow();
+  });
+
+  it("rejects unreasonably long scanner strings", () => {
+    expect(() => convertHsrScannerJson(scanner({ build: "x".repeat(257) }), {
+      uid: "100000001", dataReleaseId: "4.4-cn-2026-08-21",
+      importedAt: "2026-08-22T00:00:00.000Z",
+    })).toThrow();
   });
 
   it("rejects malformed and unsupported scanner documents without partial output", () => {
