@@ -4,6 +4,7 @@ import { useRelease } from "../app/ReleaseProvider";
 import { loadCommunityTeams } from "../community/teamRepository";
 import type { TeamPreset } from "../domain/community";
 import type { AccountProfile } from "../domain/profiles";
+import { CharacterArchetypeSchema, type CharacterArchetype } from "../domain/entities";
 import { allocateProfileMemberBuilds } from "../profiles/profileAllocation";
 import { PROFILE_SELECTION_EVENT, readSelectedProfileUid, selectProfileUid } from "../profiles/profileSelection";
 import { defaultProfileService, type ProfileService } from "../profiles/profileService";
@@ -23,6 +24,7 @@ function ids(value: string): string[] {
 
 const componentLabels = {
   roleCoverage: "职责覆盖", buffApplicability: "Buff 适用", mechanicSynergy: "机制协同",
+  archetypeAffinity: "流派契合",
   skillPointEconomy: "战技点经济", actionCompatibility: "行动兼容", weaknessCoverage: "弱点覆盖",
   survivability: "生存", activationCost: "启动成本", wastedEffects: "浪费效果", communityPrior: "社区先验",
 } as const;
@@ -46,7 +48,7 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
   const [required, setRequired] = useState("");
   const [excluded, setExcluded] = useState("");
   const [weaknesses, setWeaknesses] = useState("");
-  const [archetype, setArchetype] = useState("");
+  const [archetype, setArchetype] = useState<CharacterArchetype | "">("");
   const [objective, setObjective] = useState<RecommendationObjective>("maximum-synergy");
   const [encounter, setEncounter] = useState<EncounterMode>("standard");
   const [results, setResults] = useState<RecommendationResult[]>([]);
@@ -124,7 +126,7 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
         roster: ownedOnly ? { mode: "owned-only", characterIds: ids(owned) } : { mode: "unrestricted" },
         requiredCharacterIds: ids(required), excludedCharacterIds: ids(excluded),
         encounter: { mode: encounter, enemyWeaknesses: ids(weaknesses) }, objective,
-        archetype: archetype.trim() || undefined,
+        archetype: archetype || undefined,
         investment: selectedProfile ? {
           allowedLightConeIds: selectedProfile.lightCones.map(({ logicalId }) => logicalId).sort(),
           allowedRelicSetIds: [...new Set(selectedProfile.relics.map(({ setLogicalId }) => setLogicalId))].sort(),
@@ -157,7 +159,7 @@ export function RecommendationPage({ loadPresets = loadCommunityTeams, memberBui
         <label>推荐目标<select aria-label="推荐目标" value={objective} onChange={(event) => setObjective(event.target.value as RecommendationObjective)}><option value="maximum-synergy">最大协同</option><option value="comfort">舒适生存</option><option value="low-investment">低投入</option></select></label>
         <label>战斗场景<select aria-label="战斗场景" value={encounter} onChange={(event) => setEncounter(event.target.value as EncounterMode)}><option value="standard">常规</option><option value="break">击破</option><option value="follow-up">追击</option><option value="damage-over-time">持续伤害</option></select></label>
         <label>敌方弱点<input aria-label="敌方弱点" value={weaknesses} onChange={(event) => setWeaknesses(event.target.value)} /></label>
-        <label>目标流派<input aria-label="目标流派" value={archetype} onChange={(event) => setArchetype(event.target.value)} /></label>
+        <label>目标流派<select aria-label="目标流派" value={archetype} onChange={(event) => setArchetype(event.target.value as CharacterArchetype | "")}><option value="">不指定</option>{CharacterArchetypeSchema.options.map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
         <button type="submit" disabled={presetLoading || profileLoading || (selectedProfile !== null && selectedProfile.dataReleaseId !== bundle.release.id)}>{presetLoading ? "正在加载社区参考…" : profileLoading ? "正在加载本地账号…" : "生成推荐"}</button>
       </form>
       {profileError ? <p className="source-warning">本地账号未载入：{profileError}。仍可使用手动输入。</p> : null}

@@ -5,38 +5,70 @@
       "revisionId": "character:synthetic-support@4.3-fixture",
       "validFromReleaseId": "4.3-fixture",
       "validToReleaseId": null,
-      "provenance": [{
-        "sourceName": "Synthetic reviewed fixture source",
-        "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
-        "sourceRevision": "4f3a91c2d847beef",
-        "sourcePath": "fixtures/characters/synthetic-support.json",
-        "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
-      }],
-      "name": "测试辅助",
-      "rarity": 5,
-      "element": "synthetic",
-      "path": "synthetic-support",
-      "roleAnnotation": {"characterLogicalId":"character:synthetic-support","releaseId":"4.3-fixture","roles":["support"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
-      "description": "仅用于自动化测试的合成角色，不代表任何真实游戏内容。",
-      "reviewStatus": "reviewed",
-      "abilities": [{
-        "logicalId": "ability:synthetic-support-skill",
-        "revisionId": "ability:synthetic-support-skill@4.3-fixture",
-        "validFromReleaseId": "4.3-fixture",
-        "validToReleaseId": null,
-        "provenance": [{
+      "provenance": [
+        {
           "sourceName": "Synthetic reviewed fixture source",
           "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
           "sourceRevision": "4f3a91c2d847beef",
           "sourcePath": "fixtures/characters/synthetic-support.json",
           "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
-        }],
-        "name": "合成增益技能",
-        "kind": "skill",
-        "originalText": "合成评审夹具：使我方全体造成的伤害提高 10%。",
-        "effectIds": ["effect:synthetic-team-damage@4.3-fixture"],
-        "reviewStatus": "reviewed"
-      }],
+        }
+      ],
+      "name": "测试辅助",
+      "rarity": 5,
+      "element": "synthetic",
+      "path": "synthetic-support",
+      "roleAnnotation": {
+        "characterLogicalId": "character:synthetic-support",
+        "releaseId": "4.3-fixture",
+        "roles": [
+          "support"
+        ],
+        "reviewStatus": "reviewed",
+        "provenance": [
+          {
+            "sourceName": "Synthetic reviewed fixture source",
+            "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+            "sourceRevision": "4f3a91c2d847beef",
+            "sourcePath": "fixtures/characters/synthetic-support.json",
+            "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+          }
+        ],
+        "classificationOwner": "star-rail-wiki",
+        "archetypes": [
+          "follow-up"
+        ],
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        }
+      },
+      "description": "仅用于自动化测试的合成角色，不代表任何真实游戏内容。",
+      "reviewStatus": "reviewed",
+      "abilities": [
+        {
+          "logicalId": "ability:synthetic-support-skill",
+          "revisionId": "ability:synthetic-support-skill@4.3-fixture",
+          "validFromReleaseId": "4.3-fixture",
+          "validToReleaseId": null,
+          "provenance": [
+            {
+              "sourceName": "Synthetic reviewed fixture source",
+              "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+              "sourceRevision": "4f3a91c2d847beef",
+              "sourcePath": "fixtures/characters/synthetic-support.json",
+              "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+            }
+          ],
+          "name": "合成增益技能",
+          "kind": "skill",
+          "originalText": "合成评审夹具：使我方全体造成的伤害提高 10%。",
+          "effectIds": [
+            "effect:synthetic-team-damage@4.3-fixture"
+          ],
+          "reviewStatus": "reviewed"
+        }
+      ],
       "traces": [],
       "eidolons": []
     },
@@ -45,103 +77,259 @@
       "revisionId": "character:synthetic-dps@4.3-fixture",
       "validFromReleaseId": "4.3-fixture",
       "validToReleaseId": null,
-      "provenance": [{
-        "sourceName": "Synthetic reviewed fixture source",
-        "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
-        "sourceRevision": "4f3a91c2d847beef",
-        "sourcePath": "fixtures/characters/synthetic-support.json",
-        "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
-      }],
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ],
       "name": "测试输出",
       "rarity": 5,
       "element": "synthetic",
       "path": "synthetic-dps",
-      "roleAnnotation": {"characterLogicalId":"character:synthetic-dps","releaseId":"4.3-fixture","roles":["damage"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
+      "roleAnnotation": {
+        "characterLogicalId": "character:synthetic-dps",
+        "releaseId": "4.3-fixture",
+        "roles": [
+          "damage"
+        ],
+        "reviewStatus": "reviewed",
+        "provenance": [
+          {
+            "sourceName": "Synthetic reviewed fixture source",
+            "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+            "sourceRevision": "4f3a91c2d847beef",
+            "sourcePath": "fixtures/characters/synthetic-support.json",
+            "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+          }
+        ],
+        "classificationOwner": "star-rail-wiki",
+        "archetypes": [
+          "follow-up"
+        ],
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        }
+      },
       "description": "仅用于自动化测试的合成输出角色，不代表任何真实游戏内容。",
       "reviewStatus": "reviewed",
-      "abilities": [], "traces": [], "eidolons": []
+      "abilities": [],
+      "traces": [],
+      "eidolons": []
     },
     {
       "logicalId": "character:synthetic-sub-dps",
       "revisionId": "character:synthetic-sub-dps@4.3-fixture",
       "validFromReleaseId": "4.3-fixture",
       "validToReleaseId": null,
-      "provenance": [{
-        "sourceName": "Synthetic reviewed fixture source", "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
-        "sourceRevision": "4f3a91c2d847beef", "sourcePath": "fixtures/characters/synthetic-support.json",
-        "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
-      }],
-      "name": "测试副输出", "rarity": 5, "element": "synthetic", "path": "synthetic-sub-dps",
-      "roleAnnotation": {"characterLogicalId":"character:synthetic-sub-dps","releaseId":"4.3-fixture","roles":["damage","support"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ],
+      "name": "测试副输出",
+      "rarity": 5,
+      "element": "synthetic",
+      "path": "synthetic-sub-dps",
+      "roleAnnotation": {
+        "characterLogicalId": "character:synthetic-sub-dps",
+        "releaseId": "4.3-fixture",
+        "roles": [
+          "damage",
+          "support"
+        ],
+        "reviewStatus": "reviewed",
+        "provenance": [
+          {
+            "sourceName": "Synthetic reviewed fixture source",
+            "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+            "sourceRevision": "4f3a91c2d847beef",
+            "sourcePath": "fixtures/characters/synthetic-support.json",
+            "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+          }
+        ],
+        "classificationOwner": "star-rail-wiki",
+        "archetypes": [
+          "dot"
+        ],
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        }
+      },
       "description": "仅用于自动化测试的合成副输出角色，不代表任何真实游戏内容。",
-      "reviewStatus": "reviewed", "abilities": [], "traces": [], "eidolons": []
+      "reviewStatus": "reviewed",
+      "abilities": [],
+      "traces": [],
+      "eidolons": []
     },
     {
       "logicalId": "character:synthetic-sustain",
       "revisionId": "character:synthetic-sustain@4.3-fixture",
       "validFromReleaseId": "4.3-fixture",
       "validToReleaseId": null,
-      "provenance": [{
-        "sourceName": "Synthetic reviewed fixture source", "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
-        "sourceRevision": "4f3a91c2d847beef", "sourcePath": "fixtures/characters/synthetic-support.json",
-        "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
-      }],
-      "name": "测试生存", "rarity": 5, "element": "synthetic", "path": "synthetic-sustain",
-      "roleAnnotation": {"characterLogicalId":"character:synthetic-sustain","releaseId":"4.3-fixture","roles":["sustain"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ],
+      "name": "测试生存",
+      "rarity": 5,
+      "element": "synthetic",
+      "path": "synthetic-sustain",
+      "roleAnnotation": {
+        "characterLogicalId": "character:synthetic-sustain",
+        "releaseId": "4.3-fixture",
+        "roles": [
+          "sustain"
+        ],
+        "reviewStatus": "reviewed",
+        "provenance": [
+          {
+            "sourceName": "Synthetic reviewed fixture source",
+            "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+            "sourceRevision": "4f3a91c2d847beef",
+            "sourcePath": "fixtures/characters/synthetic-support.json",
+            "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+          }
+        ],
+        "classificationOwner": "star-rail-wiki",
+        "archetypes": [
+          "general"
+        ],
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        }
+      },
       "description": "仅用于自动化测试的合成生存角色，不代表任何真实游戏内容。",
-      "reviewStatus": "reviewed", "abilities": [], "traces": [], "eidolons": []
+      "reviewStatus": "reviewed",
+      "abilities": [],
+      "traces": [],
+      "eidolons": []
     },
     {
       "logicalId": "character:synthetic-breaker",
       "revisionId": "character:synthetic-breaker@4.3-fixture",
       "validFromReleaseId": "4.3-fixture",
       "validToReleaseId": null,
-      "provenance": [{
-        "sourceName": "Synthetic reviewed fixture source", "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
-        "sourceRevision": "4f3a91c2d847beef", "sourcePath": "fixtures/characters/synthetic-support.json",
-        "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
-      }],
-      "name": "测试削韧", "rarity": 5, "element": "synthetic", "path": "synthetic-breaker",
-      "roleAnnotation": {"characterLogicalId":"character:synthetic-breaker","releaseId":"4.3-fixture","roles":["damage","support"],"reviewStatus":"reviewed","provenance":[{"sourceName":"Synthetic reviewed fixture source","sourceUrl":"https://example.invalid/star-rail-synthetic-fixture","sourceRevision":"4f3a91c2d847beef","sourcePath":"fixtures/characters/synthetic-support.json","sourceChecksum":"sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"}]},
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/characters/synthetic-support.json",
+          "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+        }
+      ],
+      "name": "测试削韧",
+      "rarity": 5,
+      "element": "synthetic",
+      "path": "synthetic-breaker",
+      "roleAnnotation": {
+        "characterLogicalId": "character:synthetic-breaker",
+        "releaseId": "4.3-fixture",
+        "roles": [
+          "damage",
+          "support"
+        ],
+        "reviewStatus": "reviewed",
+        "provenance": [
+          {
+            "sourceName": "Synthetic reviewed fixture source",
+            "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+            "sourceRevision": "4f3a91c2d847beef",
+            "sourcePath": "fixtures/characters/synthetic-support.json",
+            "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
+          }
+        ],
+        "classificationOwner": "star-rail-wiki",
+        "archetypes": [
+          "break"
+        ],
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        }
+      },
       "description": "仅用于自动化测试的合成削韧角色，不代表任何真实游戏内容。",
-      "reviewStatus": "reviewed", "abilities": [], "traces": [], "eidolons": []
+      "reviewStatus": "reviewed",
+      "abilities": [],
+      "traces": [],
+      "eidolons": []
     }
   ],
-  "equipment": [{
-    "logicalId": "light-cone:synthetic-cone",
-    "revisionId": "light-cone:synthetic-cone@4.3-fixture",
-    "validFromReleaseId": "4.3-fixture",
-    "validToReleaseId": null,
-    "provenance": [{
-      "sourceName": "Synthetic reviewed fixture source",
-      "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
-      "sourceRevision": "4f3a91c2d847beef",
-      "sourcePath": "fixtures/equipment/synthetic-cone.json",
-      "sourceChecksum": "sha256:46231144f68a6d84e47717f84608e35dfffa89af870e04152832a735f7b1e34d"
-    }],
-    "kind": "light-cone",
-    "name": "测试光锥",
-    "rarity": 5,
-    "description": "仅用于自动化测试的合成装备，不代表任何真实游戏内容。",
-    "pathRestriction": "synthetic-support",
-    "superimpositionValues": [0.1, 0.12, 0.14, 0.16, 0.18],
-    "setThresholds": [],
-    "effectIds": [],
-    "reviewStatus": "reviewed"
-  }],
-  "effects": [{
-    "id": "effect:synthetic-team-damage@4.3-fixture",
-    "sourceRevisionId": "ability:synthetic-support-skill@4.3-fixture",
-    "metric": "damage_bonus",
-    "operation": "percent",
-    "value": { "base": 0.1, "scaling": [] },
-    "target": { "type": "team" },
-    "trigger": { "type": "always" },
-    "duration": { "type": "permanent" },
-    "stacking": { "type": "none", "maxStacks": 1 },
-    "conditions": [],
-    "dispellable": null,
-    "reviewStatus": "reviewed",
-    "originalText": "合成评审夹具：使我方全体造成的伤害提高 10%。"
-  }]
+  "equipment": [
+    {
+      "logicalId": "light-cone:synthetic-cone",
+      "revisionId": "light-cone:synthetic-cone@4.3-fixture",
+      "validFromReleaseId": "4.3-fixture",
+      "validToReleaseId": null,
+      "provenance": [
+        {
+          "sourceName": "Synthetic reviewed fixture source",
+          "sourceUrl": "https://example.invalid/star-rail-synthetic-fixture",
+          "sourceRevision": "4f3a91c2d847beef",
+          "sourcePath": "fixtures/equipment/synthetic-cone.json",
+          "sourceChecksum": "sha256:46231144f68a6d84e47717f84608e35dfffa89af870e04152832a735f7b1e34d"
+        }
+      ],
+      "kind": "light-cone",
+      "name": "测试光锥",
+      "rarity": 5,
+      "description": "仅用于自动化测试的合成装备，不代表任何真实游戏内容。",
+      "pathRestriction": "synthetic-support",
+      "superimpositionValues": [
+        0.1,
+        0.12,
+        0.14,
+        0.16,
+        0.18
+      ],
+      "setThresholds": [],
+      "effectIds": [],
+      "reviewStatus": "reviewed"
+    }
+  ],
+  "effects": [
+    {
+      "id": "effect:synthetic-team-damage@4.3-fixture",
+      "sourceRevisionId": "ability:synthetic-support-skill@4.3-fixture",
+      "metric": "damage_bonus",
+      "operation": "percent",
+      "value": {
+        "base": 0.1,
+        "scaling": []
+      },
+      "target": {
+        "type": "team"
+      },
+      "trigger": {
+        "type": "always"
+      },
+      "duration": {
+        "type": "permanent"
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [],
+      "dispellable": null,
+      "reviewStatus": "reviewed",
+      "originalText": "合成评审夹具：使我方全体造成的伤害提高 10%。"
+    }
+  ]
 }

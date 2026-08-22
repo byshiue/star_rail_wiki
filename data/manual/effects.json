@@ -9981,22 +9981,19 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill:ability:110102"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 1
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "解除指定我方单体的1个负面效果，并使该目标立即行动，造成的伤害提高33%→82.5%，持续1回合",
       "candidateId": "ability:110102@4.4-cn-2026-08-21#effect-1"
     },
@@ -12522,22 +12519,19 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:110603"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "【通解】状态下，敌方目标防御力降低30%→45%，持续2回合",
       "candidateId": "ability:110603@4.4-cn-2026-08-21#effect-1"
     },
@@ -217789,8 +217783,7 @@
         "type": "team"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -217799,13 +217792,9 @@
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "布洛妮娅在场时，我方全体造成的伤害提高10%。",
       "candidateId": "trace:1101103@4.4-cn-2026-08-21#effect-1"
     },

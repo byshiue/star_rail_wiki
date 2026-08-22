@@ -11,6 +11,7 @@ export interface RecommendationExplanation {
 
 const componentLabels: Record<keyof ScoreComponents, string> = {
   roleCoverage: "职责覆盖", buffApplicability: "增益适用", mechanicSynergy: "机制协同",
+  archetypeAffinity: "流派契合",
   skillPointEconomy: "战技点经济", actionCompatibility: "行动兼容", weaknessCoverage: "弱点覆盖",
   survivability: "生存", activationCost: "启动成本", wastedEffects: "浪费效果", communityPrior: "社区先验",
 };

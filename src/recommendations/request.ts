@@ -1,4 +1,5 @@
 import type { TeamPreset } from "../domain/community";
+import type { CharacterArchetype } from "../domain/entities";
 import type { GameReleaseBundle } from "../domain/releases";
 import type { BattleScenario, TeamMemberBuild } from "../effects/evaluateTeam";
 
@@ -12,7 +13,7 @@ export interface RecommendationRequest {
   excludedCharacterIds: string[];
   encounter: { mode: EncounterMode; enemyWeaknesses: string[]; enemyBroken?: boolean };
   objective: RecommendationObjective;
-  archetype?: string;
+  archetype?: CharacterArchetype;
   desiredDamageDealerId?: string;
   investment?: {
     maxEidolon?: number;

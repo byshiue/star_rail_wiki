@@ -48,7 +48,7 @@ The immutable predecessor `4.3-cn-2026-06-10` uses StarRailRes commit
 `7b349e39ee0f6f3bf814567995829b99c95e7a93` and Dimbreath released-client
 evidence `d5c40c0095bc5fdef9ce968c078304a95caab235`; 4.4 points to it directly.
 
-Coverage is deliberately candid: all 2,780 source descriptions containing auditable numeric tokens produce 4,667 numeric-effect candidates. These map one-to-one to 39 reviewed unconditional effects and 4,628 explicit unsupported effects. Unsupported entries retain the complete Chinese clause and a mechanic-specific reason and never enter arithmetic. Silent numeric descriptions, `unmappedEffects`, and unresolved StarRailRes parameter tokens are all zero; this does not mean that every mechanic is simulated.
+Coverage is deliberately candid: all 2,780 source descriptions containing auditable numeric tokens produce 4,667 numeric-effect candidates. These map one-to-one to 42 reviewed effects and 4,625 explicit unsupported effects. Of the reviewed effects, exactly one has team scope; the newly reviewed production sample also contains one single-ally effect and one all-enemies effect. Unsupported entries retain the complete Chinese clause and a mechanic-specific reason and never enter arithmetic. Silent numeric descriptions, `unmappedEffects`, and unresolved StarRailRes parameter tokens are all zero; this does not mean that every mechanic is simulated.
 
 Production updates require a new release ID, official channel evidence, immutable revisions, checksums, entity diff, role review and separate reviewed/unsupported coverage in a Pull Request. Scheduled automation never deploys or overwrites current data directly.
 

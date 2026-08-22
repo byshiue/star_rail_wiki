@@ -19,7 +19,7 @@ const request = {
   excludedCharacterIds: [],
   encounter: { mode: "standard" as const, enemyWeaknesses: ["synthetic"] },
   objective: "maximum-synergy" as const,
-  archetype: "follow-up",
+  archetype: "follow-up" as const,
   maxResults: 3,
   maxCombinations: 100,
 };
@@ -32,8 +32,8 @@ describe("recommendTeams", () => {
     expect(second).toEqual(first);
     expect(first).toHaveLength(3);
     expect(first[0]).toMatchObject({
-      weightsVersion: "recommendation-weights-v2",
-      components: { roleCoverage: expect.any(Number), buffApplicability: expect.any(Number) },
+      weightsVersion: "recommendation-weights-v3-archetypes",
+      components: { roleCoverage: expect.any(Number), buffApplicability: expect.any(Number), archetypeAffinity: expect.any(Number) },
       explanation: { evidenceIds: expect.arrayContaining([expect.stringContaining("4.3-fixture")]) },
       audit: { evaluatedCombinationCount: expect.any(Number), excluded: expect.any(Array) },
     });
@@ -153,14 +153,33 @@ it("zeros an ineligible community prior with reasons", () => {
   expect(result.components.communityPrior).toBe(0);
 });
 
-it("returns all ten applied weights and low-investment scoring reacts to actual builds", () => {
+it("returns every applied weight and low-investment scoring reacts to actual builds", () => {
   const memberBuilds = { "character:synthetic-support": { eidolon: 0, lightCone: { logicalId: "light-cone:synthetic-cone", superimposition: 1 } } };
   const normal = recommendTeams({ ...request, requiredCharacterIds: ["character:synthetic-dps", "character:synthetic-support"] }, { ...context, memberBuilds })[0];
   const low = recommendTeams({ ...request, requiredCharacterIds: ["character:synthetic-dps", "character:synthetic-support"], objective: "low-investment" }, { ...context, memberBuilds })[0];
   expect(Object.keys(low.appliedWeights).sort()).toEqual(Object.keys(low.components).sort());
-  expect(low.weightsVersion).toBe("recommendation-weights-v2");
+  expect(low.weightsVersion).toBe("recommendation-weights-v3-archetypes");
   expect(low.appliedWeights.activationCost).toBeLessThan(normal.appliedWeights.activationCost);
   expect(low.totalScore).toBeLessThan(normal.totalScore);
+});
+
+it("ranks explicit follow-up and dot annotations differently without inspecting names or paths", () => {
+  const bundle = structuredClone(fixtureBundle);
+  for (const character of bundle.entities.characters) {
+    character.name = "相同名称";
+    character.path = "same-path";
+  }
+  const followUp = recommendTeams({ ...request, requiredCharacterIds: [], archetype: "follow-up", maxResults: 1 }, {
+    ...context, bundle, communityPresets: [],
+  })[0];
+  const dot = recommendTeams({ ...request, requiredCharacterIds: [], archetype: "dot", maxResults: 1 }, {
+    ...context, bundle, communityPresets: [],
+  })[0];
+  expect(followUp.team).not.toEqual(dot.team);
+  expect(followUp.team).toContain("character:synthetic-support");
+  expect(dot.team).toContain("character:synthetic-sub-dps");
+  expect(followUp.components.archetypeAffinity).toBeGreaterThan(dot.components.archetypeAffinity);
+  expect(followUp.appliedWeights.archetypeAffinity).toBe(14);
 });
 
 it("uses explicit versioned mixed roles and is invariant to weakness and allowlist order", () => {

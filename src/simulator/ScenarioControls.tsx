@@ -24,6 +24,11 @@ function parseConditions(value: string): Record<string, string | number | boolea
     .map(([key, item]) => [key, conditionValue(item)]));
 }
 
+function parseAssignments(value: string): Record<string, string> {
+  return Object.fromEntries(value.split("\n").map((line) => line.split("=", 2).map((item) => item.trim()))
+    .filter(([effectId, target]) => Boolean(effectId && target)) as Array<[string, string]>);
+}
+
 export function ScenarioControls({ scenario, onChange, onFire }: ScenarioControlsProps) {
   function checked(key: "enemyBroken" | "battleStarted" | "actionActive") {
     return (event: ChangeEvent<HTMLInputElement>) => onChange({ ...scenario, [key]: event.target.checked });
@@ -59,6 +64,10 @@ export function ScenarioControls({ scenario, onChange, onFire }: ScenarioControl
         <label>
           <span>自定义条件（每行 key=value）</span>
           <textarea onChange={(event) => onChange({ ...scenario, conditions: parseConditions(event.target.value) })} />
+        </label>
+        <label>
+          <span>目标指定（每行 effectId=slot/enemy）</span>
+          <textarea aria-label="目标指定" onChange={(event) => onChange({ ...scenario, targetAssignments: parseAssignments(event.target.value) })} />
         </label>
       </div>
     </details>

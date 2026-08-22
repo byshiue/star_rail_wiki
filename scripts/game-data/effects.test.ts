@@ -8,6 +8,7 @@ import { GameReleaseBundleSchema } from "../../src/domain/releases";
 import entitiesFixture from "../../data/fixtures/release-4.3/entities.json";
 import releaseFixture from "../../data/fixtures/release-4.3/release.json";
 import effectFixture from "../../public/data/releases/4.3-fixture/effects.json";
+import production44Effects from "../../public/data/releases/4.4-cn-2026-08-21/effects.json";
 import { applyEffectOverlays, EffectOverlayFileSchema, type EffectOverlay } from "./applyEffectOverlays";
 import { assertComplete, buildCoverageReport } from "./checkEffectCoverage";
 import { extractCandidateEffects } from "./extractEffects";
@@ -41,6 +42,38 @@ const goldenCases = [
 ] as const;
 
 describe("reviewed effect overlays", () => {
+  it("locks the small manually reviewed 4.4 team, ally, and enemy sample", () => {
+    const effects = production44Effects.filter(({ reviewStatus }) => reviewStatus === "reviewed");
+    expect(effects).toHaveLength(42);
+    expect(effects.filter(({ target }) => target.type === "team")).toHaveLength(1);
+    expect(effects.filter(({ target }) => target.type === "single-ally")).toHaveLength(1);
+    expect(effects.filter(({ target }) => target.type === "all-enemies")).toHaveLength(1);
+
+    expect(effects.find(({ id }) => id === "effect:4.4:0417")).toMatchObject({
+      sourceRevisionId: "trace:1101103@4.4-cn-2026-08-21",
+      metric: "damage_bonus", operation: "percent", value: { base: 0.1, scaling: [] },
+      target: { type: "team" }, trigger: { type: "always" }, duration: { type: "permanent" },
+      stacking: { type: "none", maxStacks: 1 }, reviewStatus: "reviewed",
+      originalText: "布洛妮娅在场时，我方全体造成的伤害提高10%。",
+    });
+    expect(effects.find(({ id }) => id === "effect:4.4:0412")).toMatchObject({
+      sourceRevisionId: "ability:110102@4.4-cn-2026-08-21",
+      metric: "damage_bonus", operation: "percent", value: { base: 0.33, scaling: [] },
+      target: { type: "single-ally" }, trigger: { type: "event", event: "skill:ability:110102" },
+      duration: { type: "turns", value: 1 }, stacking: { type: "refresh", maxStacks: 1 },
+      reviewStatus: "reviewed",
+      originalText: "解除指定我方单体的1个负面效果，并使该目标立即行动，造成的伤害提高33%→82.5%，持续1回合",
+    });
+    expect(effects.find(({ id }) => id === "effect:4.4:0437")).toMatchObject({
+      sourceRevisionId: "ability:110603@4.4-cn-2026-08-21",
+      metric: "defense_reduction", operation: "percent", value: { base: 0.3, scaling: [] },
+      target: { type: "all-enemies" }, trigger: { type: "event", event: "ultimate:ability:110603" },
+      duration: { type: "turns", value: 2 }, stacking: { type: "refresh", maxStacks: 1 },
+      reviewStatus: "reviewed",
+      originalText: "【通解】状态下，敌方目标防御力降低30%→45%，持续2回合",
+    });
+  });
+
   it.each(goldenCases)("extracts a conservative candidate for %s", (text, metric, target) => {
     const [candidate] = extractCandidateEffects(feature(`ability:${metric}@4.3-fixture`, text));
 
@@ -423,5 +456,5 @@ it.each(["swapped", "unreviewed"])("repository rejects %s active role annotation
     entities.characters[0].roleAnnotation.reviewStatus = "generated";
   }
   await writeFile(entitiesPath, `${JSON.stringify(entities, null, 2)}\n`);
-  await expect(validateRepository(root)).rejects.toThrow(/role annotation character|reviewed role annotation|role annotation mismatch/i);
+  await expect(validateRepository(root)).rejects.toThrow(/role annotation character|reviewed role annotation|role annotation mismatch|expected.*reviewed/i);
 });

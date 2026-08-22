@@ -78,9 +78,18 @@ describe("versioned domain schemas", () => {
       [swapped.characters[1].roleAnnotation, swapped.characters[0].roleAnnotation];
     expect(() => GameReleaseBundleSchema.parse({ release: releaseFixture, entities: swapped })).toThrow(/role annotation character/);
     const unreviewed = validEntities();
-    unreviewed.characters[0].roleAnnotation.reviewStatus = "generated";
-    expect(() => GameReleaseBundleSchema.parse({ release: releaseFixture, entities: unreviewed })).toThrow(/reviewed role annotation/);
+    (unreviewed.characters[0].roleAnnotation as { reviewStatus: string }).reviewStatus = "generated";
+    expect(() => GameReleaseBundleSchema.parse({ release: releaseFixture, entities: unreviewed })).toThrow(/reviewed|expected.*reviewed/i);
   });
+
+  it.each(["classificationOwner", "archetypes", "reviewer"] as const)(
+    "requires project-owned reviewed archetype annotation field %s",
+    (field) => {
+      const entities = validEntities();
+      delete (entities.characters[0].roleAnnotation as unknown as Record<string, unknown>)[field];
+      expect(() => GameReleaseBundleSchema.parse({ release: releaseFixture, entities })).toThrow();
+    },
+  );
 
   it("preserves a reviewed effect contract for later evaluation", () => {
     const effect = EffectSchema.parse(entitiesFixture.effects[0]);

@@ -12,12 +12,20 @@ export type EntityProvenance = z.infer<typeof EntityProvenanceSchema>;
 
 export const CharacterRoleSchema = z.enum(["damage", "support", "sustain"]);
 export type CharacterRole = z.infer<typeof CharacterRoleSchema>;
+export const CharacterArchetypeSchema = z.enum([
+  "general", "hypercarry", "follow-up", "dot", "break", "summon", "counter",
+]);
+export type CharacterArchetype = z.infer<typeof CharacterArchetypeSchema>;
 export const CharacterRoleAnnotationSchema = z.strictObject({
   characterLogicalId: z.string().regex(/^character:/),
   releaseId: z.string().min(1),
+  classificationOwner: z.literal("star-rail-wiki"),
   roles: z.array(CharacterRoleSchema).min(1).max(3)
     .refine((roles) => new Set(roles).size === roles.length, "duplicate character roles are not allowed"),
-  reviewStatus: ReviewStatusSchema,
+  archetypes: z.array(CharacterArchetypeSchema).min(1).max(7)
+    .refine((values) => new Set(values).size === values.length, "duplicate character archetypes are not allowed"),
+  reviewStatus: z.literal("reviewed"),
+  reviewer: z.strictObject({ name: z.string().min(1), reviewedAt: z.iso.datetime() }),
   provenance: z.array(EntityProvenanceSchema).min(1),
 });
 export type CharacterRoleAnnotation = z.infer<typeof CharacterRoleAnnotationSchema>;

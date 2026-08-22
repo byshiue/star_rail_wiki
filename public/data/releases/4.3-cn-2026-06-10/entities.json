@@ -22,10 +22,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1001",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -722,10 +730,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1002",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -1420,10 +1436,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1003",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up",
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -2123,11 +2148,20 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1004",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "general",
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -3363,11 +3397,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1005",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "dot"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -4580,11 +4622,20 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1006",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "general",
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -5814,10 +5865,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1008",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -6513,10 +6572,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1009",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -7212,10 +7279,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1013",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -7911,10 +7986,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1014",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -8645,10 +8728,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1015",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -9368,10 +9459,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1101",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "general",
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -10069,10 +10169,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1102",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -11288,10 +11396,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1103",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "dot"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -11986,10 +12102,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1104",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -12680,10 +12804,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1105",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -13377,11 +13509,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1106",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -14078,10 +14218,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1107",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up",
+          "counter"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -14775,11 +14924,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1108",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "dot"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -15474,10 +15631,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1109",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -16196,10 +16361,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1110",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -16894,11 +17067,20 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1111",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "dot",
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -17621,10 +17803,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1112",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -18322,10 +18512,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1201",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -19046,10 +19244,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1202",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "general",
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -19748,10 +19955,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1203",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -20447,10 +20662,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1204",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "summon",
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -21147,10 +21371,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1205",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry",
+          "counter"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -22421,10 +22654,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1206",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "break",
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -23121,10 +23363,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1207",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -23824,10 +24074,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1208",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -24525,10 +24783,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1209",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -25224,11 +25490,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1210",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "dot"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -25921,10 +26195,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1211",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -26621,10 +26903,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1212",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -27904,10 +28194,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1213",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -28695,10 +28993,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1214",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "break",
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -29395,10 +29702,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1215",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -30095,10 +30410,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1217",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general",
+          "dot"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -31317,11 +31641,20 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1218",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "dot",
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -32021,10 +32354,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1220",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -32799,10 +33140,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1221",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up",
+          "counter"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -33503,10 +33853,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1222",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "break",
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -34209,10 +34568,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1223",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -34910,10 +35277,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1224",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up",
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -35638,11 +36014,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1225",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -36365,10 +36749,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1301",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -37085,10 +37477,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1302",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -37807,10 +38207,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1303",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "break",
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -38510,10 +38919,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1304",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -39219,10 +39636,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1305",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -39924,10 +40349,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1306",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "hypercarry",
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -41148,11 +41582,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1307",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "dot"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -42389,11 +42831,20 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1308",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "hypercarry",
+          "dot"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -43183,10 +43634,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1309",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "follow-up",
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -43885,10 +44345,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1310",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -45215,10 +45683,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1312",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -45918,10 +46394,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1313",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "summon",
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -46622,10 +47107,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1314",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -47327,10 +47820,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1315",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -48054,10 +48555,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1317",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -48919,11 +49428,20 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1321",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "break",
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -49634,10 +50152,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1401",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up",
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -50369,11 +50896,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1402",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "summon"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -51242,10 +51777,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1403",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -51947,10 +52490,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1404",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -52695,10 +53246,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1405",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -53408,11 +53967,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1406",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -54116,11 +54683,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1407",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "summon"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -55075,10 +55650,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1408",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -55886,11 +56469,20 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1409",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "summon",
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -56725,11 +57317,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1410",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "dot"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -57428,10 +58028,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1412",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "hypercarry",
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -58140,11 +58749,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1413",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "summon"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -59030,10 +59647,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1414",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -59741,11 +60366,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1415",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -60983,10 +61616,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1501",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -61800,10 +62441,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1502",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up",
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -62550,10 +63200,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1504",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -63258,10 +63916,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1505",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "follow-up"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -64010,10 +64676,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1506",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -64875,11 +65549,20 @@
       "roleAnnotation": {
         "characterLogicalId": "character:1507",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "hypercarry",
+          "counter"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -65650,10 +66333,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8001",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -66389,10 +67080,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8002",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "hypercarry"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -67128,10 +67827,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8003",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -67850,10 +68557,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8004",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "sustain"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -68572,10 +69287,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8005",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -69271,10 +69994,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8006",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "support"
         ],
+        "archetypes": [
+          "break"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -69970,11 +70701,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8007",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "summon"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -70894,11 +71633,19 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8008",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage",
           "support"
         ],
+        "archetypes": [
+          "summon"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -71703,10 +72450,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8009",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",
@@ -72453,10 +73208,18 @@
       "roleAnnotation": {
         "characterLogicalId": "character:8010",
         "releaseId": "4.3-cn-2026-06-10",
+        "classificationOwner": "star-rail-wiki",
         "roles": [
           "damage"
         ],
+        "archetypes": [
+          "general"
+        ],
         "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Star Rail Wiki maintainers",
+          "reviewedAt": "2026-08-21T20:00:00.000Z"
+        },
         "provenance": [
           {
             "sourceName": "StarRailRes 4.3 path plus Star Rail Wiki reviewed role classification",

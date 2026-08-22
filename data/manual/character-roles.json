@@ -16,7 +16,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:2231d45155c19f2cef3c8a7c97b6ce1c66951a71ac52ae5a5b516fd2156180f2"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:synthetic-breaker",
@@ -34,7 +42,15 @@
           "sourcePath": "fixtures/characters/synthetic-support.json",
           "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:synthetic-dps",
@@ -51,7 +67,15 @@
           "sourcePath": "fixtures/characters/synthetic-support.json",
           "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:synthetic-sub-dps",
@@ -69,7 +93,15 @@
           "sourcePath": "fixtures/characters/synthetic-support.json",
           "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:synthetic-support",
@@ -86,7 +118,15 @@
           "sourcePath": "fixtures/characters/synthetic-support.json",
           "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:synthetic-sustain",
@@ -103,7 +143,15 @@
           "sourcePath": "fixtures/characters/synthetic-support.json",
           "sourceChecksum": "sha256:896ff58023cf2f346caa15e48b3a107c42af66a737dce1c66bd7f24813666b88"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1001",
@@ -120,7 +168,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1002",
@@ -137,7 +193,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1003",
@@ -154,7 +218,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1004",
@@ -172,7 +245,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1005",
@@ -190,7 +272,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1006",
@@ -208,7 +298,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1008",
@@ -225,7 +324,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1009",
@@ -242,7 +349,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1013",
@@ -259,7 +374,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1014",
@@ -276,7 +399,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1015",
@@ -293,7 +424,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1101",
@@ -310,7 +449,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1102",
@@ -327,7 +475,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1103",
@@ -344,7 +500,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1104",
@@ -361,7 +525,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1105",
@@ -378,7 +550,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1106",
@@ -396,7 +576,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1107",
@@ -413,7 +601,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "counter"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1108",
@@ -431,7 +628,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1109",
@@ -448,7 +653,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1110",
@@ -465,7 +678,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1111",
@@ -483,7 +704,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot",
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1112",
@@ -500,7 +730,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1201",
@@ -517,7 +755,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1202",
@@ -534,7 +780,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1203",
@@ -551,7 +806,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1204",
@@ -568,7 +831,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon",
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1205",
@@ -585,7 +857,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "counter"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1206",
@@ -602,7 +883,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1207",
@@ -619,7 +909,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1208",
@@ -636,7 +934,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1209",
@@ -653,7 +959,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1210",
@@ -671,7 +985,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1211",
@@ -688,7 +1010,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1212",
@@ -705,7 +1035,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1213",
@@ -722,7 +1060,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1214",
@@ -739,7 +1085,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1215",
@@ -756,7 +1111,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1217",
@@ -773,7 +1136,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1218",
@@ -791,7 +1163,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1220",
@@ -808,7 +1189,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1221",
@@ -825,7 +1214,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "counter"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1222",
@@ -842,7 +1240,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1223",
@@ -859,7 +1266,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1224",
@@ -876,7 +1291,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1225",
@@ -894,7 +1318,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1301",
@@ -911,7 +1343,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1302",
@@ -928,7 +1368,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1303",
@@ -945,7 +1393,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1304",
@@ -962,7 +1419,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1305",
@@ -979,7 +1444,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1306",
@@ -996,7 +1469,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1307",
@@ -1014,7 +1496,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1308",
@@ -1032,7 +1522,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1309",
@@ -1049,7 +1548,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1310",
@@ -1066,7 +1574,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1312",
@@ -1083,7 +1599,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1313",
@@ -1100,7 +1624,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1314",
@@ -1117,7 +1650,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1315",
@@ -1134,7 +1675,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1317",
@@ -1151,7 +1700,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1321",
@@ -1169,7 +1726,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1401",
@@ -1186,7 +1752,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1402",
@@ -1204,7 +1779,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1403",
@@ -1221,7 +1804,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1404",
@@ -1238,7 +1829,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1405",
@@ -1255,7 +1854,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1406",
@@ -1273,7 +1880,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1407",
@@ -1291,7 +1906,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1408",
@@ -1308,7 +1931,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1409",
@@ -1326,7 +1957,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1410",
@@ -1344,7 +1984,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1412",
@@ -1361,7 +2009,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1413",
@@ -1379,7 +2036,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1414",
@@ -1396,7 +2061,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1415",
@@ -1414,7 +2087,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1501",
@@ -1431,7 +2112,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1502",
@@ -1448,7 +2137,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1504",
@@ -1465,7 +2163,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1505",
@@ -1482,7 +2188,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1506",
@@ -1499,7 +2213,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1507",
@@ -1517,7 +2239,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "counter"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1508",
@@ -1534,7 +2265,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1509",
@@ -1551,7 +2290,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1510",
@@ -1568,7 +2315,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8001",
@@ -1585,7 +2340,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8002",
@@ -1602,7 +2365,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8003",
@@ -1619,7 +2390,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8004",
@@ -1636,7 +2415,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8005",
@@ -1653,7 +2440,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8006",
@@ -1670,7 +2465,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8007",
@@ -1688,7 +2491,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8008",
@@ -1706,7 +2517,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8009",
@@ -1723,7 +2542,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8010",
@@ -1740,7 +2567,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:746e60441dd9d9a703363136ec465f548d47ef52b71f48d1b29f94601ed8584d"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1001",
@@ -1757,7 +2592,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1002",
@@ -1774,7 +2617,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1003",
@@ -1791,7 +2642,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1004",
@@ -1809,7 +2669,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1005",
@@ -1827,7 +2696,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1006",
@@ -1845,7 +2722,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1008",
@@ -1862,7 +2748,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1009",
@@ -1879,7 +2773,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1013",
@@ -1896,7 +2798,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1014",
@@ -1913,7 +2823,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1015",
@@ -1930,7 +2848,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1101",
@@ -1947,7 +2873,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1102",
@@ -1964,7 +2899,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1103",
@@ -1981,7 +2924,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1104",
@@ -1998,7 +2949,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1105",
@@ -2015,7 +2974,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1106",
@@ -2033,7 +3000,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1107",
@@ -2050,7 +3025,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "counter"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1108",
@@ -2068,7 +3052,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1109",
@@ -2085,7 +3077,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1110",
@@ -2102,7 +3102,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1111",
@@ -2120,7 +3128,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot",
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1112",
@@ -2137,7 +3154,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1201",
@@ -2154,7 +3179,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1202",
@@ -2171,7 +3204,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1203",
@@ -2188,7 +3230,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1204",
@@ -2205,7 +3255,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon",
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1205",
@@ -2222,7 +3281,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "counter"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1206",
@@ -2239,7 +3307,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1207",
@@ -2256,7 +3333,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1208",
@@ -2273,7 +3358,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1209",
@@ -2290,7 +3383,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1210",
@@ -2308,7 +3409,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1211",
@@ -2325,7 +3434,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1212",
@@ -2342,7 +3459,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1213",
@@ -2359,7 +3484,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1214",
@@ -2376,7 +3509,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1215",
@@ -2393,7 +3535,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1217",
@@ -2410,7 +3560,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general",
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1218",
@@ -2428,7 +3587,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1220",
@@ -2445,7 +3613,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1221",
@@ -2462,7 +3638,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "counter"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1222",
@@ -2479,7 +3664,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1223",
@@ -2496,7 +3690,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1224",
@@ -2513,7 +3715,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1225",
@@ -2531,7 +3742,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1301",
@@ -2548,7 +3767,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1302",
@@ -2565,7 +3792,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1303",
@@ -2582,7 +3817,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1304",
@@ -2599,7 +3843,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1305",
@@ -2616,7 +3868,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1306",
@@ -2633,7 +3893,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1307",
@@ -2651,7 +3920,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1308",
@@ -2669,7 +3946,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1309",
@@ -2686,7 +3972,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1310",
@@ -2703,7 +3998,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1312",
@@ -2720,7 +4023,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1313",
@@ -2737,7 +4048,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1314",
@@ -2754,7 +4074,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1315",
@@ -2771,7 +4099,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1317",
@@ -2788,7 +4124,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1321",
@@ -2806,7 +4150,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1401",
@@ -2823,7 +4176,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1402",
@@ -2841,7 +4203,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1403",
@@ -2858,7 +4228,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1404",
@@ -2875,7 +4253,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1405",
@@ -2892,7 +4278,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1406",
@@ -2910,7 +4304,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1407",
@@ -2928,7 +4330,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1408",
@@ -2945,7 +4355,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1409",
@@ -2963,7 +4381,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1410",
@@ -2981,7 +4408,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "dot"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1412",
@@ -2998,7 +4433,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1413",
@@ -3016,7 +4460,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1414",
@@ -3033,7 +4485,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1415",
@@ -3051,7 +4511,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1501",
@@ -3068,7 +4536,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1502",
@@ -3085,7 +4561,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up",
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1504",
@@ -3102,7 +4587,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1505",
@@ -3119,7 +4612,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1506",
@@ -3136,7 +4637,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1507",
@@ -3154,7 +4663,16 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry",
+        "counter"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1508",
@@ -3171,7 +4689,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1509",
@@ -3188,7 +4714,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:1510",
@@ -3205,7 +4739,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "follow-up"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8001",
@@ -3222,7 +4764,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8002",
@@ -3239,7 +4789,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "hypercarry"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8003",
@@ -3256,7 +4814,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8004",
@@ -3273,7 +4839,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8005",
@@ -3290,7 +4864,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8006",
@@ -3307,7 +4889,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "break"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8007",
@@ -3325,7 +4915,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8008",
@@ -3343,7 +4941,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "summon"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8009",
@@ -3360,7 +4966,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     },
     {
       "characterLogicalId": "character:8010",
@@ -3377,7 +4991,15 @@
           "sourcePath": "index_new/cn/characters.json",
           "sourceChecksum": "sha256:a6b55f871e46b3668ca9ed2df6ba7bd370ea813fce644c0884c696f793a87b53"
         }
-      ]
+      ],
+      "classificationOwner": "star-rail-wiki",
+      "archetypes": [
+        "general"
+      ],
+      "reviewer": {
+        "name": "Star Rail Wiki maintainers",
+        "reviewedAt": "2026-08-21T20:00:00.000Z"
+      }
     }
   ]
 }

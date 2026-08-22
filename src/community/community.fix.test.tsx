@@ -25,7 +25,7 @@ const provenance = [{
 function releasedBundle(): GameReleaseBundle {
   const character = (logicalId: string, name: string): CharacterRevision => ({
     logicalId, revisionId: `${logicalId}@release-4.3`, validFromReleaseId: "release-4.3",
-    validToReleaseId: null, provenance, name, rarity: 5, element: "虚数", path: "harmony", roleAnnotation: { characterLogicalId: logicalId, releaseId: "release-4.3", roles: ["support"], reviewStatus: "reviewed", provenance },
+    validToReleaseId: null, provenance, name, rarity: 5, element: "虚数", path: "harmony", roleAnnotation: { characterLogicalId: logicalId, releaseId: "release-4.3", classificationOwner: "star-rail-wiki", roles: ["support"], archetypes: ["general"], reviewStatus: "reviewed", reviewer: { name: "test reviewer", reviewedAt: "2026-08-21T00:00:00.000Z" }, provenance },
     description: `${name}测试资料。`, reviewStatus: "reviewed", abilities: [], traces: [], eidolons: [],
   });
   return {

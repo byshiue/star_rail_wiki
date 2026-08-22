@@ -9,7 +9,7 @@ import {
   type RecommendationContext, type RecommendationRequest,
 } from "./request";
 
-export const WEIGHTS_VERSION = "recommendation-weights-v2" as const;
+export const WEIGHTS_VERSION = "recommendation-weights-v3-archetypes" as const;
 export const COMMUNITY_PRIOR_WEIGHT_CAP = 5;
 export const MAX_COMMUNITY_PRESETS = MAX_COMMUNITY_TEAM_PRESETS;
 
@@ -17,6 +17,7 @@ export interface ScoreComponents {
   roleCoverage: number;
   buffApplicability: number;
   mechanicSynergy: number;
+  archetypeAffinity: number;
   skillPointEconomy: number;
   actionCompatibility: number;
   weaknessCoverage: number;
@@ -33,6 +34,7 @@ export const SCORE_WEIGHTS: ScoreWeights = {
   roleCoverage: 24,
   buffApplicability: 18,
   mechanicSynergy: 12,
+  archetypeAffinity: 14,
   skillPointEconomy: 8,
   actionCompatibility: 7,
   weaknessCoverage: 10,
@@ -204,11 +206,15 @@ export function scoreTeam(
       + Math.min(0.25, (member?.relicSets?.length ?? 0) * 0.1);
   }, 0) / team.length);
   const desiredDealer = request.desiredDamageDealerId ? team.includes(request.desiredDamageDealerId) : true;
+  const archetypeMatches = request.archetype
+    ? characters.filter(({ roleAnnotation }) => roleAnnotation.archetypes.includes(request.archetype!)).length
+    : 0;
   const components: ScoreComponents = {
     roleCoverage: clamped01((desiredDealer ? 0.4 : 0) + Math.min(1, damageCount) * 0.25
       + Math.min(1, supportCount) * 0.2 + Math.min(1, sustainCount) * 0.15),
     buffApplicability: relevant ? clamped01(applicable / relevant) : 0,
     mechanicSynergy: clamped01(mechanicMatches / 2),
+    archetypeAffinity: request.archetype ? clamped01(archetypeMatches / team.length) : 0,
     skillPointEconomy: clamped01((supportCount + sustainCount) / 3),
     actionCompatibility: evaluation.groups.some(({ metric }) => metric === "speed" || metric === "action_advance") ? 1 : 0.5,
     weaknessCoverage: request.encounter.enemyWeaknesses.length ? clamped01(weaknessMatches / 4) : 0.5,

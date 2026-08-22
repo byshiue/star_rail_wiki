@@ -924,7 +924,7 @@ git commit -m "feat: add reviewed public profile workflow"
 - Consumes: all prior task interfaces.
 - Produces: deployable `dist/`; audited current-release coverage report; GitHub Pages deployment; scheduled review PR for future released data.
 
-- [ ] **Step 1: Write failing end-to-end acceptance tests**
+- [x] **Step 1: Write failing end-to-end acceptance tests**
 
 ```ts
 test("builds a team, traces a buff, and restores the shared release-pinned URL", async ({ page }) => {
@@ -940,25 +940,25 @@ test("builds a team, traces a buff, and restores the shared release-pinned URL",
 
 Add flows for wiki search, version diff, three deterministic recommendations, two isolated UIDs across reload, invalid profile import rollback, and public-consent export.
 
-- [ ] **Step 2: Run end-to-end tests and record expected failures**
+- [x] **Step 2: Run end-to-end tests and record expected failures**
 
 Run: `npm run build && npm run test:e2e`
 
 Expected: new tests fail only where current-release data, final navigation, or production deployment integration is incomplete.
 
-- [ ] **Step 3: Import and audit the then-current released CN manifest**
+- [x] **Step 3: Import and audit the then-current released CN manifest**
 
 Pin the exact released game version and upstream commit in `docs/data-sources.md`. Review every changed character/equipment description, complete manual effect overlays until `unmappedEffects` is zero, and explicitly mark special mechanics unsupported only with a visible reason. Never import a newer preload TextMap into an older approved config release.
 
-- [ ] **Step 4: Audit community sources and legal notices**
+- [x] **Step 4: Audit community sources and legal notices**
 
 Verify links, authors, dates, and version applicability for each seed preset. `NOTICE` lists data/code sources and their licenses; `LICENSE` covers original code only. Do not commit third-party images until the audit records their permitted use.
 
-- [ ] **Step 5: Add GitHub Pages deployment and reviewed sync PR workflows**
+- [x] **Step 5: Add GitHub Pages deployment and reviewed sync PR workflows**
 
 Deployment uses official GitHub Pages actions, `npm ci`, `npm run check`, Playwright smoke tests, and uploads `dist/` only after success. Scheduled sync checks the allowlisted released manifest, generates a deterministic release/diff, and opens a pull request; it has no direct deploy step.
 
-- [ ] **Step 6: Run the complete verification suite**
+- [x] **Step 6: Run the complete verification suite**
 
 Run:
 
@@ -971,6 +971,14 @@ git diff --check
 ```
 
 Expected: all commands exit 0; coverage has zero unmapped numeric effects; the repository contains no secret; the production build uses `/star_rail_wiki/` assets and hash routes.
+
+R4 verification ledger (2026-08-22): 4.3 has 4,501 candidates, 0 reviewed,
+4,501 explicit unsupported and 0 unmapped effects. 4.4 has 4,667 candidates,
+42 reviewed, 4,625 explicit unsupported and 0 unmapped effects. The 4.4
+reviewed set contains exactly one team target, one single-ally target and one
+all-enemies target. Local verification passed 335 Vitest tests, 8 CI-mode
+Playwright tests, repository validation, production build, full repository
+secret scanning, `npm audit --audit-level=high`, and `git diff --check`.
 
 - [ ] **Step 7: Commit the release candidate**
 
@@ -994,14 +1002,17 @@ Expected: `origin` points to `https://github.com/byshiue/star_rail_wiki.git`, `m
 
 ## Final verification checklist
 
-- [ ] The current released CN game version and every upstream revision are recorded.
-- [ ] Every released character/equipment description is searchable.
-- [ ] Numeric buff/debuff coverage reports zero silent omissions.
-- [ ] Historical revisions and before/after changes remain accessible.
-- [ ] Simulator results preserve separate operation groups and full evidence chains.
-- [ ] Recommendation output is deterministic, account-aware, and explains constraints and substitutions.
-- [ ] Multiple UID profiles remain isolated and JSON import is atomic.
-- [ ] Public profile export requires explicit consent and passes strict repository validation.
-- [ ] Community teams contain attribution without copied article text.
+- [x] The current released CN game version and every upstream revision are recorded.
+- [x] Every released character/equipment description is searchable.
+- [x] Numeric buff/debuff coverage reports zero silent omissions.
+- [x] Historical revisions and before/after changes remain accessible.
+- [x] Simulator results preserve separate operation groups and full evidence chains.
+- [x] Recommendation output is deterministic, account-aware, and explains constraints and substitutions.
+- [x] Multiple UID profiles remain isolated and JSON import is atomic.
+- [x] Public profile export requires explicit consent and passes strict repository validation.
+- [x] Community teams contain attribution without copied article text.
 - [ ] Unit, component, end-to-end, data, build, audit, and Pages smoke checks pass.
-- [ ] No GitHub or model-provider credential is shipped to the browser or repository.
+- [x] No GitHub or model-provider credential is shipped to the browser or repository.
+
+The remaining unchecked verification item requires the external GitHub Pages
+workflow after Step 8 pushes the repository. All local portions of that item pass.
