@@ -89,6 +89,25 @@ button:focus-visible, summary:focus-visible {
 .scenario-grid textarea { min-height: 6rem; }
 .effect-category { border-top: 1px solid var(--color-border); padding-top: var(--space-3); }
 .effect-category h3 { display: flex; justify-content: space-between; font-size: 1rem; }
+.audit-category summary {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  cursor: pointer;
+  list-style: none;
+}
+.audit-category summary::-webkit-details-marker { display: none; }
+.audit-category summary strong::before {
+  display: inline-block;
+  margin-right: var(--space-2);
+  content: "▸";
+  transition: transform 120ms ease;
+}
+.audit-category[open] summary strong::before { transform: rotate(90deg); }
+.audit-category summary:focus-visible {
+  outline: 2px solid var(--color-accent-strong);
+  outline-offset: var(--space-1);
+}
 .effect-category ul, .aggregation-groups ul, .evaluation-warnings ul, .evidence-drawer ul {
   display: grid;
   gap: var(--space-2);

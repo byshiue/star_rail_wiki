@@ -1,4 +1,5 @@
 import type { GameReleaseBundle } from "../domain/releases";
+import type { EvaluationReason } from "../effects/context";
 import type { AggregationGroup, EffectEvidence, TeamEvaluation } from "../effects/evaluateTeam";
 
 type EvaluationEntry = TeamEvaluation["active"][number] | TeamEvaluation["inactive"][number];
@@ -10,6 +11,7 @@ const metricLabels: Record<string, string> = {
   defense_reduction: "减防", defense_ignore: "无视防御", resistance_reduction: "减抗",
   resistance_penetration: "抗性穿透", action_advance: "行动提前", action_delay: "行动延后",
   healing: "治疗", shielding: "护盾", skill_points: "战技点", mechanic_counter: "机制计数",
+  unclassified_numeric: "未分类数值机制",
 };
 
 const categoryLabels = {
@@ -19,6 +21,30 @@ const categoryLabels = {
   unsupported: "unsupported · 不支持",
   wasted: "wasted · 无有效受益者",
 } as const;
+
+const auditCategories = new Set<keyof typeof categoryLabels>(["inactive", "unsupported", "wasted"]);
+
+const knownReasonLabels = {
+  source_not_selected: "来源未选择",
+  eidolon_locked: "需要更高星魂",
+  illegal_equipment: "装备与角色命途不匹配",
+  effect_not_reviewed: "效果尚未审核",
+  source_not_reviewed: "来源尚未审核",
+  unsupported_effect: "该效果尚不支持模拟",
+  unsupported_source: "该来源尚不支持模拟",
+  battle_not_started: "战斗尚未开始",
+  action_not_active: "指定行动尚未触发",
+  event_not_triggered: "指定事件尚未触发",
+  duration_expired: "效果持续时间已结束",
+  target_required: "需要指定目标",
+  target_not_selected: "指定目标未入队",
+  no_active_stacks: "当前没有有效层数",
+  no_compatible_consumer: "队伍中没有有效受益者",
+  enemy_not_broken: "敌人尚未处于弱点击破状态",
+  condition_unknown: "缺少条件资料",
+  condition_not_met: "触发条件未满足",
+} satisfies Record<EvaluationReason, string>;
+const reasonLabels: Record<string, string> = knownReasonLabels;
 
 type EffectSummaryProps = {
   evaluation: TeamEvaluation | null;
@@ -109,22 +135,33 @@ export function EffectSummary({ evaluation, bundle, onEvidence }: EffectSummaryP
       ) : null}
       {categories.map((category) => {
         const entries = evaluation?.[category] ?? [];
+        const categoryId = `category-${category}`;
+        const content = entries.length ? (
+          <ul>
+            {entries.map((entry) => {
+              const label = effectLabel(entry, bundle);
+              const reason = "reason" in entry ? reasonLabels[entry.reason] ?? entry.reason : null;
+              return (
+                <li key={entry.evaluationId}>
+                  <div><strong>{label}</strong>{reason ? <small>原因：{reason}</small> : null}</div>
+                  <button type="button" aria-label={`查看${label.replace(/ \+.*$/, "")}来源`} onClick={() => onEvidence(entry.evidence)}>查看来源</button>
+                </li>
+              );
+            })}
+          </ul>
+        ) : <p>无</p>;
+        if (auditCategories.has(category)) {
+          return (
+            <details className="effect-category audit-category" key={category} aria-labelledby={categoryId}>
+              <summary><strong id={categoryId}>{categoryLabels[category]}</strong><span>{entries.length}</span></summary>
+              {content}
+            </details>
+          );
+        }
         return (
-          <section className="effect-category" key={category} aria-labelledby={`category-${category}`}>
-            <h3 id={`category-${category}`}>{categoryLabels[category]} <span>{entries.length}</span></h3>
-            {entries.length ? (
-              <ul>
-                {entries.map((entry) => {
-                  const label = effectLabel(entry, bundle);
-                  return (
-                    <li key={entry.evaluationId}>
-                      <div><strong>{label}</strong>{"reason" in entry ? <small>原因：{entry.reason}</small> : null}</div>
-                      <button type="button" aria-label={`查看${label.replace(/ \+.*$/, "")}来源`} onClick={() => onEvidence(entry.evidence)}>查看来源</button>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : <p>无</p>}
+          <section className="effect-category" key={category} aria-labelledby={categoryId}>
+            <h3 id={categoryId}>{categoryLabels[category]} <span>{entries.length}</span></h3>
+            {content}
           </section>
         );
       })}

@@ -41,7 +41,8 @@ function releasedBundle(): GameReleaseBundle {
   const sustain = character("character:sustain", "测试生存", "preservation");
   supportTwo.element = "雷";
   support.eidolons = [feature(
-    "eidolon:support-1", "eidolon:support-1@4.3", "全队增伤", "eidolon", ["effect:team-damage"],
+    "eidolon:support-1", "eidolon:support-1@4.3", "全队增伤", "eidolon",
+    ["effect:team-damage", "effect:unclassified-eidolon"],
   )];
   support.abilities = [feature(
     "ability:support-override", "ability:support-override@4.3", "暴伤设定", "ability",
@@ -84,6 +85,13 @@ function releasedBundle(): GameReleaseBundle {
     stacking: { type: "none", maxStacks: 1 }, conditions: [], dispellable: null,
     reviewStatus: "reviewed", originalText: "使我方全体暴击伤害设为20%。",
   };
+  const unclassifiedEidolon: Effect = {
+    id: "effect:unclassified-eidolon", sourceRevisionId: "eidolon:support-1@4.3",
+    metric: "unclassified_numeric", operation: "flat", value: { base: 7, scaling: [] },
+    target: { type: "self" }, trigger: { type: "always" }, duration: { type: "permanent" },
+    stacking: { type: "none", maxStacks: 1 }, conditions: [], dispellable: null,
+    reviewStatus: "unsupported", originalText: "测试尚未分类的星魂数值。",
+  };
   const supportSelfCriticalDamage: Effect = {
     id: "effect:support-self-critical-damage", sourceRevisionId: "ability:support-override@4.3",
     metric: "critical_damage", operation: "override", value: { base: 0.6, scaling: [] },
@@ -104,7 +112,8 @@ function releasedBundle(): GameReleaseBundle {
       sources: parsed.release.sources.map((source) => ({ ...source, name: "正式服资料源", url: "https://example.com/star-rail/4.3" })),
     },
     entities: { characters: [dps, support, supportTwo, sustain], equipment,
-      effects: [effect, supportCriticalDamage, supportSelfCriticalDamage, supportTwoCriticalDamage] },
+      effects: [effect, unclassifiedEidolon, supportCriticalDamage, supportSelfCriticalDamage,
+        supportTwoCriticalDamage] },
   };
 }
 
@@ -186,6 +195,43 @@ test("changing an eidolon recomputes buffs and preserves release provenance", as
   expect(screen.getByRole("button", { name: "查看全队增伤来源" })).toHaveFocus();
 });
 
+
+test("keeps locked and unsupported effects in collapsed localized audit details", async () => {
+  const user = userEvent.setup();
+  renderSimulator();
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
+
+  const inactiveLabel = screen.getByText("inactive · 未生效");
+  const inactiveDetails = inactiveLabel.closest("details");
+  expect(inactiveDetails).not.toBeNull();
+  expect(inactiveDetails).not.toHaveAttribute("open");
+  expect(within(inactiveDetails as HTMLElement).getByText("自身未分类数值机制")).not.toBeVisible();
+
+  await user.click(inactiveLabel);
+
+  expect(inactiveDetails).toHaveAttribute("open");
+  expect(within(inactiveDetails as HTMLElement).getAllByText("原因：需要更高星魂")).toHaveLength(2);
+  expect(screen.queryByText(/unclassified_numeric|eidolon_locked/)).not.toBeInTheDocument();
+
+  await user.selectOptions(screen.getByLabelText("测试辅助星魂"), "1");
+  const unsupportedLabel = screen.getByText("unsupported · 不支持");
+  const unsupportedDetails = unsupportedLabel.closest("details");
+  expect(unsupportedDetails).not.toBeNull();
+  expect(unsupportedDetails).not.toHaveAttribute("open");
+
+  const appliedGroups = screen.getByRole("heading", { name: "applied groups · 已应用汇总" }).closest("section");
+  expect(appliedGroups).not.toBeNull();
+  expect(within(appliedGroups as HTMLElement).queryByText(/未分类数值机制|\+7/)).not.toBeInTheDocument();
+
+  await user.click(unsupportedLabel);
+  expect(unsupportedDetails).toHaveAttribute("open");
+  expect(within(unsupportedDetails as HTMLElement).getByText("自身未分类数值机制")).toBeVisible();
+  expect(within(unsupportedDetails as HTMLElement).getByText("原因：该效果尚不支持模拟")).toBeVisible();
+
+  await user.click(screen.getByRole("button", { name: "查看自身未分类数值机制来源" }));
+  const dialog = screen.getByRole("dialog", { name: "效果证据" });
+  expect(within(dialog).getByText("测试尚未分类的星魂数值。")).toBeVisible();
+});
 
 test("overlapping character buffs show every contribution and the applied rule", async () => {
   const user = userEvent.setup();

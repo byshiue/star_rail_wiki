@@ -184,11 +184,12 @@ test("fresh battle, action, and event triggers are explicit one-shot evaluations
   await user.click(screen.getByLabelText("敌人处于弱点击破"));
   expect(screen.queryByText("全队速度 +10")).not.toBeInTheDocument();
 
-  expect(screen.getByText("原因：event_not_triggered")).toBeVisible();
+  await user.click(screen.getByText("inactive · 未生效"));
+  expect(screen.getByText("原因：指定事件尚未触发")).toBeVisible();
   await user.click(screen.getByRole("button", { name: "触发这些事件一次" }));
   expect(screen.getByText("全队增伤 +10%")).toBeVisible();
   await user.click(screen.getByLabelText("敌人处于弱点击破"));
-  expect(screen.getByText("原因：event_not_triggered")).toBeVisible();
+  expect(screen.getByText("原因：指定事件尚未触发")).toBeVisible();
   await user.click(screen.getByRole("button", { name: "触发这些事件一次" }));
   expect(screen.getByText("全队增伤 +10%")).toBeVisible();
 });
@@ -289,7 +290,8 @@ test("a one-shot fired before its source enters the build is consumed and not re
   await user.click(screen.getByRole("button", { name: "触发战斗开始一次" }));
   await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
   expect(screen.queryByText("全队攻击力 +10%")).not.toBeInTheDocument();
-  expect(screen.getByText("原因：battle_not_started")).toBeVisible();
+  await user.click(screen.getByText("inactive · 未生效"));
+  expect(screen.getByText("原因：战斗尚未开始")).toBeVisible();
 });
 
 test("external URL navigation consumes a one-shot without reusing it in the incoming build", async () => {
@@ -315,7 +317,8 @@ test("external URL navigation consumes a one-shot without reusing it in the inco
   act(() => { window.location.hash = `#/simulator?build=${support}`; });
   await waitFor(() => expect(screen.getByLabelText("1号位角色")).toHaveValue("character:support"));
   expect(screen.queryByText("全队攻击力 +10%")).not.toBeInTheDocument();
-  expect(screen.getByText("原因：battle_not_started")).toBeVisible();
+  await user.click(screen.getByText("inactive · 未生效"));
+  expect(screen.getByText("原因：战斗尚未开始")).toBeVisible();
 });
 
 test("aggregation formatting follows operation semantics instead of metric guesses", async () => {
