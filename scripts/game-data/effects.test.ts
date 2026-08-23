@@ -44,11 +44,13 @@ const goldenCases = [
 describe("reviewed effect overlays", () => {
   it("locks the manually reviewed 4.4 target coverage", () => {
     const effects = production44Effects.filter(({ reviewStatus }) => reviewStatus === "reviewed");
-    expect(effects).toHaveLength(60);
-    expect(effects.filter(({ target }) => target.type === "team")).toHaveLength(7);
-    expect(effects.filter(({ target }) => target.type === "single-ally")).toHaveLength(2);
-    expect(effects.filter(({ target }) => target.type === "all-enemies")).toHaveLength(3);
+    expect(effects).toHaveLength(89);
+    expect(effects.filter(({ target }) => target.type === "team")).toHaveLength(24);
+    expect(effects.filter(({ target }) => target.type === "single-ally")).toHaveLength(6);
+    expect(effects.filter(({ target }) => target.type === "single-other-ally")).toHaveLength(1);
+    expect(effects.filter(({ target }) => target.type === "all-enemies")).toHaveLength(6);
     expect(effects.filter(({ target }) => target.type === "character-list")).toHaveLength(2);
+    expect(effects.filter(({ target }) => target.type === "team-except-self")).toHaveLength(1);
 
     expect(effects.find(({ id }) => id === "effect:4.4:0417")).toMatchObject({
       sourceRevisionId: "trace:1101103@4.4-cn-2026-08-21",
@@ -136,6 +138,32 @@ describe("reviewed effect overlays", () => {
       reviewStatus: "unsupported",
       originalText: expect.stringContaining("造成等同于远坂凛300%→750%攻击力"),
     });
+  });
+
+  it("locks the first reviewed support batch without enabling Sparkle alternate-mode duplicates", () => {
+    const expected = [
+      ["effect:4.4:130302-damage-bonus", "ability:130302@4.4-cn-2026-08-21", "damage_bonus", "team"],
+      ["effect:4.4:130303-resistance-penetration", "ability:130303@4.4-cn-2026-08-21", "resistance_penetration", "team"],
+      ["effect:4.4:130304-team-speed", "ability:130304@4.4-cn-2026-08-21", "speed", "team-except-self"],
+      ["effect:4.4:130604-team-damage", "ability:130604@4.4-cn-2026-08-21", "damage_bonus", "team"],
+      ["effect:4.4:140302-resistance-penetration", "ability:140302@4.4-cn-2026-08-21", "resistance_penetration", "team"],
+      ["effect:4.4:140303-vulnerability", "ability:140303@4.4-cn-2026-08-21", "vulnerability", "all-enemies"],
+      ["effect:4.4:141503-critical-rate", "ability:141503@4.4-cn-2026-08-21", "critical_rate", "self"],
+      ["effect:4.4:141504-team-damage", "ability:141504@4.4-cn-2026-08-21", "damage_bonus", "team"],
+      ["effect:4.4:0812", "ability:1141502@4.4-cn-2026-08-21", "damage_bonus", "single-ally"],
+      ["effect:4.4:0827", "ability:1141525@4.4-cn-2026-08-21", "damage_bonus", "single-ally"],
+    ] as const;
+    for (const [id, sourceRevisionId, metric, targetType] of expected) {
+      expect(production44Effects.find((effect) => effect.id === id)).toMatchObject({
+        sourceRevisionId, metric, target: { type: targetType }, reviewStatus: "reviewed",
+      });
+    }
+    expect(production44Effects.find(({ id }) => id === "effect:4.4:0632")).toMatchObject({
+      target: { type: "single-other-ally" }, duration: { type: "instant" }, reviewStatus: "reviewed",
+    });
+    expect(production44Effects.filter(({ sourceRevisionId, reviewStatus }) => (
+      sourceRevisionId.startsWith("ability:11306") && reviewStatus === "reviewed"
+    ))).toHaveLength(0);
   });
 
   it.each(goldenCases)("extracts a conservative candidate for %s", (text, metric, target) => {

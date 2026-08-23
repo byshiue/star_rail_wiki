@@ -26,6 +26,16 @@ describe("immutable reviewed skill scaling", () => {
       ["ability:101502", 15, 15],
       ["ability:150803", 15, 15],
       ["ability:150804", 15, 15],
+      ["ability:130302", 15, 15],
+      ["ability:130303", 15, 15],
+      ["ability:130304", 15, 15],
+      ["ability:130604", 15, 15],
+      ["ability:140302", 15, 15],
+      ["ability:140303", 15, 15],
+      ["ability:141503", 15, 15],
+      ["ability:141504", 15, 15],
+      ["ability:1141502", 10, 10],
+      ["ability:1141525", 10, 10],
     ]);
   });
 
@@ -52,6 +62,23 @@ describe("immutable reviewed skill scaling", () => {
     expect(deriveReviewedSkillScaling(snapshot, "ability:150804", "effect:4.4:0866")).toEqual({
       base: 0.35,
       scaling: [0.385, 0.42, 0.455, 0.49, 0.525, 0.5687, 0.6125, 0.6562, 0.7, 0.735, 0.77, 0.805, 0.84, 0.875],
+    });
+  });
+
+  it("derives exact core support sequences for the reviewed 4.4 batch", () => {
+    expect(deriveReviewedSkillScaling(snapshot, "ability:130302")).toMatchObject({ base: 0.16, scaling: expect.arrayContaining([0.4]) });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:130303")).toMatchObject({ base: 0.15, scaling: expect.arrayContaining([0.3]) });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:130304")).toMatchObject({ base: 0.08, scaling: expect.arrayContaining([0.11]) });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:130604")).toMatchObject({ base: 0.03, scaling: expect.arrayContaining([0.075]) });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:140302")).toMatchObject({ base: 0.12, scaling: expect.arrayContaining([0.3]) });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:140303")).toMatchObject({ base: 0.15, scaling: expect.arrayContaining([0.375]) });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:141503")).toMatchObject({ base: 0.25, scaling: expect.arrayContaining([0.625]) });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:141504")).toMatchObject({ base: 0.1, scaling: expect.arrayContaining([0.25]) });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:1141502")).toEqual({
+      base: 0.2, scaling: [0.24, 0.28, 0.32, 0.36, 0.4, 0.44, 0.48, 0.52, 0.56],
+    });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:1141525")).toEqual({
+      base: 0.12, scaling: [0.144, 0.168, 0.192, 0.216, 0.24, 0.264, 0.288, 0.312, 0.336],
     });
   });
 

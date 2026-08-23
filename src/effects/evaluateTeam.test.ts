@@ -166,6 +166,42 @@ describe("evaluateTeam", () => {
     }));
   });
 
+  it("targets every teammate except the effect source", () => {
+    const bundle = structuredClone(fixtureBundle);
+    const template = bundle.entities.effects.find(({ id }) => id === "effect:damage")!;
+    bundle.entities.effects.push({
+      ...template,
+      id: "effect:team-except-self",
+      target: { type: "team-except-self" },
+    });
+
+    const result = evaluateTeam(goldenTeam, allConditionsActive, bundle);
+    expect(result.active.find(({ effectId }) => effectId === "effect:team-except-self")?.targets)
+      .toEqual(["slot-2", "slot-3", "slot-4"]);
+  });
+
+  it("rejects the source as a selected other-ally target", () => {
+    const bundle = structuredClone(fixtureBundle);
+    const template = bundle.entities.effects.find(({ id }) => id === "effect:damage")!;
+    bundle.entities.effects.push({ ...template, id: "effect:other-ally", target: { type: "single-other-ally" } });
+    const sourceId = "slot-1:ability:synthetic-support-skill@4.3-fixture";
+
+    const rejected = evaluateTeam(goldenTeam, {
+      ...allConditionsActive,
+      targetAssignments: { [`${sourceId}:effect:other-ally`]: "slot-1" },
+    }, bundle);
+    expect(rejected.inactive).toContainEqual(expect.objectContaining({
+      effectId: "effect:other-ally", reason: "target_not_selected",
+    }));
+
+    const accepted = evaluateTeam(goldenTeam, {
+      ...allConditionsActive,
+      targetAssignments: { [`${sourceId}:effect:other-ally`]: "slot-2" },
+    }, bundle);
+    expect(accepted.active.find(({ effectId }) => effectId === "effect:other-ally")?.targets)
+      .toEqual(["slot-2"]);
+  });
+
   it("classifies unresolved targets and unconsumable buffs without aggregating them", () => {
     const bundle = structuredClone(fixtureBundle);
     const template = bundle.entities.effects.find(({ id }) => id === "effect:damage")!;

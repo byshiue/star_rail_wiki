@@ -53,9 +53,11 @@ function characterName(logicalId: string, bundle: GameReleaseBundle): string {
 
 function scopeLabel(type: Effect["target"]["type"] | undefined): string {
   if (type === "team") return "全队";
+  if (type === "team-except-self") return "除自身外全队";
   if (type === "character-list") return "指定角色";
   if (type === "self") return "自身";
   if (type === "single-ally") return "单体队友";
+  if (type === "single-other-ally") return "单体其他队友";
   if (type === "single-enemy") return "单个敌人";
   if (type === "all-enemies") return "全体敌人";
   return "指定目标";

@@ -61,9 +61,11 @@ type EffectSummaryProps = {
 function targetLabel(entry: EvaluationEntry, bundle: GameReleaseBundle): string {
   const target = bundle.entities.effects.find(({ id }) => id === entry.effectId)?.target.type;
   if (target === "team") return "全队";
+  if (target === "team-except-self") return "除自身外全队";
   if (target === "character-list") return "指定角色";
   if (target === "self") return "自身";
   if (target === "single-ally") return "单体队友";
+  if (target === "single-other-ally") return "单体其他队友";
   if (target === "single-enemy") return "单个敌人";
   if (target === "all-enemies") return "全体敌人";
   return "目标";
@@ -86,9 +88,11 @@ function groupTargetLabel(group: AggregationGroup, bundle: GameReleaseBundle): s
   const target = bundle.entities.effects.find(({ id }) => group.effectIds.includes(id))?.target.type;
   const concrete = group.targets.length ? group.targets.join("、") : "无具体目标";
   if (target === "team") return `全队（${concrete}）`;
+  if (target === "team-except-self") return `除自身外全队（${concrete}）`;
   if (target === "character-list") return `指定角色（${concrete}）`;
   if (target === "self") return `自身（${concrete}）`;
   if (target === "single-ally") return `单体队友（${concrete}）`;
+  if (target === "single-other-ally") return `单体其他队友（${concrete}）`;
   if (target === "single-enemy") return `单个敌人（${concrete}）`;
   if (target === "all-enemies") return `全体敌人（${concrete}）`;
   return concrete;

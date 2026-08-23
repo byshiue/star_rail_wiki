@@ -11,6 +11,7 @@ export function resolveTargets(
   switch (effect.target.type) {
     case "self": return { targets: [source.memberId] };
     case "team": return { targets: allies };
+    case "team-except-self": return { targets: allies.filter((memberId) => memberId !== source.memberId) };
     case "character-list": {
       const selected = new Set(effect.target.characterLogicalIds);
       return {
@@ -19,6 +20,14 @@ export function resolveTargets(
           .map(([memberId]) => memberId)
           .sort(),
       };
+    }
+    case "single-other-ally": {
+      const evaluationId = `${source.sourceInstanceId}:${effect.id}`;
+      const selected = context.scenario.targetAssignments?.[evaluationId] ?? context.scenario.targetAssignments?.[effect.id];
+      if (!selected) return { targets: [], reason: "target_required" };
+      return context.memberIds.has(selected) && selected !== source.memberId
+        ? { targets: [selected] }
+        : { targets: [], reason: "target_not_selected" };
     }
     case "single-ally": {
       const evaluationId = `${source.sourceInstanceId}:${effect.id}`;

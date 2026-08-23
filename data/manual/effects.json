@@ -25719,29 +25719,42 @@
       "operation": "percent",
       "value": {
         "base": 0.2,
-        "scaling": []
+        "scaling": [
+          0.24,
+          0.28,
+          0.32,
+          0.36,
+          0.4,
+          0.44,
+          0.48,
+          0.52,
+          0.56
+        ]
       },
       "target": {
-        "type": "self"
+        "type": "single-ally"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "memosprite-skill:ability:1141502"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
       "conditions": [
         {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
+          "type": "target-is-non-chrysos-heir",
+          "operator": "equals",
+          "value": true
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "当该角色不是黄金裔时，使其造成的伤害提高20%→56%，持续2回合，该效果对其忆灵也生效",
       "candidateId": "ability:1141502@4.4-cn-2026-08-21#effect-1"
     },
@@ -28656,29 +28669,35 @@
       "operation": "percent",
       "value": {
         "base": 0.12,
-        "scaling": []
+        "scaling": [
+          0.144,
+          0.168,
+          0.192,
+          0.216,
+          0.24,
+          0.264,
+          0.288,
+          0.312,
+          0.336
+        ]
       },
       "target": {
-        "type": "self"
+        "type": "single-ally"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "memosprite-skill:ability:1141525"
       },
       "duration": {
         "type": "permanent"
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "当丹恒•腾荒持有【献予「大地」之诗】时，【同袍】造成的伤害提高12.0%→33.6%",
       "candidateId": "ability:1141525@4.4-cn-2026-08-21#effect-1"
     },
@@ -47724,37 +47743,53 @@
       "candidateId": "ability:130302@4.4-cn-2026-08-21#residual-1"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:c8c6445825035045",
+      "id": "effect:4.4:130302-damage-bonus",
       "sourceRevisionId": "ability:130302@4.4-cn-2026-08-21",
-      "metric": "unclassified_numeric",
+      "metric": "damage_bonus",
       "operation": "percent",
       "value": {
         "base": 0.16,
-        "scaling": []
+        "scaling": [
+          0.176,
+          0.192,
+          0.208,
+          0.224,
+          0.24,
+          0.26,
+          0.28,
+          0.3,
+          0.32,
+          0.336,
+          0.352,
+          0.368,
+          0.384,
+          0.4
+        ]
       },
       "target": {
         "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill:ability:130302"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 3
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "当阮•梅拥有【弦外音】时，我方全体伤害提高16.0%→40.0%，弱点击破效率提高50%",
-      "candidateId": "ability:130302@4.4-cn-2026-08-21#residual-2"
+      "candidateId": "ability:130302@4.4-cn-2026-08-21#residual-2",
+      "metricCorrection": {
+        "from": "unclassified_numeric",
+        "reason": "自动抽取把同句团队增伤与弱点击破效率合并；人工审核仅将可精确缩放的团队增伤部分建模。"
+      }
     },
     {
       "id": "effect:4.3-cn-2026-06-10:unsupported:f193690cfac02b55",
@@ -47889,35 +47924,47 @@
       "candidateId": "ability:130303@4.3-cn-2026-06-10#residual-3"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:10267acd590d40a7",
+      "id": "effect:4.4:130303-resistance-penetration",
       "sourceRevisionId": "ability:130303@4.4-cn-2026-08-21",
       "metric": "resistance_penetration",
       "operation": "percent",
       "value": {
         "base": 0.15,
-        "scaling": []
+        "scaling": [
+          0.16,
+          0.17,
+          0.18,
+          0.19,
+          0.2,
+          0.2125,
+          0.225,
+          0.2375,
+          0.25,
+          0.26,
+          0.27,
+          0.28,
+          0.29,
+          0.3
+        ]
       },
       "target": {
         "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:130303"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "处于结界中时我方全体全属性抗性穿透提高15.0%→30.0%，且攻击后会对敌方目标施加【残梅绽】",
       "candidateId": "ability:130303@4.4-cn-2026-08-21#effect-1"
     },
@@ -48120,20 +48167,34 @@
       "candidateId": "ability:130304@4.3-cn-2026-06-10#residual-2"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:7cab1c0feb47f5a6",
+      "id": "effect:4.4:130304-team-speed",
       "sourceRevisionId": "ability:130304@4.4-cn-2026-08-21",
       "metric": "speed",
       "operation": "percent",
       "value": {
         "base": 0.08,
-        "scaling": []
+        "scaling": [
+          0.082,
+          0.084,
+          0.086,
+          0.088,
+          0.09,
+          0.0925,
+          0.095,
+          0.0975,
+          0.1,
+          0.102,
+          0.104,
+          0.106,
+          0.108,
+          0.11
+        ]
       },
       "target": {
-        "type": "self"
+        "type": "team-except-self"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -48142,13 +48203,9 @@
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：该数值机制的触发、目标、持续与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "使除自身以外的队友速度提高8.0%→11.0%",
       "candidateId": "ability:130304@4.4-cn-2026-08-21#effect-1"
     },
@@ -50076,26 +50133,22 @@
         "scaling": []
       },
       "target": {
-        "type": "single-ally"
+        "type": "single-other-ally"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill:ability:130602"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：行动序列变更的触发、目标、持续与重复触发机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "使指定我方单体的暴击伤害提高，提高数值等同于花火12.0%→30.0%暴击伤害+27.0%→54.0%，持续1回合，并使该目标行动提前50%",
       "candidateId": "ability:130602@4.4-cn-2026-08-21#effect-1"
     },
@@ -50212,22 +50265,18 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:130603"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：生命或资源回复的触发、目标、倍率、持续与上限机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "为我方恢复4个战技点，并使我方全体获得【谜诡】",
       "candidateId": "ability:130603@4.4-cn-2026-08-21#effect-1"
     },
@@ -50364,35 +50413,47 @@
       "candidateId": "ability:130604@4.3-cn-2026-06-10#residual-2"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:dea0b37ed9aec026",
+      "id": "effect:4.4:130604-team-damage",
       "sourceRevisionId": "ability:130604@4.4-cn-2026-08-21",
       "metric": "damage_bonus",
       "operation": "percent",
       "value": {
         "base": 0.03,
-        "scaling": []
+        "scaling": [
+          0.033,
+          0.036,
+          0.039,
+          0.042,
+          0.045,
+          0.0488,
+          0.0525,
+          0.0563,
+          0.06,
+          0.063,
+          0.066,
+          0.069,
+          0.072,
+          0.075
+        ]
       },
       "target": {
         "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill-point-spent"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
-        "maxStacks": 1
+        "type": "additive",
+        "maxStacks": 3
       },
-      "conditions": [
-        {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "当我方目标每消耗1点战技点，则使我方全体造成的伤害提高3.0%→7.5%，该效果持续2回合，最多可叠加3层",
       "candidateId": "ability:130604@4.4-cn-2026-08-21#effect-1"
     },
@@ -61848,35 +61909,47 @@
       "candidateId": "ability:140302@4.3-cn-2026-06-10#residual-2"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:bd32d8f17e3737ba",
+      "id": "effect:4.4:140302-resistance-penetration",
       "sourceRevisionId": "ability:140302@4.4-cn-2026-08-21",
       "metric": "resistance_penetration",
       "operation": "percent",
       "value": {
         "base": 0.12,
-        "scaling": []
+        "scaling": [
+          0.132,
+          0.144,
+          0.156,
+          0.168,
+          0.18,
+          0.195,
+          0.21,
+          0.225,
+          0.24,
+          0.252,
+          0.264,
+          0.276,
+          0.288,
+          0.3
+        ]
       },
       "target": {
         "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill:ability:140302"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 3
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "当缇宝拥有【神启】时，我方全体目标全属性抗性穿透提高12.0%→30.0%",
       "candidateId": "ability:140302@4.4-cn-2026-08-21#effect-1"
     },
@@ -62112,35 +62185,47 @@
       "candidateId": "ability:140303@4.3-cn-2026-06-10#residual-4"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:0725335b76a74bb9",
+      "id": "effect:4.4:140303-vulnerability",
       "sourceRevisionId": "ability:140303@4.4-cn-2026-08-21",
       "metric": "vulnerability",
       "operation": "percent",
       "value": {
         "base": 0.15,
-        "scaling": []
+        "scaling": [
+          0.165,
+          0.18,
+          0.195,
+          0.21,
+          0.225,
+          0.2437,
+          0.2625,
+          0.2812,
+          0.3,
+          0.315,
+          0.33,
+          0.345,
+          0.36,
+          0.375
+        ]
       },
       "target": {
         "type": "all-enemies"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:140303"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "结界持续期间，敌方目标受到的伤害提高15.0%→37.5%",
       "candidateId": "ability:140303@4.4-cn-2026-08-21#effect-1"
     },
@@ -72837,35 +72922,46 @@
       "candidateId": "ability:141503@4.3-cn-2026-06-10#residual-3"
     },
     {
-      "id": "effect:4.4:0810",
+      "id": "effect:4.4:141503-critical-rate",
       "sourceRevisionId": "ability:141503@4.4-cn-2026-08-21",
       "metric": "critical_rate",
       "operation": "percent",
       "value": {
         "base": 0.25,
-        "scaling": []
+        "scaling": [
+          0.275,
+          0.3,
+          0.325,
+          0.35,
+          0.375,
+          0.4062,
+          0.4375,
+          0.4688,
+          0.5,
+          0.525,
+          0.55,
+          0.575,
+          0.6,
+          0.625
+        ]
       },
       "target": {
-        "type": "team"
+        "type": "self"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:141503"
       },
       "duration": {
         "type": "permanent"
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "召唤忆灵德谬歌，使其立即获得1个额外回合并激活全体队友的终结技，随后进入【往昔的涟漪】状态，普攻强化为【向着爱与明天♪】且仅能使用该普攻，昔涟和德谬歌的暴击率提高25%→62.5%，展开战技的结界并使战技的结界没有持续时间",
       "candidateId": "ability:141503@4.4-cn-2026-08-21#effect-1"
     },
@@ -73101,20 +73197,34 @@
       "candidateId": "ability:141504@4.3-cn-2026-06-10#residual-3"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:dccd37964294a64e",
+      "id": "effect:4.4:141504-team-damage",
       "sourceRevisionId": "ability:141504@4.4-cn-2026-08-21",
       "metric": "damage_bonus",
       "operation": "percent",
       "value": {
         "base": 0.1,
-        "scaling": []
+        "scaling": [
+          0.11,
+          0.12,
+          0.13,
+          0.14,
+          0.15,
+          0.1625,
+          0.175,
+          0.1875,
+          0.2,
+          0.21,
+          0.22,
+          0.23,
+          0.24,
+          0.25
+        ]
       },
       "target": {
         "type": "team"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -73123,13 +73233,9 @@
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "昔涟在场时，我方全体目标造成的伤害提高10.0%→25.0%",
       "candidateId": "ability:141504@4.4-cn-2026-08-21#effect-1"
     },
@@ -120805,22 +120911,19 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:130303"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "终结技展开结界期间，我方全体造成伤害时无视目标20%的防御力。",
       "candidateId": "eidolon:130301@4.4-cn-2026-08-21#effect-1"
     },
@@ -120867,11 +120970,10 @@
         "scaling": []
       },
       "target": {
-        "type": "all-enemies"
+        "type": "team"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -120882,11 +120984,13 @@
       },
       "conditions": [
         {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
+          "type": "enemy-broken",
+          "operator": "equals",
+          "value": true
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "阮•梅在场时，我方全体对处于弱点击破状态的敌方目标造成伤害时，攻击力提高40%。",
       "candidateId": "eidolon:130302@4.4-cn-2026-08-21#effect-1"
     },
@@ -123012,26 +123116,23 @@
         "scaling": []
       },
       "target": {
-        "type": "self"
+        "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:130603"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 3
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "终结技施加的【谜诡】的持续时间额外增加1回合，持有【谜诡】的我方目标攻击力提高40%。",
       "candidateId": "eidolon:130601@4.4-cn-2026-08-21#effect-1"
     },
@@ -123111,26 +123212,23 @@
         "scaling": []
       },
       "target": {
-        "type": "self"
+        "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill-point-spent"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
-        "maxStacks": 1
+        "type": "additive",
+        "maxStacks": 3
       },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "天赋每层效果额外使我方目标造成伤害时无视目标8%的防御力。",
       "candidateId": "eidolon:130602@4.4-cn-2026-08-21#effect-1"
     },
@@ -132355,22 +132453,19 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill:ability:140302"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 3
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "【神启】持续期间，我方全体造成伤害时无视目标18%的防御力。",
       "candidateId": "eidolon:140304@4.4-cn-2026-08-21#effect-1"
     },
@@ -139677,26 +139772,22 @@
         "scaling": []
       },
       "target": {
-        "type": "self"
+        "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:141403"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "丹恒•腾荒施放终结技时，恢复1个战技点，使【同袍】全属性抗性穿透提高18%，持续3回合。",
       "candidateId": "eidolon:141401@4.4-cn-2026-08-21#effect-1"
     },
@@ -139710,26 +139801,23 @@
         "scaling": []
       },
       "target": {
-        "type": "self"
+        "type": "single-ally"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:141403"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 3
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "丹恒•腾荒施放终结技时，恢复1个战技点，使【同袍】全属性抗性穿透提高18%，持续3回合。",
       "candidateId": "eidolon:141401@4.4-cn-2026-08-21#effect-2"
     },
@@ -140406,8 +140494,7 @@
         "type": "all-enemies"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -140418,29 +140505,30 @@
       },
       "conditions": [
         {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
+          "type": "buddy-present",
+          "operator": "equals",
+          "value": true
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "场上存在【同袍】时，使敌方全体受到的伤害提高20%，【同袍】造成伤害时，无视敌方目标12%的防御力",
       "candidateId": "eidolon:141406@4.4-cn-2026-08-21#effect-1"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:2ccaba62a8cb67e0",
+      "id": "effect:4.4:141406-buddy-defense-ignore",
       "sourceRevisionId": "eidolon:141406@4.4-cn-2026-08-21",
-      "metric": "unclassified_numeric",
+      "metric": "defense_ignore",
       "operation": "percent",
       "value": {
         "base": 0.12,
         "scaling": []
       },
       "target": {
-        "type": "all-enemies"
+        "type": "single-ally"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -140451,13 +140539,19 @@
       },
       "conditions": [
         {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
+          "type": "buddy-present",
+          "operator": "equals",
+          "value": true
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "场上存在【同袍】时，使敌方全体受到的伤害提高20%，【同袍】造成伤害时，无视敌方目标12%的防御力",
-      "candidateId": "eidolon:141406@4.4-cn-2026-08-21#residual-1"
+      "candidateId": "eidolon:141406@4.4-cn-2026-08-21#residual-1",
+      "metricCorrection": {
+        "from": "unclassified_numeric",
+        "reason": "同句第二项经人工审核为【同袍】造成伤害时无视12%防御。"
+      }
     },
     {
       "id": "effect:4.4-cn-2026-08-21:unsupported:fd8b2b7312e98b86",
@@ -141331,22 +141425,18 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "cyrene-first-ultimate"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：行动序列变更的触发、目标、持续与重复触发机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "昔涟首次施放终结技时，使我方全体行动提前100%",
       "candidateId": "eidolon:141506@4.4-cn-2026-08-21#effect-1"
     },
@@ -141363,8 +141453,7 @@
         "type": "all-enemies"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -141375,11 +141464,18 @@
       },
       "conditions": [
         {
-          "type": "不支持：该数值机制的触发、目标、持续与叠加规则尚未逐项建模"
+          "type": "demiurge-present",
+          "operator": "equals",
+          "value": true
+        },
+        {
+          "type": "cyrene-memosprite-skill-count",
+          "operator": "at-least",
+          "value": 1
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "1次：德谬歌在场时，敌方全体目标的防御力降低20%",
       "candidateId": "eidolon:141506@4.4-cn-2026-08-21#effect-2"
     },
@@ -141397,22 +141493,18 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "cyrene-memosprite-skill-twice"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：行动序列变更的触发、目标、持续与重复触发机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "至少2次：使我方全体行动提前24%",
       "candidateId": "eidolon:141506@4.4-cn-2026-08-21#effect-3"
     },
@@ -257704,8 +257796,7 @@
         "type": "team"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -257714,13 +257805,9 @@
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：该数值机制的触发、目标、持续与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "我方全体击破特攻提高20%。",
       "candidateId": "trace:1303101@4.4-cn-2026-08-21#effect-1"
     },
@@ -260707,8 +260794,7 @@
         "type": "team"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -260717,13 +260803,9 @@
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：该数值机制的触发、目标、持续与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "我方全体的攻击力提高15%",
       "candidateId": "trace:1306103@4.4-cn-2026-08-21#effect-1"
     },
@@ -284101,26 +284183,21 @@
         "scaling": []
       },
       "target": {
-        "type": "single-ally"
+        "type": "self"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "battle-start"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：行动序列变更的触发、目标、持续与重复触发机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "战斗开始时，丹恒•腾荒行动提前40%",
       "candidateId": "trace:1414102@4.4-cn-2026-08-21#effect-1"
     },
@@ -284138,22 +284215,18 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "buddy-attack"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：行动序列变更的触发、目标、持续与重复触发机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "【同袍】施放攻击时，丹恒•腾荒恢复6点能量，使【龙灵】行动提前15%",
       "candidateId": "trace:1414102@4.4-cn-2026-08-21#effect-2"
     },
@@ -285193,8 +285266,7 @@
         "type": "team"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -285205,11 +285277,13 @@
       },
       "conditions": [
         {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
+          "type": "speed",
+          "operator": "at-least",
+          "value": 180
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "昔涟的速度大于等于180点时，我方全体造成的伤害提高20%，之后每超过1点速度，昔涟与德谬歌的冰属性抗性穿透提高2%，最多计入60点超出的速度。",
       "candidateId": "trace:1415103@4.4-cn-2026-08-21#effect-1"
     },

@@ -188,6 +188,607 @@ const reviewed: Record<string, ReviewedEffect> = {
     target: { type: "self" }, trigger: { type: "always" },
     duration: { type: "permanent" }, stacking: { type: "none", maxStacks: 1 },
   },
+  "ability:130302@4.4-cn-2026-08-21#residual-2": {
+    "sourceRevisionId": "ability:130302@4.4-cn-2026-08-21",
+    "originalText": "当阮•梅拥有【弦外音】时，我方全体伤害提高16.0%→40.0%，弱点击破效率提高50%",
+    "id": "effect:4.4:130302-damage-bonus",
+    "metric": "damage_bonus",
+    "operation": "percent",
+    "metricCorrection": {
+      "from": "unclassified_numeric",
+      "reason": "自动抽取把同句团队增伤与弱点击破效率合并；人工审核仅将可精确缩放的团队增伤部分建模。"
+    },
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "skill:ability:130302"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 3
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    },
+    "scalingEffectId": "effect:4.4:130302-damage-bonus"
+  },
+  "ability:130303@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:130303@4.4-cn-2026-08-21",
+    "originalText": "处于结界中时我方全体全属性抗性穿透提高15.0%→30.0%，且攻击后会对敌方目标施加【残梅绽】",
+    "id": "effect:4.4:130303-resistance-penetration",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "ultimate:ability:130303"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 2
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    },
+    "scalingEffectId": "effect:4.4:130303-resistance-penetration"
+  },
+  "ability:130304@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:130304@4.4-cn-2026-08-21",
+    "originalText": "使除自身以外的队友速度提高8.0%→11.0%",
+    "id": "effect:4.4:130304-team-speed",
+    "target": {
+      "type": "team-except-self"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    },
+    "scalingEffectId": "effect:4.4:130304-team-speed"
+  },
+  "trace:1303101@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "trace:1303101@4.4-cn-2026-08-21",
+    "originalText": "我方全体击破特攻提高20%。",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "eidolon:130301@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "eidolon:130301@4.4-cn-2026-08-21",
+    "originalText": "终结技展开结界期间，我方全体造成伤害时无视目标20%的防御力。",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "ultimate:ability:130303"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 2
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    }
+  },
+  "eidolon:130302@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "eidolon:130302@4.4-cn-2026-08-21",
+    "originalText": "阮•梅在场时，我方全体对处于弱点击破状态的敌方目标造成伤害时，攻击力提高40%。",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    },
+    "conditions": [
+      {
+        "type": "enemy-broken",
+        "operator": "equals",
+        "value": true
+      }
+    ]
+  },
+  "ability:130602@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:130602@4.4-cn-2026-08-21",
+    "originalText": "使指定我方单体的暴击伤害提高，提高数值等同于花火12.0%→30.0%暴击伤害+27.0%→54.0%，持续1回合，并使该目标行动提前50%",
+    "target": {
+      "type": "single-other-ally"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "skill:ability:130602"
+    },
+    "duration": {
+      "type": "instant"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "ability:130603@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:130603@4.4-cn-2026-08-21",
+    "originalText": "为我方恢复4个战技点，并使我方全体获得【谜诡】",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "ultimate:ability:130603"
+    },
+    "duration": {
+      "type": "instant"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "ability:130604@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:130604@4.4-cn-2026-08-21",
+    "originalText": "当我方目标每消耗1点战技点，则使我方全体造成的伤害提高3.0%→7.5%，该效果持续2回合，最多可叠加3层",
+    "id": "effect:4.4:130604-team-damage",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "skill-point-spent"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 2
+    },
+    "stacking": {
+      "type": "additive",
+      "maxStacks": 3
+    },
+    "scalingEffectId": "effect:4.4:130604-team-damage"
+  },
+  "trace:1306103@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "trace:1306103@4.4-cn-2026-08-21",
+    "originalText": "我方全体的攻击力提高15%",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "eidolon:130601@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "eidolon:130601@4.4-cn-2026-08-21",
+    "originalText": "终结技施加的【谜诡】的持续时间额外增加1回合，持有【谜诡】的我方目标攻击力提高40%。",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "ultimate:ability:130603"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 3
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    }
+  },
+  "eidolon:130602@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "eidolon:130602@4.4-cn-2026-08-21",
+    "originalText": "天赋每层效果额外使我方目标造成伤害时无视目标8%的防御力。",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "skill-point-spent"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 2
+    },
+    "stacking": {
+      "type": "additive",
+      "maxStacks": 3
+    }
+  },
+  "ability:140302@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:140302@4.4-cn-2026-08-21",
+    "originalText": "当缇宝拥有【神启】时，我方全体目标全属性抗性穿透提高12.0%→30.0%",
+    "id": "effect:4.4:140302-resistance-penetration",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "skill:ability:140302"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 3
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    },
+    "scalingEffectId": "effect:4.4:140302-resistance-penetration"
+  },
+  "ability:140303@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:140303@4.4-cn-2026-08-21",
+    "originalText": "结界持续期间，敌方目标受到的伤害提高15.0%→37.5%",
+    "id": "effect:4.4:140303-vulnerability",
+    "target": {
+      "type": "all-enemies"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "ultimate:ability:140303"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 2
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    },
+    "scalingEffectId": "effect:4.4:140303-vulnerability"
+  },
+  "eidolon:140304@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "eidolon:140304@4.4-cn-2026-08-21",
+    "originalText": "【神启】持续期间，我方全体造成伤害时无视目标18%的防御力。",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "skill:ability:140302"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 3
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    }
+  },
+  "ability:141503@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:141503@4.4-cn-2026-08-21",
+    "originalText": "召唤忆灵德谬歌，使其立即获得1个额外回合并激活全体队友的终结技，随后进入【往昔的涟漪】状态，普攻强化为【向着爱与明天♪】且仅能使用该普攻，昔涟和德谬歌的暴击率提高25%→62.5%，展开战技的结界并使战技的结界没有持续时间",
+    "id": "effect:4.4:141503-critical-rate",
+    "target": {
+      "type": "self"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "ultimate:ability:141503"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    },
+    "scalingEffectId": "effect:4.4:141503-critical-rate"
+  },
+  "ability:141504@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:141504@4.4-cn-2026-08-21",
+    "originalText": "昔涟在场时，我方全体目标造成的伤害提高10.0%→25.0%",
+    "id": "effect:4.4:141504-team-damage",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    },
+    "scalingEffectId": "effect:4.4:141504-team-damage"
+  },
+  "ability:1141502@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:1141502@4.4-cn-2026-08-21",
+    "originalText": "当该角色不是黄金裔时，使其造成的伤害提高20%→56%，持续2回合，该效果对其忆灵也生效",
+    "target": {
+      "type": "single-ally"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "memosprite-skill:ability:1141502"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 2
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    },
+    "conditions": [
+      {
+        "type": "target-is-non-chrysos-heir",
+        "operator": "equals",
+        "value": true
+      }
+    ],
+    "scalingEffectId": "effect:4.4:0812"
+  },
+  "ability:1141525@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "ability:1141525@4.4-cn-2026-08-21",
+    "originalText": "当丹恒•腾荒持有【献予「大地」之诗】时，【同袍】造成的伤害提高12.0%→33.6%",
+    "target": {
+      "type": "single-ally"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "memosprite-skill:ability:1141525"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    },
+    "scalingEffectId": "effect:4.4:0827"
+  },
+  "trace:1415103@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "trace:1415103@4.4-cn-2026-08-21",
+    "originalText": "昔涟的速度大于等于180点时，我方全体造成的伤害提高20%，之后每超过1点速度，昔涟与德谬歌的冰属性抗性穿透提高2%，最多计入60点超出的速度。",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    },
+    "conditions": [
+      {
+        "type": "speed",
+        "operator": "at-least",
+        "value": 180
+      }
+    ]
+  },
+  "eidolon:141506@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "eidolon:141506@4.4-cn-2026-08-21",
+    "originalText": "昔涟首次施放终结技时，使我方全体行动提前100%",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "cyrene-first-ultimate"
+    },
+    "duration": {
+      "type": "instant"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "eidolon:141506@4.4-cn-2026-08-21#effect-2": {
+    "sourceRevisionId": "eidolon:141506@4.4-cn-2026-08-21",
+    "originalText": "1次：德谬歌在场时，敌方全体目标的防御力降低20%",
+    "target": {
+      "type": "all-enemies"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    },
+    "conditions": [
+      {
+        "type": "demiurge-present",
+        "operator": "equals",
+        "value": true
+      },
+      {
+        "type": "cyrene-memosprite-skill-count",
+        "operator": "at-least",
+        "value": 1
+      }
+    ]
+  },
+  "eidolon:141506@4.4-cn-2026-08-21#effect-3": {
+    "sourceRevisionId": "eidolon:141506@4.4-cn-2026-08-21",
+    "originalText": "至少2次：使我方全体行动提前24%",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "cyrene-memosprite-skill-twice"
+    },
+    "duration": {
+      "type": "instant"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "trace:1414102@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "trace:1414102@4.4-cn-2026-08-21",
+    "originalText": "战斗开始时，丹恒•腾荒行动提前40%",
+    "target": {
+      "type": "self"
+    },
+    "trigger": {
+      "type": "battle-start"
+    },
+    "duration": {
+      "type": "instant"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "trace:1414102@4.4-cn-2026-08-21#effect-2": {
+    "sourceRevisionId": "trace:1414102@4.4-cn-2026-08-21",
+    "originalText": "【同袍】施放攻击时，丹恒•腾荒恢复6点能量，使【龙灵】行动提前15%",
+    "target": {
+      "type": "self"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "buddy-attack"
+    },
+    "duration": {
+      "type": "instant"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "eidolon:141401@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "eidolon:141401@4.4-cn-2026-08-21",
+    "originalText": "丹恒•腾荒施放终结技时，恢复1个战技点，使【同袍】全属性抗性穿透提高18%，持续3回合。",
+    "target": {
+      "type": "team"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "ultimate:ability:141403"
+    },
+    "duration": {
+      "type": "instant"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    }
+  },
+  "eidolon:141401@4.4-cn-2026-08-21#effect-2": {
+    "sourceRevisionId": "eidolon:141401@4.4-cn-2026-08-21",
+    "originalText": "丹恒•腾荒施放终结技时，恢复1个战技点，使【同袍】全属性抗性穿透提高18%，持续3回合。",
+    "target": {
+      "type": "single-ally"
+    },
+    "trigger": {
+      "type": "event",
+      "event": "ultimate:ability:141403"
+    },
+    "duration": {
+      "type": "turns",
+      "value": 3
+    },
+    "stacking": {
+      "type": "refresh",
+      "maxStacks": 1
+    }
+  },
+  "eidolon:141406@4.4-cn-2026-08-21#effect-1": {
+    "sourceRevisionId": "eidolon:141406@4.4-cn-2026-08-21",
+    "originalText": "场上存在【同袍】时，使敌方全体受到的伤害提高20%，【同袍】造成伤害时，无视敌方目标12%的防御力",
+    "target": {
+      "type": "all-enemies"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    },
+    "conditions": [
+      {
+        "type": "buddy-present",
+        "operator": "equals",
+        "value": true
+      }
+    ]
+  },
+  "eidolon:141406@4.4-cn-2026-08-21#residual-1": {
+    "sourceRevisionId": "eidolon:141406@4.4-cn-2026-08-21",
+    "originalText": "场上存在【同袍】时，使敌方全体受到的伤害提高20%，【同袍】造成伤害时，无视敌方目标12%的防御力",
+    "id": "effect:4.4:141406-buddy-defense-ignore",
+    "metric": "defense_ignore",
+    "operation": "percent",
+    "metricCorrection": {
+      "from": "unclassified_numeric",
+      "reason": "同句第二项经人工审核为【同袍】造成伤害时无视12%防御。"
+    },
+    "target": {
+      "type": "single-ally"
+    },
+    "trigger": {
+      "type": "always"
+    },
+    "duration": {
+      "type": "permanent"
+    },
+    "stacking": {
+      "type": "none",
+      "maxStacks": 1
+    },
+    "conditions": [
+      {
+        "type": "buddy-present",
+        "operator": "equals",
+        "value": true
+      }
+    ]
+  },
 };
 
 export async function applyR4ReviewedEffects(
