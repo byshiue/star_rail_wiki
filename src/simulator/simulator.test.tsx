@@ -42,6 +42,14 @@ function releasedBundle(): GameReleaseBundle {
   support.eidolons = [feature(
     "eidolon:support-1", "eidolon:support-1@4.3", "全队增伤", "eidolon", ["effect:team-damage"],
   )];
+  support.abilities = [feature(
+    "ability:support-override", "ability:support-override@4.3", "暴伤设定", "ability",
+    ["effect:support-critical-damage", "effect:support-self-critical-damage"],
+  )];
+  supportTwo.abilities = [feature(
+    "ability:support-2-override", "ability:support-2-override@4.3", "暴伤设定二", "ability",
+    ["effect:support-2-critical-damage"],
+  )];
   const equipment: EquipmentRevision[] = [
     {
       logicalId: "light-cone:harmony", revisionId: "light-cone:harmony@4.3", validFromReleaseId: releaseId,
@@ -68,12 +76,34 @@ function releasedBundle(): GameReleaseBundle {
     trigger: { type: "always" }, duration: { type: "permanent" }, stacking: { type: "none", maxStacks: 1 },
     conditions: [], dispellable: null, reviewStatus: "reviewed", originalText: "使我方全体造成的伤害提高50%。",
   };
+  const supportCriticalDamage: Effect = {
+    id: "effect:support-critical-damage", sourceRevisionId: "ability:support-override@4.3",
+    metric: "critical_damage", operation: "override", value: { base: 0.2, scaling: [] },
+    target: { type: "team" }, trigger: { type: "always" }, duration: { type: "permanent" },
+    stacking: { type: "none", maxStacks: 1 }, conditions: [], dispellable: null,
+    reviewStatus: "reviewed", originalText: "使我方全体暴击伤害设为20%。",
+  };
+  const supportSelfCriticalDamage: Effect = {
+    id: "effect:support-self-critical-damage", sourceRevisionId: "ability:support-override@4.3",
+    metric: "critical_damage", operation: "override", value: { base: 0.6, scaling: [] },
+    target: { type: "self" }, trigger: { type: "always" }, duration: { type: "permanent" },
+    stacking: { type: "none", maxStacks: 1 }, conditions: [], dispellable: null,
+    reviewStatus: "reviewed", originalText: "使自身暴击伤害设为60%。",
+  };
+  const supportTwoCriticalDamage: Effect = {
+    id: "effect:support-2-critical-damage", sourceRevisionId: "ability:support-2-override@4.3",
+    metric: "critical_damage", operation: "override", value: { base: 0.4, scaling: [] },
+    target: { type: "team" }, trigger: { type: "always" }, duration: { type: "permanent" },
+    stacking: { type: "none", maxStacks: 1 }, conditions: [], dispellable: null,
+    reviewStatus: "reviewed", originalText: "使我方全体暴击伤害设为40%。",
+  };
   return {
     release: {
       ...parsed.release, id: releaseId, gameVersion: "4.3", channel: "released",
       sources: parsed.release.sources.map((source) => ({ ...source, name: "正式服资料源", url: "https://example.com/star-rail/4.3" })),
     },
-    entities: { characters: [dps, support, supportTwo, sustain], equipment, effects: [effect] },
+    entities: { characters: [dps, support, supportTwo, sustain], equipment,
+      effects: [effect, supportCriticalDamage, supportSelfCriticalDamage, supportTwoCriticalDamage] },
   };
 }
 
@@ -136,6 +166,12 @@ test("changing an eidolon recomputes buffs and preserves release provenance", as
   expect(screen.queryByText("全队增伤 +50%")).not.toBeInTheDocument();
   await user.selectOptions(screen.getByLabelText("测试辅助星魂"), "1");
 
+  const breakdown = screen.getByRole("region", { name: "当前 Buff 汇总" });
+  const contributions = within(breakdown).getByRole("list", { name: "全队增伤角色贡献" });
+  const group = contributions.closest(".buff-group") as HTMLElement;
+  expect(within(group).getByText("测试辅助 E1")).toBeVisible();
+  expect(within(group).getByText("叠加后总值 +50%")).toBeVisible();
+  expect(within(group).getByText("提供 +50%")).toBeVisible();
   expect(screen.getByText("全队增伤 +50%")).toBeVisible();
   await user.click(screen.getByRole("button", { name: "查看全队增伤来源" }));
   const dialog = screen.getByRole("dialog", { name: "效果证据" });
@@ -149,6 +185,37 @@ test("changing an eidolon recomputes buffs and preserves release provenance", as
   expect(screen.getByRole("button", { name: "查看全队增伤来源" })).toHaveFocus();
 });
 
+
+test("overlapping character buffs show every contribution and the applied rule", async () => {
+  const user = userEvent.setup();
+  renderSimulator();
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
+  await user.selectOptions(screen.getByLabelText("2号位角色"), "character:support-2");
+
+  const contributions = screen.getByRole("list", { name: "全队暴击伤害角色贡献" });
+  const group = contributions.closest(".buff-group");
+  expect(group).not.toBeNull();
+  expect(within(group as HTMLElement).getByText("测试辅助 E0")).toBeVisible();
+  expect(within(group as HTMLElement).getByText("提供 设为 0.2")).toBeVisible();
+  expect(within(group as HTMLElement).getByText("测试辅助二 E0")).toBeVisible();
+  expect(within(group as HTMLElement).getByText("提供 设为 0.4")).toBeVisible();
+  expect(within(group as HTMLElement).getByText("叠加后总值 设为 0.4")).toBeVisible();
+  expect(within(group as HTMLElement).getByText("取最高")).toBeVisible();
+});
+
+
+test("self and team buffs stay separate when they resolve to the same member", async () => {
+  const user = userEvent.setup();
+  renderSimulator();
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
+
+  const team = screen.getByRole("list", { name: "全队暴击伤害角色贡献" });
+  const self = screen.getByRole("list", { name: "自身暴击伤害角色贡献" });
+  expect(within(team.closest(".buff-group") as HTMLElement)
+    .getByText("叠加后总值 设为 0.2")).toBeVisible();
+  expect(within(self.closest(".buff-group") as HTMLElement)
+    .getByText("叠加后总值 设为 0.6")).toBeVisible();
+});
 test("malformed and stale hash builds show a recoverable accessible error", async () => {
   const user = userEvent.setup();
   renderSimulator(releasedBundle(), "/simulator?build=not-json");

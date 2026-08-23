@@ -7,6 +7,7 @@ import { EffectSummary } from "./EffectSummary";
 import { EvidenceDrawer } from "./EvidenceDrawer";
 import { ScenarioControls } from "./ScenarioControls";
 import { decodeTeamBuild, encodeTeamBuild, validateTeamBuild } from "./teamBuild";
+import { TeamBuffBreakdown } from "./TeamBuffBreakdown";
 import { TeamSlots } from "./TeamSlots";
 import { useTeamBuild } from "./useTeamBuild";
 
@@ -131,6 +132,7 @@ function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceP
       <div className="simulator-layout">
         <div className="builder-column">
           <TeamSlots bundle={bundle} build={team.build} maxSlots={maxSlots} onChange={team.updateMember} />
+          <TeamBuffBreakdown build={team.build} evaluation={team.evaluation} bundle={bundle} />
           <ScenarioControls scenario={scenario} onChange={updateScenario} onFire={fireScenario} />
           {encoded.value ? (
             <label className="share-field">

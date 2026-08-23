@@ -9,7 +9,7 @@
   align-items: start;
 }
 .builder-column, .results-panel { display: grid; gap: var(--space-4); }
-.team-panel, .results-panel, .scenario-controls, .share-field, .build-error {
+.team-panel, .buff-breakdown, .results-panel, .scenario-controls, .share-field, .build-error {
   padding: var(--space-4);
   background: rgb(9 13 24 / 58%);
   border: 1px solid var(--color-border);
@@ -142,4 +142,46 @@ button {
 .aggregation-groups li span { color: var(--color-text-muted); }
 @media (max-width: 34rem) {
   .relic-selection { grid-template-columns: 1fr; }
+}
+
+.buff-breakdown h2 { margin: 0; }
+.buff-count {
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  background: var(--color-surface-raised);
+  border-radius: 999px;
+}
+.buff-groups, .buff-contributions, .unsupported-buffs ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.buff-group {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.buff-group-heading, .buff-contributions li, .unsupported-buffs li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.buff-group-heading > span { color: var(--color-accent-strong); font-weight: 700; }
+.buff-contributions {
+  margin-top: 0;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+.buff-contributions li span:last-child, .unsupported-buffs li span, .buff-note,
+.unsupported-buffs > p { color: var(--color-text-muted); }
+.unsupported-buffs { margin-top: var(--space-3); }
+.unsupported-buffs summary { cursor: pointer; font-weight: 700; }
+@media (max-width: 34rem) {
+  .buff-group-heading, .buff-contributions li, .unsupported-buffs li { align-items: flex-start; flex-direction: column; }
 }
