@@ -4,6 +4,8 @@ import { MemoryRouter } from "react-router-dom";
 import { afterEach, vi } from "vitest";
 import entitiesJson from "../../data/fixtures/release-4.3/entities.json";
 import releaseJson from "../../data/fixtures/release-4.3/release.json";
+import production44Entities from "../../public/data/releases/4.4-cn-2026-08-21/entities.json";
+import production44Release from "../../public/data/releases/4.4-cn-2026-08-21/release.json";
 import { ReleaseProvider } from "../app/ReleaseProvider";
 import type { CharacterRevision, EquipmentRevision, FeatureRevision } from "../domain/entities";
 import type { Effect } from "../domain/effects";
@@ -115,6 +117,13 @@ function releasedBundle(): GameReleaseBundle {
       effects: [effect, unclassifiedEidolon, supportCriticalDamage, supportSelfCriticalDamage,
         supportTwoCriticalDamage] },
   };
+}
+
+function productionBundle(): GameReleaseBundle {
+  return GameReleaseBundleSchema.parse({
+    release: production44Release,
+    entities: production44Entities,
+  });
 }
 
 function renderSimulator(bundle = releasedBundle(), route = "/simulator") {
@@ -231,6 +240,52 @@ test("keeps locked and unsupported effects in collapsed localized audit details"
   await user.click(screen.getByRole("button", { name: "查看自身未分类数值机制来源" }));
   const dialog = screen.getByRole("dialog", { name: "效果证据" });
   expect(within(dialog).getByText("测试尚未分类的星魂数值。")).toBeVisible();
+});
+
+test("shows reviewed triggerable buffs separately without adding them to current totals", async () => {
+  const user = userEvent.setup();
+  const bundle = releasedBundle();
+  const ability = bundle.entities.characters
+    .find(({ logicalId }) => logicalId === "character:support")!.abilities[0]!;
+  const template = bundle.entities.effects
+    .find(({ id }) => id === "effect:support-critical-damage")!;
+  ability.effectIds.push("effect:triggerable-attack");
+  bundle.entities.effects.push({
+    ...template,
+    id: "effect:triggerable-attack",
+    metric: "attack",
+    operation: "percent",
+    value: { base: 0.25, scaling: [] },
+    trigger: { type: "event", event: "support-skill" },
+    duration: { type: "turns", value: 2 },
+    originalText: "施放战技后，使我方全体攻击力提高25%，持续2回合。",
+  });
+
+  renderSimulator(bundle);
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
+
+  const available = screen.getByRole("heading", { name: "available · 可触发 1" }).closest("section");
+  expect(available).not.toBeNull();
+  expect(within(available as HTMLElement).getByText("全队攻击力")).toBeVisible();
+  expect(within(available as HTMLElement).getByText("原因：指定事件尚未触发")).toBeVisible();
+  expect(screen.queryByRole("list", { name: "全队攻击力角色贡献" })).not.toBeInTheDocument();
+  const inactive = screen.getByText("inactive · 未生效").closest("details");
+  expect(inactive).not.toBeNull();
+  expect(within(inactive as HTMLElement).getByText("2")).toBeInTheDocument();
+});
+
+test("Archer and Rin show their 4.4 entry buffs and triggerable buffs immediately after selection", async () => {
+  const user = userEvent.setup();
+  renderSimulator(productionBundle());
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:1015");
+  await user.selectOptions(screen.getByLabelText("2号位角色"), "character:1508");
+
+  expect(screen.getByRole("heading", { name: "conditional · 条件生效 2" })).toBeVisible();
+  expect(screen.getByRole("heading", { name: "available · 可触发 8" })).toBeVisible();
+  expect(screen.getByText("指定角色攻击力 +150%")).toBeVisible();
+  expect(screen.getByText("指定角色抗性穿透 +15%")).toBeVisible();
+  expect(screen.getByRole("list", { name: "指定角色攻击力角色贡献" })).toBeVisible();
+  expect(screen.getByRole("list", { name: "指定角色抗性穿透角色贡献" })).toBeVisible();
 });
 
 test("overlapping character buffs show every contribution and the applied rule", async () => {

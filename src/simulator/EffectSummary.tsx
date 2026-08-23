@@ -17,12 +17,18 @@ const metricLabels: Record<string, string> = {
 const categoryLabels = {
   active: "active · 生效",
   conditional: "conditional · 条件生效",
+  available: "available · 可触发",
   inactive: "inactive · 未生效",
   unsupported: "unsupported · 不支持",
   wasted: "wasted · 无有效受益者",
 } as const;
+type DisplayCategory = keyof typeof categoryLabels;
 
-const auditCategories = new Set<keyof typeof categoryLabels>(["inactive", "unsupported", "wasted"]);
+const auditCategories = new Set<DisplayCategory>(["inactive", "unsupported", "wasted"]);
+const availableReasons = new Set<EvaluationReason>([
+  "battle_not_started", "action_not_active", "event_not_triggered", "duration_expired",
+  "target_required", "target_not_selected", "enemy_not_broken", "condition_unknown", "condition_not_met",
+]);
 
 const knownReasonLabels = {
   source_not_selected: "来源未选择",
@@ -55,6 +61,7 @@ type EffectSummaryProps = {
 function targetLabel(entry: EvaluationEntry, bundle: GameReleaseBundle): string {
   const target = bundle.entities.effects.find(({ id }) => id === entry.effectId)?.target.type;
   if (target === "team") return "全队";
+  if (target === "character-list") return "指定角色";
   if (target === "self") return "自身";
   if (target === "single-ally") return "单体队友";
   if (target === "single-enemy") return "单个敌人";
@@ -79,6 +86,7 @@ function groupTargetLabel(group: AggregationGroup, bundle: GameReleaseBundle): s
   const target = bundle.entities.effects.find(({ id }) => group.effectIds.includes(id))?.target.type;
   const concrete = group.targets.length ? group.targets.join("、") : "无具体目标";
   if (target === "team") return `全队（${concrete}）`;
+  if (target === "character-list") return `指定角色（${concrete}）`;
   if (target === "self") return `自身（${concrete}）`;
   if (target === "single-ally") return `单体队友（${concrete}）`;
   if (target === "single-enemy") return `单个敌人（${concrete}）`;
@@ -103,8 +111,23 @@ function capValue(group: AggregationGroup, value: number): string {
   return rounded(value);
 }
 
+function categoryEntries(
+  evaluation: TeamEvaluation | null, category: DisplayCategory,
+): EvaluationEntry[] {
+  if (!evaluation) return [];
+  const available = evaluation.inactive.filter(({ reason }) => (
+    availableReasons.has(reason as EvaluationReason)
+  ));
+  if (category === "available") return available;
+  if (category === "inactive") {
+    const availableIds = new Set(available.map(({ evaluationId }) => evaluationId));
+    return evaluation.inactive.filter(({ evaluationId }) => !availableIds.has(evaluationId));
+  }
+  return evaluation[category];
+}
+
 export function EffectSummary({ evaluation, bundle, onEvidence }: EffectSummaryProps) {
-  const categories = (Object.keys(categoryLabels) as Array<keyof typeof categoryLabels>);
+  const categories = (Object.keys(categoryLabels) as DisplayCategory[]);
   return (
     <section className="results-panel" aria-labelledby="evaluation-title">
       <p className="eyebrow">评估结果</p>
@@ -134,7 +157,7 @@ export function EffectSummary({ evaluation, bundle, onEvidence }: EffectSummaryP
         </section>
       ) : null}
       {categories.map((category) => {
-        const entries = evaluation?.[category] ?? [];
+        const entries = categoryEntries(evaluation, category);
         const categoryId = `category-${category}`;
         const content = entries.length ? (
           <ul>

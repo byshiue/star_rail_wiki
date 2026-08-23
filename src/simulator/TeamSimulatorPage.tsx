@@ -41,7 +41,7 @@ function SimulatorWorkspace({ bundle, title, description, maxSlots }: WorkspaceP
     [sharedValue, bundle, maxSlots],
   );
   const [linkError, setLinkError] = useState<string | null>(shared.error ?? null);
-  const [scenario, setScenario] = useState<BattleScenario>({});
+  const [scenario, setScenario] = useState<BattleScenario>({ battleStarted: true });
   const [evidence, setEvidence] = useState<EffectEvidence | null>(null);
   const applyingLocation = useRef(false);
   const team = useTeamBuild(bundle, scenario, shared.build, maxSlots);

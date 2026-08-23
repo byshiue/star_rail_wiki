@@ -34,8 +34,8 @@ function sources(input: ReleaseEntities | EffectSources): EffectSources {
   return "characters" in input ? collectEffectSources(input) : input;
 }
 
-function coverageKey(value: { sourceRevisionId?: string; revisionId?: string; metric: string; originalText: string }): string {
-  return `${value.sourceRevisionId ?? value.revisionId}\u0000${value.metric}\u0000${value.originalText}`;
+function coverageKey(value: { sourceRevisionId?: string; revisionId?: string; originalText: string }): string {
+  return `${value.sourceRevisionId ?? value.revisionId}\u0000${value.originalText}`;
 }
 
 export function buildCoverageReport(

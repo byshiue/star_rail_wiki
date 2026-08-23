@@ -13,7 +13,7 @@ const metricLabels: Record<Effect["metric"], string> = {
   healing: "治疗", shielding: "护盾", skill_points: "战技点", mechanic_counter: "机制计数", unclassified_numeric: "未分类数值机制",
 };
 const targetLabels: Record<Effect["target"]["type"], string> = {
-  self: "自身", "single-ally": "单体队友", team: "全队", "single-enemy": "单体敌人", "all-enemies": "敌方全体",
+  self: "自身", "single-ally": "单体队友", team: "全队", "character-list": "指定角色", "single-enemy": "单体敌人", "all-enemies": "敌方全体",
 };
 function formatValue(effect: Effect): string {
   return effect.operation === "percent" || effect.operation === "multiplier" ? `${effect.value.base * 100}%` : String(effect.value.base);

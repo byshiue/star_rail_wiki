@@ -136,6 +136,36 @@ describe("evaluateTeam", () => {
     }));
   });
 
+  it("targets only selected members whose character logical IDs are explicitly listed", () => {
+    const bundle = structuredClone(fixtureBundle);
+    const template = bundle.entities.effects.find(({ id }) => id === "effect:damage")!;
+    bundle.entities.effects.push({
+      ...template,
+      id: "effect:character-list",
+      target: {
+        type: "character-list",
+        characterLogicalIds: ["character:synthetic-support", "character:synthetic-dps"],
+      },
+    });
+    const build = {
+      ...goldenTeam,
+      members: [
+        { slotId: "slot-1", characterLogicalId: "character:synthetic-support", eidolon: 0 },
+        { slotId: "slot-2", characterLogicalId: "character:synthetic-dps", eidolon: 0 },
+        { slotId: "slot-3", characterLogicalId: "character:synthetic-sustain", eidolon: 0 },
+      ],
+    };
+
+    const result = evaluateTeam(build, allConditionsActive, bundle);
+    expect(result.active.find(({ effectId }) => effectId === "effect:character-list")?.targets)
+      .toEqual(["slot-1", "slot-2"]);
+    expect(result.groups).toContainEqual(expect.objectContaining({
+      effectIds: ["effect:character-list"],
+      targets: ["slot-1", "slot-2"],
+      targetSignature: "slot-1|slot-2",
+    }));
+  });
+
   it("classifies unresolved targets and unconsumable buffs without aggregating them", () => {
     const bundle = structuredClone(fixtureBundle);
     const template = bundle.entities.effects.find(({ id }) => id === "effect:damage")!;

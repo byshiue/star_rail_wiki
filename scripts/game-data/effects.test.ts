@@ -42,12 +42,13 @@ const goldenCases = [
 ] as const;
 
 describe("reviewed effect overlays", () => {
-  it("locks the small manually reviewed 4.4 team, ally, and enemy sample", () => {
+  it("locks the manually reviewed 4.4 target coverage", () => {
     const effects = production44Effects.filter(({ reviewStatus }) => reviewStatus === "reviewed");
-    expect(effects).toHaveLength(42);
-    expect(effects.filter(({ target }) => target.type === "team")).toHaveLength(1);
-    expect(effects.filter(({ target }) => target.type === "single-ally")).toHaveLength(1);
-    expect(effects.filter(({ target }) => target.type === "all-enemies")).toHaveLength(1);
+    expect(effects).toHaveLength(60);
+    expect(effects.filter(({ target }) => target.type === "team")).toHaveLength(7);
+    expect(effects.filter(({ target }) => target.type === "single-ally")).toHaveLength(2);
+    expect(effects.filter(({ target }) => target.type === "all-enemies")).toHaveLength(3);
+    expect(effects.filter(({ target }) => target.type === "character-list")).toHaveLength(2);
 
     expect(effects.find(({ id }) => id === "effect:4.4:0417")).toMatchObject({
       sourceRevisionId: "trace:1101103@4.4-cn-2026-08-21",
@@ -77,6 +78,63 @@ describe("reviewed effect overlays", () => {
       duration: { type: "turns", value: 2 }, stacking: { type: "refresh", maxStacks: 1 },
       reviewStatus: "reviewed",
       originalText: "【通解】状态下，敌方目标防御力降低30%→45%，持续2回合",
+    });
+  });
+
+  it("locks reviewed Archer and Rin team-visible buffs to the 4.4 source revision", () => {
+    expect(production44Effects.find(({ id }) => id === "effect:4.4:0405")).toMatchObject({
+      sourceRevisionId: "ability:101502@4.4-cn-2026-08-21",
+      metric: "damage_bonus",
+      value: { base: 0.6, scaling: expect.arrayContaining([1.2]) },
+      target: { type: "self" },
+      trigger: { type: "event", event: "archer-circuit-skill" },
+      stacking: { type: "additive", maxStacks: 2 },
+      conditions: [{ type: "attack-type", operator: "equals", value: "skill" }],
+      reviewStatus: "reviewed",
+    });
+    expect(production44Effects.find(({ id }) => id === "effect:4.4:0868")).toMatchObject({
+      sourceRevisionId: "trace:1508101@4.4-cn-2026-08-21",
+      metric: "attack", value: { base: 1.5 },
+      target: {
+        type: "character-list",
+        characterLogicalIds: ["character:1015", "character:1508"],
+      },
+      trigger: { type: "battle-start" },
+      reviewStatus: "reviewed",
+    });
+    expect(production44Effects.find(({ id }) => id === "effect:4.4:1508101-resistance-penetration"))
+      .toMatchObject({
+        sourceRevisionId: "trace:1508101@4.4-cn-2026-08-21",
+        metric: "resistance_penetration", value: { base: 0.15 },
+        target: {
+          type: "character-list",
+          characterLogicalIds: ["character:1015", "character:1508"],
+        },
+        reviewStatus: "reviewed",
+      });
+    expect(production44Effects.find(({ id }) => id === "effect:4.4:0865")).toMatchObject({
+      sourceRevisionId: "ability:150803@4.4-cn-2026-08-21",
+      metric: "vulnerability",
+      value: { base: 0.1, scaling: expect.arrayContaining([0.25]) },
+      target: { type: "all-enemies" },
+      duration: { type: "turns", value: 3 },
+      reviewStatus: "reviewed",
+    });
+    expect(production44Effects.find(({ id }) => (
+      id === "effect:4.4-cn-2026-08-21:unsupported:70c2682f847c1b91"
+    ))).toMatchObject({
+      sourceRevisionId: "ability:101502@4.4-cn-2026-08-21",
+      metric: "unclassified_numeric",
+      reviewStatus: "unsupported",
+      originalText: expect.stringContaining("造成等同于Archer180%→450%攻击力"),
+    });
+    expect(production44Effects.find(({ id }) => (
+      id === "effect:4.4-cn-2026-08-21:unsupported:3d570b952f757d5e"
+    ))).toMatchObject({
+      sourceRevisionId: "ability:150803@4.4-cn-2026-08-21",
+      metric: "unclassified_numeric",
+      reviewStatus: "unsupported",
+      originalText: expect.stringContaining("造成等同于远坂凛300%→750%攻击力"),
     });
   });
 
@@ -289,6 +347,49 @@ describe("reviewed effect overlays", () => {
     ]);
   });
 
+  it("allows reviewed overlays to correct a generated metric without weakening source identity", () => {
+    const source = feature(
+      "eidolon:metric-correction@4.3-fixture",
+      "我方全体造成的战技伤害为原伤害的130%",
+    );
+    const [candidate] = extractCandidateEffects(source);
+    expect(candidate.metric).toBe("unclassified_numeric");
+    const overlay: EffectOverlay = {
+      candidateId: candidate.candidateId,
+      id: "effect:metric-correction@4.3-fixture",
+      sourceRevisionId: source.revisionId,
+      metric: "damage_bonus",
+      metricCorrection: {
+        from: "unclassified_numeric",
+        reason: "原伤害的130%按游戏语义审核为30%战技增伤。",
+      },
+      operation: "percent",
+      value: { base: 0.3, scaling: [] },
+      target: { type: "team" },
+      trigger: { type: "always" },
+      duration: { type: "permanent" },
+      stacking: { type: "none", maxStacks: 1 },
+      conditions: [{ type: "attack-type", operator: "equals", value: "skill" }],
+      dispellable: null,
+      reviewStatus: "reviewed",
+      originalText: source.originalText,
+    };
+
+    expect(applyEffectOverlays([candidate], [overlay])[0]).toMatchObject({
+      metric: "damage_bonus", value: { base: 0.3 }, reviewStatus: "reviewed",
+    });
+    const { metricCorrection: _omitted, ...undeclared } = overlay;
+    expect(() => applyEffectOverlays([candidate], [undeclared])).toThrow(/conflicts/i);
+    expect(() => applyEffectOverlays([candidate], [{
+      ...overlay,
+      metricCorrection: { ...overlay.metricCorrection!, from: "attack" },
+    }])).toThrow(/conflicts/i);
+    expect(() => applyEffectOverlays([candidate], [{ ...overlay, sourceRevisionId: "eidolon:other@4.3-fixture" }]))
+      .toThrow(/conflicts/i);
+    expect(() => applyEffectOverlays([candidate], [{ ...overlay, originalText: source.originalText + "。" }]))
+      .toThrow(/conflicts/i);
+  });
+
   it("rejects stale, duplicate-candidate, and duplicate-effect overlays", () => {
     const [candidate] = extractCandidateEffects(feature("ability:strict@4.3-fixture", "team damage bonus 50%"));
     const overlay = {
@@ -303,8 +404,33 @@ describe("reviewed effect overlays", () => {
     expect(() => applyEffectOverlays([candidate], [{ ...overlay, candidateId: "stale#effect-1" }])).toThrow(/stale/i);
     expect(() => applyEffectOverlays([candidate], [overlay, { ...overlay, id: "effect:other" }])).toThrow(/candidateId/i);
     expect(() => applyEffectOverlays([candidate], [overlay, { ...overlay, candidateId: "other", id: overlay.id }])).toThrow(/effect id/i);
-    expect(() => applyEffectOverlays([candidate], [{ ...overlay, metric: "attack" }])).toThrow(/conflicts/i);
     expect(() => applyEffectOverlays([candidate], [])).toThrow(/unconsumed/i);
+  });
+
+  it("rejects correction metadata when the generated metric did not change", () => {
+    const [candidate] = extractCandidateEffects(feature(
+      "ability:unneeded-correction@4.3-fixture",
+      "team damage bonus 50%",
+    ));
+    const overlay = {
+      candidateId: candidate.candidateId,
+      id: "effect:unneeded-correction@4.3-fixture",
+      sourceRevisionId: candidate.sourceRevisionId,
+      metric: candidate.metric,
+      metricCorrection: { from: candidate.metric, reason: "不应接受无变化的校正。" },
+      operation: "percent" as const,
+      value: { base: 0.5, scaling: [] },
+      target: { type: "team" as const },
+      trigger: { type: "always" as const },
+      duration: { type: "permanent" as const },
+      stacking: { type: "none" as const, maxStacks: 1 as const },
+      conditions: [],
+      dispellable: null,
+      reviewStatus: "reviewed" as const,
+      originalText: candidate.originalText,
+    };
+
+    expect(() => applyEffectOverlays([candidate], [overlay])).toThrow(/conflicts/i);
   });
 
   it("rejects generated entries in the manually reviewed overlay file", () => {
@@ -355,6 +481,37 @@ describe("effect completeness gate", () => {
       unmappedEffects: 0,
     });
     expect(() => assertComplete(report)).not.toThrow();
+  });
+
+  it("counts a source-locked reviewed metric correction as mapped coverage", () => {
+    const source = feature("eidolon:coverage-correction@4.3-fixture", "我方全体造成的战技伤害为原伤害的130%");
+    const [candidate] = extractCandidateEffects(source);
+    const [effect] = applyEffectOverlays([candidate], [{
+      candidateId: candidate.candidateId,
+      id: "effect:coverage-correction@4.3-fixture",
+      sourceRevisionId: source.revisionId,
+      metric: "damage_bonus",
+      metricCorrection: {
+        from: "unclassified_numeric",
+        reason: "原伤害的130%按游戏语义审核为30%战技增伤。",
+      },
+      operation: "percent",
+      value: { base: 0.3, scaling: [] },
+      target: { type: "team" },
+      trigger: { type: "always" },
+      duration: { type: "permanent" },
+      stacking: { type: "none", maxStacks: 1 },
+      conditions: [{ type: "attack-type", operator: "equals", value: "skill" }],
+      dispellable: null,
+      reviewStatus: "reviewed",
+      originalText: source.originalText,
+    }]);
+
+    expect(buildCoverageReport([source], [effect])).toMatchObject({
+      candidateNumericEffects: 1,
+      reviewedEffects: 1,
+      unmappedEffects: 0,
+    });
   });
 
   it("fails when numeric buff text has no effect or unsupported record", () => {

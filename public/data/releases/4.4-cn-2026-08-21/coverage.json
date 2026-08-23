@@ -4,8 +4,8 @@
   "silentNumericSourceDescriptions": 0,
   "excludedStructuralNumericTokens": 0,
   "candidateNumericEffects": 4667,
-  "reviewedEffects": 42,
+  "reviewedEffects": 60,
   "generatedEffects": 0,
-  "explicitUnsupportedEffects": 4625,
+  "explicitUnsupportedEffects": 4607,
   "unmappedEffects": 0
 }

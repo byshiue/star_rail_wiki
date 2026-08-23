@@ -21,7 +21,11 @@ describe("immutable reviewed skill scaling", () => {
     expect(snapshot.records.map(({ featureLogicalId, maxLevel, params }) => (
       [featureLogicalId, maxLevel, params.length]
     ))).toEqual([
-      ["ability:110102", 15, 15], ["ability:110603", 15, 15],
+      ["ability:110102", 15, 15],
+      ["ability:110603", 15, 15],
+      ["ability:101502", 15, 15],
+      ["ability:150803", 15, 15],
+      ["ability:150804", 15, 15],
     ]);
   });
 
@@ -33,6 +37,21 @@ describe("immutable reviewed skill scaling", () => {
     expect(deriveReviewedSkillScaling(snapshot, "ability:110603")).toEqual({
       base: 0.3,
       scaling: [0.31, 0.32, 0.33, 0.34, 0.35, 0.3625, 0.375, 0.3875, 0.4, 0.41, 0.42, 0.43, 0.44, 0.45],
+    });
+  });
+
+  it("derives exact Archer and Rin level sequences by audited effect ID", () => {
+    expect(deriveReviewedSkillScaling(snapshot, "ability:101502", "effect:4.4:0405")).toEqual({
+      base: 0.6,
+      scaling: [0.64, 0.68, 0.72, 0.76, 0.8, 0.85, 0.9, 0.95, 1, 1.04, 1.08, 1.12, 1.16, 1.2],
+    });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:150803", "effect:4.4:0865")).toEqual({
+      base: 0.1,
+      scaling: [0.11, 0.12, 0.13, 0.14, 0.15, 0.1625, 0.175, 0.1875, 0.2, 0.21, 0.22, 0.23, 0.24, 0.25],
+    });
+    expect(deriveReviewedSkillScaling(snapshot, "ability:150804", "effect:4.4:0866")).toEqual({
+      base: 0.35,
+      scaling: [0.385, 0.42, 0.455, 0.49, 0.525, 0.5687, 0.6125, 0.6562, 0.7, 0.735, 0.77, 0.805, 0.84, 0.875],
     });
   });
 

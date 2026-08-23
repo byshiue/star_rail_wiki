@@ -8797,7 +8797,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:f42d10b16681edd6",
             "effect:4.4:0405"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "ability:101503",
@@ -8842,7 +8842,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:1af17de84604022f",
             "effect:4.4:0406"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "ability:101506",
@@ -9073,7 +9073,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:1ede84a322cb2cd0",
             "effect:4.4:0407"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "trace:1015201",
@@ -9318,7 +9318,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:78d90e10d5f08e7b",
             "effect:4.4:0408"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "eidolon:101502",
@@ -9341,7 +9341,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:378829b2ddf3f118",
             "effect:4.4:0409"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "eidolon:101503",
@@ -9384,9 +9384,9 @@
           "kind": "eidolon-4",
           "originalText": "造成的终结技伤害提高150%。",
           "effectIds": [
-            "effect:4.4-cn-2026-08-21:unsupported:d2b22bd15b7a095a"
+            "effect:4.4:101504-ultimate-damage"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "eidolon:101505",
@@ -9433,7 +9433,7 @@
             "effect:4.4:0410",
             "effect:4.4:0411"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         }
       ]
     },
@@ -66424,7 +66424,7 @@
             "effect:4.4:0864",
             "effect:4.4:0865"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "ability:150804",
@@ -66449,7 +66449,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:fa838f222ac8bd68",
             "effect:4.4:0866"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "ability:150805",
@@ -66473,7 +66473,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:424b5ee798dbab79",
             "effect:4.4:0867"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "ability:150806",
@@ -66662,10 +66662,10 @@
           "originalText": "远坂凛在场时，战技点上限额外增加2点。进入战斗时，远坂凛的攻击力提高150%，量子属性抗性穿透提高15%，若Archer在队伍中，Archer也会获得该效果。",
           "effectIds": [
             "effect:4.4-cn-2026-08-21:unsupported:39a6dad5c3cb2ba8",
-            "effect:4.4-cn-2026-08-21:unsupported:52d4405c24c94800",
-            "effect:4.4:0868"
+            "effect:4.4:0868",
+            "effect:4.4:1508101-resistance-penetration"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "trace:1508102",
@@ -66688,7 +66688,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:09810d806496e6af",
             "effect:4.4:0869"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "trace:1508103",
@@ -66974,10 +66974,10 @@
           "kind": "eidolon-2",
           "originalText": "远坂凛造成的战技伤害提高30%。远坂凛在场时，我方全体造成的战技伤害为原伤害的130%。",
           "effectIds": [
-            "effect:4.4-cn-2026-08-21:unsupported:8eb757144d5e6514",
-            "effect:4.4-cn-2026-08-21:unsupported:c501f401337b6d30"
+            "effect:4.4:150802-self-skill-damage",
+            "effect:4.4:150802-team-skill-damage"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         },
         {
           "logicalId": "eidolon:150803",
@@ -67068,7 +67068,7 @@
             "effect:4.4-cn-2026-08-21:unsupported:c89fe483725e3fed",
             "effect:4.4:0870"
           ],
-          "reviewStatus": "unsupported"
+          "reviewStatus": "reviewed"
         }
       ]
     },
@@ -123626,38 +123626,6 @@
       "originalText": "行迹属性：DefenceAddedRatio +5%"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:52d4405c24c94800",
-      "sourceRevisionId": "trace:1508101@4.4-cn-2026-08-21",
-      "metric": "unclassified_numeric",
-      "operation": "percent",
-      "value": {
-        "base": 0.15,
-        "scaling": []
-      },
-      "target": {
-        "type": "self"
-      },
-      "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
-      },
-      "duration": {
-        "type": "permanent"
-      },
-      "stacking": {
-        "type": "none",
-        "maxStacks": 1
-      },
-      "conditions": [
-        {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
-        }
-      ],
-      "dispellable": null,
-      "reviewStatus": "unsupported",
-      "originalText": "进入战斗时，远坂凛的攻击力提高150%，量子属性抗性穿透提高15%，若Archer在队伍中，Archer也会获得该效果"
-    },
-    {
       "id": "effect:4.4-cn-2026-08-21:unsupported:52d4d0b17116cba5",
       "sourceRevisionId": "eidolon:150805@4.4-cn-2026-08-21",
       "metric": "unclassified_numeric",
@@ -152298,38 +152266,6 @@
       "originalText": "荆棘：使装备者的攻击力提高24%→40%"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:8eb757144d5e6514",
-      "sourceRevisionId": "eidolon:150802@4.4-cn-2026-08-21",
-      "metric": "unclassified_numeric",
-      "operation": "percent",
-      "value": {
-        "base": 0.3,
-        "scaling": []
-      },
-      "target": {
-        "type": "self"
-      },
-      "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
-      },
-      "duration": {
-        "type": "permanent"
-      },
-      "stacking": {
-        "type": "none",
-        "maxStacks": 1
-      },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
-      "dispellable": null,
-      "reviewStatus": "unsupported",
-      "originalText": "远坂凛造成的战技伤害提高30%"
-    },
-    {
       "id": "effect:4.4-cn-2026-08-21:unsupported:8ec1826182913062",
       "sourceRevisionId": "ability:132102@4.4-cn-2026-08-21",
       "metric": "unclassified_numeric",
@@ -178090,38 +178026,6 @@
       "originalText": "增幅状态下希儿的量子属性抗性穿透提高20%"
     },
     {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:c501f401337b6d30",
-      "sourceRevisionId": "eidolon:150802@4.4-cn-2026-08-21",
-      "metric": "unclassified_numeric",
-      "operation": "percent",
-      "value": {
-        "base": 1.3,
-        "scaling": []
-      },
-      "target": {
-        "type": "team"
-      },
-      "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
-      },
-      "duration": {
-        "type": "permanent"
-      },
-      "stacking": {
-        "type": "none",
-        "maxStacks": 1
-      },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
-      "dispellable": null,
-      "reviewStatus": "unsupported",
-      "originalText": "远坂凛在场时，我方全体造成的战技伤害为原伤害的130%"
-    },
-    {
       "id": "effect:4.4-cn-2026-08-21:unsupported:c510e1a37d11f652",
       "sourceRevisionId": "trace:1305102@4.4-cn-2026-08-21",
       "metric": "unclassified_numeric",
@@ -184136,38 +184040,6 @@
       "dispellable": null,
       "reviewStatus": "unsupported",
       "originalText": "【残梦】达到9点时可激活终结技"
-    },
-    {
-      "id": "effect:4.4-cn-2026-08-21:unsupported:d2b22bd15b7a095a",
-      "sourceRevisionId": "eidolon:101504@4.4-cn-2026-08-21",
-      "metric": "unclassified_numeric",
-      "operation": "percent",
-      "value": {
-        "base": 1.5,
-        "scaling": []
-      },
-      "target": {
-        "type": "self"
-      },
-      "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
-      },
-      "duration": {
-        "type": "permanent"
-      },
-      "stacking": {
-        "type": "none",
-        "maxStacks": 1
-      },
-      "conditions": [
-        {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
-        }
-      ],
-      "dispellable": null,
-      "reviewStatus": "unsupported",
-      "originalText": "造成的终结技伤害提高150%"
     },
     {
       "id": "effect:4.4-cn-2026-08-21:unsupported:d2b549c1e05f1d94",
@@ -218903,29 +218775,46 @@
       "operation": "percent",
       "value": {
         "base": 0.6,
-        "scaling": []
+        "scaling": [
+          0.64,
+          0.68,
+          0.72,
+          0.76,
+          0.8,
+          0.85,
+          0.9,
+          0.95,
+          1,
+          1.04,
+          1.08,
+          1.12,
+          1.16,
+          1.2
+        ]
       },
       "target": {
         "type": "self"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "archer-circuit-skill"
       },
       "duration": {
         "type": "permanent"
       },
       "stacking": {
-        "type": "none",
-        "maxStacks": 1
+        "type": "additive",
+        "maxStacks": 2
       },
       "conditions": [
         {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
+          "type": "attack-type",
+          "operator": "equals",
+          "value": "skill"
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "【回路连接】状态下施放战技后，本回合不会结束，并使Archer战技造成的伤害提高60%→120%，该效果可以叠加2层，持续至退出【回路连接】状态"
     },
     {
@@ -218938,26 +218827,22 @@
         "scaling": []
       },
       "target": {
-        "type": "all-enemies"
+        "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ally-attack"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：生命或资源回复的触发、目标、倍率、持续与上限机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "当Archer的队友对敌方目标施放攻击后，Archer消耗1点充能，立即对主目标发动追加攻击，造成等同于Archer100%→250%攻击力的量子属性伤害，并恢复1个战技点"
     },
     {
@@ -218974,22 +218859,25 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill-point-gained"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 1
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
       "conditions": [
         {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
+          "type": "skill-points",
+          "operator": "at-least",
+          "value": 4
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "我方获得战技点后，若战技点大于等于4点，Archer的暴击伤害提高120%，持续1回合。"
     },
     {
@@ -219002,26 +218890,22 @@
         "scaling": []
       },
       "target": {
-        "type": "self"
+        "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "archer-third-skill"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：生命或资源回复的触发、目标、倍率、持续与上限机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "单个回合内施放3次战技后，为我方恢复2个战技点。"
     },
     {
@@ -219038,22 +218922,19 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:101503"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "施放终结技时，使敌方目标的量子属性的抗性降低20%，并为其添加量子属性弱点，持续2回合。"
     },
     {
@@ -219066,26 +218947,22 @@
         "scaling": []
       },
       "target": {
-        "type": "self"
+        "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "turn-start:character:1015"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：生命或资源回复的触发、目标、倍率、持续与上限机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "回合开始时为我方恢复1个战技点"
     },
     {
@@ -219101,8 +218978,7 @@
         "type": "self"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -219113,11 +218989,13 @@
       },
       "conditions": [
         {
-          "type": "不支持：伤害倍率的攻击类型、触发条件、目标与叠加机制尚未逐项建模"
+          "type": "attack-type",
+          "operator": "equals",
+          "value": "skill"
         }
       ],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "造成的战技伤害无视20%的防御力"
     },
     {
@@ -233613,26 +233491,22 @@
         "scaling": []
       },
       "target": {
-        "type": "all-enemies"
+        "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:150803"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：生命或资源回复的触发、目标、倍率、持续与上限机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "施放时，为我方恢复1个战技点，并使敌方全体受到的伤害提高10%→25%，持续3回合"
     },
     {
@@ -233642,29 +233516,41 @@
       "operation": "percent",
       "value": {
         "base": 0.1,
-        "scaling": []
+        "scaling": [
+          0.11,
+          0.12,
+          0.13,
+          0.14,
+          0.15,
+          0.1625,
+          0.175,
+          0.1875,
+          0.2,
+          0.21,
+          0.22,
+          0.23,
+          0.24,
+          0.25
+        ]
       },
       "target": {
         "type": "all-enemies"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "ultimate:ability:150803"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 3
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：生命或资源回复的触发、目标、倍率、持续与上限机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "施放时，为我方恢复1个战技点，并使敌方全体受到的伤害提高10%→25%，持续3回合"
     },
     {
@@ -233674,29 +233560,41 @@
       "operation": "percent",
       "value": {
         "base": 0.35,
-        "scaling": []
+        "scaling": [
+          0.385,
+          0.42,
+          0.455,
+          0.49,
+          0.525,
+          0.5687,
+          0.6125,
+          0.6562,
+          0.7,
+          0.735,
+          0.77,
+          0.805,
+          0.84,
+          0.875
+        ]
       },
       "target": {
-        "type": "self"
+        "type": "single-ally"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "skill-point-changed"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 2
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：生命或资源回复的触发、目标、倍率、持续与上限机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "我方目标消耗或恢复战技点时，使其暴击伤害提高35%→87.5%，持续2回合，且每消耗或恢复1点战技点就使远坂凛获得1点【宝石能量】"
     },
     {
@@ -233709,26 +233607,22 @@
         "scaling": []
       },
       "target": {
-        "type": "all-enemies"
+        "type": "team"
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "rin-archer-coordinated-attack"
       },
       "duration": {
-        "type": "permanent"
+        "type": "instant"
       },
       "stacking": {
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：生命或资源回复的触发、目标、倍率、持续与上限机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "Archer施放战技【伪•螺旋剑】攻击后，若战技点小于等于3点或本次【回路连接】状态已主动施放5次【伪•螺旋剑】，且未触发【自在远坂流】的连携追加攻击，远坂凛和Archer对敌方全体发动连携追加攻击，分别造成等同于远坂凛150%→375%攻击力以及Archer150%→375%攻击力的量子属性伤害，并为我方恢复4个战技点"
     },
     {
@@ -233741,11 +233635,14 @@
         "scaling": []
       },
       "target": {
-        "type": "self"
+        "type": "character-list",
+        "characterLogicalIds": [
+          "character:1015",
+          "character:1508"
+        ]
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "battle-start"
       },
       "duration": {
         "type": "permanent"
@@ -233754,13 +233651,9 @@
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "进入战斗时，远坂凛的攻击力提高150%，量子属性抗性穿透提高15%，若Archer在队伍中，Archer也会获得该效果"
     },
     {
@@ -233777,22 +233670,19 @@
       },
       "trigger": {
         "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "event": "rin-speed-buff-activated"
       },
       "duration": {
-        "type": "permanent"
+        "type": "turns",
+        "value": 3
       },
       "stacking": {
-        "type": "none",
+        "type": "refresh",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：持续回合、刷新时点与叠加规则尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "进入战斗时和施放强化战技后，远坂凛的速度提高20%，持续3回合。"
     },
     {
@@ -233808,8 +233698,7 @@
         "type": "self"
       },
       "trigger": {
-        "type": "event",
-        "event": "unsupported-reviewed-mechanic"
+        "type": "always"
       },
       "duration": {
         "type": "permanent"
@@ -233818,13 +233707,9 @@
         "type": "none",
         "maxStacks": 1
       },
-      "conditions": [
-        {
-          "type": "不支持：抗性或穿透效果的属性范围、目标、持续与叠加机制尚未逐项建模"
-        }
-      ],
+      "conditions": [],
       "dispellable": null,
-      "reviewStatus": "unsupported",
+      "reviewStatus": "reviewed",
       "originalText": "远坂凛的全属性抗性穿透提高20%"
     },
     {
@@ -236024,6 +235909,136 @@
       "dispellable": null,
       "reviewStatus": "unsupported",
       "originalText": "施放欢愉技时，使自身暴击伤害提高100%，持续3回合。"
+    },
+    {
+      "id": "effect:4.4:101504-ultimate-damage",
+      "sourceRevisionId": "eidolon:101504@4.4-cn-2026-08-21",
+      "metric": "damage_bonus",
+      "operation": "percent",
+      "value": {
+        "base": 1.5,
+        "scaling": []
+      },
+      "target": {
+        "type": "self"
+      },
+      "trigger": {
+        "type": "always"
+      },
+      "duration": {
+        "type": "permanent"
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [
+        {
+          "type": "attack-type",
+          "operator": "equals",
+          "value": "ultimate"
+        }
+      ],
+      "dispellable": null,
+      "reviewStatus": "reviewed",
+      "originalText": "造成的终结技伤害提高150%"
+    },
+    {
+      "id": "effect:4.4:150802-self-skill-damage",
+      "sourceRevisionId": "eidolon:150802@4.4-cn-2026-08-21",
+      "metric": "damage_bonus",
+      "operation": "percent",
+      "value": {
+        "base": 0.3,
+        "scaling": []
+      },
+      "target": {
+        "type": "self"
+      },
+      "trigger": {
+        "type": "always"
+      },
+      "duration": {
+        "type": "permanent"
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [
+        {
+          "type": "attack-type",
+          "operator": "equals",
+          "value": "skill"
+        }
+      ],
+      "dispellable": null,
+      "reviewStatus": "reviewed",
+      "originalText": "远坂凛造成的战技伤害提高30%"
+    },
+    {
+      "id": "effect:4.4:150802-team-skill-damage",
+      "sourceRevisionId": "eidolon:150802@4.4-cn-2026-08-21",
+      "metric": "damage_bonus",
+      "operation": "percent",
+      "value": {
+        "base": 0.3,
+        "scaling": []
+      },
+      "target": {
+        "type": "team"
+      },
+      "trigger": {
+        "type": "always"
+      },
+      "duration": {
+        "type": "permanent"
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [
+        {
+          "type": "attack-type",
+          "operator": "equals",
+          "value": "skill"
+        }
+      ],
+      "dispellable": null,
+      "reviewStatus": "reviewed",
+      "originalText": "远坂凛在场时，我方全体造成的战技伤害为原伤害的130%"
+    },
+    {
+      "id": "effect:4.4:1508101-resistance-penetration",
+      "sourceRevisionId": "trace:1508101@4.4-cn-2026-08-21",
+      "metric": "resistance_penetration",
+      "operation": "percent",
+      "value": {
+        "base": 0.15,
+        "scaling": []
+      },
+      "target": {
+        "type": "character-list",
+        "characterLogicalIds": [
+          "character:1015",
+          "character:1508"
+        ]
+      },
+      "trigger": {
+        "type": "battle-start"
+      },
+      "duration": {
+        "type": "permanent"
+      },
+      "stacking": {
+        "type": "none",
+        "maxStacks": 1
+      },
+      "conditions": [],
+      "dispellable": null,
+      "reviewStatus": "reviewed",
+      "originalText": "进入战斗时，远坂凛的攻击力提高150%，量子属性抗性穿透提高15%，若Archer在队伍中，Archer也会获得该效果"
     }
   ]
 }

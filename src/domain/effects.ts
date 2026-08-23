@@ -22,6 +22,10 @@ export const TargetSelectorSchema = z.discriminatedUnion("type", [
   z.strictObject({ type: z.literal("self") }),
   z.strictObject({ type: z.literal("single-ally") }),
   z.strictObject({ type: z.literal("team") }),
+  z.strictObject({
+    type: z.literal("character-list"),
+    characterLogicalIds: z.array(z.string().min(1)).min(1),
+  }),
   z.strictObject({ type: z.literal("single-enemy") }),
   z.strictObject({ type: z.literal("all-enemies") }),
 ]);

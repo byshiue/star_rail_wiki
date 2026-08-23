@@ -1,9 +1,15 @@
 import { z } from "zod";
-import { EffectSchema, type Effect } from "../../src/domain/effects";
+import { EffectMetricSchema, EffectSchema, type Effect } from "../../src/domain/effects";
 import type { CandidateEffect } from "./extractEffects";
+
+const MetricCorrectionSchema = z.strictObject({
+  from: EffectMetricSchema,
+  reason: z.string().trim().min(1),
+});
 
 export const EffectOverlaySchema = EffectSchema.extend({
   candidateId: z.string().min(1),
+  metricCorrection: MetricCorrectionSchema.optional(),
   reviewStatus: z.enum(["reviewed", "unsupported"]),
 });
 export type EffectOverlay = z.infer<typeof EffectOverlaySchema>;
@@ -41,14 +47,23 @@ export function applyEffectOverlays(
   const effects = parsedOverlays.map((overlay) => {
     const candidate = candidatesById.get(overlay.candidateId);
     if (!candidate) throw new Error(`stale effect overlay candidateId: ${overlay.candidateId}`);
+    const metricChanged = overlay.metric !== candidate.metric;
+    const correctionAuthorized = metricChanged
+      && overlay.reviewStatus === "reviewed"
+      && overlay.metricCorrection?.from === candidate.metric;
     if (
       overlay.sourceRevisionId !== candidate.sourceRevisionId
-      || overlay.metric !== candidate.metric
       || overlay.originalText !== candidate.originalText
+      || (metricChanged && !correctionAuthorized)
+      || (!metricChanged && overlay.metricCorrection !== undefined)
     ) {
       throw new Error(`effect overlay conflicts with candidateId: ${overlay.candidateId}`);
     }
-    const { candidateId: _candidateId, ...effect } = overlay;
+    const {
+      candidateId: _candidateId,
+      metricCorrection: _metricCorrection,
+      ...effect
+    } = overlay;
     return EffectSchema.parse(effect);
   });
 
