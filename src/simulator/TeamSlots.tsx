@@ -1,6 +1,37 @@
-import type { ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import type { GameReleaseBundle } from "../domain/releases";
 import type { TeamBuild, TeamMemberBuild } from "../effects/evaluateTeam";
+
+const pathLabels: Record<string, string> = {
+  destruction: "毁灭",
+  hunt: "巡猎",
+  erudition: "智识",
+  harmony: "同谐",
+  nihility: "虚无",
+  preservation: "存护",
+  abundance: "丰饶",
+  remembrance: "记忆",
+  elation: "欢愉",
+  Warrior: "毁灭",
+  Rogue: "巡猎",
+  Mage: "智识",
+  Shaman: "同谐",
+  Warlock: "虚无",
+  Knight: "存护",
+  Priest: "丰饶",
+  Memory: "记忆",
+  Elation: "欢愉",
+};
+
+const elementLabels: Record<string, string> = {
+  Physical: "物理",
+  Fire: "火",
+  Ice: "冰",
+  Thunder: "雷",
+  Wind: "风",
+  Quantum: "量子",
+  Imaginary: "虚数",
+};
 
 type TeamSlotsProps = {
   bundle: GameReleaseBundle;
@@ -14,6 +45,16 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
   const cones = bundle.entities.equipment.filter((item) => item.kind === "light-cone" && item.validToReleaseId === null);
   const relics = bundle.entities.equipment.filter((item) => item.kind === "relic-set" && item.validToReleaseId === null);
   const selectedIds = new Set(build.members.map((member) => member.characterLogicalId));
+  const [pathFilter, setPathFilter] = useState("");
+  const [elementFilter, setElementFilter] = useState("");
+  const paths = [...new Set(characters.map(({ path }) => path))]
+    .sort((left, right) => (pathLabels[left] ?? left).localeCompare(pathLabels[right] ?? right, "zh-Hant"));
+  const elements = [...new Set(characters.map(({ element }) => element))]
+    .sort((left, right) => (elementLabels[left] ?? left).localeCompare(elementLabels[right] ?? right, "zh-Hant"));
+  const filteredCharacters = characters.filter((character) => (
+    (!pathFilter || character.path === pathFilter)
+    && (!elementFilter || character.element === elementFilter)
+  ));
 
   function memberAt(slot: number) {
     return build.members.find((member) => member.slotId === `slot-${slot}`);
@@ -55,6 +96,27 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
         <div><p className="eyebrow">队伍配置</p><h2 id="team-slots-title">{maxSlots === 1 ? "单角色构筑" : "最多四名角色"}</h2></div>
         <span className="release-pin">正式服 {bundle.release.gameVersion}</span>
       </div>
+      <div className="character-filters" aria-label="角色筛选">
+        <label>
+          <span>命途</span>
+          <select aria-label="命途筛选" value={pathFilter} onChange={(event) => setPathFilter(event.target.value)}>
+            <option value="">全部命途</option>
+            {paths.map((path) => <option key={path} value={path}>{pathLabels[path] ?? path}</option>)}
+          </select>
+        </label>
+        <label>
+          <span>属性</span>
+          <select
+            aria-label="属性筛选"
+            value={elementFilter}
+            onChange={(event) => setElementFilter(event.target.value)}
+          >
+            <option value="">全部属性</option>
+            {elements.map((element) => <option key={element} value={element}>{elementLabels[element] ?? element}</option>)}
+          </select>
+        </label>
+        <span className="filter-count" role="status">符合条件：{filteredCharacters.length} 名</span>
+      </div>
       <div className="team-slots">
         {Array.from({ length: maxSlots }, (_, index) => {
           const slot = index + 1;
@@ -83,7 +145,10 @@ export function TeamSlots({ bundle, build, maxSlots = 4, onChange }: TeamSlotsPr
                 <span>{slot}号位角色</span>
                 <select aria-label={`${slot}号位角色`} value={member?.characterLogicalId ?? ""} onChange={(event) => selectCharacter(slot, event)}>
                   <option value="">选择角色</option>
-                  {characters.map((option) => (
+                  {characters.filter((option) => (
+                    option.logicalId === member?.characterLogicalId
+                    || filteredCharacters.some(({ logicalId }) => logicalId === option.logicalId)
+                  )).map((option) => (
                     <option
                       key={option.logicalId} value={option.logicalId}
                       disabled={option.logicalId !== member?.characterLogicalId && selectedIds.has(option.logicalId)}

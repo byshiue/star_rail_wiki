@@ -39,6 +39,7 @@ function releasedBundle(): GameReleaseBundle {
   const support = character("character:support", "测试辅助", "harmony");
   const supportTwo = character("character:support-2", "测试辅助二", "nihility");
   const sustain = character("character:sustain", "测试生存", "preservation");
+  supportTwo.element = "雷";
   support.eidolons = [feature(
     "eidolon:support-1", "eidolon:support-1@4.3", "全队增伤", "eidolon", ["effect:team-damage"],
   )];
@@ -215,6 +216,27 @@ test("self and team buffs stay separate when they resolve to the same member", a
     .getByText("叠加后总值 设为 0.2")).toBeVisible();
   expect(within(self.closest(".buff-group") as HTMLElement)
     .getByText("叠加后总值 设为 0.6")).toBeVisible();
+});
+
+test("filters character candidates by path and element without removing selected members", async () => {
+  const user = userEvent.setup();
+  renderSimulator();
+  await user.selectOptions(screen.getByLabelText("1号位角色"), "character:support");
+
+  await user.selectOptions(screen.getByLabelText("命途筛选"), "nihility");
+  await user.selectOptions(screen.getByLabelText("属性筛选"), "雷");
+
+  expect(screen.getByLabelText("1号位角色")).toHaveValue("character:support");
+  expect(within(screen.getByLabelText("1号位角色")).getByRole("option", { name: "测试辅助" }))
+    .toBeInTheDocument();
+  const secondSlot = screen.getByLabelText("2号位角色");
+  expect(within(secondSlot).getByRole("option", { name: "测试辅助二" })).toBeInTheDocument();
+  expect(within(secondSlot).queryByRole("option", { name: "测试输出" })).not.toBeInTheDocument();
+
+  await user.selectOptions(screen.getByLabelText("命途筛选"), "");
+  await user.selectOptions(screen.getByLabelText("属性筛选"), "");
+
+  expect(within(secondSlot).getByRole("option", { name: "测试输出" })).toBeInTheDocument();
 });
 test("malformed and stale hash builds show a recoverable accessible error", async () => {
   const user = userEvent.setup();
