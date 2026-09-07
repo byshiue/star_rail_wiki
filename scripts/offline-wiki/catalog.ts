@@ -1,0 +1,64 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { GameReleaseBundleSchema } from "../../src/domain/releases";
+import type { EditorialData } from "./editorial";
+import { DocumentCatalogSchema, type DocumentCatalog } from "./schema";
+
+const RELEASE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+
+function readJson(path: string): unknown {
+  return JSON.parse(readFileSync(path, "utf8"));
+}
+
+function compareChineseName(left: { name: string; logicalId: string }, right: { name: string; logicalId: string }) {
+  return left.name.localeCompare(right.name, "zh-CN") || left.logicalId.localeCompare(right.logicalId);
+}
+
+export function loadDocumentCatalog(
+  releasesRoot: string,
+  releaseId: string,
+  editorialData: EditorialData = { summaries: [], divergentUniverse: [] },
+): DocumentCatalog {
+  if (!RELEASE_ID_PATTERN.test(releaseId) || releaseId.toLowerCase() === "latest") {
+    throw new Error(`offline wiki requires an exact release id; received ${JSON.stringify(releaseId)}`);
+  }
+
+  const releaseRoot = join(releasesRoot, releaseId);
+  const bundle = GameReleaseBundleSchema.parse({
+    release: readJson(join(releaseRoot, "release.json")),
+    entities: readJson(join(releaseRoot, "entities.json")),
+  });
+  if (bundle.release.id !== releaseId) {
+    throw new Error(`release directory ${releaseId} contains release ${bundle.release.id}`);
+  }
+
+  const characters = [...bundle.entities.characters].sort(compareChineseName);
+  const lightCones = bundle.entities.equipment
+    .filter((item) => item.kind === "light-cone")
+    .sort(compareChineseName);
+  const relicSets = bundle.entities.equipment
+    .filter((item) => item.kind === "relic-set")
+    .sort(compareChineseName);
+  const storyEntityIds = new Set([
+    ...characters.map((item) => item.logicalId),
+    ...lightCones.map((item) => item.logicalId),
+    ...relicSets.map((item) => item.logicalId),
+  ]);
+  const reviewedSummaryIds = new Set(editorialData.summaries
+    .filter((summary) => summary.releaseId === releaseId && storyEntityIds.has(summary.logicalId))
+    .map((summary) => summary.logicalId));
+
+  return DocumentCatalogSchema.parse({
+    release: bundle.release,
+    characters,
+    lightCones,
+    relicSets,
+    divergentUniverse: editorialData.divergentUniverse
+      .filter((item) => item.releaseId === releaseId)
+      .sort(compareChineseName),
+    summaryCoverage: {
+      reviewed: reviewedSummaryIds.size,
+      missing: storyEntityIds.size - reviewedSummaryIds.size,
+    },
+  });
+}

@@ -37,6 +37,20 @@ npm audit --audit-level=high
 
 production 使用 `/star_rail_wiki/` base path、hash routes，输出在 `dist/`。资料更新和覆盖率语义见 `docs/data-sources.md`；公开档案隐私说明见 `docs/profile-publication.md`。
 
+## 离线 PDF 图鉴
+
+仓库包含本地离线图鉴生成流程，可把固定版本资料输出为总索引、角色、光锥、遗器与差分宇宙五份 A4 PDF。生成的 PDF、官方图片缓存与 Agent 草稿位于被 Git 忽略的 `.local/offline-wiki/`，不会由 GitHub Actions 生成或上传。
+
+安装 Playwright Chromium 后执行：
+
+```bash
+npm run docs:prepare -- --release 4.4-cn-2026-08-21
+npm run docs:build -- --release 4.4-cn-2026-08-21
+npm run docs:verify -- --release 4.4-cn-2026-08-21
+```
+
+图片缓存、原创故事摘要、本地审核网页、SSH tunnel 与版本更新步骤见 [离线 Wiki PDF 制作流程](docs/offline-wiki.md)。
+
 ## 免责声明
 
 这是社区维护的非官方项目，与米哈游、HoYoverse 或资料/攻略作者无隶属关系。游戏名称、文字及相关知识产权归各权利人所有。移除或更正请求可通过 GitHub Issue 提交。

@@ -1,0 +1,52 @@
+name: Offline Wiki workflow validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/offline-wiki.yml"
+      - "data/offline-wiki/**"
+      - "docs/offline-wiki.md"
+      - "scripts/offline-wiki/**"
+      - "public/data/releases/**"
+      - "package.json"
+      - "package-lock.json"
+  pull_request:
+    paths:
+      - ".github/workflows/offline-wiki.yml"
+      - "data/offline-wiki/**"
+      - "docs/offline-wiki.md"
+      - "scripts/offline-wiki/**"
+      - "public/data/releases/**"
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout without credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate offline Wiki schemas and fixtures
+        run: npx vitest run scripts/offline-wiki
+      - name: Check repository boundaries
+        run: npm run docs:verify:repository
+      - name: Prepare current released catalog without network access
+        run: |
+          RELEASE_ID=$(node -p "require('./public/data/releases/index.json').currentReleaseId")
+          npm run docs:prepare -- --release "$RELEASE_ID"
+
+# This workflow intentionally does not download artwork, call an Agent,
+# install Chromium, build PDFs, or upload local documentation artifacts.

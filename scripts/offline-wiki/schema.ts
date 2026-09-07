@@ -1,0 +1,69 @@
+import { z } from "zod";
+import {
+  CharacterRevisionSchema,
+  EntityProvenanceSchema,
+  EquipmentRevisionSchema,
+} from "../../src/domain/entities";
+import { DataReleaseSchema } from "../../src/domain/releases";
+
+export const StoryEntityKindSchema = z.enum(["character", "light-cone", "relic-set", "divergent-universe"]);
+
+export const ReviewedSummarySchema = z.strictObject({
+  logicalId: z.string().min(1),
+  entityKind: StoryEntityKindSchema,
+  releaseId: z.string().min(1),
+  locale: z.literal("zh-CN"),
+  summary: z.string().min(1),
+  contentChecksum: z.string().regex(/^sha256:[a-f0-9]{64}$/),
+  reviewStatus: z.literal("reviewed"),
+  reviewer: z.strictObject({
+    name: z.string().min(1),
+    reviewedAt: z.iso.datetime(),
+  }),
+  provenance: z.array(EntityProvenanceSchema).min(1),
+});
+
+export const DivergentUniverseEntrySchema = z.strictObject({
+  logicalId: z.string().regex(/^du:/),
+  kind: z.enum([
+    "blessing",
+    "equation",
+    "curio",
+    "weighted-curio",
+    "occurrence",
+    "tutorial",
+    "probability-museum",
+    "operational-record",
+  ]),
+  name: z.string().min(1),
+  releaseId: z.string().min(1),
+  description: z.string().min(1),
+  provenance: z.array(EntityProvenanceSchema).min(1),
+  reviewStatus: z.literal("reviewed"),
+});
+
+export const DocumentLightConeSchema = EquipmentRevisionSchema.extend({
+  kind: z.literal("light-cone"),
+});
+
+export const DocumentRelicSetSchema = EquipmentRevisionSchema.extend({
+  kind: z.literal("relic-set"),
+});
+
+export const DocumentCatalogSchema = z.strictObject({
+  release: DataReleaseSchema,
+  characters: z.array(CharacterRevisionSchema),
+  lightCones: z.array(DocumentLightConeSchema),
+  relicSets: z.array(DocumentRelicSetSchema),
+  divergentUniverse: z.array(DivergentUniverseEntrySchema),
+  summaryCoverage: z.strictObject({
+    reviewed: z.number().int().nonnegative(),
+    missing: z.number().int().nonnegative(),
+  }),
+});
+
+export type DocumentLightCone = z.infer<typeof DocumentLightConeSchema>;
+export type DocumentRelicSet = z.infer<typeof DocumentRelicSetSchema>;
+export type DocumentCatalog = z.infer<typeof DocumentCatalogSchema>;
+export type ReviewedSummary = z.infer<typeof ReviewedSummarySchema>;
+export type DivergentUniverseEntry = z.infer<typeof DivergentUniverseEntrySchema>;

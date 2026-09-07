@@ -1,0 +1,25 @@
+{
+  "currentReleaseId": null,
+  "releases": [
+    {
+      "id": "4.4-fixture",
+      "gameVersion": "4.4",
+      "region": "cn",
+      "channel": "fixture",
+      "importedAt": "2026-09-06T00:00:00.000Z",
+      "reviewedAt": "2026-09-06T01:00:00.000Z",
+      "sources": [
+        {
+          "name": "Offline Wiki fixture",
+          "url": "https://example.invalid/offline-wiki-fixture",
+          "revision": "abcdef12",
+          "fileChecksums": {
+            "fixture.json": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "retrievedAt": "2026-09-06T00:00:00.000Z"
+        }
+      ],
+      "previousReleaseId": null
+    }
+  ]
+}

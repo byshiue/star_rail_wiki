@@ -1,0 +1,120 @@
+# 离线 Wiki PDF 制作流程
+
+这套流程把仓库中已经固定版本、附带来源的正式服资料转换为可搜索的简体中文离线图鉴。生成的 HTML、PDF、官方图片缓存和 Agent 草稿只保存在 `.local/offline-wiki/`，不会上传 GitHub。
+
+当前实现可生成总索引、角色、光锥、遗器与差分宇宙五册。初始素材清单与故事摘要集合为空，因此当前 PDF 是完整的角色/装备文字版，图片显示占位提示，故事及差分宇宙会显示待补。不要把它误认为 HoYoWiki 的完整镜像。
+
+## 环境
+
+需要 Node.js 24。首次安装：
+
+```bash
+npm ci
+npx playwright install chromium
+```
+
+Chromium 只用于本地把 HTML 打印为 PDF。GitHub Actions 不安装浏览器、不调用 Agent，也不生成或上传完整 PDF。
+
+## 生成当前版本
+
+以下范例使用当前固定资料 `4.4-cn-2026-08-21`：
+
+```bash
+npm run docs:prepare -- --release 4.4-cn-2026-08-21
+npm run docs:html -- --release 4.4-cn-2026-08-21
+npm run docs:build -- --release 4.4-cn-2026-08-21
+npm run docs:verify -- --release 4.4-cn-2026-08-21
+```
+
+PDF 位于：
+
+```text
+.local/offline-wiki/builds/4.4-cn-2026-08-21/pdf/
+├── 00-总索引.pdf
+├── 01-角色图鉴.pdf
+├── 02-光锥图鉴.pdf
+├── 03-遗器图鉴.pdf
+└── 04-差分宇宙图鉴.pdf
+```
+
+每次构建同时产生 `build-manifest.json`，记录 HTML 与 PDF 的 SHA-256、PDF 页数和资料版本。`docs:verify` 会重新计算这些值，侦测损坏或混用版本。
+
+## 图片素材
+
+图片来源清单位于 `data/offline-wiki/assets.json`。每条记录必须包括实体 ID、用途、HTTPS URL、允许的 host、预期媒体类型、归属说明、缓存 key，以及在能够固定内容时提供 SHA-256。
+
+```bash
+npm run docs:assets -- --release 4.4-cn-2026-08-21
+```
+
+下载器会重新检查初始 URL 和每次 redirect，限制媒体类型与文件大小，并验证已声明的 checksum。图片只写入 `.local/offline-wiki/assets/<release>/`。加入来源前应先确认使用条件；仓库不得提交下载后的官方图片。
+
+## 本地 Agent 摘要与人工审核
+
+先建立缺漏请求：
+
+```bash
+npm run docs:draft -- --release 4.4-cn-2026-08-21
+```
+
+请求队列位于 `.local/offline-wiki/drafts/<release>/draft-requests.json`。本地 Agent 应依据队列列出的公开来源撰写原创摘要，不复制官方长篇原文，并把每个成品保存为队列指定的 `*.draft.json`。草稿必须符合以下结构：
+
+```json
+{
+  "logicalId": "character:1001",
+  "entityKind": "character",
+  "releaseId": "4.4-cn-2026-08-21",
+  "locale": "zh-CN",
+  "summary": "经过重新表述的原创摘要。",
+  "reviewStatus": "draft",
+  "provenance": [
+    {
+      "sourceName": "来源名称",
+      "sourceUrl": "https://example.invalid/exact-entry",
+      "sourceRevision": "固定版本或查阅日期",
+      "sourcePath": "entry/path",
+      "sourceChecksum": "sha256:64位小写十六进制"
+    }
+  ]
+}
+```
+
+启动审核网页：
+
+```bash
+npm run docs:review -- --release 4.4-cn-2026-08-21
+```
+
+服务只监听 `127.0.0.1:4174`。远端机器上可在自己的电脑使用 SSH tunnel：
+
+```bash
+ssh -N -L 4174:127.0.0.1:4174 USER@REMOTE_HOST
+```
+
+然后打开 `http://127.0.0.1:4174/`。只有点击“接受并写入正式资料”才会把摘要写入 `data/offline-wiki/summaries/`，同时记录审核者、时间与内容 checksum。拒绝或尚未处理的草稿不会进入正式 PDF。正式摘要属于原创项目内容，可提交 Git；草稿不可提交。
+
+## 新版本更新
+
+1. 先按 `docs/data-sources.md` 导入并审核新的正式服 release，禁止以 `latest` 代替精确 release ID。
+2. 执行 `docs:prepare`，检查角色、光锥、遗器、差分宇宙和摘要缺漏。
+3. 审核并更新图片来源清单；在本地执行 `docs:assets`。
+4. 生成 Agent 请求，逐条核对来源并在本地审核摘要。
+5. 执行 `docs:build` 与 `docs:verify`。
+6. 保留 `.local/offline-wiki/builds/<release>/` 作为该版本本地档案；不要覆盖其他 release 目录。
+7. 只提交生成器、测试、来源清单与已经审核的原创摘要。
+
+## GitHub 验证边界
+
+```bash
+npm run docs:verify:repository
+```
+
+该检查会拒绝被 Git 追踪的 `.local/offline-wiki` 内容、离线 Wiki 官方图片/PDF，以及 `*.draft.json`。独立 GitHub workflow 只运行 schema、fixture、prepare 与仓库边界检查，不需要 API key，也不会访问 HoYoWiki 或发布文档。
+
+## 内容及版权边界
+
+- 技能、星魂、光锥和遗器数值来自仓库固定 revision 的资料，并在条目中显示来源与版本。
+- 故事使用原创摘要，不收录官方故事全文。
+- 不建立 HoYoWiki 全站无人值守爬虫，不使用 Cookie、账号凭证或私人接口。
+- 官方图片只用于使用者自己的本地缓存和离线阅读；是否可以下载及如何使用，应以来源当时的条款为准。
+- 差分宇宙条目只有在资料来源、版本与 checksum 足够明确时才进入正式集合，否则保持缺漏状态。

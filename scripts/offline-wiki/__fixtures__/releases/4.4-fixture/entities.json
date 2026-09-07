@@ -1,0 +1,121 @@
+{
+  "characters": [
+    {
+      "logicalId": "character:1",
+      "revisionId": "character:1@4.4-fixture",
+      "validFromReleaseId": "4.4-fixture",
+      "validToReleaseId": null,
+      "provenance": [
+        {
+          "sourceName": "Offline Wiki fixture",
+          "sourceUrl": "https://example.invalid/offline-wiki-fixture/fixture.json",
+          "sourceRevision": "abcdef12",
+          "sourcePath": "fixture.json",
+          "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "name": "测试角色",
+      "rarity": 5,
+      "element": "Fire",
+      "path": "Warrior",
+      "description": "用于离线文档测试的角色。",
+      "roleAnnotation": {
+        "characterLogicalId": "character:1",
+        "releaseId": "4.4-fixture",
+        "classificationOwner": "star-rail-wiki",
+        "roles": ["damage"],
+        "archetypes": ["general"],
+        "reviewStatus": "reviewed",
+        "reviewer": {
+          "name": "Fixture reviewer",
+          "reviewedAt": "2026-09-06T01:00:00.000Z"
+        },
+        "provenance": [
+          {
+            "sourceName": "Offline Wiki fixture",
+            "sourceUrl": "https://example.invalid/offline-wiki-fixture/fixture.json",
+            "sourceRevision": "abcdef12",
+            "sourcePath": "fixture.json",
+            "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ]
+      },
+      "reviewStatus": "reviewed",
+      "abilities": [
+        {
+          "logicalId": "ability:1",
+          "revisionId": "ability:1@4.4-fixture",
+          "validFromReleaseId": "4.4-fixture",
+          "validToReleaseId": null,
+          "provenance": [
+            {
+              "sourceName": "Offline Wiki fixture",
+              "sourceUrl": "https://example.invalid/offline-wiki-fixture/fixture.json",
+              "sourceRevision": "abcdef12",
+              "sourcePath": "fixture.json",
+              "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ],
+          "name": "测试技能",
+          "kind": "战技",
+          "originalText": "造成100%攻击力的伤害。",
+          "effectIds": [],
+          "reviewStatus": "reviewed"
+        }
+      ],
+      "traces": [],
+      "eidolons": []
+    }
+  ],
+  "equipment": [
+    {
+      "logicalId": "light-cone:1",
+      "revisionId": "light-cone:1@4.4-fixture",
+      "validFromReleaseId": "4.4-fixture",
+      "validToReleaseId": null,
+      "provenance": [
+        {
+          "sourceName": "Offline Wiki fixture",
+          "sourceUrl": "https://example.invalid/offline-wiki-fixture/fixture.json",
+          "sourceRevision": "abcdef12",
+          "sourcePath": "fixture.json",
+          "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "kind": "light-cone",
+      "name": "测试光锥",
+      "rarity": 5,
+      "description": "使装备者造成的伤害提高20%。",
+      "pathRestriction": "Warrior",
+      "superimpositionValues": [0.2],
+      "setThresholds": [],
+      "effectIds": [],
+      "reviewStatus": "reviewed"
+    },
+    {
+      "logicalId": "relic-set:1",
+      "revisionId": "relic-set:1@4.4-fixture",
+      "validFromReleaseId": "4.4-fixture",
+      "validToReleaseId": null,
+      "provenance": [
+        {
+          "sourceName": "Offline Wiki fixture",
+          "sourceUrl": "https://example.invalid/offline-wiki-fixture/fixture.json",
+          "sourceRevision": "abcdef12",
+          "sourcePath": "fixture.json",
+          "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "kind": "relic-set",
+      "name": "测试遗器",
+      "rarity": null,
+      "description": "二件套：攻击力提高12%。",
+      "pathRestriction": null,
+      "superimpositionValues": [],
+      "setThresholds": [2],
+      "effectIds": [],
+      "reviewStatus": "reviewed"
+    }
+  ],
+  "effects": []
+}
