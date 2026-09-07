@@ -39,7 +39,7 @@ production 使用 `/star_rail_wiki/` base path、hash routes，输出在 `dist/`
 
 ## 离线 PDF 图鉴
 
-仓库包含本地离线图鉴生成流程，可把固定版本资料输出为总索引、角色、光锥、遗器与差分宇宙五份 A4 PDF。生成的 PDF、官方图片缓存与 Agent 草稿位于被 Git 忽略的 `.local/offline-wiki/`，不会由 GitHub Actions 生成或上传。
+仓库包含本地离线图鉴生成流程，可把固定版本资料输出为总索引、角色、光锥、遗器，以及差分宇宙、世界观、剧情、文本收藏四个 lore 分类索引与有内容的分册。生成的 PDF、本地导入的长文、官方图片缓存与 Agent 草稿都位于被 Git 忽略的 `.local/offline-wiki/`，不会由 GitHub Actions 生成或上传。
 
 安装 Playwright Chromium 后执行：
 
@@ -49,7 +49,7 @@ npm run docs:build -- --release 4.4-cn-2026-08-21
 npm run docs:verify -- --release 4.4-cn-2026-08-21
 ```
 
-图片缓存、原创故事摘要、本地审核网页、SSH tunnel 与版本更新步骤见 [离线 Wiki PDF 制作流程](docs/offline-wiki.md)。
+同一组 build 命令会自动读取已经验证的 `.local/offline-wiki/imports/4.4-cn-2026-08-21/normalized/current.jsonl`；没有本地 overlay 时是公开摘要版，存在匹配 overlay 时会加入本地全文。输入 manifest、三种 adapter、失败回滚、覆盖率和版本更新步骤见 [离线 Wiki PDF 制作流程](docs/offline-wiki.md)。
 
 ## 免责声明
 

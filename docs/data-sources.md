@@ -1,6 +1,6 @@
 # Game data sources
 
-The importer accepts only a review-supplied manifest. Each manifest records the released game version and, independently for every source, its name, base URL, immutable revision, upstream paths, retrieval time, and reviewed SHA-256 checksums. It never resolves `master`, `latest`, or another mutable ref.
+The game-data importer accepts only a review-supplied manifest. Each manifest records the released game version and, independently for every source, its name, base URL, immutable revision, upstream paths, retrieval time, and reviewed SHA-256 checksums. It never resolves `master`, `latest`, or another mutable ref. The separate user-local lore import contract is documented below and in `docs/offline-wiki.md`.
 
 ## Reviewed local fixture
 
@@ -42,6 +42,8 @@ Production current is `4.4-cn-2026-08-21`. The official HoYoLAB Version 4.4 noti
 
 The bundle contains 95 characters, 762 skills, 1,912 trace nodes, 570 canonical eidolons, 165 light cones and 60 relic/planar sets. Sixty unreferenced seven-digit alternate enhanced eidolon records are excluded with a reason and ID-list checksum in the audit; skill and trace orphan counts are zero.
 
+The exact 4.4 release end boundary used by lore admission is `2026-08-26T06:00:00+08:00` (`2026-08-25T22:00:00.000Z`), taken from the official Version 4.4 update details above. Evidence published at or after that instant is not admitted to the 4.4 lore catalog.
+
 The orphan-rank audit is not self-attesting. Each production audit directory checks in the exact immutable `characters.json` and `character_ranks.json` bytes under `source/index_new/cn/`. Repository validation verifies those bytes against both the source manifest and generated release source checksums, then recomputes raw rank IDs, character `ranks` references, the exact set difference, count, and sorted-list SHA-256 before comparing the report and audit summary. Coordinated edits to the report and summary therefore fail while the pinned raw snapshot remains unchanged.
 
 The immutable predecessor `4.3-cn-2026-06-10` uses StarRailRes commit
@@ -66,3 +68,26 @@ checksums, and full logical-revision details for text, features, equipment value
 and provenance/source changes. Any failure prevents the PR job. Only the
 second job has `contents`/`pull-requests` write permission; its token exists only in the
 final commit/push/draft-PR step. The workflow never pushes `main` or deploys Pages.
+
+## Offline lore source and candidate policy
+
+The committed lore layer is locked to `4.4-cn-2026-08-21` and lives under `data/offline-wiki/lore/4.4-cn-2026-08-21/`. Its four families are Divergent Universe, worldview, missions, and collectible text. The following official URLs are recorded as candidate discovery or release evidence; a URL alone is not an admitted record:
+
+- Version 4.4 update authority: https://www.hoyolab.com/article/45851903
+- Mainland China Version 4.4 update detail used by the mission candidate: https://sr.mihoyo.com/news/165210?type=activity
+- Current HoYoWiki navigation used only for discovery: https://wiki.hoyolab.com/pc/hsr/aggregate/enemy?crawler=Googlebot
+- Current HoYoWiki bookshelf used only for discovery: https://wiki.hoyolab.com/pc/hsr/aggregate/book?crawler=Googlebot
+- Official Version 4.5 Divergent Universe notice used to prove a later-version rejection: https://www.hoyolab.com/article/46375186
+
+`candidates.json` is explicitly `exhaustive: false`. As of its `2026-09-07T13:17:28.000Z` access record it contains four candidates and three evidence records. Deterministic evaluation admits zero: one is `reject-later-version`, one is `reject-ambiguous-version`, and two are `missing-source`. `rejections.json` must exactly cover all non-admitted decisions, while each family production file must exactly equal the admitted records for that family. These four decisions demonstrate the gate; they are not a claim that only four 4.4 entries exist.
+
+Admission requires consistent entry-level evidence identifying version 4.4 or earlier, an immutable identity, a publication instant before the exact release end boundary, and a non-null source artifact SHA-256. A current/live page, a manually noted fact without the artifact bytes, or a community repository's license does not satisfy all of those conditions. Consequently current HoYoWiki counts cannot establish an expected 4.4 baseline; every production family currently has `baselineStatus: "missing"`, `expectedCount: null`, and no coverage percentage.
+
+Checksum meanings are deliberately separate:
+
+- `factCaptureChecksum` is SHA-256 over the canonical ordered evidence fields except itself. It detects edits to the locally recorded factual observation; it does not prove that the remote page bytes were archived.
+- `sourceArtifactChecksum` is SHA-256 of the immutable source artifact itself. It is mandatory for admission and is currently null for all three evidence records.
+- Admitted lore `contentChecksum` would cover the canonical ordered structured record except the checksum field. Baseline records use the analogous canonical checksum.
+- User-local import manifest file checksums cover the exact input bytes. Normalized JSONL v2 retains the primary `sourceChecksum`, all `sourceDependencies` path/checksum pairs, an `inputChecksum` over normalized logical input fields, and a `contentChecksum` over the full normalized record except itself.
+
+Publicly committed data may include short mechanics, facts, original summaries, relationships, source metadata and checksums. It must not include copied official long-form prose. Long text may only enter through a user-provided local manifest and remains under ignored `.local/offline-wiki/imports/<release>/`; import adapters do not fetch missing pages or accept authentication material.
