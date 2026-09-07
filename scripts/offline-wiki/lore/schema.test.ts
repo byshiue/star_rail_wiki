@@ -12,6 +12,7 @@ const provenance = [{
 
 const commonRecord = {
   aliases: [],
+  displayOrder: null,
   releaseId: "4.4-fixture",
   locale: "zh-CN",
   description: "简短说明。",
@@ -22,6 +23,20 @@ const commonRecord = {
 } as const;
 
 describe("LoreRecordSchema", () => {
+  it("requires an explicit nullable display order and rejects negative values", () => {
+    const candidate = {
+      ...commonRecord,
+      logicalId: "lore:worldview:faction:1",
+      family: "worldview",
+      kind: "faction",
+      name: "测试派系",
+    };
+    const { displayOrder: _displayOrder, ...missingOrder } = candidate;
+    expect(() => LoreRecordSchema.parse(missingOrder)).toThrow();
+    expect(() => LoreRecordSchema.parse({ ...candidate, displayOrder: -1 })).toThrow();
+    expect(LoreRecordSchema.parse({ ...candidate, displayOrder: 3 })).toMatchObject({ displayOrder: 3 });
+  });
+
   it("parses a divergent-universe equation", () => {
     expect(LoreRecordSchema.parse({
       ...commonRecord,

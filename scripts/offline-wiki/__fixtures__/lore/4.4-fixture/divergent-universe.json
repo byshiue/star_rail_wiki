@@ -3,6 +3,7 @@
     "logicalId": "lore:du:equation:aha",
     "name": "阿哈时刻",
     "aliases": [],
+    "displayOrder": null,
     "releaseId": "4.4-fixture",
     "locale": "zh-CN",
     "description": "测试方程说明。",
@@ -27,6 +28,6 @@
       "effect": "测试效果。",
       "enhancedEffect": null
     },
-    "contentChecksum": "sha256:828e98d0b05130b1428b2c1a565766cb55986a8a2e47fdd948991525a289aac9"
+    "contentChecksum": "sha256:401da6d668bae88e81afe3651d6fb779826573fedbadb3bc66703f6d29b1e865"
   }
 ]

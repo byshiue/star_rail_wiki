@@ -8,6 +8,7 @@ import { verifyOfflineWiki } from "./verify";
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__", "releases");
+const loreRoot = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__", "lore");
 
 describe("offline wiki PDF verification", () => {
   it("verifies every declared PDF checksum and detects output corruption", async () => {
@@ -17,6 +18,7 @@ describe("offline wiki PDF verification", () => {
       editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
       releaseId: "4.4-fixture",
       outputRoot,
+      loreRoot,
       renderPdf: async () => ({
         bytes: new TextEncoder().encode("%PDF-1.7\n/Type /Page\n%%EOF\n"),
         pageCount: 1,
@@ -25,8 +27,8 @@ describe("offline wiki PDF verification", () => {
 
     expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" })).toEqual({
       releaseId: "4.4-fixture",
-      verifiedFiles: 5,
-      pages: 5,
+      verifiedFiles: 12,
+      pages: 12,
     });
 
     writeFileSync(

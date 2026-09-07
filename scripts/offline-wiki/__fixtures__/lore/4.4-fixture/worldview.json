@@ -3,6 +3,7 @@
     "logicalId": "lore:worldview:location:belobog",
     "name": "贝洛伯格",
     "aliases": ["雅利洛-Ⅵ"],
+    "displayOrder": null,
     "releaseId": "4.4-fixture",
     "locale": "zh-CN",
     "description": "测试世界观说明。",
@@ -19,6 +20,6 @@
     "reviewStatus": "reviewed",
     "family": "worldview",
     "kind": "location",
-    "contentChecksum": "sha256:fb8f24cd2904fcb405d87ccb0c794428c5de6197a3a6ea9ee6d3ed929ed80a4e"
+    "contentChecksum": "sha256:acd2c63464a0e9e64e66899cb99de461cc346aaa93afa7807aabef8409278441"
   }
 ]

@@ -3,6 +3,7 @@
     "logicalId": "lore:collectible:readable:origami-bird",
     "name": "折纸小鸟",
     "aliases": [],
+    "displayOrder": null,
     "releaseId": "4.4-fixture",
     "locale": "zh-CN",
     "description": "测试读物说明。",
@@ -25,6 +26,6 @@
     "reviewStatus": "reviewed",
     "family": "collectible",
     "kind": "readable",
-    "contentChecksum": "sha256:de482e01e05aa0fffb67fbf0ef11cc5d00b271b63008ffde82325dda6a0735f2"
+    "contentChecksum": "sha256:d9efc28b3681b8c855a8eee9fd2f8dcdc99b53bbca1a6c3b4099f1b2d8d54ec5"
   }
 ]

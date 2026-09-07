@@ -10,6 +10,9 @@ export type BuildOfflineWikiOptions = {
   editorialRoot: string;
   releaseId: string;
   outputRoot: string;
+  loreRoot?: string;
+  localOverlayPath?: string;
+  localImportReportPath?: string;
   renderPdf?: PdfRenderer;
 };
 

@@ -35,10 +35,12 @@ export function buildHtmlVolumes(options: BuildHtmlOptions): HtmlOutput[] {
   const loreRoot = options.loreRoot ?? join(options.editorialRoot, "lore");
   const localOverlayPath = options.localOverlayPath
     ?? join(process.cwd(), ".local", "offline-wiki", "imports", options.releaseId, "normalized", "current.jsonl");
+  const localImportReportPath = options.localImportReportPath
+    ?? join(localOverlayPath, "..", "..", "reports", "last-rejected.json");
   const catalog = loadDocumentCatalog(options.releasesRoot, options.releaseId, editorial, {
     loreRoot,
     localOverlayPath,
-    localImportReportPath: options.localImportReportPath,
+    localImportReportPath,
   });
   const previousCatalog = catalog.release.previousReleaseId
     ? loadDocumentCatalog(options.releasesRoot, catalog.release.previousReleaseId, editorial)

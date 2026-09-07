@@ -59,6 +59,7 @@ describe("offline wiki lore volumes", () => {
       ...equation,
       logicalId: `lore:du:equation:${String(index).padStart(3, "0")}`,
       name: "同名条目",
+      displayOrder: null,
     }));
     catalog.lore = [...equations, ...catalog.lore.filter((record) => record.family !== "divergent-universe")];
 
@@ -75,13 +76,17 @@ describe("offline wiki lore volumes", () => {
     expect(familyIndex.indexOf("方程")).toBeLessThan(familyIndex.indexOf("奇物"));
 
     catalog.lore = [
-      { ...equation, logicalId: "lore:du:equation:z", name: "乙" },
-      { ...equation, logicalId: "lore:du:equation:b", name: "甲" },
-      { ...equation, logicalId: "lore:du:equation:a", name: "甲" },
+      { ...equation, logicalId: "lore:du:equation:late", name: "甲", displayOrder: 9 },
+      { ...equation, logicalId: "lore:du:equation:z", name: "乙", displayOrder: null },
+      { ...equation, logicalId: "lore:du:equation:b", name: "甲", displayOrder: null },
+      { ...equation, logicalId: "lore:du:equation:a", name: "甲", displayOrder: null },
+      { ...equation, logicalId: "lore:du:equation:first", name: "乙", displayOrder: 1 },
       ...catalog.lore.filter((record) => record.family !== "divergent-universe"),
     ];
     const sortedHtml = renderLoreVolumes({ catalog, summaries: [], localOverlay: new Map() })
       .find(({ filename }) => filename === "04-差分宇宙-方程-001.html")!.html;
+    expect(sortedHtml.indexOf("lore:du:equation:first")).toBeLessThan(sortedHtml.indexOf("lore:du:equation:late"));
+    expect(sortedHtml.indexOf("lore:du:equation:late")).toBeLessThan(sortedHtml.indexOf("lore:du:equation:a"));
     expect(sortedHtml.indexOf("lore:du:equation:a")).toBeLessThan(sortedHtml.indexOf("lore:du:equation:b"));
     expect(sortedHtml.indexOf("lore:du:equation:b")).toBeLessThan(sortedHtml.indexOf("lore:du:equation:z"));
   });
@@ -95,9 +100,25 @@ describe("offline wiki lore volumes", () => {
     const missionHtml = volumes.find(({ filename }) => filename === "06-剧情-开拓任务-001.html")!.html;
     const worldviewHtml = volumes.find(({ filename }) => filename === "05-世界观-地点-001.html")!.html;
 
-    expect(missionHtml).toContain('href="05-世界观-地点-001.html#entry-lore-worldview-location-belobog">贝洛伯格</a>');
-    expect(missionHtml).toContain('href="01-角色图鉴.html#entry-character-1">测试角色</a>');
-    expect(worldviewHtml).toContain('id="entry-lore-worldview-location-belobog"');
+    expect(missionHtml).toContain('href="05-世界观-地点-001.html#entry-bG9yZTp3b3JsZHZpZXc6bG9jYXRpb246YmVsb2JvZw">贝洛伯格</a>');
+    expect(missionHtml).toContain('href="01-角色图鉴.html#entry-Y2hhcmFjdGVyOjE">测试角色</a>');
+    expect(worldviewHtml).toContain('id="entry-bG9yZTp3b3JsZHZpZXc6bG9jYXRpb246YmVsb2JvZw"');
+  });
+
+  it("uses distinct injective anchors for logical IDs that collide under punctuation replacement", () => {
+    const catalog = fixtureCatalog();
+    const equation = catalog.lore.find((record) => record.kind === "equation")!;
+    catalog.lore = [
+      { ...equation, logicalId: "lore:a:b", name: "冒号条目" },
+      { ...equation, logicalId: "lore:a-b", name: "连字号条目" },
+      ...catalog.lore.filter((record) => record.family !== "divergent-universe"),
+    ];
+    const html = renderLoreVolumes({ catalog, summaries: [], localOverlay: new Map() })
+      .find(({ filename }) => filename === "04-差分宇宙-方程-001.html")!.html;
+    const ids = [...html.matchAll(/<article class="entry" id="([^"]+)"/g)].map((match) => match[1]);
+
+    expect(ids).toHaveLength(2);
+    expect(new Set(ids).size).toBe(2);
   });
 
   it("renders escaped summaries and an honest missing-full-text fallback", () => {
@@ -152,13 +173,17 @@ describe("offline wiki lore volumes", () => {
   });
 
   it("shows structured/full-text/rejections and omits a percentage for a missing baseline", () => {
-    const volumes = renderLoreVolumes({ catalog: fixtureCatalog(), summaries: [], localOverlay: new Map() });
+    const catalog = fixtureCatalog();
+    catalog.loreCoverage.families.mission.importRejections.missingText = 2;
+    catalog.loreCoverage.families.mission.kinds.trailblaze!.importRejections.missingText = 2;
+    const volumes = renderLoreVolumes({ catalog, summaries: [], localOverlay: new Map() });
     const missionIndex = volumes.find(({ filename }) => filename === "06-剧情-索引.html")!.html;
 
     expect(missionIndex).toContain("基准缺失");
     expect(missionIndex).toContain("结构化：1");
     expect(missionIndex).toContain("本地全文：0");
-    expect(missionIndex).toContain("拒绝：0");
+    expect(missionIndex).toContain("拒绝：2");
+    expect(missionIndex).toContain("归属拒绝：未知类别 0 · 缺少文本 2 · 版本不明确 0 · 来源格式错误 0");
     expect(missionIndex).not.toMatch(/覆盖率[^<]*%/);
   });
 

@@ -49,6 +49,7 @@ function canonicalRecord(record: LoreRecord): object {
     logicalId: record.logicalId,
     name: record.name,
     aliases: record.aliases,
+    displayOrder: record.displayOrder,
     releaseId: record.releaseId,
     locale: record.locale,
     description: record.description,

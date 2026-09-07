@@ -3,6 +3,7 @@
     "logicalId": "lore:mission:trailblaze:silent-star",
     "name": "沉默的星",
     "aliases": [],
+    "displayOrder": null,
     "releaseId": "4.4-fixture",
     "locale": "zh-CN",
     "description": "测试开拓任务说明。",
@@ -25,6 +26,6 @@
     "reviewStatus": "reviewed",
     "family": "mission",
     "kind": "trailblaze",
-    "contentChecksum": "sha256:e2c6cc3a4875f251179061635f47a7709e5fb8da9ee2b0813f512b716543dee3"
+    "contentChecksum": "sha256:309a834d32a14f7c0dc6888db9b4ee57ce948d3749f8cf9af3494c34b046583b"
   }
 ]

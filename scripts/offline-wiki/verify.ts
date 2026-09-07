@@ -6,23 +6,28 @@ import { z } from "zod";
 import { countPdfPages } from "./pdf/inspect";
 
 const ChecksumSchema = z.string().regex(/^sha256:[a-f0-9]{64}$/);
+const SafeHtmlFilenameSchema = z.string().regex(/^[^/\\]+\.html$/);
+const SafePdfFilenameSchema = z.string().regex(/^[^/\\]+\.pdf$/);
 const BuildManifestSchema = z.strictObject({
   schemaVersion: z.literal(1),
   releaseId: z.string().min(1),
-  inputs: z.array(z.strictObject({ filename: z.string().endsWith(".html"), checksum: ChecksumSchema })),
+  inputs: z.array(z.strictObject({ filename: SafeHtmlFilenameSchema, checksum: ChecksumSchema })),
   outputs: z.array(z.strictObject({
-    filename: z.string().endsWith(".pdf"),
+    filename: SafePdfFilenameSchema,
     checksum: ChecksumSchema,
     pageCount: z.number().int().positive(),
   })),
 });
 
-const EXPECTED_PDFS = [
+const REQUIRED_PDFS = [
   "00-总索引.pdf",
   "01-角色图鉴.pdf",
   "02-光锥图鉴.pdf",
   "03-遗器图鉴.pdf",
-  "04-差分宇宙图鉴.pdf",
+  "04-差分宇宙-索引.pdf",
+  "05-世界观-索引.pdf",
+  "06-剧情-索引.pdf",
+  "07-文本收藏-索引.pdf",
 ];
 
 export type VerifyOfflineWikiOptions = { outputRoot: string; releaseId: string };
@@ -36,8 +41,15 @@ export function verifyOfflineWiki(options: VerifyOfflineWikiOptions): Verificati
   const buildRoot = join(options.outputRoot, "builds", options.releaseId);
   const manifest = BuildManifestSchema.parse(JSON.parse(readFileSync(join(buildRoot, "build-manifest.json"), "utf8")));
   if (manifest.releaseId !== options.releaseId) throw new Error("build manifest release does not match requested release");
-  if (JSON.stringify(manifest.outputs.map((item) => item.filename)) !== JSON.stringify(EXPECTED_PDFS)) {
-    throw new Error("build manifest must contain the five canonical PDF volumes in order");
+  const inputNames = manifest.inputs.map((item) => item.filename);
+  const outputNames = manifest.outputs.map((item) => item.filename);
+  const expectedOutputNames = inputNames.map((filename) => filename.replace(/\.html$/, ".pdf"));
+  if (new Set(inputNames).size !== inputNames.length || new Set(outputNames).size !== outputNames.length) {
+    throw new Error("build manifest filenames must be unique");
+  }
+  if (JSON.stringify(outputNames) !== JSON.stringify(expectedOutputNames)
+      || REQUIRED_PDFS.some((filename) => !outputNames.includes(filename))) {
+    throw new Error("build manifest HTML/PDF volumes do not match the required canonical indexes");
   }
 
   for (const input of manifest.inputs) {

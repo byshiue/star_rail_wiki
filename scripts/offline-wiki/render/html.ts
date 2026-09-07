@@ -13,7 +13,18 @@ export function textToHtml(value: string): string {
 }
 
 export function anchorFor(logicalId: string): string {
-  return `entry-${logicalId.replaceAll(/[^A-Za-z0-9_-]/g, "-")}`;
+  return `entry-${Buffer.from(logicalId, "utf8").toString("base64url")}`;
+}
+
+export function externalLink(href: string, label: string): string {
+  let safe = false;
+  try {
+    const url = new URL(href);
+    safe = url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    safe = false;
+  }
+  return safe ? `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>` : escapeHtml(label);
 }
 
 export function htmlDocument(title: string, releaseLabel: string, body: string): string {

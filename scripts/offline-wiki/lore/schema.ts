@@ -34,6 +34,7 @@ const LoreRecordCommonShape = {
   logicalId: z.string().regex(/^lore:/),
   name: z.string().min(1),
   aliases: z.array(z.string().min(1)),
+  displayOrder: z.number().int().nonnegative().nullable(),
   releaseId: z.string().min(1),
   locale: z.literal("zh-CN"),
   description: z.string().min(1),

@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { loadDocumentCatalog } from "../catalog";
 import type { StorySummary } from "../schema";
+import { anchorFor } from "./html";
 import { renderVolumes } from "./volumes";
 
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "releases");
@@ -34,6 +35,23 @@ describe("offline wiki HTML volumes", () => {
 
     expect(characterVolume).toContain("&lt;script&gt;alert(&#39;source&#39;)&lt;/script&gt;");
     expect(characterVolume).not.toContain("<script>alert('source')</script>");
+  });
+
+  it("uses an injective deterministic anchor encoding", () => {
+    expect(anchorFor("lore:a:b")).not.toBe(anchorFor("lore:a-b"));
+    expect(anchorFor("中文:条目")).toBe(anchorFor("中文:条目"));
+  });
+
+  it("does not emit non-HTTP source URLs as links anywhere", () => {
+    const catalog = loadDocumentCatalog(fixtureRoot, "4.4-fixture");
+    catalog.characters[0]!.provenance[0]!.sourceUrl = "javascript:alert(1)";
+    catalog.characters[0]!.abilities[0]!.provenance[0]!.sourceUrl = "data:text/html,unsafe";
+
+    const html = renderVolumes({ catalog, summaries: [] })[1]!.html;
+
+    expect(html).toContain("Offline Wiki fixture");
+    expect(html).not.toContain('href="javascript:');
+    expect(html).not.toContain('href="data:');
   });
 
   it("embeds a locally cached image and its attribution instead of a placeholder", () => {
@@ -79,9 +97,9 @@ describe("offline wiki HTML volumes", () => {
     const catalog = loadDocumentCatalog(fixtureRoot, "4.4-fixture");
     const indexVolume = renderVolumes({ catalog, summaries: [] })[0]!.html;
 
-    expect(indexVolume).toContain('href="01-角色图鉴.pdf#entry-character-1"');
-    expect(indexVolume).toContain('href="02-光锥图鉴.pdf#entry-light-cone-1"');
-    expect(indexVolume).toContain('href="03-遗器图鉴.pdf#entry-relic-set-1"');
+    expect(indexVolume).toContain('href="01-角色图鉴.pdf#entry-Y2hhcmFjdGVyOjE"');
+    expect(indexVolume).toContain('href="02-光锥图鉴.pdf#entry-bGlnaHQtY29uZTox"');
+    expect(indexVolume).toContain('href="03-遗器图鉴.pdf#entry-cmVsaWMtc2V0OjE"');
   });
 
   it("labels Agent-written story summaries as not human-reviewed", () => {
@@ -121,10 +139,13 @@ describe("offline wiki HTML volumes", () => {
 
   it("reports global lore coverage and rejections without a percentage when any baseline is missing", () => {
     const catalog = loadDocumentCatalog(fixtureRoot, "4.4-fixture", undefined, { loreRoot });
+    catalog.loreCoverage.unattributedImportRejections.unknownKind = 1;
+    catalog.loreCoverage.unattributedImportRejections.malformedSource = 2;
 
     const index = renderVolumes({ catalog, summaries: [] })[0]!.html;
 
     expect(index).toContain("基准缺失；结构化 4；本地全文 0；拒绝 0");
+    expect(index).toContain("未归属拒绝：未知类别 1 · 缺少文本 0 · 版本不明确 0 · 来源格式错误 2");
     expect(index).not.toMatch(/背景资料：[^<]*覆盖率[^<]*%/);
   });
 });

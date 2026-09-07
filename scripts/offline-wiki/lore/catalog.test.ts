@@ -32,6 +32,7 @@ function checksumLoreRecord(value: Record<string, unknown>): string {
     logicalId: record.logicalId,
     name: record.name,
     aliases: record.aliases,
+    displayOrder: record.displayOrder,
     releaseId: record.releaseId,
     locale: record.locale,
     description: record.description,

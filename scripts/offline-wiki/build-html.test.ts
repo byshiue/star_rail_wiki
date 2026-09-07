@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -67,5 +67,32 @@ describe("offline wiki HTML build", () => {
 
     expect(readFileSync(join(outputRoot, "builds", "4.4-fixture", "html", "01-角色图鉴.html"), "utf8"))
       .toContain('src="data:image/png;base64,iVBORw0KGgo="');
+  });
+
+  it("loads the fixed last-rejected report next to the selected local overlay by default", () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-html-"));
+    const importRoot = join(outputRoot, ".local", "offline-wiki", "imports", "4.4-fixture");
+    const localOverlayPath = join(importRoot, "normalized", "current.jsonl");
+    mkdirSync(join(importRoot, "reports"), { recursive: true });
+    writeFileSync(join(importRoot, "reports", "last-rejected.json"), JSON.stringify({
+      status: "rejected", releaseId: "4.4-fixture", acceptedCount: 0, rejectedCount: 1,
+      inputChecksums: [], outputChecksum: null, warnings: [], rejection: {
+        reason: "adapter-rejected", sourcePaths: [], recoveryNames: [], items: [{
+          sourcePath: "unknown.json", logicalId: null, reason: "unknown-kind", detail: "category-not-mapped",
+        }],
+      },
+    }));
+
+    buildHtmlVolumes({
+      releasesRoot: fixtureRoot,
+      editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture",
+      outputRoot,
+      loreRoot,
+      localOverlayPath,
+    });
+
+    const index = readFileSync(join(outputRoot, "builds", "4.4-fixture", "html", "00-总索引.html"), "utf8");
+    expect(index).toContain("未归属拒绝：未知类别 1");
   });
 });
