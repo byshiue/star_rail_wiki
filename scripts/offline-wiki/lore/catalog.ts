@@ -11,7 +11,10 @@ import {
 } from "./schema";
 
 const RELEASE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
-const SUPPORTED_RELEASE_PATTERN = /^4\.4(?:-|$)/;
+const SUPPORTED_RELEASE_IDS = new Set([
+  "4.4-cn-2026-08-21",
+  "4.4-fixture",
+]);
 
 const FAMILY_FILES: ReadonlyArray<readonly [LoreFamily, string]> = [
   ["divergent-universe", "divergent-universe.json"],
@@ -125,8 +128,10 @@ export function loadLoreCatalog(root: string, releaseId: string): LoreCatalog {
   if (!RELEASE_ID_PATTERN.test(releaseId) || releaseId.toLowerCase() === "latest") {
     throw new Error(`offline wiki lore requires an exact release id; received ${JSON.stringify(releaseId)}`);
   }
-  if (!SUPPORTED_RELEASE_PATTERN.test(releaseId)) {
-    throw new Error(`offline wiki lore only supports 4.4 releases; received ${JSON.stringify(releaseId)}`);
+  if (!SUPPORTED_RELEASE_IDS.has(releaseId)) {
+    throw new Error(
+      `offline wiki lore only supports 4.4-cn-2026-08-21 and 4.4-fixture; received ${JSON.stringify(releaseId)}`,
+    );
   }
 
   const releaseRoot = join(root, releaseId);

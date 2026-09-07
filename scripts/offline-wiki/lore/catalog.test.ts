@@ -8,6 +8,10 @@ import { loadLoreCatalog } from "./catalog";
 import { LoreRecordSchema } from "./schema";
 
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "lore");
+const productionRoot = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..", "..", "..", "data", "offline-wiki", "lore",
+);
 
 function mutateFixture(
   filename: string,
@@ -88,6 +92,22 @@ describe("loadLoreCatalog", () => {
 
   it("rejects direct requests for a non-4.4 release", () => {
     expect(() => loadLoreCatalog(fixtureRoot, "4.5-fixture")).toThrow(/only supports 4\.4/i);
+  });
+
+  it.each([
+    "4.4-latest",
+    "4.4-current",
+    "4.4-ambiguous",
+  ])("rejects unsupported 4.4 alias %s", (releaseId) => {
+    expect(() => loadLoreCatalog(fixtureRoot, releaseId)).toThrow(
+      /only supports.*4\.4-cn-2026-08-21.*4\.4-fixture/i,
+    );
+  });
+
+  it("loads the exact production 4.4 release", () => {
+    const catalog = loadLoreCatalog(productionRoot, "4.4-cn-2026-08-21");
+    expect(catalog.records).toEqual([]);
+    expect(catalog.baselines).toHaveLength(4);
   });
 
   it("verifies checksums from canonical parsed fields instead of input key order", () => {
