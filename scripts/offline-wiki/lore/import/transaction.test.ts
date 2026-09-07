@@ -22,11 +22,11 @@ function canonicalRecord(logicalId = "lore:worldview:faction:1") {
   };
 }
 
-function fixture(lines: string[]) {
+function fixture(lines: string[], logicalId = "lore:worldview:faction:1") {
   const repositoryRoot = mkdtempSync(join(tmpdir(), "offline-wiki-repository-"));
   const sourceRoot = mkdtempSync(join(tmpdir(), "offline-wiki-source-"));
   const hydrated = lines.map((line) => line === "VALID"
-    ? JSON.stringify(canonicalRecord())
+    ? JSON.stringify(canonicalRecord(logicalId))
     : line);
   const text = `${hydrated.join("\n")}\n`;
   const inputPath = join(sourceRoot, "worldview.jsonl");
@@ -146,7 +146,7 @@ describe("importLocalLore", () => {
     const target = join(releaseRoot, "normalized");
     const backupName = ".normalized-backup-test1234";
     renameSync(target, join(releaseRoot, backupName));
-    writeFileSync(join(releaseRoot, ".normalized-transaction.json"), JSON.stringify({ schemaVersion: 1, phase: "backed-up", targetName: "normalized", stagingName: ".normalized-staging-test1234", backupName, expectedOutputChecksum: `sha256:${"b".repeat(64)}` }));
+    writeFileSync(join(releaseRoot, ".normalized-transaction.json"), JSON.stringify({ schemaVersion: 1, phase: "backed-up", targetName: "normalized", stagingName: ".normalized-staging-test1234", backupName, priorOutputChecksum: firstOutputChecksum(join(releaseRoot, backupName)), expectedOutputChecksum: `sha256:${"b".repeat(64)}` }));
     writeFileSync(join(releaseRoot, ".normalized-transaction.lock"), JSON.stringify({ pid: 2147483647, nonce: "stale-lock" }));
     writeFileSync(join(good.sourceRoot, "worldview.jsonl"), "{bad}\n");
 
@@ -163,7 +163,7 @@ describe("importLocalLore", () => {
     const target = join(releaseRoot, "normalized");
     const backupName = ".normalized-backup-test5678";
     cpSync(target, join(releaseRoot, backupName), { recursive: true });
-    writeFileSync(join(releaseRoot, ".normalized-transaction.json"), JSON.stringify({ schemaVersion: 1, phase: "promoted", targetName: "normalized", stagingName: ".normalized-staging-test5678", backupName, expectedOutputChecksum: first.outputChecksum }));
+    writeFileSync(join(releaseRoot, ".normalized-transaction.json"), JSON.stringify({ schemaVersion: 1, phase: "promoted", targetName: "normalized", stagingName: ".normalized-staging-test5678", backupName, priorOutputChecksum: first.outputChecksum, expectedOutputChecksum: first.outputChecksum }));
 
     const report = importLocalLore({
       repositoryRoot: data.repositoryRoot,
@@ -204,6 +204,73 @@ describe("importLocalLore", () => {
     expect(backups).toHaveLength(1);
     expect(report.rejection?.recoveryNames).toEqual(expect.arrayContaining([JOURNAL_NAME_FOR_TEST, backups[0]]));
   });
+
+  it("recovers prepared crashes from the prior-target identity matrix", () => {
+    const old = fixture(["VALID"], "lore:worldview:faction:old");
+    const prior = importLocalLore({ repositoryRoot: old.repositoryRoot, releaseId: "4.4-fixture", manifestPath: old.manifestPath, sourceRoot: old.sourceRoot });
+    const newer = fixture(["VALID"], "lore:worldview:faction:new");
+    const expected = importLocalLore({ repositoryRoot: newer.repositoryRoot, releaseId: "4.4-fixture", manifestPath: newer.manifestPath, sourceRoot: newer.sourceRoot });
+    const releaseRoot = join(old.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    const target = join(releaseRoot, "normalized"); const stagingName = ".normalized-staging-matrix1"; const backupName = ".normalized-backup-matrix1";
+    cpSync(join(newer.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized"), join(releaseRoot, stagingName), { recursive: true });
+    renameSync(target, join(releaseRoot, backupName));
+    writeJournal(releaseRoot, { phase: "prepared", stagingName, backupName, priorOutputChecksum: prior.outputChecksum, expectedOutputChecksum: expected.outputChecksum });
+    writeFileSync(join(old.sourceRoot, "worldview.jsonl"), "{bad}\n");
+    const report = importLocalLore({ repositoryRoot: old.repositoryRoot, releaseId: "4.4-fixture", manifestPath: old.manifestPath, sourceRoot: old.sourceRoot });
+    expect(report.status).toBe("rejected"); expect(firstOutputChecksum(target)).toBe(prior.outputChecksum);
+    expect(existsSync(join(releaseRoot, stagingName))).toBe(false); expect(existsSync(join(releaseRoot, JOURNAL_NAME_FOR_TEST))).toBe(false);
+  });
+
+  it("recognizes a no-prior prepared crash after staging was promoted as committed", () => {
+    const data = fixture(["VALID"]); const committed = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    writeJournal(releaseRoot, { phase: "prepared", stagingName: ".normalized-staging-gone", backupName: null, priorOutputChecksum: null, expectedOutputChecksum: committed.outputChecksum });
+    const recovered = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    expect(recovered.status).toBe("accepted"); expect(recovered.outputChecksum).toBe(committed.outputChecksum);
+  });
+
+  it("fails closed and preserves every artifact for an ambiguous prepared state", () => {
+    const data = fixture(["VALID"]); const prior = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); const target = join(releaseRoot, "normalized");
+    const backupName = ".normalized-backup-ambiguous"; const stagingName = ".normalized-staging-ambiguous";
+    cpSync(target, join(releaseRoot, backupName), { recursive: true }); cpSync(target, join(releaseRoot, stagingName), { recursive: true });
+    writeJournal(releaseRoot, { phase: "prepared", stagingName, backupName, priorOutputChecksum: prior.outputChecksum, expectedOutputChecksum: prior.outputChecksum });
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    expect(report.status).toBe("rejected"); expect(report.rejection?.reason).toBe("recovery-failed");
+    expect(existsSync(target)).toBe(true); expect(existsSync(join(releaseRoot, backupName))).toBe(true); expect(existsSync(join(releaseRoot, stagingName))).toBe(true);
+  });
+
+  it("aborts an unmutated prepared transaction when prior target and staged candidate both verify", () => {
+    const data = fixture(["VALID"]); const prior = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); const stagingName = ".normalized-staging-abort";
+    cpSync(join(releaseRoot, "normalized"), join(releaseRoot, stagingName), { recursive: true });
+    writeJournal(releaseRoot, { phase: "prepared", stagingName, backupName: ".normalized-backup-not-created", priorOutputChecksum: prior.outputChecksum, expectedOutputChecksum: prior.outputChecksum });
+    writeFileSync(join(data.sourceRoot, "worldview.jsonl"), "{bad}\n");
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    expect(report.status).toBe("rejected"); expect(existsSync(join(releaseRoot, stagingName))).toBe(false); expect(firstOutputChecksum(join(releaseRoot, "normalized"))).toBe(prior.outputChecksum);
+  });
+
+  it("serializes stale-lock reclaimers so a nested contender cannot enter", () => {
+    const data = fixture(["VALID"]); const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); mkdirSync(releaseRoot, { recursive: true });
+    writeFileSync(join(releaseRoot, ".normalized-transaction.lock"), JSON.stringify({ pid: 2147483647, nonce: "old" }));
+    let nested: ReturnType<typeof importLocalLore> | undefined;
+    const outer = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot, operations: {
+      duringLockReclaim: () => { nested = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot }); },
+    } });
+    expect(outer.status).toBe("accepted"); expect(nested?.status).toBe("rejected");
+  });
+
+  it("cleans only its own atomic-json temp after rename failure", () => {
+    const data = fixture(["VALID"]); const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); mkdirSync(releaseRoot, { recursive: true });
+    writeFileSync(join(releaseRoot, "other.tmp"), "keep");
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot, operations: { beforeAtomicRename: () => { throw new Error("rename failure"); } } });
+    expect(report.status).toBe("rejected"); expect(readFileSync(join(releaseRoot, "other.tmp"), "utf8")).toBe("keep");
+    expect(readdirSync(releaseRoot).filter((name) => name.endsWith(".tmp"))).toEqual(["other.tmp"]);
+  });
 });
 
 const JOURNAL_NAME_FOR_TEST = ".normalized-transaction.json";
+function firstOutputChecksum(root: string): string { return JSON.parse(readFileSync(join(root, "report.json"), "utf8")).outputChecksum as string; }
+function writeJournal(root: string, fields: { phase: string; stagingName: string; backupName: string | null; priorOutputChecksum: string | null; expectedOutputChecksum: string | null }): void {
+  writeFileSync(join(root, JOURNAL_NAME_FOR_TEST), JSON.stringify({ schemaVersion: 1, targetName: "normalized", ...fields }));
+}

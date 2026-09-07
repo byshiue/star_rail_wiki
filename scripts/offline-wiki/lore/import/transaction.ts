@@ -20,9 +20,9 @@ export type LocalImportReport = {
 };
 export type ImportLocalLoreOptions = {
   repositoryRoot: string; releaseId: string; manifestPath: string; sourceRoot: string; outputRoot?: string;
-  operations?: { removeBackup?: (path: string) => void; beforePromote?: (targetRoot: string) => void };
+  operations?: { removeBackup?: (path: string) => void; beforePromote?: (targetRoot: string) => void; duringLockReclaim?: () => void; beforeAtomicRename?: (temporaryPath: string, targetPath: string) => void };
 };
-type Journal = { schemaVersion: 1; phase: "prepared" | "backed-up" | "promoted"; targetName: "normalized"; stagingName: string; backupName: string | null; expectedOutputChecksum: string };
+type Journal = { schemaVersion: 1; phase: "prepared" | "backed-up" | "promoted"; targetName: "normalized"; stagingName: string; backupName: string | null; priorOutputChecksum: string | null; expectedOutputChecksum: string };
 
 const JOURNAL_NAME = ".normalized-transaction.json";
 const LOCK_NAME = ".normalized-transaction.lock";
@@ -41,7 +41,11 @@ function assertSafePath(root: string, path: string): void {
 }
 function ensureDirectory(root: string, path: string): void { assertSafePath(root, path); mkdirSync(path, { recursive: true, mode: 0o700 }); assertSafePath(root, path); }
 function writeJson(path: string, value: unknown): void { writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, { mode: 0o600 }); }
-function atomicJson(path: string, value: unknown): void { const temp = `${path}.${randomUUID()}.tmp`; writeJson(temp, value); renameSync(temp, path); }
+function atomicJson(path: string, value: unknown, options: ImportLocalLoreOptions): void {
+  const temp = `${path}.${randomUUID()}.tmp`;
+  try { writeJson(temp, value); options.operations?.beforeAtomicRename?.(temp, path); renameSync(temp, path); }
+  finally { if (existsSync(temp)) unlinkSync(temp); }
+}
 
 function roots(options: ImportLocalLoreOptions) {
   const repositoryRoot = resolve(options.repositoryRoot);
@@ -62,7 +66,7 @@ function persistRejected(repositoryRoot: string, releaseRoot: string, report: Lo
 function parseJournal(path: string): Journal {
   const value = JSON.parse(readFileSync(path, "utf8")) as Partial<Journal>;
   const keys = value && typeof value === "object" ? Object.keys(value).sort().join(",") : "";
-  if (keys !== "backupName,expectedOutputChecksum,phase,schemaVersion,stagingName,targetName" || value.schemaVersion !== 1 || !["prepared", "backed-up", "promoted"].includes(String(value.phase)) || value.targetName !== "normalized" || typeof value.stagingName !== "string" || !SAFE_NAME.test(value.stagingName) || (value.backupName !== null && (typeof value.backupName !== "string" || !SAFE_NAME.test(value.backupName))) || typeof value.expectedOutputChecksum !== "string" || !/^sha256:[a-f0-9]{64}$/.test(value.expectedOutputChecksum)) throw new Error("malformed transaction journal");
+  if (keys !== "backupName,expectedOutputChecksum,phase,priorOutputChecksum,schemaVersion,stagingName,targetName" || value.schemaVersion !== 1 || !["prepared", "backed-up", "promoted"].includes(String(value.phase)) || value.targetName !== "normalized" || typeof value.stagingName !== "string" || !SAFE_NAME.test(value.stagingName) || (value.backupName !== null && (typeof value.backupName !== "string" || !SAFE_NAME.test(value.backupName))) || (value.priorOutputChecksum !== null && (typeof value.priorOutputChecksum !== "string" || !/^sha256:[a-f0-9]{64}$/.test(value.priorOutputChecksum))) || (value.priorOutputChecksum === null) !== (value.backupName === null) || typeof value.expectedOutputChecksum !== "string" || !/^sha256:[a-f0-9]{64}$/.test(value.expectedOutputChecksum)) throw new Error("malformed transaction journal");
   return value as Journal;
 }
 function validateAcceptedReport(value: unknown): LocalImportReport {
@@ -85,11 +89,13 @@ function recoveryNames(releaseRoot: string): string[] {
   if (!existsSync(releaseRoot)) return [JOURNAL_NAME];
   return [JOURNAL_NAME, ...readdirSync(releaseRoot).filter((name) => /^\.normalized-backup-[A-Za-z0-9-]+$/.test(name)).sort()];
 }
-function acquireLock(releaseRoot: string): { path: string; nonce: string } {
+function acquireLock(releaseRoot: string, options: ImportLocalLoreOptions): { path: string; nonce: string } {
   const path = join(releaseRoot, LOCK_NAME); const nonce = randomUUID();
   let descriptor: number;
   try { descriptor = openSync(path, "wx", 0o600); }
   catch {
+    const originalStats = lstatSync(path, { bigint: true });
+    if (originalStats.isSymbolicLink() || !originalStats.isFile()) throw new Error("transaction lock is not a regular file");
     let existing: { pid?: number; nonce?: string };
     try { existing = JSON.parse(readFileSync(path, "utf8")) as { pid?: number; nonce?: string }; }
     catch { throw new Error("another import or manual recovery is active"); }
@@ -98,8 +104,27 @@ function acquireLock(releaseRoot: string): { path: string; nonce: string } {
     catch (error) {
       if (!(error instanceof Error) || !("code" in error) || error.code !== "ESRCH") throw error;
     }
-    unlinkSync(path);
-    descriptor = openSync(path, "wx", 0o600);
+    const guard = `${path}-reclaim`; let guardDescriptor: number;
+    try { guardDescriptor = openSync(guard, "wx", 0o600); } catch { throw new Error("lock reclaim is already active"); }
+    const guardStats = lstatSync(guard, { bigint: true }); closeSync(guardDescriptor);
+    const tombstone = `${path}.stale-${randomUUID()}`; let moved = false; let installed = false;
+    try {
+      options.operations?.duringLockReclaim?.();
+      const currentStats = lstatSync(path, { bigint: true });
+      if (currentStats.isSymbolicLink() || !currentStats.isFile() || currentStats.dev !== originalStats.dev || currentStats.ino !== originalStats.ino) throw new Error("lock identity changed during reclaim");
+      const current = JSON.parse(readFileSync(path, "utf8")) as { pid?: number; nonce?: string };
+      if (current.pid !== existing.pid || current.nonce !== existing.nonce) throw new Error("lock owner changed during reclaim");
+      try { process.kill(current.pid!, 0); throw new Error("lock owner became active"); }
+      catch (error) { if (!(error instanceof Error) || !("code" in error) || error.code !== "ESRCH") throw error; }
+      renameSync(path, tombstone); moved = true;
+      descriptor = openSync(path, "wx", 0o600); installed = true;
+    } catch (error) {
+      if (moved && !installed && !existsSync(path)) renameSync(tombstone, path);
+      throw error;
+    } finally {
+      if (moved && existsSync(tombstone)) { const stats = lstatSync(tombstone, { bigint: true }); if (stats.dev === originalStats.dev && stats.ino === originalStats.ino) unlinkSync(tombstone); }
+      if (existsSync(guard)) { const stats = lstatSync(guard, { bigint: true }); if (stats.dev === guardStats.dev && stats.ino === guardStats.ino) unlinkSync(guard); }
+    }
   }
   try { writeFileSync(descriptor, JSON.stringify({ pid: process.pid, nonce })); } finally { closeSync(descriptor); }
   return { path, nonce };
@@ -115,24 +140,29 @@ function recover(options: ImportLocalLoreOptions, context: ReturnType<typeof roo
   const journal = parseJournal(journalPath);
   const backup = journal.backupName ? join(context.releaseRoot, journal.backupName) : null;
   const staging = join(context.releaseRoot, journal.stagingName);
-  if (journal.phase === "prepared") {
-    if (existsSync(staging)) rmSync(staging, { recursive: true, force: true });
-    unlinkSync(journalPath); return null;
+  const targetExists = existsSync(context.targetRoot); const backupExists = backup !== null && existsSync(backup); const stagingExists = existsSync(staging);
+  const targetReport = targetExists ? validateOverlay(context.targetRoot) : null;
+  const backupReport = backupExists ? validateOverlay(backup!) : null;
+  const stagingReport = stagingExists ? validateOverlay(staging) : null;
+  const targetIsNew = targetReport?.outputChecksum === journal.expectedOutputChecksum;
+  const targetIsPrior = journal.priorOutputChecksum !== null && targetReport?.outputChecksum === journal.priorOutputChecksum;
+  const backupIsPrior = journal.priorOutputChecksum !== null && backupReport?.outputChecksum === journal.priorOutputChecksum;
+  const stagingIsNew = stagingReport?.outputChecksum === journal.expectedOutputChecksum;
+  const committed = (): LocalImportReport => {
+    if (!targetIsNew || !targetReport || stagingExists || (journal.priorOutputChecksum === null ? backupExists : !backupIsPrior)) throw new Error("ambiguous committed state");
+    if (backupExists) { try { cleanupBackup(backup!, options); } catch { return { ...targetReport, warnings: ["backup-cleanup-pending"] }; } }
+    unlinkSync(journalPath); return targetReport;
+  };
+  if (targetIsPrior && !backupExists && stagingIsNew) { rmSync(staging, { recursive: true, force: true }); unlinkSync(journalPath); return null; }
+  if (targetIsNew) return committed();
+  if (journal.priorOutputChecksum === null) {
+    if (!targetExists && !backupExists && stagingIsNew) { rmSync(staging, { recursive: true, force: true }); unlinkSync(journalPath); return null; }
+    throw new Error("ambiguous no-prior recovery state");
   }
-  if (existsSync(context.targetRoot)) {
-    const committed = validateOverlay(context.targetRoot, journal.expectedOutputChecksum);
-    if (backup && existsSync(backup)) {
-      try { cleanupBackup(backup, options); } catch { return { ...committed, warnings: ["backup-cleanup-pending"] }; }
-    }
-    if (existsSync(staging)) rmSync(staging, { recursive: true, force: true });
-    unlinkSync(journalPath); return committed;
+  if (!targetExists && backupIsPrior && (stagingIsNew || !stagingExists)) {
+    renameSync(backup!, context.targetRoot); if (stagingExists) rmSync(staging, { recursive: true, force: true }); unlinkSync(journalPath); return null;
   }
-  if (!backup || !existsSync(backup)) throw new Error("manual recovery required: backup missing");
-  validateOverlay(backup);
-  renameSync(backup, context.targetRoot);
-  if (existsSync(staging)) rmSync(staging, { recursive: true, force: true });
-  unlinkSync(journalPath);
-  return null;
+  throw new Error("ambiguous recovery state");
 }
 
 function promote(options: ImportLocalLoreOptions, context: ReturnType<typeof roots>, output: string, report: LocalImportReport): LocalImportReport {
@@ -142,13 +172,14 @@ function promote(options: ImportLocalLoreOptions, context: ReturnType<typeof roo
   const backupName = `.normalized-backup-${randomUUID()}`;
   const backup = join(context.releaseRoot, backupName);
   const journalPath = join(context.releaseRoot, JOURNAL_NAME);
-  let journal: Journal = { schemaVersion: 1, phase: "prepared", targetName: "normalized", stagingName, backupName: existsSync(context.targetRoot) ? backupName : null, expectedOutputChecksum: report.outputChecksum! };
+  const priorReport = existsSync(context.targetRoot) ? validateOverlay(context.targetRoot) : null;
+  let journal: Journal = { schemaVersion: 1, phase: "prepared", targetName: "normalized", stagingName, backupName: priorReport ? backupName : null, priorOutputChecksum: priorReport?.outputChecksum ?? null, expectedOutputChecksum: report.outputChecksum! };
   try {
     writeFileSync(join(staging, "current.jsonl"), output, { mode: 0o600 }); writeJson(join(staging, "report.json"), report); validateOverlay(staging, report.outputChecksum!);
-    atomicJson(journalPath, journal);
-    if (existsSync(context.targetRoot)) { validateOverlay(context.targetRoot); renameSync(context.targetRoot, backup); journal = { ...journal, phase: "backed-up" }; atomicJson(journalPath, journal); }
+    atomicJson(journalPath, journal, options);
+    if (existsSync(context.targetRoot)) { validateOverlay(context.targetRoot); renameSync(context.targetRoot, backup); journal = { ...journal, phase: "backed-up" }; atomicJson(journalPath, journal, options); }
     options.operations?.beforePromote?.(context.targetRoot);
-    renameSync(staging, context.targetRoot); journal = { ...journal, phase: "promoted" }; atomicJson(journalPath, journal); validateOverlay(context.targetRoot, report.outputChecksum!);
+    renameSync(staging, context.targetRoot); journal = { ...journal, phase: "promoted" }; atomicJson(journalPath, journal, options); validateOverlay(context.targetRoot, report.outputChecksum!);
   } catch {
     if (existsSync(backup) && !existsSync(context.targetRoot)) { renameSync(backup, context.targetRoot); if (existsSync(journalPath)) unlinkSync(journalPath); }
     throw new Error("promotion failed");
@@ -181,7 +212,7 @@ export function importLocalLore(options: ImportLocalLoreOptions): LocalImportRep
   const context = roots(options);
   ensureDirectory(context.repositoryRoot, context.releaseRoot);
   let lock: { path: string; nonce: string };
-  try { lock = acquireLock(context.releaseRoot); }
+  try { lock = acquireLock(context.releaseRoot, options); }
   catch { const report = rejected(options.releaseId, "recovery-failed", [], [], [LOCK_NAME, ...recoveryNames(context.releaseRoot)]); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
   try { return runImport(options, context); } finally { releaseLock(lock); }
 }
