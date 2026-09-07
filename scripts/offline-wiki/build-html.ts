@@ -20,6 +20,7 @@ export type BuildHtmlOptions = {
   loreRoot?: string;
   localOverlayPath?: string;
   localImportReportPath?: string;
+  buildRootOverride?: string;
 };
 
 export type HtmlOutput = Pick<RenderedVolume, "filename" | "family" | "group"> & { path: string };
@@ -52,7 +53,10 @@ export function buildHtmlVolumes(options: BuildHtmlOptions): HtmlOutput[] {
     assetManifest,
     options.assetCacheRoot ?? join(options.outputRoot, "assets", options.releaseId),
   );
-  const outputDirectory = join(options.outputRoot, "builds", options.releaseId, "html");
+  const outputDirectory = join(
+    options.buildRootOverride ?? join(options.outputRoot, "builds", options.releaseId),
+    "html",
+  );
   mkdirSync(outputDirectory, { recursive: true });
   const baseVolumes = renderVolumes({
     catalog,

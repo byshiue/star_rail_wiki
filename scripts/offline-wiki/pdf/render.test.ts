@@ -1,14 +1,30 @@
-import { existsSync, mkdtempSync, readFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { buildOfflineWiki } from "../build";
-import { renderPdfWithPlaywright } from "./render";
+import { verifyOfflineWiki } from "../verify";
+import { renderPdfWithPlaywright, renderTrustedPdfHtmlWithPlaywrightForTest } from "./render";
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "releases");
 const loreRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "lore");
+
+function emptyLoreFixture(): string {
+  const root = mkdtempSync(join(tmpdir(), "offline-wiki-empty-lore-"));
+  const releaseRoot = join(root, "4.4-fixture");
+  cpSync(join(loreRoot, "4.4-fixture"), releaseRoot, { recursive: true });
+  for (const filename of ["divergent-universe.json", "worldview.json", "missions.json", "collectibles.json"]) {
+    writeFileSync(join(releaseRoot, filename), "[]\n");
+  }
+  return root;
+}
+
+const fakePdf = async ({ title }: { title: string }) => ({
+  bytes: new TextEncoder().encode(`%PDF-1.7\n/Type /Page\n${title}\n%%EOF\n`),
+  pageCount: 1,
+});
 
 describe("offline wiki PDF build", () => {
   it("writes the fixture's grouped PDFs and a checksummed build manifest", async () => {
@@ -21,7 +37,7 @@ describe("offline wiki PDF build", () => {
       outputRoot,
       loreRoot,
       renderPdf: async ({ title }) => ({
-        bytes: new TextEncoder().encode(`%PDF-1.7\n${title}\n%%EOF\n`),
+        bytes: new TextEncoder().encode(`%PDF-1.7\n/Type /Page\n${title}\n%%EOF\n`),
         pageCount: 1,
       }),
     });
@@ -71,10 +87,17 @@ describe("offline wiki PDF build", () => {
   });
 
   it("reports the blocked URL when low-level raw HTML attempts a remote request", async () => {
-    await expect(renderPdfWithPlaywright({
+    await expect(renderTrustedPdfHtmlWithPlaywrightForTest({
       html: '<!doctype html><img src="https://blocked.invalid/raw.png">',
       title: "unsafe raw hook",
     })).rejects.toThrow(/https:\/\/blocked\.invalid\/raw\.png/);
+  });
+
+  it("reports a print-only blocked URL after the media phase", async () => {
+    await expect(renderTrustedPdfHtmlWithPlaywrightForTest({
+      html: '<!doctype html><style>@media print { body { background-image: url("https://blocked.invalid/print.png") } }</style>',
+      title: "unsafe print hook",
+    })).rejects.toThrow(/https:\/\/blocked\.invalid\/print\.png/);
   });
 
   it.each([
@@ -84,6 +107,44 @@ describe("offline wiki PDF build", () => {
     await expect(renderPdfWithPlaywright({
       html: `<!doctype html><iframe src="${url}"></iframe>`,
       title: "unsafe embedded resource",
-    })).rejects.toThrow(url);
+    })).rejects.toThrow(/forbidden|allowed|data image/i);
+  });
+
+  it("atomically replaces stale subgroup files when a same-release rebuild has fewer volumes", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-rebuild-"));
+    await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    });
+    await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+    });
+
+    const buildRoot = join(outputRoot, "builds", "4.4-fixture");
+    expect(readdirSync(join(buildRoot, "html")).filter((name) => name.endsWith(".html"))).toHaveLength(8);
+    expect(readdirSync(join(buildRoot, "pdf")).filter((name) => name.endsWith(".pdf"))).toHaveLength(8);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(8);
+  });
+
+  it("preserves the prior verified build when a staged rebuild fails", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-rebuild-"));
+    await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    });
+    const buildRoot = join(outputRoot, "builds", "4.4-fixture");
+    const oldManifest = readFileSync(join(buildRoot, "build-manifest.json"), "utf8");
+    const oldIndex = readFileSync(join(buildRoot, "html", "00-总索引.html"), "utf8");
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(),
+      renderPdf: async () => { throw new Error("fixture render failed"); },
+    })).rejects.toThrow(/fixture render failed/);
+
+    expect(readFileSync(join(buildRoot, "build-manifest.json"), "utf8")).toBe(oldManifest);
+    expect(readFileSync(join(buildRoot, "html", "00-总索引.html"), "utf8")).toBe(oldIndex);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
   });
 });

@@ -1,10 +1,11 @@
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildHtmlVolumes } from "./build-html";
 import { renderPdfWithPlaywright, type PdfRenderer } from "./pdf/render";
 import type { LoreFamily } from "./schema";
+import { verifyBuildRoot } from "./verify";
 
 export type BuildOfflineWikiOptions = {
   releasesRoot: string;
@@ -42,39 +43,66 @@ function writeAtomically(path: string, bytes: Uint8Array): void {
 }
 
 export async function buildOfflineWiki(options: BuildOfflineWikiOptions): Promise<BuildManifest> {
-  const htmlOutputs = buildHtmlVolumes(options);
-  const buildRoot = join(options.outputRoot, "builds", options.releaseId);
-  const pdfRoot = join(buildRoot, "pdf");
-  mkdirSync(pdfRoot, { recursive: true });
-  const renderPdf = options.renderPdf ?? renderPdfWithPlaywright;
-  const inputs: BuildManifest["inputs"] = [];
-  const outputs: BuildManifest["outputs"] = [];
+  if (/[/\\]/u.test(options.releaseId)) throw new Error("releaseId must not contain path separators");
+  const buildsRoot = join(options.outputRoot, "builds");
+  const finalBuildRoot = join(buildsRoot, options.releaseId);
+  mkdirSync(buildsRoot, { recursive: true });
+  const stagingBuildRoot = mkdtempSync(join(buildsRoot, `.${options.releaseId}.staging-`));
+  try {
+    const htmlOutputs = buildHtmlVolumes({ ...options, buildRootOverride: stagingBuildRoot });
+    const pdfRoot = join(stagingBuildRoot, "pdf");
+    mkdirSync(pdfRoot, { recursive: true });
+    const renderPdf = options.renderPdf ?? renderPdfWithPlaywright;
+    const inputs: BuildManifest["inputs"] = [];
+    const outputs: BuildManifest["outputs"] = [];
 
-  for (const [order, htmlOutput] of htmlOutputs.entries()) {
-    const htmlBytes = readFileSync(htmlOutput.path);
-    inputs.push({ filename: htmlOutput.filename, checksum: checksum(htmlBytes) });
-    const filename = htmlOutput.filename.replace(/\.html$/, ".pdf");
-    const rendered = await renderPdf({
-      html: htmlBytes.toString("utf8"),
-      title: filename.replace(/\.pdf$/, ""),
-    });
-    writeAtomically(join(pdfRoot, filename), rendered.bytes);
-    outputs.push({
-      filename,
-      checksum: checksum(rendered.bytes),
-      pageCount: rendered.pageCount,
-      family: htmlOutput.family,
-      group: htmlOutput.group,
-      order,
-    });
+    for (const [order, htmlOutput] of htmlOutputs.entries()) {
+      const htmlBytes = readFileSync(htmlOutput.path);
+      inputs.push({ filename: htmlOutput.filename, checksum: checksum(htmlBytes) });
+      const filename = htmlOutput.filename.replace(/\.html$/, ".pdf");
+      const rendered = await renderPdf({
+        html: htmlBytes.toString("utf8"),
+        title: filename.replace(/\.pdf$/, ""),
+      });
+      writeAtomically(join(pdfRoot, filename), rendered.bytes);
+      outputs.push({
+        filename,
+        checksum: checksum(rendered.bytes),
+        pageCount: rendered.pageCount,
+        family: htmlOutput.family,
+        group: htmlOutput.group,
+        order,
+      });
+    }
+
+    const manifest: BuildManifest = { schemaVersion: 2, releaseId: options.releaseId, inputs, outputs };
+    writeAtomically(
+      join(stagingBuildRoot, "build-manifest.json"),
+      Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, "utf8"),
+    );
+    verifyBuildRoot(stagingBuildRoot, options.releaseId);
+
+    if (!existsSync(finalBuildRoot)) {
+      renameSync(stagingBuildRoot, finalBuildRoot);
+      return manifest;
+    }
+    const existing = lstatSync(finalBuildRoot);
+    if (!existing.isDirectory() || existing.isSymbolicLink()) {
+      throw new Error("existing release build root must be a real directory");
+    }
+    const backupBuildRoot = `${finalBuildRoot}.backup-${process.pid}-${Date.now()}`;
+    renameSync(finalBuildRoot, backupBuildRoot);
+    try {
+      renameSync(stagingBuildRoot, finalBuildRoot);
+    } catch (error) {
+      renameSync(backupBuildRoot, finalBuildRoot);
+      throw error;
+    }
+    rmSync(backupBuildRoot, { recursive: true, force: true });
+    return manifest;
+  } finally {
+    if (existsSync(stagingBuildRoot)) rmSync(stagingBuildRoot, { recursive: true, force: true });
   }
-
-  const manifest: BuildManifest = { schemaVersion: 2, releaseId: options.releaseId, inputs, outputs };
-  writeAtomically(
-    join(buildRoot, "build-manifest.json"),
-    Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, "utf8"),
-  );
-  return manifest;
 }
 
 function runCli(): Promise<void> {

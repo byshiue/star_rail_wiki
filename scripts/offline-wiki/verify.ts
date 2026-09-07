@@ -24,13 +24,13 @@ const BuildManifestSchema = z.strictObject({
 });
 
 type Family = z.infer<typeof LoreFamilySchema>;
-type VolumeMetadata = { family: Family | null; group: string; sortKey: readonly number[] };
+type VolumeMetadata = { family: Family | null; group: string; part: number | null; sortKey: readonly number[] };
 
 const CORE_VOLUMES = new Map<string, VolumeMetadata>([
-  ["00-总索引", { family: null, group: "global-index", sortKey: [0] }],
-  ["01-角色图鉴", { family: null, group: "characters", sortKey: [1] }],
-  ["02-光锥图鉴", { family: null, group: "light-cones", sortKey: [2] }],
-  ["03-遗器图鉴", { family: null, group: "relic-sets", sortKey: [3] }],
+  ["00-总索引", { family: null, group: "global-index", part: null, sortKey: [0] }],
+  ["01-角色图鉴", { family: null, group: "characters", part: null, sortKey: [1] }],
+  ["02-光锥图鉴", { family: null, group: "light-cones", part: null, sortKey: [2] }],
+  ["03-遗器图鉴", { family: null, group: "relic-sets", part: null, sortKey: [3] }],
 ]);
 
 const LORE_TAXONOMY: readonly {
@@ -81,14 +81,14 @@ function metadataForFilename(filename: string): VolumeMetadata {
   if (core) return core;
   for (const [familyIndex, definition] of LORE_TAXONOMY.entries()) {
     if (stem === `${definition.prefix}-索引`) {
-      return { family: definition.family, group: "index", sortKey: [4 + familyIndex, 0] };
+      return { family: definition.family, group: "index", part: null, sortKey: [4 + familyIndex, 0] };
     }
     for (const [groupIndex, group] of definition.groups.entries()) {
       const match = new RegExp(`^${definition.prefix}-${group.label}-(\\d{3})$`, "u").exec(stem);
       if (match) {
         const part = Number(match[1]);
         if (part < 1) throw new Error(`PDF volume part must start at 001: ${filename}`);
-        return { family: definition.family, group: group.group, sortKey: [4 + familyIndex, 1 + groupIndex, part] };
+        return { family: definition.family, group: group.group, part, sortKey: [4 + familyIndex, 1 + groupIndex, part] };
       }
     }
   }
@@ -107,10 +107,9 @@ function sameNames(actual: string[], expected: string[]): boolean {
   return JSON.stringify([...actual].sort()) === JSON.stringify([...expected].sort());
 }
 
-export function verifyOfflineWiki(options: VerifyOfflineWikiOptions): VerificationReport {
-  const buildRoot = join(options.outputRoot, "builds", options.releaseId);
+export function verifyBuildRoot(buildRoot: string, releaseId: string): VerificationReport {
   const manifest = BuildManifestSchema.parse(JSON.parse(readFileSync(join(buildRoot, "build-manifest.json"), "utf8")));
-  if (manifest.releaseId !== options.releaseId) throw new Error("build manifest release does not match requested release");
+  if (manifest.releaseId !== releaseId) throw new Error("build manifest release does not match requested release");
   const inputNames = manifest.inputs.map((item) => item.filename);
   const outputNames = manifest.outputs.map((item) => item.filename);
   const expectedOutputNames = inputNames.map((filename) => filename.replace(/\.html$/, ".pdf"));
@@ -132,6 +131,16 @@ export function verifyOfflineWiki(options: VerifyOfflineWikiOptions): Verificati
     if (compareSortKeys(inputMetadata[index - 1]!.sortKey, inputMetadata[index]!.sortKey) >= 0) {
       throw new Error("build manifest HTML inputs do not follow deterministic renderer order");
     }
+  }
+  const expectedPartByGroup = new Map<string, number>();
+  for (const metadata of inputMetadata) {
+    if (metadata.family === null || metadata.part === null) continue;
+    const key = `${metadata.family}:${metadata.group}`;
+    const expectedPart = (expectedPartByGroup.get(key) ?? 0) + 1;
+    if (metadata.part !== expectedPart) {
+      throw new Error(`build manifest subgroup parts must be contiguous from 001: ${key}`);
+    }
+    expectedPartByGroup.set(key, expectedPart);
   }
   for (const [index, output] of manifest.outputs.entries()) {
     const expected = inputMetadata[index]!;
@@ -159,7 +168,11 @@ export function verifyOfflineWiki(options: VerifyOfflineWikiOptions): Verificati
     if (pageCount !== output.pageCount) throw new Error(`PDF page count mismatch: ${output.filename}`);
     pages += pageCount;
   }
-  return { releaseId: options.releaseId, verifiedFiles: manifest.outputs.length, pages };
+  return { releaseId, verifiedFiles: manifest.outputs.length, pages };
+}
+
+export function verifyOfflineWiki(options: VerifyOfflineWikiOptions): VerificationReport {
+  return verifyBuildRoot(join(options.outputRoot, "builds", options.releaseId), options.releaseId);
 }
 
 function runCli(): void {

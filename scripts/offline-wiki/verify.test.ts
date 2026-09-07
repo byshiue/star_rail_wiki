@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdtempSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -85,5 +85,32 @@ describe("offline wiki PDF verification", () => {
     await buildFixture(outputRoot);
     mutateManifest(outputRoot, mutate);
     expect(() => verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" })).toThrow();
+  });
+
+  it("rejects a subgroup whose first part starts at 002", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-verify-"));
+    await buildFixture(outputRoot);
+    const buildRoot = join(outputRoot, "builds", "4.4-fixture");
+    renameSync(join(buildRoot, "html", "04-差分宇宙-方程-001.html"), join(buildRoot, "html", "04-差分宇宙-方程-002.html"));
+    renameSync(join(buildRoot, "pdf", "04-差分宇宙-方程-001.pdf"), join(buildRoot, "pdf", "04-差分宇宙-方程-002.pdf"));
+    mutateManifest(outputRoot, (manifest) => {
+      manifest.inputs[5]!.filename = "04-差分宇宙-方程-002.html";
+      manifest.outputs[5]!.filename = "04-差分宇宙-方程-002.pdf";
+    });
+    expect(() => verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" })).toThrow(/part|continu/i);
+  });
+
+  it("rejects a missing part inside a subgroup sequence", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-verify-"));
+    await buildFixture(outputRoot);
+    const buildRoot = join(outputRoot, "builds", "4.4-fixture");
+    copyFileSync(join(buildRoot, "html", "04-差分宇宙-方程-001.html"), join(buildRoot, "html", "04-差分宇宙-方程-003.html"));
+    copyFileSync(join(buildRoot, "pdf", "04-差分宇宙-方程-001.pdf"), join(buildRoot, "pdf", "04-差分宇宙-方程-003.pdf"));
+    mutateManifest(outputRoot, (manifest) => {
+      manifest.inputs.splice(6, 0, { ...manifest.inputs[5]!, filename: "04-差分宇宙-方程-003.html" });
+      manifest.outputs.splice(6, 0, { ...manifest.outputs[5]!, filename: "04-差分宇宙-方程-003.pdf" });
+      manifest.outputs.forEach((output, order) => { output.order = order; });
+    });
+    expect(() => verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" })).toThrow(/part|continu/i);
   });
 });
