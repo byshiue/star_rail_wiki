@@ -111,6 +111,17 @@ describe("LoreRecordSchema", () => {
       provenance: [],
     })).toThrow();
   });
+
+  it("rejects a malformed provenance source checksum", () => {
+    expect(() => LoreRecordSchema.parse({
+      ...commonRecord,
+      logicalId: "lore:worldview:faction:1",
+      family: "worldview",
+      kind: "faction",
+      name: "测试派系",
+      provenance: [{ ...provenance[0], sourceChecksum: "fixture-checksum" }],
+    })).toThrow();
+  });
 });
 
 describe("LoreBaselineSchema", () => {
@@ -134,13 +145,35 @@ describe("LoreBaselineSchema", () => {
     })).toMatchObject({ baselineStatus: "missing", expectedCount: null });
   });
 
-  it("rejects a complete baseline without a count or provenance", () => {
+  it("rejects a complete baseline without an expected count", () => {
     expect(() => LoreBaselineSchema.parse({
       releaseId: "4.4-fixture",
       family: "mission",
       baselineStatus: "complete",
       expectedCount: null,
+      provenance,
+      contentChecksum: `sha256:${"d".repeat(64)}`,
+    })).toThrow();
+  });
+
+  it("rejects a complete baseline without provenance", () => {
+    expect(() => LoreBaselineSchema.parse({
+      releaseId: "4.4-fixture",
+      family: "mission",
+      baselineStatus: "complete",
+      expectedCount: 1,
       provenance: [],
+      contentChecksum: `sha256:${"d".repeat(64)}`,
+    })).toThrow();
+  });
+
+  it("rejects a malformed provenance source checksum", () => {
+    expect(() => LoreBaselineSchema.parse({
+      releaseId: "4.4-fixture",
+      family: "mission",
+      baselineStatus: "complete",
+      expectedCount: 1,
+      provenance: [{ ...provenance[0], sourceChecksum: "fixture-checksum" }],
       contentChecksum: `sha256:${"d".repeat(64)}`,
     })).toThrow();
   });

@@ -3,6 +3,10 @@ import { EntityProvenanceSchema } from "../../../src/domain/entities";
 
 const Sha256Schema = z.string().regex(/^sha256:[a-f0-9]{64}$/);
 
+const LoreProvenanceSchema = EntityProvenanceSchema.extend({
+  sourceChecksum: Sha256Schema,
+});
+
 export const LoreFamilySchema = z.enum([
   "divergent-universe",
   "worldview",
@@ -34,7 +38,7 @@ const LoreRecordCommonShape = {
   locale: z.literal("zh-CN"),
   description: z.string().min(1),
   relationships: z.array(LoreRelationshipSchema),
-  provenance: z.array(EntityProvenanceSchema).min(1),
+  provenance: z.array(LoreProvenanceSchema).min(1),
   reviewStatus: z.literal("reviewed"),
   contentChecksum: Sha256Schema,
 };
@@ -94,7 +98,7 @@ export const LoreBaselineSchema = z.strictObject({
   family: LoreFamilySchema,
   baselineStatus: z.enum(["complete", "missing"]),
   expectedCount: z.number().int().nonnegative().nullable(),
-  provenance: z.array(EntityProvenanceSchema),
+  provenance: z.array(LoreProvenanceSchema),
   contentChecksum: Sha256Schema,
 }).refine(
   ({ baselineStatus, expectedCount, provenance }) => (
