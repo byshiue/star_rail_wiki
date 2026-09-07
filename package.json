@@ -40,6 +40,7 @@
     "docs:prepare": "tsx scripts/offline-wiki/prepare.ts",
     "docs:html": "tsx scripts/offline-wiki/build-html.ts",
     "docs:assets": "tsx scripts/offline-wiki/assets-cli.ts",
+    "docs:import-lore": "tsx scripts/offline-wiki/lore/import/cli.ts",
     "docs:draft": "tsx scripts/offline-wiki/draft.ts",
     "docs:review": "tsx scripts/offline-wiki/review.ts",
     "docs:build": "tsx scripts/offline-wiki/build.ts",
