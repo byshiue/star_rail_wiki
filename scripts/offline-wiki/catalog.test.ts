@@ -112,6 +112,22 @@ describe("offline wiki document catalog", () => {
     expect(catalog.loreCoverage.families.worldview.percentage).toBe(100);
   });
 
+  it.each([
+    ["duplicate reviewed summaries", ["reviewed", "reviewed"]],
+    ["conflicting review partitions", ["reviewed", "auto-generated"]],
+  ])("fails closed on %s for one exact-release lore logical ID", (_label, statuses) => {
+    const summaries = statuses.map((reviewStatus) => ({
+      logicalId: "lore:worldview:location:belobog",
+      entityKind: "lore",
+      releaseId: "4.4-fixture",
+      reviewStatus,
+    }));
+    expect(() => loadDocumentCatalog(fixtureRoot, "4.4-fixture", {
+      summaries: summaries as never,
+      divergentUniverse: [],
+    }, { loreRoot })).toThrow(/duplicate|summary|partition/i);
+  });
+
   it("removes duplicate and dangling released-entity relationships before rendering can link them", () => {
     const catalog = loadDocumentCatalog(fixtureRoot, "4.4-fixture", undefined, { loreRoot });
     const collectible = catalog.lore.find((record) => record.family === "collectible")!;

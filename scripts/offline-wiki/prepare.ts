@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { loadDocumentCatalog } from "./catalog";
 import { compareDocumentCatalogs, type DocumentChanges } from "./changes";
 import { loadEditorialData } from "./editorial";
-import type { LoreFamilyCoverage, LoreCoverageMetric } from "./lore/coverage";
+import type { ImportRejectionCounts, LoreFamilyCoverage, LoreCoverageMetric } from "./lore/coverage";
 
 export type PrepareOptions = {
   releasesRoot: string;
@@ -37,6 +37,7 @@ export type PrepareReport = {
     mission: LoreFamilyCoverage;
     collectible: LoreFamilyCoverage;
     totals: LoreCoverageMetric;
+    unattributedImportRejections: ImportRejectionCounts;
   };
   changes: DocumentChanges;
 };
@@ -80,6 +81,7 @@ export function prepareOfflineWiki(options: PrepareOptions): PrepareReport {
       mission: catalog.loreCoverage.families.mission,
       collectible: catalog.loreCoverage.families.collectible,
       totals: catalog.loreCoverage.totals,
+      unattributedImportRejections: catalog.loreCoverage.unattributedImportRejections,
     },
     changes: compareDocumentCatalogs(previousCatalog, catalog),
   };

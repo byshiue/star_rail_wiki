@@ -95,6 +95,17 @@ function byFamily(records: readonly LoreRecord[]): LoreCatalog["byFamily"] {
   };
 }
 
+function validateLoreSummaryPartition(summaries: EditorialData["summaries"], releaseId: string): void {
+  const seen = new Set<string>();
+  for (const summary of summaries) {
+    if (summary.releaseId !== releaseId || summary.entityKind !== "lore") continue;
+    if (seen.has(summary.logicalId)) {
+      throw new Error(`duplicate lore summary partition for ${summary.logicalId} in release ${releaseId}`);
+    }
+    seen.add(summary.logicalId);
+  }
+}
+
 export function loadDocumentCatalog(
   releasesRoot: string,
   releaseId: string,
@@ -142,6 +153,7 @@ export function loadDocumentCatalog(
   const committedLore = options.loreRoot
     ? loadLoreCatalog(options.loreRoot, releaseId)
     : emptyLoreCatalog(releaseId);
+  validateLoreSummaryPartition(editorialData.summaries, releaseId);
   const releasedEntityIds = new Set([
     ...characters.map((item) => item.logicalId),
     ...lightCones.map((item) => item.logicalId),

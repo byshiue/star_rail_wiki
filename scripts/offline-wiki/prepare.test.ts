@@ -44,10 +44,13 @@ describe("offline wiki prepare report", () => {
     const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-prepare-lore-"));
     const report = prepareOfflineWiki({ releasesRoot: fixtureRoot, loreRoot, releaseId: "4.4-fixture", outputRoot });
     expect(report.schemaVersion).toBe(2);
-    expect(Object.keys(report.lore)).toEqual(["divergentUniverse", "worldview", "mission", "collectible", "totals"]);
+    expect(Object.keys(report.lore)).toEqual([
+      "divergentUniverse", "worldview", "mission", "collectible", "totals", "unattributedImportRejections",
+    ]);
     expect(report.lore.divergentUniverse).toMatchObject({ structured: 1, expected: 1, percentage: 100 });
     expect(report.lore.mission).toMatchObject({ baselineStatus: "missing", expected: null, percentage: null });
     expect(report.lore.totals).toMatchObject({ structured: 4, expected: null, percentage: null });
+    expect(report.lore.unattributedImportRejections).toEqual({ unknownKind: 0, missingText: 0, ambiguousRelease: 0, malformedSource: 0 });
     expect(report.counts).toEqual({ characters: 1, lightCones: 1, relicSets: 1, divergentUniverse: 0 });
     expect(report.gaps.storySummaries).toBe(3);
   });
