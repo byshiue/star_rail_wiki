@@ -1,10 +1,18 @@
 import { createHash, randomUUID } from "node:crypto";
 import {
-  closeSync, existsSync, fstatSync, lstatSync, mkdirSync, mkdtempSync, openSync, readFileSync, readdirSync, realpathSync,
+  closeSync, existsSync, fstatSync, fsyncSync, lstatSync, mkdirSync, mkdtempSync, openSync, readFileSync, readdirSync, realpathSync,
   renameSync, rmSync, unlinkSync, writeFileSync,
 } from "node:fs";
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { materializeCanonicalLoreInput, parseCanonicalLoreJsonl, serializeCanonicalLoreRecords, validateLocalFullTextRecords, type LocalFullTextRecord } from "./canonical";
+import {
+  fsyncDirectory,
+  observePublishedOwner,
+  publishAtomicOwner,
+  samePublishedOwner,
+  unlinkPublishedOwner,
+  type PublishedOwner,
+} from "../../atomic-owner";
 import { loadLocalLoreManifest, readValidatedLocalLoreFile } from "./manifest";
 import { convertCompatibleGameData } from "./adapters/game-data";
 import { convertSavedHoyoWiki } from "./adapters/hoyowiki";
@@ -23,7 +31,16 @@ export type LocalImportReport = {
 };
 export type ImportLocalLoreOptions = {
   repositoryRoot: string; releaseId: string; manifestPath: string; sourceRoot: string; outputRoot?: string;
-  operations?: { removeBackup?: (path: string) => void; beforeBackupRename?: () => void; beforePromote?: (targetRoot: string) => void; duringLockReclaim?: () => void; inspectReclaimGuardFd?: (descriptor: number) => void; beforeAtomicRename?: (temporaryPath: string, targetPath: string) => void };
+  operations?: {
+    removeBackup?: (path: string) => void;
+    beforeBackupRename?: () => void;
+    beforePromote?: (targetRoot: string) => void;
+    duringLockReclaim?: () => void;
+    inspectReclaimGuardFd?: (descriptor: number) => void;
+    beforeAtomicRename?: (temporaryPath: string, targetPath: string) => void;
+    afterOwnerCandidateFsync?: (label: string, path: string) => void;
+    afterOwnerPublishLink?: (label: string, path: string) => void;
+  };
 };
 type Journal = { schemaVersion: 1; phase: "prepared" | "backed-up" | "promoted"; targetName: "normalized"; stagingName: string; backupName: string | null; priorOutputChecksum: string | null; expectedOutputChecksum: string };
 
@@ -46,8 +63,16 @@ function ensureDirectory(root: string, path: string): void { assertSafePath(root
 function writeJson(path: string, value: unknown): void { writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, { mode: 0o600 }); }
 function atomicJson(path: string, value: unknown, options: ImportLocalLoreOptions): void {
   const temp = `${path}.${randomUUID()}.tmp`;
-  try { writeJson(temp, value); options.operations?.beforeAtomicRename?.(temp, path); renameSync(temp, path); }
-  finally { if (existsSync(temp)) unlinkSync(temp); }
+  try {
+    writeJson(temp, value);
+    const descriptor = openSync(temp, "r");
+    try { fsyncSync(descriptor); } finally { closeSync(descriptor); }
+    options.operations?.beforeAtomicRename?.(temp, path);
+    renameSync(temp, path);
+    fsyncDirectory(dirname(path), "atomic JSON");
+  } finally {
+    if (existsSync(temp)) unlinkSync(temp);
+  }
 }
 
 function roots(options: ImportLocalLoreOptions) {
@@ -63,8 +88,11 @@ function roots(options: ImportLocalLoreOptions) {
 function rejected(releaseId: string, reason: RejectionReason, checksums: string[] = [], paths: string[] = [], recoveryNames: string[] = [], items: ImportRejection[] = []): LocalImportReport {
   return { status: "rejected", releaseId, acceptedCount: 0, rejectedCount: Math.max(1, items.length), inputChecksums: checksums, outputChecksum: null, warnings: [], rejection: { reason, sourcePaths: paths, recoveryNames, items } };
 }
-function persistRejected(repositoryRoot: string, releaseRoot: string, report: LocalImportReport): void {
-  const dir = join(releaseRoot, "reports"); ensureDirectory(repositoryRoot, dir); writeJson(join(dir, "last-rejected.json"), report);
+function persistRejected(repositoryRoot: string, releaseRoot: string, report: LocalImportReport, options: ImportLocalLoreOptions): void {
+  const dir = join(releaseRoot, "reports");
+  ensureDirectory(repositoryRoot, dir);
+  try { atomicJson(join(dir, "last-rejected.json"), report, options); }
+  catch { /* the returned rejection remains authoritative */ }
 }
 function parseJournal(path: string): Journal {
   const value = JSON.parse(readFileSync(path, "utf8")) as Partial<Journal>;
@@ -92,52 +120,187 @@ function recoveryNames(releaseRoot: string): string[] {
   if (!existsSync(releaseRoot)) return [JOURNAL_NAME];
   return [JOURNAL_NAME, ...readdirSync(releaseRoot).filter((name) => /^\.normalized-backup-[A-Za-z0-9-]+$/.test(name)).sort()];
 }
-function acquireLock(releaseRoot: string, options: ImportLocalLoreOptions): { path: string; nonce: string } {
-  const path = join(releaseRoot, LOCK_NAME); const nonce = randomUUID();
-  let descriptor: number;
-  try { descriptor = openSync(path, "wx", 0o600); }
-  catch {
-    const originalStats = lstatSync(path, { bigint: true });
-    if (originalStats.isSymbolicLink() || !originalStats.isFile()) throw new Error("transaction lock is not a regular file");
-    let existing: { pid?: number; nonce?: string };
-    try { existing = JSON.parse(readFileSync(path, "utf8")) as { pid?: number; nonce?: string }; }
-    catch { throw new Error("another import or manual recovery is active"); }
-    if (!Number.isInteger(existing.pid) || existing.pid! <= 0 || typeof existing.nonce !== "string") throw new Error("another import or manual recovery is active");
-    try { process.kill(existing.pid!, 0); throw new Error("another import or manual recovery is active"); }
-    catch (error) {
-      if (!(error instanceof Error) || !("code" in error) || error.code !== "ESRCH") throw error;
+type ImportOwnerValue = { pid: number; nonce: string };
+type ImportOwner = PublishedOwner<ImportOwnerValue>;
+const LEGACY_LOCK_GRACE_MS = 30_000;
+
+class LiveImportLockError extends Error {}
+
+function parseImportOwner(value: unknown): ImportOwnerValue {
+  if (!value || typeof value !== "object" || Array.isArray(value)
+      || Object.keys(value).sort().join(",") !== "nonce,pid") {
+    throw new Error("owner identity must contain exactly pid and nonce");
+  }
+  const owner = value as { pid?: unknown; nonce?: unknown };
+  if (!Number.isInteger(owner.pid) || Number(owner.pid) <= 0 || typeof owner.nonce !== "string" || owner.nonce.length === 0) {
+    throw new Error("owner identity is malformed");
+  }
+  return { pid: Number(owner.pid), nonce: owner.nonce };
+}
+
+function processIsAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (error) {
+    if (error instanceof Error && "code" in error && error.code === "ESRCH") return false;
+    throw error;
+  }
+}
+
+function sameLegacyIdentity(path: string, stats: { dev: number | bigint; ino: number | bigint }): boolean {
+  try {
+    const current = lstatSync(path, { bigint: true });
+    return !current.isSymbolicLink() && current.isFile()
+      && current.dev === BigInt(stats.dev) && current.ino === BigInt(stats.ino);
+  } catch {
+    return false;
+  }
+}
+
+function releaseImportOwner(releaseRoot: string, owner: ImportOwner, label: string): void {
+  try {
+    if (unlinkPublishedOwner(owner, label, parseImportOwner)) fsyncDirectory(releaseRoot, label);
+  } catch {
+    /* retain an owner whose identity cannot be proven */
+  }
+}
+
+function publishImportOwner(
+  releaseRoot: string,
+  path: string,
+  label: string,
+  options: ImportLocalLoreOptions,
+): ImportOwner | null {
+  return publishAtomicOwner({
+    directory: releaseRoot,
+    path,
+    label,
+    value: { pid: process.pid, nonce: randomUUID() },
+    parse: parseImportOwner,
+    operations: options.operations,
+  });
+}
+
+function replaceStaleArtifact(
+  releaseRoot: string,
+  path: string,
+  label: string,
+  stats: { dev: number | bigint; ino: number | bigint },
+  options: ImportLocalLoreOptions,
+): ImportOwner {
+  const tombstone = `${path}.stale-${randomUUID()}`;
+  renameSync(path, tombstone);
+  fsyncDirectory(releaseRoot, label);
+  let installed: ImportOwner | null = null;
+  try {
+    if (!sameLegacyIdentity(tombstone, stats)) throw new Error(`${label} identity changed during isolation`);
+    installed = publishImportOwner(releaseRoot, path, label, options);
+    if (!installed) throw new Error(`${label} changed during stale recovery`);
+    return installed;
+  } catch (error) {
+    if (!installed && !existsSync(path) && sameLegacyIdentity(tombstone, stats)) {
+      renameSync(tombstone, path);
+      fsyncDirectory(releaseRoot, label);
     }
-    const guard = `${path}-reclaim`; let guardDescriptor: number;
-    try { guardDescriptor = openSync(guard, "wx", 0o600); } catch { throw new Error("lock reclaim is already active"); }
-    let guardStats;
-    try { guardStats = fstatSync(guardDescriptor, { bigint: true }); options.operations?.inspectReclaimGuardFd?.(guardDescriptor); }
-    finally { closeSync(guardDescriptor); }
-    const guardPathStats = lstatSync(guard, { bigint: true });
-    if (guardPathStats.dev !== guardStats.dev || guardPathStats.ino !== guardStats.ino) throw new Error("reclaim guard identity mismatch");
-    const tombstone = `${path}.stale-${randomUUID()}`; let moved = false; let installed = false;
-    try {
-      options.operations?.duringLockReclaim?.();
-      const currentStats = lstatSync(path, { bigint: true });
-      if (currentStats.isSymbolicLink() || !currentStats.isFile() || currentStats.dev !== originalStats.dev || currentStats.ino !== originalStats.ino) throw new Error("lock identity changed during reclaim");
-      const current = JSON.parse(readFileSync(path, "utf8")) as { pid?: number; nonce?: string };
-      if (current.pid !== existing.pid || current.nonce !== existing.nonce) throw new Error("lock owner changed during reclaim");
-      try { process.kill(current.pid!, 0); throw new Error("lock owner became active"); }
-      catch (error) { if (!(error instanceof Error) || !("code" in error) || error.code !== "ESRCH") throw error; }
-      renameSync(path, tombstone); moved = true;
-      descriptor = openSync(path, "wx", 0o600); installed = true;
-    } catch (error) {
-      if (moved && !installed && !existsSync(path)) renameSync(tombstone, path);
-      throw error;
-    } finally {
-      if (moved && existsSync(tombstone)) { const stats = lstatSync(tombstone, { bigint: true }); if (stats.dev === originalStats.dev && stats.ino === originalStats.ino) unlinkSync(tombstone); }
-      if (existsSync(guard)) { const stats = lstatSync(guard, { bigint: true }); if (stats.dev === guardStats.dev && stats.ino === guardStats.ino) unlinkSync(guard); }
+    throw error;
+  } finally {
+    if (installed && sameLegacyIdentity(tombstone, stats)) {
+      unlinkSync(tombstone);
+      fsyncDirectory(releaseRoot, label);
     }
   }
-  try { writeFileSync(descriptor, JSON.stringify({ pid: process.pid, nonce })); } finally { closeSync(descriptor); }
-  return { path, nonce };
 }
-function releaseLock(lock: { path: string; nonce: string }): void {
-  try { const value = JSON.parse(readFileSync(lock.path, "utf8")) as { nonce?: string }; if (value.nonce === lock.nonce) unlinkSync(lock.path); } catch { /* fail closed: retain an unverified lock */ }
+
+function inspectGuardDescriptor(guard: ImportOwner, options: ImportLocalLoreOptions): void {
+  if (!options.operations?.inspectReclaimGuardFd) return;
+  const descriptor = openSync(guard.path, "r");
+  try {
+    const stats = fstatSync(descriptor, { bigint: true });
+    if (stats.dev !== guard.device || stats.ino !== guard.inode) throw new Error("reclaim guard identity mismatch");
+    options.operations.inspectReclaimGuardFd(descriptor);
+  } finally {
+    closeSync(descriptor);
+  }
+}
+
+function acquireReclaimGuard(releaseRoot: string, path: string, options: ImportLocalLoreOptions): ImportOwner {
+  let guard = publishImportOwner(releaseRoot, path, "transaction lock reclaim guard", options);
+  if (guard) {
+    try {
+      inspectGuardDescriptor(guard, options);
+      return guard;
+    } catch (error) {
+      releaseImportOwner(releaseRoot, guard, "transaction lock reclaim guard");
+      throw error;
+    }
+  }
+
+  const stats = lstatSync(path, { bigint: true });
+  if (stats.isSymbolicLink() || !stats.isFile()) throw new Error("transaction lock reclaim guard is not a regular file");
+  let observed: ImportOwner | null = null;
+  try {
+    observed = observePublishedOwner(path, "transaction lock reclaim guard", parseImportOwner);
+  } catch {
+    if (Date.now() - Number(stats.mtimeMs) < LEGACY_LOCK_GRACE_MS) {
+      throw new Error("transaction lock reclaim guard is malformed or recently incomplete");
+    }
+  }
+  if (observed && processIsAlive(observed.value.pid)) throw new LiveImportLockError("lock reclaim is already active");
+
+  const claimPath = `${path}-claim`;
+  const claim = publishImportOwner(releaseRoot, claimPath, "transaction lock reclaim claim", options);
+  if (!claim) throw new LiveImportLockError("lock reclaim is already active");
+  try {
+    if (!sameLegacyIdentity(path, stats)) throw new Error("transaction lock reclaim guard changed before recovery");
+    if (observed && !samePublishedOwner(observed, "transaction lock reclaim guard", parseImportOwner)) {
+      throw new Error("transaction lock reclaim guard owner changed before recovery");
+    }
+    if (observed && processIsAlive(observed.value.pid)) throw new LiveImportLockError("lock reclaim became active");
+    guard = replaceStaleArtifact(releaseRoot, path, "transaction lock reclaim guard", stats, options);
+    inspectGuardDescriptor(guard, options);
+    return guard;
+  } finally {
+    releaseImportOwner(releaseRoot, claim, "transaction lock reclaim claim");
+  }
+}
+
+function acquireLock(releaseRoot: string, options: ImportLocalLoreOptions): ImportOwner {
+  const path = join(releaseRoot, LOCK_NAME);
+  let installed = publishImportOwner(releaseRoot, path, "transaction lock", options);
+  if (installed) return installed;
+
+  const stats = lstatSync(path, { bigint: true });
+  if (stats.isSymbolicLink() || !stats.isFile()) throw new Error("transaction lock is not a regular file");
+  let observed: ImportOwner | null = null;
+  try {
+    observed = observePublishedOwner(path, "transaction lock", parseImportOwner);
+  } catch {
+    if (Date.now() - Number(stats.mtimeMs) < LEGACY_LOCK_GRACE_MS) {
+      throw new Error("transaction lock is malformed or recently incomplete");
+    }
+  }
+  if (observed && processIsAlive(observed.value.pid)) {
+    throw new LiveImportLockError("another import or manual recovery is active");
+  }
+
+  const guard = acquireReclaimGuard(releaseRoot, `${path}-reclaim`, options);
+  try {
+    options.operations?.duringLockReclaim?.();
+    if (!sameLegacyIdentity(path, stats)) throw new Error("lock identity changed during reclaim");
+    if (observed) {
+      if (!samePublishedOwner(observed, "transaction lock", parseImportOwner)) throw new Error("lock owner changed during reclaim");
+      if (processIsAlive(observed.value.pid)) throw new LiveImportLockError("lock owner became active");
+    }
+    installed = replaceStaleArtifact(releaseRoot, path, "transaction lock", stats, options);
+    return installed;
+  } finally {
+    releaseImportOwner(releaseRoot, guard, "transaction lock reclaim guard");
+  }
+}
+
+function releaseLock(lock: ImportOwner): void {
+  releaseImportOwner(dirname(lock.path), lock, "transaction lock");
 }
 
 function recover(options: ImportLocalLoreOptions, context: ReturnType<typeof roots>): LocalImportReport | null {
@@ -230,43 +393,48 @@ function runRegisteredAdapter(
 }
 
 function runImport(options: ImportLocalLoreOptions, context: ReturnType<typeof roots>): LocalImportReport {
+  const persist = (report: LocalImportReport) => persistRejected(context.repositoryRoot, context.releaseRoot, report, options);
   try { const recovered = recover(options, context); if (recovered) return recovered; }
-  catch { const report = rejected(options.releaseId, "recovery-failed", [], [], recoveryNames(context.releaseRoot)); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+  catch { const report = rejected(options.releaseId, "recovery-failed", [], [], recoveryNames(context.releaseRoot)); persist(report); return report; }
   let manifest;
   try { manifest = loadLocalLoreManifest(options.manifestPath, options.releaseId, options.sourceRoot); }
-  catch { const report = rejected(options.releaseId, "manifest-validation-failed"); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+  catch { const report = rejected(options.releaseId, "manifest-validation-failed"); persist(report); return report; }
   const checksums = manifest.files.map((file) => file.checksum); const paths = manifest.files.map((file) => file.path);
   let records: LocalFullTextRecord[];
   if (manifest.adapter === "canonical-jsonl") {
-    if (manifest.files.length !== 1) { const report = rejected(options.releaseId, "adapter-unsupported", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+    if (manifest.files.length !== 1) { const report = rejected(options.releaseId, "adapter-unsupported", checksums, paths); persist(report); return report; }
     let text: string;
     try { text = readValidatedLocalLoreFile(manifest, options.sourceRoot, manifest.files[0].path).text; }
-    catch { const report = rejected(options.releaseId, "source-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+    catch { const report = rejected(options.releaseId, "source-validation-failed", checksums, paths); persist(report); return report; }
     try { records = parseCanonicalLoreJsonl(text, manifest); }
-    catch { const report = rejected(options.releaseId, "canonical-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+    catch { const report = rejected(options.releaseId, "canonical-validation-failed", checksums, paths); persist(report); return report; }
   } else {
     let adapterResult: AdapterResult;
     try { adapterResult = runRegisteredAdapter(manifest, options.sourceRoot); }
-    catch { const report = rejected(options.releaseId, "source-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+    catch { const report = rejected(options.releaseId, "source-validation-failed", checksums, paths); persist(report); return report; }
     if (adapterResult.rejections.length > 0) {
       const report = rejected(options.releaseId, "adapter-rejected", checksums, paths, [], adapterResult.rejections);
-      persistRejected(context.repositoryRoot, context.releaseRoot, report);
+      persist(report);
       return report;
     }
     try { records = materializeAdapterEntries(adapterResult, manifest); }
-    catch { const report = rejected(options.releaseId, "canonical-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+    catch { const report = rejected(options.releaseId, "canonical-validation-failed", checksums, paths); persist(report); return report; }
   }
   const output = serializeCanonicalLoreRecords(records);
   const report: LocalImportReport = { status: "accepted", releaseId: options.releaseId, acceptedCount: records.length, rejectedCount: 0, inputChecksums: checksums, outputChecksum: sha(output), warnings: [], rejection: null };
   try { return promote(options, context, output, report); }
-  catch { const failure = rejected(options.releaseId, "promotion-failed", checksums, paths, recoveryNames(context.releaseRoot)); persistRejected(context.repositoryRoot, context.releaseRoot, failure); return failure; }
+  catch { const failure = rejected(options.releaseId, "promotion-failed", checksums, paths, recoveryNames(context.releaseRoot)); persist(failure); return failure; }
 }
 
 export function importLocalLore(options: ImportLocalLoreOptions): LocalImportReport {
   const context = roots(options);
   ensureDirectory(context.repositoryRoot, context.releaseRoot);
-  let lock: { path: string; nonce: string };
+  let lock: ImportOwner;
   try { lock = acquireLock(context.releaseRoot, options); }
-  catch { const report = rejected(options.releaseId, "recovery-failed", [], [], [LOCK_NAME, ...recoveryNames(context.releaseRoot)]); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+  catch (error) {
+    const report = rejected(options.releaseId, "recovery-failed", [], [], [LOCK_NAME, ...recoveryNames(context.releaseRoot)]);
+    if (!(error instanceof LiveImportLockError)) persistRejected(context.repositoryRoot, context.releaseRoot, report, options);
+    return report;
+  }
   try { return runImport(options, context); } finally { releaseLock(lock); }
 }

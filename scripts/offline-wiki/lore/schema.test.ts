@@ -194,6 +194,17 @@ describe("LoreBaselineSchema", () => {
   });
 });
 
+  it("rejects a missing baseline that still claims an expected count", () => {
+    expect(() => LoreBaselineSchema.parse({
+      releaseId: "4.4-fixture",
+      family: "mission",
+      baselineStatus: "missing",
+      expectedCount: 12,
+      provenance: [],
+      contentChecksum: `sha256:${"d".repeat(64)}`,
+    })).toThrow(/missing|expected/i);
+  });
+
 describe("StorySummarySchema lore entities", () => {
   const reviewedSummary = {
     logicalId: "lore:worldview:faction:1",

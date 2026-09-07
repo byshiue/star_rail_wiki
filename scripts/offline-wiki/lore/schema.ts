@@ -101,12 +101,14 @@ export const LoreBaselineSchema = z.strictObject({
   expectedCount: z.number().int().nonnegative().nullable(),
   provenance: z.array(LoreProvenanceSchema),
   contentChecksum: Sha256Schema,
-}).refine(
-  ({ baselineStatus, expectedCount, provenance }) => (
-    baselineStatus !== "complete" || (expectedCount !== null && provenance.length > 0)
-  ),
-  { message: "complete lore baselines require an expected count and provenance" },
-);
+}).superRefine(({ baselineStatus, expectedCount, provenance }, context) => {
+  if (baselineStatus === "complete" && (expectedCount === null || provenance.length === 0)) {
+    context.addIssue({ code: "custom", message: "complete lore baselines require an expected count and provenance" });
+  }
+  if (baselineStatus === "missing" && expectedCount !== null) {
+    context.addIssue({ code: "custom", message: "missing lore baselines require expectedCount to be null" });
+  }
+});
 
 export type LoreFamily = z.infer<typeof LoreFamilySchema>;
 export type LoreRelationship = z.infer<typeof LoreRelationshipSchema>;

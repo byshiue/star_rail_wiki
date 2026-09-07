@@ -4,8 +4,9 @@ import { GameReleaseBundleSchema } from "../../src/domain/releases";
 import type { EditorialData } from "./editorial";
 import { loadLoreCatalog, type LoreCatalog } from "./lore/catalog";
 import { buildLoreCoverage, loadLocalImportReport } from "./lore/coverage";
-import { loadLocalFullTextOverlay } from "./lore/local-overlay";
+import { loadLocalFullTextOverlay, type LocalFullTextOverlayRecord } from "./lore/local-overlay";
 import type { LoreFamily, LoreRecord } from "./lore/schema";
+
 import { DocumentCatalogSchema, type DocumentCatalog } from "./schema";
 
 const RELEASE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
@@ -15,6 +16,7 @@ export type LoadDocumentCatalogOptions = {
   loreRoot?: string;
   localOverlayPath?: string;
   localImportReportPath?: string;
+  onLocalOverlayLoaded?: (overlay: ReadonlyMap<string, LocalFullTextOverlayRecord>) => void;
 };
 
 function readJson(path: string): unknown {
@@ -44,6 +46,7 @@ function emptyLoreCatalog(releaseId: string): LoreCatalog {
       provenance: [],
       contentChecksum: `sha256:${"0".repeat(64)}`,
     })),
+    candidateDecisions: [],
   };
 }
 
@@ -166,6 +169,7 @@ export function loadDocumentCatalog(
     byFamily: byFamily(processedLore.records),
   };
   const localOverlay = loadLocalFullTextOverlay(options.localOverlayPath, releaseId, loreCatalog.records);
+  options.onLocalOverlayLoaded?.(localOverlay);
   const loreCoverage = buildLoreCoverage({
     catalog: loreCatalog,
     summaries: editorialData.summaries,

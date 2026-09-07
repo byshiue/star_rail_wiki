@@ -136,7 +136,8 @@ function renderIndex(input: VolumeRenderInput): string {
     <h3>变更（${changes.changed.length}）</h3><ul>${changes.changed.map((id) => `<li>${escapeHtml(id)}</li>`).join("")}</ul>
     <h3>移除（${changes.removed.length}）</h3><ul>${changes.removed.map((id) => `<li>${escapeHtml(id)}</li>`).join("")}</ul>
     <p>未变更：${changes.unchanged.length}</p></section>` : "";
-  const rejectedLore = (metric: LoreCoverageMetric) => metric.rejectedLaterVersion
+  const rejectedLore = (metric: LoreCoverageMetric) => metric.missingSourceEvidence
+    + metric.rejectedLaterVersion
     + metric.rejectedAmbiguousVersion
     + metric.invalidRelationships
     + Object.values(metric.importRejections).reduce((sum, count) => sum + count, 0);

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { closeSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
+import { closeSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, unlinkSync, utimesSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -371,6 +371,88 @@ describe("importLocalLore", () => {
     writeFileSync(join(data.sourceRoot, "worldview.jsonl"), "{bad}\n");
     const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
     expect(report.status).toBe("rejected"); expect(existsSync(join(releaseRoot, stagingName))).toBe(false); expect(firstOutputChecksum(join(releaseRoot, "normalized"))).toBe(prior.outputChecksum);
+  });
+
+  it("recovers aged malformed legacy lock and reclaim-guard artifacts", () => {
+    for (const artifact of ["lock", "guard"] as const) {
+      const data = fixture(["VALID"]);
+      const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+      mkdirSync(releaseRoot, { recursive: true });
+      const lockPath = join(releaseRoot, ".normalized-transaction.lock");
+      writeFileSync(lockPath, artifact === "lock" ? "" : JSON.stringify({ pid: 2147483647, nonce: "old" }));
+      const malformedPath = artifact === "lock" ? lockPath : `${lockPath}-reclaim`;
+      if (artifact === "guard") writeFileSync(malformedPath, "{");
+      utimesSync(malformedPath, new Date(0), new Date(0));
+
+      expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("accepted");
+      expect(existsSync(lockPath)).toBe(false);
+      expect(existsSync(`${lockPath}-reclaim`)).toBe(false);
+    }
+  });
+
+  it("does not overwrite the shared last-rejected report when a live owner holds the lock", () => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    const reportsRoot = join(releaseRoot, "reports");
+    mkdirSync(reportsRoot, { recursive: true });
+    const prior = "{\"prior\":true}\n";
+    writeFileSync(join(reportsRoot, "last-rejected.json"), prior);
+    writeFileSync(join(releaseRoot, ".normalized-transaction.lock"), JSON.stringify({ pid: process.pid, nonce: "live" }));
+
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
+
+    expect(report.status).toBe("rejected");
+    expect(readFileSync(join(reportsRoot, "last-rejected.json"), "utf8")).toBe(prior);
+  });
+
+  it("publishes last-rejected atomically and preserves the prior report when rename is interrupted", () => {
+    const data = fixture(["{bad json}"]);
+    const reportsRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/reports");
+    mkdirSync(reportsRoot, { recursive: true });
+    const reportPath = join(reportsRoot, "last-rejected.json");
+    const prior = "{\"prior\":true}\n";
+    writeFileSync(reportPath, prior);
+
+    const report = importLocalLore({
+      ...data,
+      releaseId: "4.4-fixture",
+      operations: {
+        beforeAtomicRename: (_temporary, target) => {
+          if (target === reportPath) throw new Error("simulated report rename crash");
+        },
+      },
+    });
+
+    expect(report.status).toBe("rejected");
+    expect(readFileSync(reportPath, "utf8")).toBe(prior);
+    expect(readdirSync(reportsRoot)).toEqual(["last-rejected.json"]);
+  });
+
+  it.each([
+    ["transaction lock", "afterOwnerCandidateFsync"],
+    ["transaction lock reclaim guard", "afterOwnerCandidateFsync"],
+    ["transaction lock", "afterOwnerPublishLink"],
+  ] as const)("recovers after an interrupted atomic %s publication at %s", (label, hook) => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    mkdirSync(releaseRoot, { recursive: true });
+    const lockPath = join(releaseRoot, ".normalized-transaction.lock");
+    if (label !== "transaction lock" || hook === "afterOwnerPublishLink") {
+      writeFileSync(lockPath, JSON.stringify({ pid: 2147483647, nonce: "old" }));
+    }
+    let injected = false;
+    const operations = {
+      [hook]: (publishedLabel: string) => {
+        if (!injected && publishedLabel === label) {
+          injected = true;
+          throw new Error("simulated publication crash");
+        }
+      },
+    };
+
+    expect(importLocalLore({ ...data, releaseId: "4.4-fixture", operations }).status).toBe("rejected");
+    expect(injected).toBe(true);
+    expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("accepted");
   });
 
   it("serializes stale-lock reclaimers so a nested contender cannot enter", () => {

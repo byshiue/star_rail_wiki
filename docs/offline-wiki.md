@@ -6,7 +6,7 @@
 
 ## 环境
 
-需要 Node.js 24。首次安装：
+需要 Node.js 24，并要求构建输出位于支持同目录 hard link、原子 rename、目录 open/fsync 的本地 POSIX 文件系统；不支持这些语义时，lock 会给出定向错误并 fail closed。非 Linux 主机无法核对进程启动时间，遇到疑似 PID 复用的 lock 时会保守保留，需先确认没有构建进程再人工移除。首次安装：
 
 ```bash
 npm ci
@@ -107,7 +107,7 @@ source root 必须含并在 manifest 中声明这三个严格 JSON 文件：
 - `TextMap/TextMapCHS.json`：hash 到中文字符串的 object mapping。
 - `Story/Story.json`：`{stories:[{id, sections:[{order, titleHash?, speakerHash?, branch?, bodyHash}]}]}`。
 
-`LoreEntries.json` 的 release 必须明确等于 manifest。任何缺失的名称、正文、标题、说话人或 branch hash 都会拒绝对应批次；adapter 不猜测缺字，也不读取其他目录。
+`LoreEntries.json` 的 release 必须明确等于 manifest。任何缺失的名称、正文、标题或说话人 TextMap hash，以及缺失或为空的可选 `branch` 字面字符串，都会拒绝对应批次；`branch` 不是 TextMap hash。adapter 不猜测缺字，也不读取其他目录。
 
 ## 事务、拒绝报告与恢复
 
@@ -121,7 +121,7 @@ PDF 构建本身也使用 staging、lock、journal 与原子替换；失败不�
 
 `docs:prepare` 写入 `.local/offline-wiki/previews/<release>/prepare-report.json`，单独执行 `docs:html` 则写入同目录的 `html/`。preview 与最终 `builds/<release>/` 分离，所以重复预览不会在原子 build 开始前改动上一套已验证输出。每个 family/kind 分别报告结构化记录、原创摘要（人工审核/自动生成）、本地全文、来源缺漏、版本拒绝、关系错误及本地 adapter 拒绝。
 
-`baselineStatus: "complete"` 只有在已有可信 expected count 与来源时才计算 `percentage = structured / expected × 100`（零条完整基准为 100%）；`baselineStatus: "missing"` 时 `expected` 和 `percentage` 都必须为 `null`。当前 HoYoWiki 目录是会变化的线上视图，可能已经包含 4.5 或更晚内容，也不提供每项的历史 4.4 revision，因此当前条目数不能建立 4.4 基准。
+`baselineStatus: "complete"` 只有在已有可信 expected count 与来源时才计算 `percentage = structured / expected × 100`（零条完整基准为 100%）；`baselineStatus: "missing"` 时 `expectedCount`、渲染的 `expected` 和 `percentage` 都必须为 `null`；其 provenance 可以为空，也可以保留对失败基准检索的来源说明，但不得借此提供 expected count。当前 HoYoWiki 目录是会变化的线上视图，可能已经包含 4.5 或更晚内容，也不提供每项的历史 4.4 revision，因此当前条目数不能建立 4.4 基准。
 
 正式候选还必须有条目级、不可变、在 4.4 结束时刻之前发布的 release 证据与来源 artifact checksum。当前非穷尽 ledger 只有 4 个候选、0 个获准，四项分别记录为 1 个晚于版本、1 个版本不明、2 个缺来源；它是保守决策样本，不是 4.4 内容总表。
 

@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
+import { loadValidatedCandidateDecisions, type CandidateCoverageDecision } from "./candidates";
 import {
   LoreBaselineSchema,
   LoreRecordSchema,
@@ -28,6 +29,7 @@ export type LoreCatalog = {
   records: LoreRecord[];
   byFamily: Record<LoreFamily, LoreRecord[]>;
   baselines: LoreBaseline[];
+  candidateDecisions: CandidateCoverageDecision[];
 };
 
 function readArray(path: string): unknown[] {
@@ -179,6 +181,9 @@ export function loadLoreCatalog(root: string, releaseId: string): LoreCatalog {
   for (const [family] of FAMILY_FILES) {
     if (!baselineFamilies.has(family)) throw new Error(`missing lore baseline for family ${family}`);
   }
+  const candidateDecisions = releaseId === "4.4-cn-2026-08-21"
+    ? loadValidatedCandidateDecisions(releaseRoot)
+    : [];
 
   const sortedRecords = [...records].sort(compareChineseName);
   return {
@@ -191,5 +196,6 @@ export function loadLoreCatalog(root: string, releaseId: string): LoreCatalog {
       collectible: sortedRecords.filter((record) => record.family === "collectible"),
     },
     baselines,
+    candidateDecisions,
   };
 }

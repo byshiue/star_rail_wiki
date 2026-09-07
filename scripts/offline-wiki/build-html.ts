@@ -1,4 +1,5 @@
-import { mkdirSync, renameSync, writeFileSync } from "node:fs";
+import { randomUUID } from "node:crypto";
+import { existsSync, mkdirSync, mkdtempSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadAssetManifest } from "./assets/manifest";
@@ -21,6 +22,9 @@ export type BuildHtmlOptions = {
   localOverlayPath?: string;
   localImportReportPath?: string;
   buildRootOverride?: string;
+  operations?: {
+    afterCatalogLoaded?: () => void;
+  };
 };
 
 export type HtmlOutput = Pick<RenderedVolume, "filename" | "family" | "group"> & { path: string };
@@ -38,11 +42,16 @@ export function buildHtmlVolumes(options: BuildHtmlOptions): HtmlOutput[] {
     ?? join(process.cwd(), ".local", "offline-wiki", "imports", options.releaseId, "normalized", "current.jsonl");
   const localImportReportPath = options.localImportReportPath
     ?? join(localOverlayPath, "..", "..", "reports", "last-rejected.json");
+  let localOverlay: ReturnType<typeof loadLocalFullTextOverlay> | undefined;
   const catalog = loadDocumentCatalog(options.releasesRoot, options.releaseId, editorial, {
     loreRoot,
     localOverlayPath,
     localImportReportPath,
+    onLocalOverlayLoaded: (snapshot) => { localOverlay = new Map(snapshot); },
   });
+  if (!localOverlay) throw new Error("document catalog did not bind a local overlay snapshot");
+  options.operations?.afterCatalogLoaded?.();
+
   const previousCatalog = catalog.release.previousReleaseId
     ? loadDocumentCatalog(options.releasesRoot, catalog.release.previousReleaseId, editorial)
     : null;
@@ -53,24 +62,42 @@ export function buildHtmlVolumes(options: BuildHtmlOptions): HtmlOutput[] {
     assetManifest,
     options.assetCacheRoot ?? join(options.outputRoot, "assets", options.releaseId),
   );
-  const outputDirectory = join(
-    options.buildRootOverride ?? join(options.outputRoot, "previews", options.releaseId),
-    "html",
-  );
-  mkdirSync(outputDirectory, { recursive: true });
+  const buildRoot = options.buildRootOverride ?? join(options.outputRoot, "previews", options.releaseId);
+  const outputDirectory = join(buildRoot, "html");
+  mkdirSync(buildRoot, { recursive: true });
   const baseVolumes = renderVolumes({
     catalog,
     summaries: editorial.summaries,
     assets,
     changes: compareDocumentCatalogs(previousCatalog, catalog),
   });
-  const localOverlay = loadLocalFullTextOverlay(localOverlayPath, options.releaseId, catalog.lore);
   const loreVolumes = renderLoreVolumes({ catalog, summaries: editorial.summaries, localOverlay });
-  return [...baseVolumes, ...loreVolumes].map((volume) => {
-    const path = join(outputDirectory, volume.filename);
-    writeAtomically(path, volume.html);
-    return { filename: volume.filename, path, family: volume.family, group: volume.group };
-  });
+  const volumes = [...baseVolumes, ...loreVolumes];
+  const stagingDirectory = mkdtempSync(join(buildRoot, ".html-staging-"));
+  const backupDirectory = join(buildRoot, `.html-backup-${randomUUID()}`);
+  let backedUp = false;
+  try {
+    for (const volume of volumes) writeAtomically(join(stagingDirectory, volume.filename), volume.html);
+    if (existsSync(outputDirectory)) {
+      renameSync(outputDirectory, backupDirectory);
+      backedUp = true;
+    }
+    try {
+      renameSync(stagingDirectory, outputDirectory);
+    } catch (error) {
+      if (backedUp && !existsSync(outputDirectory)) renameSync(backupDirectory, outputDirectory);
+      throw error;
+    }
+    if (backedUp) rmSync(backupDirectory, { recursive: true });
+  } finally {
+    if (existsSync(stagingDirectory)) rmSync(stagingDirectory, { recursive: true });
+  }
+  return volumes.map((volume) => ({
+    filename: volume.filename,
+    path: join(outputDirectory, volume.filename),
+    family: volume.family,
+    group: volume.group,
+  }));
 }
 
 function readOption(arguments_: string[], name: string): string | undefined {

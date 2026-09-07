@@ -6,6 +6,26 @@ import { buildLoreCoverage, LoreCoverageReportSchema } from "./coverage";
 const loreRoot = join(import.meta.dirname, "..", "__fixtures__", "lore");
 
 describe("buildLoreCoverage", () => {
+  it("attributes the validated production decision ledger by family and kind without inventing a baseline", () => {
+    const productionRoot = join(import.meta.dirname, "..", "..", "..", "data", "offline-wiki", "lore");
+    const catalog = loadLoreCatalog(productionRoot, "4.4-cn-2026-08-21");
+
+    const report = buildLoreCoverage({ catalog, summaries: [], localOverlay: new Map() });
+
+    expect(report.families["divergent-universe"].kinds.tutorial.rejectedLaterVersion).toBe(1);
+    expect(report.families.worldview.kinds.term.missingSourceEvidence).toBe(1);
+    expect(report.families.mission.kinds.trailblaze.missingSourceEvidence).toBe(1);
+    expect(report.families.collectible.kinds.readable.rejectedAmbiguousVersion).toBe(1);
+    expect(report.totals).toMatchObject({
+      baselineStatus: "missing",
+      expected: null,
+      missingSourceEvidence: 2,
+      rejectedLaterVersion: 1,
+      rejectedAmbiguousVersion: 1,
+      percentage: null,
+    });
+  });
+
   it("reports fixed fields by family and kind without inventing missing-baseline percentages", () => {
     const catalog = loadLoreCatalog(loreRoot, "4.4-fixture");
     const report = buildLoreCoverage({ catalog, summaries: [], localOverlay: new Map() });

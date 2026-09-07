@@ -92,6 +92,13 @@ export type CandidateDecision = {
   evidenceIds: string[];
   record?: LoreRecord;
 };
+export type CandidateCoverageDecision = {
+  candidateId: string;
+  family: z.infer<typeof LoreFamilySchema>;
+  kind: string;
+  decision: Exclude<CandidateDecisionState, "admit">;
+};
+
 
 function checksum(value: object): string {
   return `sha256:${createHash("sha256").update(JSON.stringify(value), "utf8").digest("hex")}`;
@@ -308,6 +315,34 @@ export function validateCandidateProduction(
   if (JSON.stringify(production) !== JSON.stringify(expected)) {
     throw new Error(`production records do not exactly match admitted candidates for family ${family}`);
   }
+}
+
+export function loadValidatedCandidateDecisions(dataRoot: string): CandidateCoverageDecision[] {
+  const ledger = CandidateLedgerSchema.parse(JSON.parse(readFileSync(join(dataRoot, "candidates.json"), "utf8")));
+  const expectedRejections = CandidateRejectionLedgerSchema.parse(JSON.parse(readFileSync(join(dataRoot, "rejections.json"), "utf8")));
+  const decisions = evaluateLoreCandidates(ledger.candidates, ledger.evidence);
+  const actualRejections = decisions.filter((decision) => decision.decision !== "admit")
+    .map(({ candidateId, decision, reason, evidenceIds }) => ({ candidateId, decision, reason, evidenceIds }));
+  if (JSON.stringify(actualRejections) !== JSON.stringify(expectedRejections.decisions)) {
+    throw new Error("candidate rejection ledger does not match deterministic evaluation");
+  }
+  const familyFiles = {
+    "divergent-universe": "divergent-universe.json",
+    worldview: "worldview.json",
+    mission: "missions.json",
+    collectible: "collectibles.json",
+  } as const;
+  for (const family of LoreFamilySchema.options) {
+    const production = z.array(z.unknown()).parse(JSON.parse(readFileSync(join(dataRoot, familyFiles[family]), "utf8")));
+    validateCandidateProduction(family, ledger.candidates, decisions, production);
+  }
+  const candidates = new Map(ledger.candidates.map((candidate) => [candidate.candidateId, candidate]));
+  return decisions.flatMap((decision) => {
+    if (decision.decision === "admit") return [];
+    const candidate = candidates.get(decision.candidateId);
+    if (!candidate) throw new Error(`decision references missing candidate ${decision.candidateId}`);
+    return [{ candidateId: decision.candidateId, family: candidate.family, kind: candidate.kind, decision: decision.decision }];
+  });
 }
 
 export function runCandidateCli(

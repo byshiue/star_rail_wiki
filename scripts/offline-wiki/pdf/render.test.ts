@@ -580,4 +580,62 @@ describe("offline wiki PDF build", () => {
     await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf })).rejects.toThrow(/journal|malformed/i);
     expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
   });
+
+  it("reclaims a reused PID when the Linux process identity does not match", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-pid-reuse-"));
+    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
+    writeFileSync(join(buildsRoot, ".4.4-fixture.build-transaction.lock"), JSON.stringify({
+      pid: process.pid,
+      nonce: "00000000-0000-4000-8000-000000000000",
+      processIdentity: { platform: "linux", bootId: "different-boot", startTimeTicks: "0" },
+    }));
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    })).resolves.toMatchObject({ schemaVersion: 2 });
+  });
+
+  it("cleans a just-published PDF owner when the publisher crashes after linking", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-owner-crash-"));
+    const lockPath = join(outputRoot, "builds", ".4.4-fixture.build-transaction.lock");
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+      fileOperationsForTest: {
+        afterOwnerPublishLink: (label) => { if (label === "build lock") throw new Error("post-link crash"); },
+      },
+    })).rejects.toThrow(/post-link crash/);
+    expect(existsSync(lockPath)).toBe(false);
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    })).resolves.toMatchObject({ schemaVersion: 2 });
+  });
+
+  it("cleans only validated dead PDF lock tombstones after guarded acquisition", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-tombstones-"));
+    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
+    const lock = ".4.4-fixture.build-transaction.lock";
+    const suffix = "00000000-0000-4000-8000-000000000010";
+    const deadOwner = JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" });
+    const dead = [
+      `${lock}.stale-${suffix}`,
+      `${lock}-reclaim.stale-${suffix}`,
+      `${lock}-reclaim-claim.stale-${suffix}`,
+    ];
+    dead.forEach((name) => writeFileSync(join(buildsRoot, name), deadOwner));
+    const unvalidated = `${lock}.stale-00000000-0000-4000-8000-000000000011`;
+    writeFileSync(join(buildsRoot, unvalidated), "attacker-controlled");
+
+    await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    });
+    expect(dead.filter((name) => existsSync(join(buildsRoot, name)))).toEqual([]);
+    expect(readFileSync(join(buildsRoot, unvalidated), "utf8")).toBe("attacker-controlled");
+  });
+
+
 });
