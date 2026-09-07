@@ -8,6 +8,10 @@ describe("offline wiki repository hygiene", () => {
     ".local/offline-wiki/drafts/a.json",
     "data/offline-wiki/official-art/character.png",
     "data/offline-wiki/summaries/character.draft.json",
+    "data/offline-wiki/official-full-text/worldview.jsonl",
+    "data/offline-wiki/lore/full-text-overlay/worldview.json",
+    "data/offline-wiki/source-cache/capture.html",
+    "data/offline-wiki/lore/nested/official-full-text/a.txt",
   ])("rejects a tracked local or unreviewed artifact: %s", (path) => {
     expect(validateTrackedFiles([path])).toEqual([path]);
   });

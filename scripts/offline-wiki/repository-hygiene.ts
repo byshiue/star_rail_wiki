@@ -3,10 +3,12 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const PROHIBITED_BINARY = /\.(?:pdf|png|jpe?g|webp|gif|avif)$/i;
+const PROHIBITED_DATA_SEGMENT = /\/(?:official-full-text|full-text-overlay|source-cache)(?:\/|$)/;
 
 export function validateTrackedFiles(paths: string[]): string[] {
   return paths.filter((path) => (
     path.startsWith(".local/offline-wiki/")
+    || (path.startsWith("data/offline-wiki/") && PROHIBITED_DATA_SEGMENT.test(path))
     || (path.startsWith("data/offline-wiki/") && PROHIBITED_BINARY.test(path))
     || (path.startsWith("data/offline-wiki/") && path.endsWith(".draft.json"))
   ));

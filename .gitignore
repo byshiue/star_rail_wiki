@@ -6,4 +6,7 @@ dist/
 !.env.example
 playwright-report/
 test-results/
+# Offline Wiki imports, normalized full-text overlays, and rejected source bodies
+# are local-only. Generated HTML/PDF documents and downloaded assets also belong
+# below this ignored boundary and must never be committed or published.
 .local/offline-wiki/
