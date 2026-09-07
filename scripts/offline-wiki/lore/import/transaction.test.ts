@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
+import { closeSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -229,6 +229,15 @@ describe("importLocalLore", () => {
     expect(recovered.status).toBe("accepted"); expect(recovered.outputChecksum).toBe(committed.outputChecksum);
   });
 
+  it("recognizes committed state after backup cleanup but before journal removal", () => {
+    const data = fixture(["VALID"]); const committed = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    writeJournal(releaseRoot, { phase: "promoted", stagingName: ".normalized-staging-gone", backupName: ".normalized-backup-already-cleaned", priorOutputChecksum: committed.outputChecksum, expectedOutputChecksum: committed.outputChecksum });
+    const recovered = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    expect(recovered.status).toBe("accepted"); expect(existsSync(join(releaseRoot, JOURNAL_NAME_FOR_TEST))).toBe(false);
+    expect(importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot }).status).toBe("accepted");
+  });
+
   it("fails closed and preserves every artifact for an ambiguous prepared state", () => {
     const data = fixture(["VALID"]); const prior = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
     const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); const target = join(releaseRoot, "normalized");
@@ -266,6 +275,21 @@ describe("importLocalLore", () => {
     const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot, operations: { beforeAtomicRename: () => { throw new Error("rename failure"); } } });
     expect(report.status).toBe("rejected"); expect(readFileSync(join(releaseRoot, "other.tmp"), "utf8")).toBe("keep");
     expect(readdirSync(releaseRoot).filter((name) => name.endsWith(".tmp"))).toEqual(["other.tmp"]);
+  });
+
+  it("preserves a valid competing target discovered after the prior snapshot", () => {
+    const data = fixture(["VALID"], "lore:worldview:faction:prior"); importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    const competitor = fixture(["VALID"], "lore:worldview:faction:competitor"); importLocalLore({ repositoryRoot: competitor.repositoryRoot, releaseId: "4.4-fixture", manifestPath: competitor.manifestPath, sourceRoot: competitor.sourceRoot });
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); const target = join(releaseRoot, "normalized"); const competitorTarget = join(competitor.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized"); const competingChecksum = firstOutputChecksum(competitorTarget);
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot, operations: { beforeBackupRename: () => { rmSync(target, { recursive: true }); cpSync(competitorTarget, target, { recursive: true }); } } });
+    expect(report.status).toBe("rejected"); expect(firstOutputChecksum(target)).toBe(competingChecksum); expect(existsSync(join(releaseRoot, JOURNAL_NAME_FOR_TEST))).toBe(true); expect(readdirSync(releaseRoot).some((name) => name.startsWith(".normalized-staging-"))).toBe(true);
+  });
+
+  it("closes the reclaim guard fd when inspection aborts", () => {
+    const data = fixture(["VALID"]); const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); mkdirSync(releaseRoot, { recursive: true }); writeFileSync(join(releaseRoot, ".normalized-transaction.lock"), JSON.stringify({ pid: 2147483647, nonce: "old" }));
+    let descriptor = -1;
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot, operations: { inspectReclaimGuardFd: (fd) => { descriptor = fd; throw new Error("inspection failure"); } } });
+    expect(report.status).toBe("rejected"); expect(descriptor).toBeGreaterThanOrEqual(0); expect(() => closeSync(descriptor)).toThrow(/bad file descriptor|EBADF/i);
   });
 });
 

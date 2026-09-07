@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import {
-  closeSync, existsSync, lstatSync, mkdirSync, mkdtempSync, openSync, readFileSync, readdirSync, realpathSync,
+  closeSync, existsSync, fstatSync, lstatSync, mkdirSync, mkdtempSync, openSync, readFileSync, readdirSync, realpathSync,
   renameSync, rmSync, unlinkSync, writeFileSync,
 } from "node:fs";
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
@@ -20,7 +20,7 @@ export type LocalImportReport = {
 };
 export type ImportLocalLoreOptions = {
   repositoryRoot: string; releaseId: string; manifestPath: string; sourceRoot: string; outputRoot?: string;
-  operations?: { removeBackup?: (path: string) => void; beforePromote?: (targetRoot: string) => void; duringLockReclaim?: () => void; beforeAtomicRename?: (temporaryPath: string, targetPath: string) => void };
+  operations?: { removeBackup?: (path: string) => void; beforeBackupRename?: () => void; beforePromote?: (targetRoot: string) => void; duringLockReclaim?: () => void; inspectReclaimGuardFd?: (descriptor: number) => void; beforeAtomicRename?: (temporaryPath: string, targetPath: string) => void };
 };
 type Journal = { schemaVersion: 1; phase: "prepared" | "backed-up" | "promoted"; targetName: "normalized"; stagingName: string; backupName: string | null; priorOutputChecksum: string | null; expectedOutputChecksum: string };
 
@@ -106,7 +106,11 @@ function acquireLock(releaseRoot: string, options: ImportLocalLoreOptions): { pa
     }
     const guard = `${path}-reclaim`; let guardDescriptor: number;
     try { guardDescriptor = openSync(guard, "wx", 0o600); } catch { throw new Error("lock reclaim is already active"); }
-    const guardStats = lstatSync(guard, { bigint: true }); closeSync(guardDescriptor);
+    let guardStats;
+    try { guardStats = fstatSync(guardDescriptor, { bigint: true }); options.operations?.inspectReclaimGuardFd?.(guardDescriptor); }
+    finally { closeSync(guardDescriptor); }
+    const guardPathStats = lstatSync(guard, { bigint: true });
+    if (guardPathStats.dev !== guardStats.dev || guardPathStats.ino !== guardStats.ino) throw new Error("reclaim guard identity mismatch");
     const tombstone = `${path}.stale-${randomUUID()}`; let moved = false; let installed = false;
     try {
       options.operations?.duringLockReclaim?.();
@@ -149,7 +153,8 @@ function recover(options: ImportLocalLoreOptions, context: ReturnType<typeof roo
   const backupIsPrior = journal.priorOutputChecksum !== null && backupReport?.outputChecksum === journal.priorOutputChecksum;
   const stagingIsNew = stagingReport?.outputChecksum === journal.expectedOutputChecksum;
   const committed = (): LocalImportReport => {
-    if (!targetIsNew || !targetReport || stagingExists || (journal.priorOutputChecksum === null ? backupExists : !backupIsPrior)) throw new Error("ambiguous committed state");
+    const backupStateIsSafe = journal.priorOutputChecksum === null ? !backupExists : (!backupExists || backupIsPrior);
+    if (!targetIsNew || !targetReport || stagingExists || !backupStateIsSafe) throw new Error("ambiguous committed state");
     if (backupExists) { try { cleanupBackup(backup!, options); } catch { return { ...targetReport, warnings: ["backup-cleanup-pending"] }; } }
     unlinkSync(journalPath); return targetReport;
   };
@@ -172,18 +177,27 @@ function promote(options: ImportLocalLoreOptions, context: ReturnType<typeof roo
   const backupName = `.normalized-backup-${randomUUID()}`;
   const backup = join(context.releaseRoot, backupName);
   const journalPath = join(context.releaseRoot, JOURNAL_NAME);
+  let preserveArtifacts = false;
   const priorReport = existsSync(context.targetRoot) ? validateOverlay(context.targetRoot) : null;
   let journal: Journal = { schemaVersion: 1, phase: "prepared", targetName: "normalized", stagingName, backupName: priorReport ? backupName : null, priorOutputChecksum: priorReport?.outputChecksum ?? null, expectedOutputChecksum: report.outputChecksum! };
   try {
     writeFileSync(join(staging, "current.jsonl"), output, { mode: 0o600 }); writeJson(join(staging, "report.json"), report); validateOverlay(staging, report.outputChecksum!);
     atomicJson(journalPath, journal, options);
-    if (existsSync(context.targetRoot)) { validateOverlay(context.targetRoot); renameSync(context.targetRoot, backup); journal = { ...journal, phase: "backed-up" }; atomicJson(journalPath, journal, options); }
-    options.operations?.beforePromote?.(context.targetRoot);
+    if (existsSync(context.targetRoot)) {
+      options.operations?.beforeBackupRename?.();
+      const latestPrior = validateOverlay(context.targetRoot);
+      if (latestPrior.outputChecksum !== journal.priorOutputChecksum) { preserveArtifacts = true; throw new Error("prior target changed before backup rename"); }
+      renameSync(context.targetRoot, backup);
+      const backedUpPrior = validateOverlay(backup);
+      if (backedUpPrior.outputChecksum !== journal.priorOutputChecksum) { preserveArtifacts = true; throw new Error("backup does not match prior target"); }
+      journal = { ...journal, phase: "backed-up" }; atomicJson(journalPath, journal, options);
+    }
+    try { options.operations?.beforePromote?.(context.targetRoot); } catch (error) { preserveArtifacts = true; throw error; }
     renameSync(staging, context.targetRoot); journal = { ...journal, phase: "promoted" }; atomicJson(journalPath, journal, options); validateOverlay(context.targetRoot, report.outputChecksum!);
   } catch {
     if (existsSync(backup) && !existsSync(context.targetRoot)) { renameSync(backup, context.targetRoot); if (existsSync(journalPath)) unlinkSync(journalPath); }
     throw new Error("promotion failed");
-  } finally { if (existsSync(staging)) rmSync(staging, { recursive: true, force: true }); }
+  } finally { if (!preserveArtifacts && existsSync(staging)) rmSync(staging, { recursive: true, force: true }); }
   if (existsSync(backup)) { try { cleanupBackup(backup, options); } catch { return { ...report, warnings: ["backup-cleanup-pending"] }; } }
   unlinkSync(journalPath); return report;
 }
