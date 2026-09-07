@@ -48,7 +48,52 @@ function fixture(lines: string[], logicalId = "lore:worldview:faction:1") {
   return { repositoryRoot, sourceRoot, manifestPath, manifest, text };
 }
 
+function savedHoyoWikiFixture(options: { invalidHtml?: boolean } = {}) {
+  const repositoryRoot = mkdtempSync(join(tmpdir(), "offline-wiki-repository-"));
+  const sourceRoot = mkdtempSync(join(tmpdir(), "offline-wiki-hoyowiki-source-"));
+  mkdirSync(join(sourceRoot, "entries"));
+  const sources = {
+    "aggregate-list.json": JSON.stringify({ releaseId: "4.4-fixture", locale: "zh-CN", entries: [{ id: "1001", category: "阵营", name: "测试派系" }] }),
+    "category-mapping.json": JSON.stringify({ categories: { "阵营": { family: "worldview", kind: "faction" } }, entries: { "1001": { logicalId: "lore:worldview:faction:1001", sourcePath: "entries/1001.html" } } }),
+    "entries/1001.html": options.invalidHtml ? "<script>private body</script>" : "<h2>背景</h2><p>离线正文。</p>",
+  };
+  for (const [path, text] of Object.entries(sources)) writeFileSync(join(sourceRoot, path), text);
+  const manifest = {
+    schemaVersion: 1, releaseId: "4.4-fixture", locale: "zh-CN",
+    source: { name: "Fixture", revision: "fixture-revision", exportedAt: "2026-09-06T00:00:00.000Z" },
+    adapter: "saved-hoyowiki", adapterVersion: 1, families: ["worldview"], userProvided: true,
+    files: Object.entries(sources).map(([path, text]) => ({ path, bytes: Buffer.byteLength(text), checksum: checksum(text) })),
+  };
+  const manifestPath = join(sourceRoot, "manifest.json");
+  writeFileSync(manifestPath, JSON.stringify(manifest));
+  return { repositoryRoot, sourceRoot, manifestPath };
+}
+
 describe("importLocalLore", () => {
+  it("dispatches a saved HoYoWiki manifest and binds the entry source checksum", () => {
+    const data = savedHoyoWikiFixture();
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
+    expect(report).toMatchObject({ status: "accepted", acceptedCount: 1, rejectedCount: 0 });
+    const current = readFileSync(join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized/current.jsonl"), "utf8");
+    const record = JSON.parse(current.trim());
+    expect(record).toMatchObject({ logicalId: "lore:worldview:faction:1001", sourcePath: "entries/1001.html" });
+    expect(record.sourceChecksum).toBe(checksum("<h2>背景</h2><p>离线正文。</p>"));
+  });
+
+  it("rejects the whole adapter batch, preserves the last-good overlay, and emits only safe rejection metadata", () => {
+    const data = savedHoyoWikiFixture({ invalidHtml: true });
+    const target = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized");
+    mkdirSync(target, { recursive: true });
+    writeFileSync(join(target, "current.jsonl"), "last-good\n");
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
+    expect(report).toMatchObject({ status: "rejected", acceptedCount: 0, rejectedCount: 1, rejection: {
+      reason: "adapter-rejected",
+      items: [{ sourcePath: "entries/1001.html", logicalId: "lore:worldview:faction:1001", reason: "missing-text", detail: "no-allowlisted-text" }],
+    } });
+    expect(readFileSync(join(target, "current.jsonl"), "utf8")).toBe("last-good\n");
+    expect(JSON.stringify(report)).not.toContain("private body");
+  });
+
   it("preserves the current overlay byte-for-byte when a later input line is invalid", () => {
     const data = fixture(["VALID", "{bad json}"]);
     const normalizedRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized");

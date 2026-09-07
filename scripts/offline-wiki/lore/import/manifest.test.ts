@@ -101,6 +101,12 @@ describe("local lore manifest", () => {
     expect(() => loadFixture(fixture)).toThrow(/user.provided/i);
   });
 
+  it("rejects adapters outside the strict offline registry", () => {
+    const fixture = createFixture();
+    writeManifest(fixture.manifestPath, { ...fixture.manifest, adapter: "fetch-from-url" });
+    expect(() => loadFixture(fixture)).toThrow(/adapter|enum|option/i);
+  });
+
   it.each([
     "/tmp/worldview.jsonl",
     "../worldview.jsonl",

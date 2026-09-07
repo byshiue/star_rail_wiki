@@ -43,7 +43,7 @@ const LocalLoreManifestSchema = z.strictObject({
     revision: z.string().min(1),
     exportedAt: z.iso.datetime(),
   }),
-  adapter: z.string().min(1),
+  adapter: z.enum(["canonical-jsonl", "saved-hoyowiki", "compatible-game-data"]),
   adapterVersion: z.number().int().positive(),
   families: z.array(LoreFamilySchema).min(1),
   userProvided: z.literal(true, {

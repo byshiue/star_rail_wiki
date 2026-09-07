@@ -6,8 +6,11 @@ import {
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import { parseCanonicalLoreJsonl, serializeCanonicalLoreRecords, validateLocalFullTextRecords, type LocalFullTextRecord } from "./canonical";
 import { loadLocalLoreManifest, readValidatedLocalLoreFile } from "./manifest";
+import { convertCompatibleGameData } from "./adapters/game-data";
+import { convertSavedHoyoWiki } from "./adapters/hoyowiki";
+import type { AdapterResult, ImportRejection } from "./adapters/types";
 
-type RejectionReason = "manifest-validation-failed" | "adapter-unsupported" | "source-validation-failed" | "canonical-validation-failed" | "staging-failed" | "promotion-failed" | "recovery-failed";
+type RejectionReason = "manifest-validation-failed" | "adapter-unsupported" | "adapter-rejected" | "source-validation-failed" | "canonical-validation-failed" | "staging-failed" | "promotion-failed" | "recovery-failed";
 export type LocalImportReport = {
   status: "accepted" | "rejected";
   releaseId: string;
@@ -16,7 +19,7 @@ export type LocalImportReport = {
   inputChecksums: string[];
   outputChecksum: string | null;
   warnings: Array<"backup-cleanup-pending">;
-  rejection: null | { reason: RejectionReason; sourcePaths: string[]; recoveryNames: string[] };
+  rejection: null | { reason: RejectionReason; sourcePaths: string[]; recoveryNames: string[]; items: ImportRejection[] };
 };
 export type ImportLocalLoreOptions = {
   repositoryRoot: string; releaseId: string; manifestPath: string; sourceRoot: string; outputRoot?: string;
@@ -57,8 +60,8 @@ function roots(options: ImportLocalLoreOptions) {
   assertSafePath(repositoryRoot, targetRoot);
   return { repositoryRoot, localRoot, releaseRoot, targetRoot };
 }
-function rejected(releaseId: string, reason: RejectionReason, checksums: string[] = [], paths: string[] = [], recoveryNames: string[] = []): LocalImportReport {
-  return { status: "rejected", releaseId, acceptedCount: 0, rejectedCount: 1, inputChecksums: checksums, outputChecksum: null, warnings: [], rejection: { reason, sourcePaths: paths, recoveryNames } };
+function rejected(releaseId: string, reason: RejectionReason, checksums: string[] = [], paths: string[] = [], recoveryNames: string[] = [], items: ImportRejection[] = []): LocalImportReport {
+  return { status: "rejected", releaseId, acceptedCount: 0, rejectedCount: Math.max(1, items.length), inputChecksums: checksums, outputChecksum: null, warnings: [], rejection: { reason, sourcePaths: paths, recoveryNames, items } };
 }
 function persistRejected(repositoryRoot: string, releaseRoot: string, report: LocalImportReport): void {
   const dir = join(releaseRoot, "reports"); ensureDirectory(repositoryRoot, dir); writeJson(join(dir, "last-rejected.json"), report);
@@ -202,6 +205,33 @@ function promote(options: ImportLocalLoreOptions, context: ReturnType<typeof roo
   unlinkSync(journalPath); return report;
 }
 
+function materializeAdapterEntries(
+  result: AdapterResult,
+  manifest: ReturnType<typeof loadLocalLoreManifest>,
+): LocalFullTextRecord[] {
+  const records: LocalFullTextRecord[] = [];
+  const logicalIds = new Set<string>();
+  for (const entry of result.entries) {
+    if (logicalIds.has(entry.input.logicalId)) throw new Error("duplicate adapter logicalId");
+    logicalIds.add(entry.input.logicalId);
+    const sourceFile = manifest.files.find((file) => file.path === entry.sourcePath);
+    if (!sourceFile) throw new Error("adapter source path is not declared");
+    const sourceManifest = { ...manifest, adapter: "canonical-jsonl" as const, files: [sourceFile] };
+    records.push(...parseCanonicalLoreJsonl(JSON.stringify(entry.input), sourceManifest));
+  }
+  validateLocalFullTextRecords(records);
+  return records;
+}
+
+function runRegisteredAdapter(
+  manifest: ReturnType<typeof loadLocalLoreManifest>,
+  sourceRoot: string,
+): AdapterResult {
+  if (manifest.adapter === "saved-hoyowiki") return convertSavedHoyoWiki({ manifest, sourceRoot });
+  if (manifest.adapter === "compatible-game-data") return convertCompatibleGameData({ manifest, sourceRoot });
+  throw new Error("adapter is not source-specific");
+}
+
 function runImport(options: ImportLocalLoreOptions, context: ReturnType<typeof roots>): LocalImportReport {
   try { const recovered = recover(options, context); if (recovered) return recovered; }
   catch { const report = rejected(options.releaseId, "recovery-failed", [], [], recoveryNames(context.releaseRoot)); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
@@ -209,13 +239,26 @@ function runImport(options: ImportLocalLoreOptions, context: ReturnType<typeof r
   try { manifest = loadLocalLoreManifest(options.manifestPath, options.releaseId, options.sourceRoot); }
   catch { const report = rejected(options.releaseId, "manifest-validation-failed"); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
   const checksums = manifest.files.map((file) => file.checksum); const paths = manifest.files.map((file) => file.path);
-  if (manifest.adapter !== "canonical-jsonl" || manifest.files.length !== 1) { const report = rejected(options.releaseId, "adapter-unsupported", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
-  let text: string;
-  try { text = readValidatedLocalLoreFile(manifest, options.sourceRoot, manifest.files[0].path).text; }
-  catch { const report = rejected(options.releaseId, "source-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
   let records: LocalFullTextRecord[];
-  try { records = parseCanonicalLoreJsonl(text, manifest); }
-  catch { const report = rejected(options.releaseId, "canonical-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+  if (manifest.adapter === "canonical-jsonl") {
+    if (manifest.files.length !== 1) { const report = rejected(options.releaseId, "adapter-unsupported", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+    let text: string;
+    try { text = readValidatedLocalLoreFile(manifest, options.sourceRoot, manifest.files[0].path).text; }
+    catch { const report = rejected(options.releaseId, "source-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+    try { records = parseCanonicalLoreJsonl(text, manifest); }
+    catch { const report = rejected(options.releaseId, "canonical-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+  } else {
+    let adapterResult: AdapterResult;
+    try { adapterResult = runRegisteredAdapter(manifest, options.sourceRoot); }
+    catch { const report = rejected(options.releaseId, "source-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+    if (adapterResult.rejections.length > 0) {
+      const report = rejected(options.releaseId, "adapter-rejected", checksums, paths, [], adapterResult.rejections);
+      persistRejected(context.repositoryRoot, context.releaseRoot, report);
+      return report;
+    }
+    try { records = materializeAdapterEntries(adapterResult, manifest); }
+    catch { const report = rejected(options.releaseId, "canonical-validation-failed", checksums, paths); persistRejected(context.repositoryRoot, context.releaseRoot, report); return report; }
+  }
   const output = serializeCanonicalLoreRecords(records);
   const report: LocalImportReport = { status: "accepted", releaseId: options.releaseId, acceptedCount: records.length, rejectedCount: 0, inputChecksums: checksums, outputChecksum: sha(output), warnings: [], rejection: null };
   try { return promote(options, context, output, report); }
