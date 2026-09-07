@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -76,6 +76,13 @@ describe("local lore manifest", () => {
     "nested/../../worldview.jsonl",
     "nested/../worldview.jsonl",
     "./worldview.jsonl",
+    "C:/worldview.jsonl",
+    "C:\\worldview.jsonl",
+    "C:worldview.jsonl",
+    "\\\\server\\share\\worldview.jsonl",
+    "//server/share/worldview.jsonl",
+    "\\\\?\\C:\\worldview.jsonl",
+    "\\\\.\\PhysicalDrive0",
   ])(
     "rejects a non-normalized or escaping path: %s",
     (path) => {
@@ -234,16 +241,25 @@ describe("local lore manifest", () => {
     expect(() => loadFixture(fixture)).toThrow(/undeclared/i);
   });
 
-  it("requires a regular manifest whose canonical path stays inside sourceRoot", () => {
+  it("accepts a canonical regular manifest outside sourceRoot", () => {
     const fixture = createFixture();
     const outsideRoot = mkdtempSync(join(tmpdir(), "offline-wiki-manifest-outside-"));
     const outsideManifest = join(outsideRoot, "manifest.json");
     writeManifest(outsideManifest, fixture.manifest);
-    expect(() => loadLocalLoreManifest(
+    unlinkSync(fixture.manifestPath);
+
+    expect(loadLocalLoreManifest(
       outsideManifest,
       FIXTURE_RELEASE,
       fixture.sourceRoot,
-    )).toThrow(/manifest.*source root|outside/i);
+    )).toMatchObject(fixture.manifest);
+  });
+
+  it("rejects a manifest symlink even when the target is a canonical external file", () => {
+    const fixture = createFixture();
+    const outsideRoot = mkdtempSync(join(tmpdir(), "offline-wiki-manifest-outside-"));
+    const outsideManifest = join(outsideRoot, "manifest.json");
+    writeManifest(outsideManifest, fixture.manifest);
 
     const linkedManifest = join(fixture.sourceRoot, "linked-manifest.json");
     symlinkSync(outsideManifest, linkedManifest);
@@ -251,7 +267,7 @@ describe("local lore manifest", () => {
       linkedManifest,
       FIXTURE_RELEASE,
       fixture.sourceRoot,
-    )).toThrow(/manifest.*symlink|outside/i);
+    )).toThrow(/manifest.*symlink/i);
   });
 
   it("rejects missing declared files rather than silently ignoring them", () => {
