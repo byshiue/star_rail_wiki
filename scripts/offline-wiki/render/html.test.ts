@@ -2,6 +2,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { loadDocumentCatalog } from "../catalog";
+import type { StorySummary } from "../schema";
 import { renderVolumes } from "./volumes";
 
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "releases");
@@ -81,5 +82,31 @@ describe("offline wiki HTML volumes", () => {
     expect(indexVolume).toContain('href="01-角色图鉴.pdf#entry-character-1"');
     expect(indexVolume).toContain('href="02-光锥图鉴.pdf#entry-light-cone-1"');
     expect(indexVolume).toContain('href="03-遗器图鉴.pdf#entry-relic-set-1"');
+  });
+
+  it("labels Agent-written story summaries as not human-reviewed", () => {
+    const catalog = loadDocumentCatalog(fixtureRoot, "4.4-fixture");
+    const summaries: StorySummary[] = [{
+      logicalId: "character:1",
+      entityKind: "character",
+      releaseId: "4.4-fixture",
+      locale: "zh-CN",
+      summary: "这是一段自动生成的原创故事摘要。",
+      contentChecksum: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      reviewStatus: "auto-generated",
+      generator: { name: "Codex", generatedAt: "2026-09-07T03:00:00.000Z" },
+      provenance: [{
+        sourceName: "Official public wiki",
+        sourceUrl: "https://wiki.hoyolab.com/pc/hsr/entry/1",
+        sourceRevision: "2026-09-07",
+        sourcePath: "entry/1",
+        sourceChecksum: "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      }],
+    }];
+
+    const volumes = renderVolumes({ catalog, summaries });
+
+    expect(volumes[1]?.html).toContain("自动生成 · 未经人工复核 · Codex");
+    expect(volumes[1]?.html).not.toContain("Codex 审核");
   });
 });

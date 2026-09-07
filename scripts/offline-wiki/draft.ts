@@ -4,11 +4,11 @@ import { fileURLToPath } from "node:url";
 import type { EntityProvenance } from "../../src/domain/entities";
 import { loadDocumentCatalog } from "./catalog";
 import { loadEditorialData } from "./editorial";
-import type { DocumentCatalog, ReviewedSummary } from "./schema";
+import type { DocumentCatalog, StorySummary } from "./schema";
 
 export type DraftRequest = {
   logicalId: string;
-  entityKind: ReviewedSummary["entityKind"];
+  entityKind: StorySummary["entityKind"];
   releaseId: string;
   name: string;
   sourceText: string;
@@ -23,7 +23,7 @@ function outputFilename(logicalId: string): string {
 
 export function createDraftRequests(
   catalog: DocumentCatalog,
-  summaries: ReviewedSummary[],
+  summaries: StorySummary[],
 ): DraftRequest[] {
   const reviewed = new Set(summaries
     .filter((summary) => summary.releaseId === catalog.release.id)

@@ -1,1 +1,1322 @@
-[]
+[
+  {
+    "logicalId": "relic-set:101",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「云无留迹的过客」借过客的逢春木簪、过客的游龙臂鞲、过客的残绣风衣、过客的冥途游履等遗物串联叙事，主题涉及花苞、嵌入、如水、未知、龙脉，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:b611e83657b0ad2027b0a0a73f67c72d9e0790ce4cdd8ed41f80f0b48485290b",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E4%BA%91%E6%97%A0%E7%95%99%E8%BF%B9%E7%9A%84%E8%BF%87%E5%AE%A2",
+        "sourceRevision": "revid:46526;timestamp:2024-10-30T09:16:35Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:ef0483581d0b067c4d1174d0fed2673cdad214845e6cfd0414961bca86cb8363"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:102",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「野穗伴行的快枪手」借快枪手的野穗毡帽、快枪手的粗革手套、快枪手的猎风披肩、快枪手的铆钉马靴等遗物串联叙事，主题涉及野生、磨损、编制、防弹、剪裁，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:8ddccf6cd585d3e116dc92faaeb7216622eb6c95e1286987d6f9ec0a19050877",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E9%87%8E%E7%A9%97%E4%BC%B4%E8%A1%8C%E7%9A%84%E5%BF%AB%E6%9E%AA%E6%89%8B",
+        "sourceRevision": "revid:46527;timestamp:2024-10-30T09:31:56Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:7fb3ce7b6313e239ad56ec1943a3709691c4f4f0d5f3d7e339ff2fa06f0f7705"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:103",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「净庭教宗的圣骑士」借圣骑的宽恕盔面、圣骑的沉默誓环、圣骑的肃穆胸甲、圣骑的秩序铁靴等遗物串联叙事，主题涉及石雕、相貌、镶嵌、鲜明、简短，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:ee77e58f4c8f9a2ef6cb6cf5e71851b2618761f159d0e9aec07e81a95544e755",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%87%80%E5%BA%AD%E6%95%99%E5%AE%97%E7%9A%84%E5%9C%A3%E9%AA%91%E5%A3%AB",
+        "sourceRevision": "revid:46528;timestamp:2024-10-30T09:34:53Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:a6fd765e871833088c0448e4e35db9de457b78074416cb45b35cd7020dc4f343"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:104",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「密林卧雪的猎人」借雪猎的荒神兜帽、雪猎的巨蜥手套、雪猎的冰龙披风、雪猎的鹿皮软靴等遗物串联叙事，主题涉及毛皮、寄宿、鬼神、刀枪不入、鳞爪，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:7e71f5839735dbfe09648fd580ba43a4dd8bf17e4ee1e56b03998e3041a387e8",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%AF%86%E6%9E%97%E5%8D%A7%E9%9B%AA%E7%9A%84%E7%8C%8E%E4%BA%BA",
+        "sourceRevision": "revid:46529;timestamp:2024-10-30T09:36:43Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:b7ab2aea784ed75639ab16d6714f8bc58bd4cac0a7a25bc2fb63d02e285b54b2"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:105",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「街头出身的拳王」借拳王的冠军护头、拳王的重炮拳套、拳王的贴身护胸、拳王的弧步战靴等遗物串联叙事，主题涉及拳击、物件、极好、专业、衬垫，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:c3a7f1f469b8c00aec8736f59e346169693575d281c26060255f0824ed1895cc",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E8%A1%97%E5%A4%B4%E5%87%BA%E8%BA%AB%E7%9A%84%E6%8B%B3%E7%8E%8B",
+        "sourceRevision": "revid:46530;timestamp:2024-10-30T09:38:42Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:39b4562aa03ca587822c2f22297214091273e45cd6d31c22750ef55e512c485a"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:106",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「戍卫风雪的铁卫」借铁卫的铸铁面盔、铁卫的银鳞手甲、铁卫的旧制军服、铁卫的白银护胫等遗物串联叙事，主题涉及统一、填充、闪耀着、复合、妥帖，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:24857c6fe8ef44e673900f2a57ceae44a54e634a6a57b4fbd4c3ebdbcc72a9a5",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%88%8D%E5%8D%AB%E9%A3%8E%E9%9B%AA%E7%9A%84%E9%93%81%E5%8D%AB",
+        "sourceRevision": "revid:46534;timestamp:2024-10-30T09:48:26Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:5c07d32bd4b2ba4dee5baf805b65848245cc8d2ef4e3b459ad64d6201f0665e3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:107",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「熔岩锻铸的火匠」借火匠的黑耀目镜、火匠的御火戒指、火匠的阻燃围裙、火匠的合金义肢等遗物串联叙事，主题涉及护目镜、迸裂、铁匠、标识、缠绕着，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:e46bb18971045b0cc9b7e77fbeecaf6b90f630615c98ef1469225685936a30c8",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E7%86%94%E5%B2%A9%E9%94%BB%E9%93%B8%E7%9A%84%E7%81%AB%E5%8C%A0",
+        "sourceRevision": "revid:48457;timestamp:2024-12-17T01:11:24Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:0389f24aba39e87de285bb6b5334358eca922848ce039ed6411435521ecad0ae"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:108",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「繁星璀璨的天才」借天才的超距遥感、天才的频变捕手、天才的元域深潜、天才的引力漫步等遗物串联叙事，主题涉及基于、介质、精密、客观、振动，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:4aaf616ea66a83b9b07657f5dfe3a1787cca0be6af28ecca0bf65a0a4da91c51",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E7%B9%81%E6%98%9F%E7%92%80%E7%92%A8%E7%9A%84%E5%A4%A9%E6%89%8D",
+        "sourceRevision": "revid:76606;timestamp:2025-12-18T09:10:01Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:64bc488980da984957d3b51bea773fe7a89a820bc04d7499db400f09f5e572d6"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:109",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「激奏雷电的乐队」借乐队的偏光墨镜、乐队的巡演手绳、乐队的钉刺皮衣、乐队的铆钉短靴等遗物串联叙事，主题涉及主唱、丝带、大卫、背面、专辑，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:cd7884fe0d50f205ad7c0916ea234f09646d146f526d1caaa4f2d3ad20433c67",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%BF%80%E5%A5%8F%E9%9B%B7%E7%94%B5%E7%9A%84%E4%B9%90%E9%98%9F",
+        "sourceRevision": "revid:46536;timestamp:2024-10-30T09:53:08Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:b367ebdc99788c401beadd06aee3ab89f380bf74abe9e5b8a864664760f3947b"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:110",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「晨昏交界的翔鹰」借翔鹰的长喙头盔、翔鹰的鹰击指环、翔鹰的翼装束带、翔鹰的绒羽绑带等遗物串联叙事，主题涉及流体、卓越、大师、腰带、支撑，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:278fbdb553f1745b3d4f498becd04fdb1e859f4305b2dff5629562bc968f5c6e",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%99%A8%E6%98%8F%E4%BA%A4%E7%95%8C%E7%9A%84%E7%BF%94%E9%B9%B0",
+        "sourceRevision": "revid:69897;timestamp:2025-10-10T11:26:31Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:72ce890bd19eabe7f22476ebf27f75a0ba3e0c40b717e3e39edbdfcae45ff4a8"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:111",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「流星追迹的怪盗」借怪盗的千人假面、怪盗的绘纹手套、怪盗的纤钢爪钩、怪盗的流星快靴等遗物串联叙事，主题涉及面貌、精湛、演技、纳米、即时，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:fc8952fe72919f3f1b773c85d085273eb6d9678e0dbf612b5809410071130c63",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%B5%81%E6%98%9F%E8%BF%BD%E8%BF%B9%E7%9A%84%E6%80%AA%E7%9B%97",
+        "sourceRevision": "revid:46533;timestamp:2024-10-30T09:46:54Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:6ff5aa35f3caa663650a33e0ea412a55aabe4408584e21c6adc4abf014681651"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:112",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「盗匪荒漠的废土客」借废土客的呼吸面罩、废土客的荒漠终端、废土客的修士长袍、废土客的动力腿甲等遗物串联叙事，主题涉及过滤、呼吸器、检测、电离、宽松，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:33c228e579b86a63f0846cf07ccf54f8199fa8909e2c41f2a2f69823f7e89c95",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E7%9B%97%E5%8C%AA%E8%8D%92%E6%BC%A0%E7%9A%84%E5%BA%9F%E5%9C%9F%E5%AE%A2",
+        "sourceRevision": "revid:46537;timestamp:2024-10-30T09:56:29Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:21cac105ebc43e81329a5b131fb1729e46eee4fb25ff73def3a4a4e30f9a21c0"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:113",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「宝命长存的莳者」借莳者的复明义眼、莳者的机巧木手、莳者的承露羽衣、莳者的天人丝履等遗物串联叙事，主题涉及某人、逐出、百无一用、侵入、古籍，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:319268f82f34affd0d6626444a246b26dc3848caa6fe738aff0b475ffa7ff05b",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%AE%9D%E5%91%BD%E9%95%BF%E5%AD%98%E7%9A%84%E8%8E%B3%E8%80%85",
+        "sourceRevision": "revid:46538;timestamp:2024-10-30T09:58:26Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:3f85976407784f8c12002acd48196c17714c6f3fcb025a251ff46f4330573308"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:114",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「骇域漫游的信使」借信使的全息目镜、信使的百变义手、信使的密信挎包、信使的酷跑板鞋等遗物串联叙事，主题涉及外形、酷似、滑雪、能看、拆卸，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:c570a5407794b1ae4baf8cd50197b7d875d4303bf0abe44a8d5bfef6b8c48812",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E9%AA%87%E5%9F%9F%E6%BC%AB%E6%B8%B8%E7%9A%84%E4%BF%A1%E4%BD%BF",
+        "sourceRevision": "revid:46540;timestamp:2024-10-30T10:02:56Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:5da4e524c2250d36fb51802cecef9614d886ead65780a1f31b336fec6383b0eb"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:115",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「毁烬焚骨的大公」借大公的冥焰冠冕、大公的绒火指套、大公的蒙恩长袍、大公的绅雅礼靴等遗物串联叙事，主题涉及端庄、完好、修饰、绒毛、彰显，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:9cf12b34ca9606d58db069f5c3e8a6ddd141520edf50e405bbaa9cb38024cc8e",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%AF%81%E7%83%AC%E7%84%9A%E9%AA%A8%E7%9A%84%E5%A4%A7%E5%85%AC",
+        "sourceRevision": "revid:46542;timestamp:2024-10-30T10:10:09Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:bdd95c57677483cbc627ca3783f333b3b9cf9b46716d395595b8b198c1f027d9"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:116",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「幽锁深牢的系囚」借系囚的合啮拘笼、系囚的铅石梏铐、系囚的幽闭缚束、系囚的绝足锁桎等遗物串联叙事，主题涉及面部、严防、紧缚、魔手、重犯，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:ed96c7d30b4f5ef98c3b8e26da689e1b9c419393099ecda6531500ba2783706c",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%B9%BD%E9%94%81%E6%B7%B1%E7%89%A2%E7%9A%84%E7%B3%BB%E5%9B%9A",
+        "sourceRevision": "revid:79187;timestamp:2026-02-20T13:38:04Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:6d692e0c95e8c4d370b802c720d4384f87248053ced3079bd966fc183930f95e"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:117",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「死水深潜的先驱」借先驱的绝热围壳、先驱的虚极罗盘、先驱的密合铅衣、先驱的泊星桩锚等遗物串联叙事，主题涉及指南、拆去、重型、一具、返回，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:8f825cafccc22243db31be246fb0f9276889e2cbca9acfae22fcb5a18a4fe7c6",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%AD%BB%E6%B0%B4%E6%B7%B1%E6%BD%9C%E7%9A%84%E5%85%88%E9%A9%B1",
+        "sourceRevision": "revid:46543;timestamp:2024-10-30T10:12:09Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:24bd26c0246486a83e96774f7898d7dcd990e17c6b0b037fb1e9a28ba2e15624"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:118",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「机心戏梦的钟表匠」借钟表匠的极目透镜、钟表匠的交运腕表、钟表匠的空幻礼服、钟表匠的隐梦革履等遗物串联叙事，主题涉及望穿、做工、手表、典雅、皮靴，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:f43ad9c73e477d9cc0552109766a9a2979f8fcd36f6fd9709c2b3d633f1ca092",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%9C%BA%E5%BF%83%E6%88%8F%E6%A2%A6%E7%9A%84%E9%92%9F%E8%A1%A8%E5%8C%A0",
+        "sourceRevision": "revid:100323;timestamp:2026-08-01T06:35:30Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:c75b3fd3bc9e4941af1ce95d94fe062aa431c2570d1ff9eaa70f848d703f7aed"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:119",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「荡除蠹灾的铁骑」借铁骑的索敌战盔、铁骑的摧坚铁腕、铁骑的银影装甲、铁骑的行空护胫等遗物串联叙事，主题涉及深度、稳固、兼具、高高、踢向，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:0d7abf2a4c0f457aaeafd4a8432106ebfc7f68818745a1de20e73adfb3897720",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E8%8D%A1%E9%99%A4%E8%A0%B9%E7%81%BE%E7%9A%84%E9%93%81%E9%AA%91",
+        "sourceRevision": "revid:46546;timestamp:2024-10-30T10:19:46Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:e1897f3b5b643f2edc57a44fb3dde8865d73f859d1d7fad6c95399e2888f83cd"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:120",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「风举云飞的勇烈」借勇烈的玄枵面甲、勇烈的钩爪腕甲、勇烈的飞翎瓷甲、勇烈的逐猎腿甲等遗物串联叙事，主题涉及两对、仿生、若想、易位、坎坷，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:279138ae020588e7d2e21750d6238670901dd2bb3f0ae5ffef74f7c658c26562",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E9%A3%8E%E4%B8%BE%E4%BA%91%E9%A3%9E%E7%9A%84%E5%8B%87%E7%83%88",
+        "sourceRevision": "revid:79172;timestamp:2026-02-20T01:43:11Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:ab5a5eeed7af6f12b5e88f1d8b37af6e5330fce9ce18c33ac1d7130f4e694c3e"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:121",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「重循苦旅的司铎」借司铎的律音耳坠、司铎的授邀手套、司铎的圣职礼服、司铎的苦旅短靴等遗物串联叙事，主题涉及告解、室内、侧耳、微末、公馆，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:79ae08f5e8c62d9952756254ff4b27f11594ad89df7fcc83a94b77411ad59999",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E9%87%8D%E5%BE%AA%E8%8B%A6%E6%97%85%E7%9A%84%E5%8F%B8%E9%93%8E",
+        "sourceRevision": "revid:96807;timestamp:2026-05-11T03:00:40Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:d497a58e4c7155dd337c4031a8367dd2dca8f91904677234cd792f37504b961d"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:122",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「识海迷坠的学者」借学者的银边视镜、学者的辅助指节、学者的粗纺外套、学者的绒皮雪靴等遗物串联叙事，主题涉及巨厦、晶石、手杖、胸针、衬托出，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:0afa6a64e7415f54c17166110283a408d13eb71e6b3af93a9fa25e4e0308b79f",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E8%AF%86%E6%B5%B7%E8%BF%B7%E5%9D%A0%E7%9A%84%E5%AD%A6%E8%80%85",
+        "sourceRevision": "revid:96806;timestamp:2026-05-11T03:00:30Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:99b6251a20431afe8484d48096f1a87f6d753299319d534b00a5e54d20adfdb1"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:123",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「凯歌祝捷的英豪」借英豪的冠军桂冠、英豪的鉴金腕铠、英豪的骁战金甲、英豪的赴火护胫等遗物串联叙事，主题涉及紧贴着、支撑着、合着、雄健、决不，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:121dc5e7de28ae07faa0901e006706ee8270ac10a9dc5a52ea54f1b72d4f3d20",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%87%AF%E6%AD%8C%E7%A5%9D%E6%8D%B7%E7%9A%84%E8%8B%B1%E8%B1%AA",
+        "sourceRevision": "revid:50035;timestamp:2025-01-15T12:14:58Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:872a94a955741711567c6a98781fa86058dc008c496897cbbc054ea3cfa2e8dd"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:124",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「哀歌覆国的诗人」借诗人的莳萝花冠、诗人的贵金手镯、诗人的缀星裙摆、诗人的钉银之履等遗物串联叙事，主题涉及春日、神庙、出色、恋恋不舍、阖上，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:4241279a4ccf78444d2ddad6e3aa650d5705985dde90797da3681cf6dcaf54a7",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%93%80%E6%AD%8C%E8%A6%86%E5%9B%BD%E7%9A%84%E8%AF%97%E4%BA%BA",
+        "sourceRevision": "revid:53042;timestamp:2025-02-04T11:19:39Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:4b952d599814b46753b727b52249b308dbdf081b24e9b11073b8fede234a62f0"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:125",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「烈阳惊雷的女武神」借女武神的翱翔翼盔、女武神的骑枪手铠、女武神的启程披风、女武神的勋礼马刺等遗物串联叙事，主题涉及阖眼、遮雨、那天、馈赠、必要，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:ac763da3a86ca98da2a1b76f7311b48fb814f8294892070543cd503f961dc1f6",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E7%83%88%E9%98%B3%E6%83%8A%E9%9B%B7%E7%9A%84%E5%A5%B3%E6%AD%A6%E7%A5%9E",
+        "sourceRevision": "revid:76249;timestamp:2025-12-14T17:05:39Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:93f38a91b8a15a3e667398294f6bab3ca8e38ba37a85aac1d7588570df939cc4"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:126",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「恶海逐波的船长」借船长的领航笠帽、船长的捕光星盘、船长的驭风斗篷、船长的踏浪游靴等遗物串联叙事，主题涉及光泽、宽边、昏黑、也会有、指出，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:bca3ae91dbbf7a0da7ba11d8617027f5858dd2921670a2868e2896d6b88c0837",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%81%B6%E6%B5%B7%E9%80%90%E6%B3%A2%E7%9A%84%E8%88%B9%E9%95%BF",
+        "sourceRevision": "revid:76247;timestamp:2025-12-14T17:04:43Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:c44ae501d7ce710089b042a22236d562f2b7d8ed9b90577e63663a0521581dff"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:127",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「再创天地的救世主」借救世主的登程风帽、救世主的执剑护手、救世主的传承战袍、救世主的拓荒长靴等遗物串联叙事，主题涉及避雨、兵刃相接、跋山涉水、吟游、穿着，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:0a8b7d721d06afeabf7d5e6f34d9b17944cfb1c04a2e092ff3f6f980bc346d33",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%86%8D%E5%88%9B%E5%A4%A9%E5%9C%B0%E7%9A%84%E6%95%91%E4%B8%96%E4%B8%BB",
+        "sourceRevision": "revid:69916;timestamp:2025-10-13T02:20:18Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:504d2cb78a478e8be06efefb0ece0e92055cb0bff3893c901d79fe6d5497b7f1"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:128",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「自匿星芒的隐士」借隐士的宽檐呢帽、隐士的简雅腕表、隐士的驼色夹克、隐士的麂皮软鞋等遗物串联叙事，主题涉及卷起、专业人士、流行、简约、圆形，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:dbd98e057d6a5d693131dc1768a1b5f5b7b07c0ae2f0554257a00f4eb9e580ea",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E8%87%AA%E5%8C%BF%E6%98%9F%E8%8A%92%E7%9A%84%E9%9A%90%E5%A3%AB",
+        "sourceRevision": "revid:76248;timestamp:2025-12-14T17:05:03Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:1da952facc4948e4fee11a53512f0999e04006edfbdd81733f037417baa518fd"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:129",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「闪耀功勋的魔法少女」借魔法少女的闪耀勋章、魔法少女的守护手套、魔法少女的永舞战裙、魔法少女的缔约长靴等遗物串联叙事，主题涉及糖果、结发、闪闪、多用、用作，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:a0bc94e7ee6d0f3904ef02c1aba6262d3d8b3768a98bb5a06fd0c6a31886b545",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E9%97%AA%E8%80%80%E5%8A%9F%E5%8B%8B%E7%9A%84%E9%AD%94%E6%B3%95%E5%B0%91%E5%A5%B3",
+        "sourceRevision": "revid:102142;timestamp:2026-09-01T13:55:52Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:05917dbf4059fecf2326c6759b641fcf52f0c72a5949421010e7f4b58f615381"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:130",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「应天涉远的卜者」借卜者的演算玉兆、卜者的机巧义手、卜者的观天星袍、卜者的飞腾云履等遗物串联叙事，主题涉及深感、天命、卜算、道袍、隆重，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:44517abe8cd52a5c499a9319f8a07c4d28e3476bc6ff5fd9ca4c1e3f1d976915",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%BA%94%E5%A4%A9%E6%B6%89%E8%BF%9C%E7%9A%84%E5%8D%9C%E8%80%85",
+        "sourceRevision": "revid:79163;timestamp:2026-02-19T14:13:38Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:e266c9d5e775f845db17e21b54fa13482949d738178bba3ad1d3a2585563e90a"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:131",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「星如我见的领航员」借领航员的深空之镜、领航员的游戏之骰、领航员的星图制服、领航员的永行魔靴等遗物串联叙事，主题涉及望远镜、有趣、谜题、细密、浩瀚，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:1e74ebaee901829da7347023fda4fc62b400bde5341630a0db029c41d7876db0",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%98%9F%E5%A6%82%E6%88%91%E8%A7%81%E7%9A%84%E9%A2%86%E8%88%AA%E5%91%98",
+        "sourceRevision": "revid:99833;timestamp:2026-07-20T09:20:53Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:f52b8aba53455cfe47c4b621e3b55e72ab9700321c05da8af76855c04c2f5696"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:132",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「叩问天工的名冶」借名冶的火兽面罩、名冶的镔铁护手、名冶的辟火匠衫、名冶的无拘重靴等遗物串联叙事，主题涉及可在、之意、犹可、寸尺、超大，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:827119f289e5fe231c4e79c5fbe3551e9f5a619d8bb541e1d1b1aefadad3e831",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%8F%A9%E9%97%AE%E5%A4%A9%E5%B7%A5%E7%9A%84%E5%90%8D%E5%86%B6",
+        "sourceRevision": "revid:100322;timestamp:2026-08-01T06:31:30Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:0abd550a967c599f8ffb3ef4e2bc3fb190b7dcd591b726464e88326011c718c4"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:301",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「太空封印站」借「黑塔」的空间站点、「黑塔」的漫历轨迹等遗物串联叙事，主题涉及停靠在、漂流、卫星、既定、书卷，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:0a4e7a95729c2b7e6ee2c41a7dcb236c7964f95253dd5ac0d8d2f6c0030fa03b",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%A4%AA%E7%A9%BA%E5%B0%81%E5%8D%B0%E7%AB%99",
+        "sourceRevision": "revid:59628;timestamp:2025-04-13T06:23:04Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:80eeb41d5e415ae5175de7dae33e39f4124e185308bb41734565248400c5b14b"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:302",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「不老者的仙舟」借罗浮仙舟的天外楼船、罗浮仙舟的建木枝蔓等遗物串联叙事，主题涉及上浮、失望、而归、长寿、出入，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:4d9ff1bc8890fdc0e0fef743565b425ae0e6fca9ec4ead9240986e3d4e8921b1",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E4%B8%8D%E8%80%81%E8%80%85%E7%9A%84%E4%BB%99%E8%88%9F",
+        "sourceRevision": "revid:59630;timestamp:2025-04-13T06:25:40Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:a057a52ae41e14f324bf6d06c9755919bd2a96cbb5a6c8e46c2055755c72fd14"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:303",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「泛银河商业公司」借公司的巨构总部、公司的贸易航道等遗物串联叙事，主题涉及置身事外、便利、经济、拓展、集合，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:c9c8eb71dadc89419091e844fd68a6c6c361ac2a84adad31bc11d0cf2b314aca",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%B3%9B%E9%93%B6%E6%B2%B3%E5%95%86%E4%B8%9A%E5%85%AC%E5%8F%B8",
+        "sourceRevision": "revid:59629;timestamp:2025-04-13T06:23:53Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:82e9fe17bf633b4900648bc56cc08c64abd7f4a9dc8cb6cd0ac8416eebe9483d"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:304",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「筑城者的贝洛伯格」借贝洛伯格的存护堡垒、贝洛伯格的铁卫防线等遗物串联叙事，主题涉及行政、护着、后退、矗立在、排成，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:3e1961b5a9676b3f9921c51190c2be7b5bd6a835bcb583f32320a97763f5f5b3",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E7%AD%91%E5%9F%8E%E8%80%85%E7%9A%84%E8%B4%9D%E6%B4%9B%E4%BC%AF%E6%A0%BC",
+        "sourceRevision": "revid:59614;timestamp:2025-04-13T06:13:09Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:f4cdb370bcb3b89b50de0d3f8407c12397567a56e39675ae32584365fc6f21ec"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:305",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「星体差分机」借螺丝星的机械烈阳、螺丝星的环星孔带等遗物串联叙事，主题涉及杠杆、活塞、齿轮、美其名曰、密布，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:60e7a0fd67bdf71e514fbebd6de731fd0490da74c05f87288dad9d0824d7d061",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%98%9F%E4%BD%93%E5%B7%AE%E5%88%86%E6%9C%BA",
+        "sourceRevision": "revid:59618;timestamp:2025-04-13T06:13:49Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:62779f1d78a4dd5e941a977b7f1c085495372f98b87ac123fceabc7f231fbaf2"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:306",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「停转的萨尔索图」借萨尔索图的移动城市、萨尔索图的晨昏界线等遗物串联叙事，主题涉及自转、周期、剩的、勉强、交界，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:2b2f549e3905271f7baa6016df1c0d1ab2c736adf155547c9a01b049c6f51af0",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%81%9C%E8%BD%AC%E7%9A%84%E8%90%A8%E5%B0%94%E7%B4%A2%E5%9B%BE",
+        "sourceRevision": "revid:59620;timestamp:2025-04-13T06:21:12Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:da3772a065c2a7d74c47c66619cc8fcea30fad222dd4e59b65539ca6db6ddb1c"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:307",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「盗贼公国塔利亚」借塔利亚的钉壳小镇、塔利亚的裸皮电线等遗物串联叙事，主题涉及无依无靠、破落、破布、暂时、绝缘，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:46c2e113f1dfc845cc7157af31c149942cd11ae50748caab1e6a4923fce3e91e",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E7%9B%97%E8%B4%BC%E5%85%AC%E5%9B%BD%E5%A1%94%E5%88%A9%E4%BA%9A",
+        "sourceRevision": "revid:59615;timestamp:2025-04-13T06:13:27Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:bdd2c9733b4600e19b48ad7ccfcd95e3ef0a4311fbe52100852dd9a2fff7a06e"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:308",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「生命的翁瓦克」借翁瓦克的诞生之岛、翁瓦克的环岛海岸等遗物串联叙事，主题涉及著名、郁郁、西斯、兴衰、岛屿，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:b024984ff1cbb4f37daf67f6c62b3e71ca8f43d1728024d57f6bf450b0f825e5",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E7%94%9F%E5%91%BD%E7%9A%84%E7%BF%81%E7%93%A6%E5%85%8B",
+        "sourceRevision": "revid:59616;timestamp:2025-04-13T06:13:34Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:a042512b88cd15ec71e80732d583fb23391ca779960f521b70e53e22344de472"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:309",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「繁星竞技场」借泰科铵的镭射球场、泰科铵的弧光赛道等遗物串联叙事，主题涉及规格、馆内、鼎沸、彩旗、机动，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:1b6c0f0fbcdfe8cd4ec5f0a21cd330f42f18b5a4032725ef8e16d8c767f5aef3",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E7%B9%81%E6%98%9F%E7%AB%9E%E6%8A%80%E5%9C%BA",
+        "sourceRevision": "revid:59622;timestamp:2025-04-13T06:21:25Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:6ac22bdd4f55fdcb4670a5ce2362576971c949e408c4abf2ec0d1b4f7b70de06"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:310",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「折断的龙骨」借伊须磨洲的残船鲸落、伊须磨洲的坼裂缆索等遗物串联叙事，主题涉及拉萨、坠毁、碇泊、自治、解开，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:6d048329965830ac1b0f3a55adb4e618b2624d764f6c8c4cd2e6c2fa0002b18f",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%8A%98%E6%96%AD%E7%9A%84%E9%BE%99%E9%AA%A8",
+        "sourceRevision": "revid:59623;timestamp:2025-04-13T06:21:32Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:95cd312d676f155fd1006e1de4eb1a955f6271b83a53efee620a0e54703ec2bf"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:311",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「苍穹战线格拉默」借格拉默的铁骑兵团、格拉默的寂静坟碑等遗物串联叙事，主题涉及盛名、变形、鼎盛、原状、在外，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:2ead6e28a83012e8be90668d52e0b4c6df86e043fd5cbb4815dff2dd4c934389",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E8%8B%8D%E7%A9%B9%E6%88%98%E7%BA%BF%E6%A0%BC%E6%8B%89%E9%BB%98",
+        "sourceRevision": "revid:59624;timestamp:2025-04-13T06:21:39Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:c31e8ce654537fae95b6c160d9b8ea9ade51201ccbe503d28686ac787ed29078"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:312",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「梦想之地匹诺康尼」借匹诺康尼的堂皇酒店、匹诺康尼的逐梦轨道等遗物串联叙事，主题涉及下榻、纸醉金迷、搭乘、五色、主体，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:99354624ccddf6d834b497935dcda23f8b27e4888e9acbb479379c85246b894e",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%A2%A6%E6%83%B3%E4%B9%8B%E5%9C%B0%E5%8C%B9%E8%AF%BA%E5%BA%B7%E5%B0%BC",
+        "sourceRevision": "revid:59631;timestamp:2025-04-13T06:26:51Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:3bd6d16028ad08d1ac5962f1171d84c6792c86606c27a55b7ff556dd0358c03c"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:313",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「无主荒星茨冈尼亚」借茨冈尼亚的母神卧榻、茨冈尼亚的轮回纽结等遗物串联叙事，主题涉及三重、朴素、以其、神体、地带，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:0f56ff289469a4ec10f4ffbd0def921b72bb5460023d8b042f0bfd1539b45178",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%97%A0%E4%B8%BB%E8%8D%92%E6%98%9F%E8%8C%A8%E5%86%88%E5%B0%BC%E4%BA%9A",
+        "sourceRevision": "revid:71951;timestamp:2025-11-14T03:13:32Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:9a54f0f2042f7d89ba0343ec27dacd3511a09d9496a7954d6d2d9f9791c659dc"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:314",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「出云显世与高天神国」借出云的祸津众神、出云的终始一刀等遗物串联叙事，主题涉及荒土、往复、不堪、辉煌、余下，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:be867a975d8d953febdb027f2c39d9ebc1edf1515e5c34a9a6f20abd9813553d",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%87%BA%E4%BA%91%E6%98%BE%E4%B8%96%E4%B8%8E%E9%AB%98%E5%A4%A9%E7%A5%9E%E5%9B%BD",
+        "sourceRevision": "revid:71890;timestamp:2025-11-14T03:11:59Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:be139f6455628533f9d7afa02ea89754f45f790af4d03e443b095f7adb93300e"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:315",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「奔狼的都蓝王朝」借都蓝的穹窿金帐、都蓝的器兽缰辔等遗物串联叙事，主题涉及牧畜、锁镣、皮鞭、高过、奴役，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:ca909121359e3b5383a21b1447df48d2af7502d3e7cdb8e2ba2da3b5ab03b29e",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%A5%94%E7%8B%BC%E7%9A%84%E9%83%BD%E8%93%9D%E7%8E%8B%E6%9C%9D",
+        "sourceRevision": "revid:79173;timestamp:2026-02-20T02:13:56Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:67ea7c4e4af7fb276fef140d87404df51518a06bcc9b4f1bd885fcaa1b732af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:316",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「劫火莲灯铸炼宫」借铸炼宫的莲华灯芯、铸炼宫的焰轮天绸等遗物串联叙事，主题涉及所在地、汲取、打造成、始祖、沉陷，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:c9a65efab8a466a51ad93619b107243edf65c2d8b6cdf4a358ed56a91ca1f70f",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%8A%AB%E7%81%AB%E8%8E%B2%E7%81%AF%E9%93%B8%E7%82%BC%E5%AE%AB",
+        "sourceRevision": "revid:59633;timestamp:2025-04-13T06:27:42Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:830718c3f35118c8b2d2f2aab97b937f509e8429ee57073c6dfc8a5eb6ad347f"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:317",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「沉陆海域露莎卡」借露莎卡的水朽苍都、露莎卡的双生航道等遗物串联叙事，主题涉及海平线、航线、水道、船员、海上，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:3362fb4f76c95a52b1685b8902a5f2b0a7a976f2e681208d8c16d8f3e36c8b00",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%B2%89%E9%99%86%E6%B5%B7%E5%9F%9F%E9%9C%B2%E8%8E%8E%E5%8D%A1",
+        "sourceRevision": "revid:59634;timestamp:2025-04-13T06:29:08Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:58c0bf3edc0dcfe1add28afe052511b57546021eda65fc34f4365bca8c7c76ea"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:318",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「奇想蕉乐园」借蕉乐园的蕉芯广场、蕉乐园的模因线缆等遗物串联叙事，主题涉及科研、分清、缆线、不可告人、香蕉，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:7dbc556e8b6b09525658076613e71c6be1324f47e78e55063bd0ff8b4d232035",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%A5%87%E6%83%B3%E8%95%89%E4%B9%90%E5%9B%AD",
+        "sourceRevision": "revid:70559;timestamp:2025-11-04T03:19:15Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:85d87f2ee2c20e65a9c468b700554bb4f899c133fe700ffe77949b9b6842a2e0"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:319",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「谧宁拾骨地」借哀地里亚的殁名祭碑、哀地里亚的入溟骨链等遗物串联叙事，主题涉及修筑、敬奉、兽骨、箭镞、铁蒺藜，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:c8e08250389c925adcabb631185dad5c7093ec96c72e0c39b317107057117048",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E8%B0%A7%E5%AE%81%E6%8B%BE%E9%AA%A8%E5%9C%B0",
+        "sourceRevision": "revid:59636;timestamp:2025-04-13T06:29:51Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:781b94258329c3b5591792a1ec54a5be34dadf36c59e1854e525bd5bae29d939"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:320",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「渊思寂虑的巨树」借神悟树庭的沉思巨桹、神悟树庭的联识叶路等遗物串联叙事，主题涉及庭院、串联、学派、游览、一滴，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:f2ad5ef7c2269fe485f597eb328c3e473418963401355726d300abf6e273ab20",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%B8%8A%E6%80%9D%E5%AF%82%E8%99%91%E7%9A%84%E5%B7%A8%E6%A0%91",
+        "sourceRevision": "revid:59637;timestamp:2025-04-13T06:30:05Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:00dcca188918af2fbf767d7b44af628efc5441b967cac8f0c74cf2b361b69203"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:321",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「妖精织梦的乐园」借迷路迷境的恬梦树屋、迷路迷境的祈愿笛哨等遗物串联叙事，主题涉及麦草、深深、二三四、陶土、小孩子，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:9370cb39650f5703485a4051eac4f67ad3833c5d9956b99749dfbff71a06a847",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%A6%96%E7%B2%BE%E7%BB%87%E6%A2%A6%E7%9A%84%E4%B9%90%E5%9B%AD",
+        "sourceRevision": "revid:76250;timestamp:2025-12-14T17:11:52Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:f32abaf5b013ee165ab95f6dd1694e41d9901e2cd9562f173ae62b831297389b"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:322",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「沉欢醉饮的海隅」借酣歌海垠的礁屿灯塔、酣歌海垠的歌咏步道等遗物串联叙事，主题涉及沉浸在、航船、触礁、浪涛、安乐，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:621d49085cc1d10100dae836293e83fd2c3de5cf040ca5e0c417f8f3a6d3f787",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%B2%89%E6%AC%A2%E9%86%89%E9%A5%AE%E7%9A%84%E6%B5%B7%E9%9A%85",
+        "sourceRevision": "revid:76251;timestamp:2025-12-14T17:12:00Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:b3dbde858535209c0581c292b97cb96eab102429987836bc6e09bf4307cfee91"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:323",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「永恒之地翁法罗斯」借翁法罗斯的西风尽途、翁法罗斯的永恒诗篇等遗物串联叙事，主题涉及章节、笔者、鲜花、开放、三千，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:19cc24f5db369533543551c2e50642b2a14d93e271f7903ca5566c16eccb2aa8",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E6%B0%B8%E6%81%92%E4%B9%8B%E5%9C%B0%E7%BF%81%E6%B3%95%E7%BD%97%E6%96%AF",
+        "sourceRevision": "revid:71108;timestamp:2025-11-06T06:14:59Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:cf1823302422a20dd22f609451bfee2ab9d78b2c259c5bc64ce792dd014da712"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:324",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「天国@直播间」借直播间的千窗万面、直播间的畅聊语流等遗物串联叙事，主题涉及参与、聊天、既能、延伸、它是，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:014430f26a7f94e1b1b79f108df12ec6576240266fb2d3249cb2bf869773e88c",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%A4%A9%E5%9B%BD%40%E7%9B%B4%E6%92%AD%E9%97%B4",
+        "sourceRevision": "revid:80120;timestamp:2026-03-07T04:01:53Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:7a6c9202643d8e00dcf0261bcac0472894e0fc51fa1d4676aca781a04880ca7d"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:325",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「零号关卡朋克洛德」借朋克洛德的虹霓都市、朋克洛德的数据洪流等遗物串联叙事，主题涉及骇客、卡带、奔腾、川流、分别，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:6e99b5693ebe76052411724c635225ed81093638af78c5bf36847e053fa08d08",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E9%9B%B6%E5%8F%B7%E5%85%B3%E5%8D%A1%E6%9C%8B%E5%85%8B%E6%B4%9B%E5%BE%B7",
+        "sourceRevision": "revid:99832;timestamp:2026-07-20T09:12:59Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:92dec4539995a80029dc78408505e0d15ed238fb2cd41662b0519e64752be35a"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:326",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「千星荟萃之城」借千星城的传媒总部、千星城的雇员凭证等遗物串联叙事，主题涉及水准、各类、人员、放送、不多，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:9c6e3b1ebf74c82cb6be7def84348dfdb0ae6c107c20db7e776c36fd806582f1",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%8D%83%E6%98%9F%E8%8D%9F%E8%90%83%E4%B9%8B%E5%9F%8E",
+        "sourceRevision": "revid:102141;timestamp:2026-09-01T13:50:05Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:95c077a27948d71af901dbf47d492da6e0b0b47cc90bd9feba9175feeba0395f"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:327",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「坠星启航地」借启航地的搁浅列车、启航地的梦想银轨等遗物串联叙事，主题涉及冷寂、仰望、希冀、有朝一日、交织，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:ef49de801463a5f80c63abd73212ef3f8b05bfa6b4d2ff01b5d8b000bb0867dd",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%9D%A0%E6%98%9F%E5%90%AF%E8%88%AA%E5%9C%B0",
+        "sourceRevision": "revid:102140;timestamp:2026-09-01T13:46:55Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:e1a09d46f0158dace821a317824cc8ce5fa33e147fa59de95d9f7dac6b5066e8"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "relic-set:328",
+    "entityKind": "relic-set",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "「寰宇生研院」借生研院的中心突触、生研院的外周管线等遗物串联叙事，主题涉及研究院、节点、中产、回馈、批量，共同补完相关人物与时代背景。",
+    "contentChecksum": "sha256:4a205ddcfb3eb2f5612c4b36a0263788bbe4f335bc673a3707625384029178d3",
+    "provenance": [
+      {
+        "sourceName": "Biligame Honkai: Star Rail Wiki relic-set revision",
+        "sourceUrl": "https://wiki.biligame.com/sr/%E5%AF%B0%E5%AE%87%E7%94%9F%E7%A0%94%E9%99%A2",
+        "sourceRevision": "revid:98997;timestamp:2026-07-15T11:51:13Z",
+        "sourcePath": "遗器套装模板的部件名称与描述字段",
+        "sourceChecksum": "sha256:88b38494422acdca2759c82ed89b0acf589c2fcdd24706f693ceee49dc8e7462"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  }
+]

@@ -1,1 +1,3632 @@
-[]
+[
+  {
+    "logicalId": "light-cone:20000",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《锋镝》保存的片段以飞矢、逐鹿、清澈、双眸、猎人等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:ac27eeb1bedb8c2ed8403151a5a0a4843402fb22768bca1b1bbf0dd8972959c9",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20000.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20001",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《物穰》保存的片段以有序、死寂、一去不返、解答、混沌等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:05da7c7f78beeac648ab9569c848a9081728aa5a248ff4c13452cf15f95687e2",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20001.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20002",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《天倾》保存的片段以有形、消逝等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:e0ee5221cafc9290b90901d3260a8b4f2ebf022d2be729b2e5ee6d9fd1452bc3",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20002.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20003",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《琥珀》保存的片段以局限、不受、事物、才能等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f10a4de5e06c5def27c6c48ea155b0b66c12d5c91c21146fc50a617512a630ce",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20003.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20004",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《幽邃》保存的片段以疑问、张口、诠释、却能、凝视等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:ec48632c4f7be441a625f7ca2c37eaaf9fe274c690121e076d2d89d6b646df64",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20004.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20005",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《齐颂》保存的片段以众志成城、收获、更高、而后、自我等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:49f185a7954f5ff58c05e4d8f49f9a63f24242a8792d22bf580e69c96457508e",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20005.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20006",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《智库》保存的片段以灭绝、败坏、图书、无限、而不等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:7d906194d7aeaaf7403d640be29ab26dccb5fc758714b69378e959711b38d7a7",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20006.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20007",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《离弦》保存的片段以箭矢、战事、必须、找到、目标等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6e8154801c16bc51a794160df39d39a1d8bff8568bd086c8faa98696d69fcdbc",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20007.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20008",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《嘉果》保存的片段以口渴、甜的、总是等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:622d22d6c214dbe9f28981c9885ffb3265ea8b1dcdca2d3edd0116abe01145d0",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20008.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20009",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《乐圮》保存的片段以某样、掌控、摧毁、事物、才是等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:27134f002b877c28b1bb76bad39c6bfdc28e9665e51430b52fcafc3e87c230f3",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20009.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20010",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《戍御》保存的片段以坚强、取胜、城墙、民众、防御等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:7ee8ab9e61a8edbdcaf7445ba7e81ddc64f46333e572426365d9d86e3319622b",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20010.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20011",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《渊环》保存的片段以摆脱、幻影、逃亡、抬起、可怖等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:b9ff038e98de4f0a3b9a4dd8defbb8df6863d892118c47ef00f43303da66ec2b",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20011.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20012",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《轮契》保存的片段以和谐、人人、机器、声响、庞大等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:e20accf6a9917b96ef5d8dca702a0476bbe8be00259619f5422f35fdc6d76605",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20012.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20013",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《灵钥》保存的片段以钥匙、赏赐、大门、知识、也不等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:a8d1f2be56ed273cb258ebca66eb7c948f15a61e52b3e348b11cbca835bab939",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20013.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20014",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《相抗》保存的片段以自由、永远等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:96a34c4af0ab957b94d9015da86b7a3d08d31da60b0043e6d62699daeb3ec0c7",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20014.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20015",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《蕃息》保存的片段以继续、生命等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:c4e7cc64a92aca7a47259392432a861cdabb2a5140fc10b4c8868e00cc44157a",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20015.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20016",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《俱殁》保存的片段以撕碎、完美、立刻、现在、过往等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:7a24d337dfca82f274512bb7072465f49752b342ebd2f3a4cc3d89a68d6b3baf",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20016.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20017",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《开疆》保存的片段以相助、诸位、将与、公司等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:06a908665bcf6565f66645f64b6fce20e96e9ea7c6abaf776347e1275e3458c9",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20017.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20018",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《匿影》保存的片段以很可能、也许会、虚无、找到等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:8edbe76517a613e25e846efd468cbc6bc1ec3a2db9e9f032e735541f509ad6c8",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20018.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20019",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《调和》保存的片段以谐音、愉快、消除、还有等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:01bd662f5c342517aaa97552da0bb109d29956207b863de655deb90c1e0a61d0",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20019.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20020",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《睿见》保存的片段以抛弃、则会、智慧、身份、如果等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:75283bc3cfe4ccd45bbb3712d6d7c796d8760299f6efb1ef6771b076153c5417",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20020.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20021",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《焚影》保存的片段以消除、本质、美好、总会、试图等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:eb11306e8962c413129849ed79a64fe0c2fc733aece572bd92bc9c817765d0d4",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20021.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20022",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《溯忆》保存的片段以七彩、衰老、童年、短暂、梦中等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:60d852175958e184b153d48ef217e04a7fa1cfb16d35a6958416b42caa5dc175",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20022.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20023",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《嗤笑》保存的片段以威吓、咧嘴、出于、起源、恐惧等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:886b2ac3022ebc80de235b0dc63609ad0cb9ccdc68b4c893d288b0e7171a3903",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20023.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:20024",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《残泪》保存的片段以最深、正如、快乐、眼泪、悲伤等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:8201ef79a715a22684440a093bede88ac20883bdaebf48046c911b1d78fed0af",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "20024.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21000",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《一场术后对话》保存的片段以该说、手术、说话、医生、谢谢等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:80c4dc836007d4dc1c544fe3fd1f03bae4a54b1f1c1bacf8fecc670bd527f426",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21000.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21001",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《晚安与睡颜》保存的片段以香甜、梦呓、啧啧、果然、端详等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:e0a7c515e2ba05c4ce1e5f3113f91c77c4cf1f69a9fbbe9e697b31d536c9967f",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21001.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21002",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《余生的第一天》保存的片段以过生日、NICKNAME、不假思索、快门、衣服等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:01aa94ca3acda370b30637a5b67f6c0ba42bfc733b7b155fecfe9ace3e3aff43",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21002.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21003",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《唯有沉默》保存的片段以到站、下车、动了、事先、面无等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:4acf4f0bd97ac287627cac2d4e3b6e6265e5cea3093c5f33666d4adf66242772",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21003.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21004",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《记忆中的模样》保存的片段以桌上、摆放着、官邸、相片、远远等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:76c164c7902a052555daee7fe7651b9e0dc1d5a696fd51aee715f61b82e73eae",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21004.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21005",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《鼹鼠党欢迎你》保存的片段以机智、怕不怕、马上、冒险、出发等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:df10e80b444aaac6f2e2ecb980ca60c42a7225bcc4fbb91299ace8266329fd74",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21005.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21006",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《「我」的诞生》保存的片段以一幅、画像、姿势、摆弄、昨天等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f252ed52579af17f3e18d653305361e532d8eddd28fa192a55462872337838ce",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21006.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21007",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《同一种心情》保存的片段以口袋、装满、诊所、那台、救治等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f53032dc177eebcc30f928013ed5f1d2eb8cc60e83113c675a6a72fdfd5ad41a",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21007.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21008",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《猎物的视线》保存的片段以多半、处境、一叠、怪不得、干掉等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6752e96f893674429bf1eaef1b069b425efd5d0c1cc43b27e505c947766e31dc",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21008.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21009",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《朗道的选择》保存的片段以不许、拉过、辩解、弟弟、去了等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:877360e43670e4d01a8e07338b3c4c07e1b4c31b1cc075df46e3a19c02b77429",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21009.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21010",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《论剑》保存的片段以不解、倒是、着手、杀敌、毫不在意等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:247f74a9a20c09605ae33a37334be9ea5562b21656e9df79442da0b4b2e219c8",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21010.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21011",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《与行星相会》保存的片段以上路、这趟、百舌、明枪暗箭、一无所知等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:7b67a09a049e184367cc84c9cb04f244ae305120e80ff237a7306f1b20233ec2",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21011.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21012",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《秘密誓心》保存的片段以检查、护肘、藏起、招呼、绷带等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:bd8f203ac0b3d6a60ae1b1ea9e6be650880c85f697851a3af0c3506570a761ed",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21012.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21013",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《别让世界静下来》保存的片段以才会有、着手、跟着、不管是、台上等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:d3cc37e5640d0bb2227d775caff0afe1497fdb009d1a153db5ca26406ddbee87",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21013.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21014",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《此时恰好》保存的片段以街道、挑了、阴凉、熙攘、跟着等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f900ebc19d41062b5da646889088c6778a0146acf347859819ab17af8ac9d79f",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21014.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21015",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《决心如汗珠般闪耀》保存的片段以台下、背脊、不管是、台上、滑落等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:7875ac86d2d346a4d91fd01e74517acd34217d9c8ace0f5a2df50d4d9b658c76",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21015.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21016",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《宇宙市场趋势》保存的片段以计算、追回、债务、要有、益处等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:408e2d2bead1b4c2b8a8f7d640a4e80b6755b44b3c325afea3c1de97ae50c59c",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21016.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21017",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《点个关注吧！》保存的片段以老爷、畅通、悠悠、大石、助人等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:45c44c456393a84311c22cbf3a650e3eac93125697fa23800d9375eedfc7e1cd",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21017.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21018",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《舞！舞！舞！》保存的片段以克拉、跳舞、圈圈、烘得、先生等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f5ea5698d90be64eede996d4c5bc0120a7c297761c8467e892ceac022e6c8c64",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21018.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21019",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《在蓝天下》保存的片段以精心、戴在、额头、花环、亲爱等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6c1c4aea71a66a4901db9bbbffa63aa7404d4754e22a12874a209a825b837ea6",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21019.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21020",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《天才们的休憩》保存的片段以点了、碧绿色、错过、出炉、时令等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:2b95a4af2bd7286aa5fd5600d37db52f24ba71f09b0b9b58ada2e84fa5bb7545",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21020.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21021",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《等价交换》保存的片段以龙女、小人儿、鼓鼓、按摩、一身等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:52d36e45eff0af39b43000256a762db6e6af25eef25559e9db0f5152d0df8050",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21021.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21022",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《延长记号》保存的片段以唱片、嘶哑、叫喊、热气、浸润等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:11d4947a55c0a44286f43eafec082b2583bcd9db22ba247de44a90a4589c54a7",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21022.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21023",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《我们是地火》保存的片段以分担、一家、忍不住、掉下、哭泣等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:cd3738c2988d991587b319d6990b402d5d4f116eec3d94921783e4f4506636c0",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21023.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21024",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《春水初生》保存的片段以稍事、入水、没过、铃铛、啁啾等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:9d03a936b656bd56f0371012e1be7087b5673af8daf8dde39aeedf0c3e792525",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21024.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21025",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《过往未来》保存的片段以跪坐、炮火、双翼、宏伟、折断等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:b97824826d514fc8b2d6e129ea73ba3d6adf9cfdbdba2d23be13dd529a1710c3",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21025.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21026",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《汪！散步时间！》保存的片段以抽抽、钻入、小路、爪子、密码等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:ac31f69a25c2f472d8ce07fafd2ac72c51b329351e2e7d9a1d5d1e625a7b9e85",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21026.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21027",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《早餐的仪式感》保存的片段以餐桌、摆好、先喝、红茶、照片等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:aead29ec559e124ec7b1fe3e420eec04ce58e30b1eb51192a1ce456c3f95e1fa",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21027.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21028",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《暖夜不会漫长》保存的片段以一盏灯、呼呼、巧克力、阅读、平时等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:045b38e06631e7ff5606d02e43bf77bf23a416d89dfbed7a4cfd81012fadd0bc",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21028.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21029",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《后会有期》保存的片段以程式、怎会、舍弃、哈欠、有机等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:15aee62d1c9298e9c68d5e39c1bd05a48d144d39337dca0f7689770ecc47e748",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21029.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21030",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《这就是我啦！》保存的片段以都很、衣服、看向、格外、开心等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f5a5bed88d8ee8998954c0d69cf7861447252dcc1b801f651bd26c2efa2eeb9c",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21030.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21031",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《重返幽冥》保存的片段以冷冷、反顾、很早以前、姐姐、心底等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:bfefc15f032ff2409e51a92b9d93bf5b8fbb00085ff47c6745c33c0efd865b3f",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21031.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21032",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《镂月裁云之意》保存的片段以那件、正要、晚上、到时、如约等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6e6a047de2952a2852ac86bbcd3292fccde6fb5bae8a298035036e095250765e",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21032.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21033",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《无处可逃》保存的片段以贯穿、他想、见到、阴影、不了等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:e26783b6eb7e24337500446b99f9eab73b9ef8399075f63c7f6ba4d5d4e7318c",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21033.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21034",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《今日亦是和平的一日》保存的片段以牌戏、午休、借了、掐指一算、正好等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:d8b2d184b7948b3a4400a36ad1f735aabf1213824212bde643e0b296ba6e6981",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21034.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21035",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《何物为真》保存的片段以诺言、幻梦、睡着、时钟、停歇等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:446ff731a089cde0bb670839ca9604654dd9b2eb81cb6b63e4da3c3ebd45b859",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21035.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21036",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《美梦小镇大冒险》保存的片段以又要、老板、丰富、统治权、折纸等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:451edb1c6df856075a9844e45f42c215eea1d20651eda7778e3e727f3d101365",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21036.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21037",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《最后的赢家》保存的片段以手枪、合作、做事、塞到、枪口等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:55f9ec0ff4afd34434911afd20344436f8b5715a73b80e311dd6a1c9845e5ca6",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21037.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21038",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《在火的远处》保存的片段以逼近、稍等片刻、人目、里面、设置等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:18873a5f111c789c4faf63215acf97d53e212c616cdee3eb1565ef8d8a55aa69",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21038.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21039",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《织造命运之线》保存的片段以排序、洗牌、操纵、表象、幽邃等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:41abb16516432566b42ecfad57e85630cc1883c1ece342693bad682352d70916",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21039.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21040",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《银河沦陷日》保存的片段以豆沙、灰灰、拿下、首脑、您要等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:0695b3fd6f6070938dcdcd207f81224c1976f96394ad87e0ffacd777ddfb6560",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21040.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21041",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《好戏开演》保存的片段以碟子、坟墓、凿子、铲子、智者等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:b294719c30cce3409760e9177b57c8def3b14ae1c6c50a86c278cdc33ed3ce77",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21041.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21042",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《铭记于心的约定》保存的片段以粗糙、大手、世事、欣喜、年幼等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:b0c016ae68be9274fede07cf6df9979be0a46ab90b882a0fc18acba45429b8bf",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21042.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21043",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《两个人的演唱会》保存的片段以哥哥、我不、觉得很、好听、底下等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:d81861053daee2f35e03ca256107c3a82af0a29d5309f005cb6dab47433afed4",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21043.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21044",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《无边曼舞》保存的片段以含笑、有些人、共舞、微茫、托住等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:573d8909bdfc9af23f8a9ec7e1e68e212203b6856da6acffce9f6b146bc9a42b",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21044.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21045",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《谐乐静默之后》保存的片段以前程、往常、挪动、入睡、历经等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6df3846a064d764dfaaf69bf3d2d621531408d3e53325fda39e679b66e0347b3",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21045.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21046",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《芳华待灼》保存的片段以熹微、挪移、惊起、只只、默念等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:745fbdec19c3476deba21bd8314f700331d8fdbe2d98669cf108b0664d0c5e80",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21046.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21047",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《黑夜如影随行》保存的片段以脚印、妥当、拾起、角落里、守望等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:c7768cb298254f27262db4fee7a572507e26d1333052467603d40a7e456e7559",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21047.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21048",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《梦的蒙太奇》保存的片段以温床、应许、震撼、重组、琐碎等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f8bc3cd17a8dff5248ca1fb5bf32b2f5ed5de48e16ad99156dd8193e0f39c962",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21048.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21050",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《胜利只在朝夕间》保存的片段以眷属、杀出、血路、收拾、蛮力等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:8d144857cef46f396d2d0c756488c3ad887bb529b75180c4485cef6da2746c62",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21050.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21051",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《天才们的问候》保存的片段以可有、摆手、上有、也就、大半等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:bed1a17e9b5929bb87795d28bc8b5a9a40704568577ce69b92b71d7e9588666a",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21051.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21052",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《多流汗，少流泪》保存的片段以折成、两段、吃不消、滑下、沉闷等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:3f1eace4d9c9ad4355de036dea839f3402fe77f617b845a60327766c49455b64",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21052.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21053",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《愿旅途永远坦然》保存的片段以雨滴、篷车、绿意、挨饿受冻、败露等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:ebf266b372537125bcd1a69923dec412147fae878d81f1130af644a6bdb0274e",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21053.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21054",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《故事的下一页》保存的片段以似曾相识、将要、上书、漫步、形形色色等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:1027affc08e8919f78d5d503979a9e34e39164a86808a091194083ae3121c4de",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21054.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21055",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《直到明天的明天》保存的片段以门扉、拭去、骤雨、严寒、稚嫩等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:491b33a396d7dfcbcbfa208f944d6c4f8873c6a12291854af4d3c1fa9ef31b1f",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21055.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21056",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《追逐风的时候》保存的片段以堵上、也好、老奶奶、救急、吃不到等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:11a80473ac4ff1a367a72b12007d90155170514c12caaa4d6407d73010e62450",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21056.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21057",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《花儿不会忘记》保存的片段以播下、夏日、灌溉、花野、踏雪等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:d826dee110ab732ea21bfdb445323b535a595ba57c2fc6855f5ff32cb8384489",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21057.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21058",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《一行往日的血》保存的片段以酝酿、捉弄、击出、洗去、孱弱等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:e8aa1784db403fbab183ebafb45dae2d62941023d01f94b8c27c26ccfc744303",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21058.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21060",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《氤氲麦香的梦》保存的片段以飘向、麦子、那份、永志、书信等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:0b89661586ae1d6e46edff267fe2eea394e2c21ee17cf6ba87db6fab1b4a939d",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21060.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21061",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《假日浴场大冒险》保存的片段以小风、一起去、特色、诊治、浴池等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:ef9a4a59cda0da2f91b2a8051cbe8c08a918a5db398c939775334b51be58e858",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21061.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21062",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《于那终点再见》保存的片段以损毁、除却、亲身、你来、道别等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:c1364e20c2b54082cb8fe2dfd76df8977ac9bdcfecb5bf1eb3623a066b335287",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21062.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21064",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《菇菇嘎嘎历险记》保存的片段以板着脸、笑一笑、咕咕、美味、快跑等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:782ddda454c28ece160d7264de9f25f98043605b2f5933f1ae5177a7e53b1a6c",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21064.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:21065",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《今日好手气》保存的片段以确信无疑、赌注、茶叶、浮沉、抽签等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:118dedf6804914d9b828ad17a50969ad588a26f0754e16a52a534ce99cdd7f6b",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "21065.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:22000",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《新手任务开始前》保存的片段以居然、会问、招揽、新人、活得等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:42229329aaee6d8b1bb95d9b8d57dd417b035efa33244d139f4a714a5f9bcc8c",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "22000.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:22001",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《嘿，我在这儿》保存的片段以三位、景物、鬼魅、往前、怯生生等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:0cd82c7038c59aaf47ded7dc99bb6637b2c69edd46f51a5f537d4f7af92bf394",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "22001.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:22002",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《为了明日的旅途》保存的片段以地图、测绘、仪器、满怀、憧憬等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:dd3e0240f22dd19937085e24d386bc4f739e47231bf23a317c43e8c2bc3b1799",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "22002.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:22003",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《忍事录•音律狩猎》保存的片段以忍法、风云、叱咤、电音、跌宕等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:bcb407b349c3277cadf04726317f067d4edbf5ded66bdb855e6695ca7566c3d2",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "22003.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:22004",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《宇宙大生意》保存的片段以会场、各方、电视、提议、非卖品等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:479e34f0d9e6432a8b3d33084257b1e5cecdfb71663d39ce5143a2436e26666a",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "22004.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:22005",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《永远的迷境饭》保存的片段以隆隆、咕噜、神奇、特制、香料等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:e7009321d46982ad52a49b93564756c96ecd5edd12c10327738ec279e39547f3",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "22005.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:22006",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《飞向粉色的明天》保存的片段以吹散、迷迷、相逢、小妖精、如初等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6a6815ad46f1130743310515d1e99c1a35facfc4a5291ba88c66ecf7b8171b73",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "22006.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:22007",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《未来，有我们一起》保存的片段以大礼、降落在、定制、周年、蛋糕等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:d7394595cee5cf473f557ec0e455c92ce500232ca136724bf5ee8d8803e3a73a",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "22007.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23000",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《银河铁道之夜》保存的片段以若是、担心、凝望、脚下、只需等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:37b592e0de36bf962a828b44a2c6e735ce27632d9204b25b7dc7cb48fcf61ea5",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23000.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23001",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《于夜色中》保存的片段以察觉、明明、感觉、不易、微笑等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:efb103d506e64264dfa4a8c4fb239904d5e2f60396de1742428f7d4d204d9b05",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23001.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23002",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《无可取代的东西》保存的片段以如果有、我也不、坏掉、麻烦、你有等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f90d41b7e5931aa4edefd6dac524b06ba4eaafd6c8f6f7c51f7ef72dd5e031a0",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23002.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23003",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《但战斗还未结束》保存的片段以撤退、赢的、寒天、冻土、一望无际等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:1c0198a498b543b0c4cb3bdc131cf7d722c7f02fc50657e779dc0ad87c91d5fc",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23003.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23004",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《以世界之名》保存的片段以拜托、那么、核心、现在、使命等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:2191679c230292aa3006e2058c35313e3915c78a552ddbf89dd54d09965e4e10",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23004.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23005",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《制胜的瞬间》保存的片段以输了、想哭、五年、几年、输给等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:17ef04fdb81a17e99c69b77d0aeb9e52a48a23ba79e69295f11fbc384afb1393",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23005.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23006",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《只需等待》保存的片段以脖子、喉咙、口水、吞咽、无所谓等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:4f774d62f9385501da49c135bd54932e74b17c3778508444cc6d8e254635ae4d",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23006.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23007",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《雨一直下》保存的片段以屋檐、一小片、雨丝、沥沥、音效等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:97dae9bd02d41a6b5e68fd732aad63dca3b0975bbc5ef239a0e8cde48869fda8",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23007.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23008",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《棺的回响》保存的片段以我看、都想、棺材、有时、毫不等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:c620340fa7a4afc80300e6baab05206bbcf842f066a6dbfc0549eda6060e5246",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23008.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23009",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《到不了的彼岸》保存的片段以一面、每年、遗憾、被人、见过等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:902a7590f172d0fc2c724938f9a23a069937419b9225f74b33fbe3ccfdb36c33",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23009.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23010",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《拂晓之前》保存的片段以务必、慎重、听取、胸有成竹、逸乐等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:beba3260a1a98a69d445e65e1ee81323fee4b5797f5d2a001fd3189657bf31b0",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23010.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23011",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《她已闭上双眼》保存的片段以伴随、万分、妙算、故人、不及等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:8e45d9522b713284137a1e95d96ff6e6888295b142b22206803eafeec206895b",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23011.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23012",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《如泥酣眠》保存的片段以紧握着、只听到、嘟囔、赢了、赢过等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:b5bcbbb1cfc77a7c959ffac581f3c877300517c68339e92ea7048e943ab11947",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23012.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23013",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《时节不居》保存的片段以配制、薄荷、生姜、下雨、芍药等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:87f5f3101486ba6ac5a62c62b2f17c8bec7b4c2ee5f4347813409ff475247618",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23013.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23014",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《此身为剑》保存的片段以彻骨、眷恋、一物、刻起、所谓的等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:20b8bdf15b37d7f321e7f3aaf91108b1f78fe3646280a83c33151f0599443dc3",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23014.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23015",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《比阳光更明亮的》保存的片段以自他、地牢、尽其所能、不见天日、无光等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:b1615c91c099c8c59b5744d08262d06756b604453dd398eee13ff7112da57d9c",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23015.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23016",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《烦恼着，幸福着》保存的片段以职场、压垮、疲劳、都应该、挺直等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:617dae64f75ad7a1ea1556add3a16c69173967aae88907dcb086772211d65256",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23016.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23017",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《惊魂夜》保存的片段以靠前、或许是、放声、害怕、尾巴等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:bbd05ddede865f73e8754112e3f8612b6fb7aed4878549bdf6c7ed00a6e340f2",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23017.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23018",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《片刻，留在眼底》保存的片段以晨光、音律、一去不复、玫瑰、唤醒等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:59e0022c3761fea9c906b2ed1fa6d4e2c831a927635fd57a3f4a069278974fd7",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23018.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23019",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《镜中故我》保存的片段以梅花、聒噪、手下、如期、凋落等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:2c138cd69dd50d29be7fc0e5272931489a0dcba982d7e1fef8b9a6c51af24035",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23019.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23020",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《纯粹思维的洗礼》保存的片段以恰好、时时、难免会、愚人、心神等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:90281a0b87ff1bbf4022a4f32d95cabf0619b244166748ff7d0a588db331c0f2",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23020.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23021",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《游戏尘寰》保存的片段以变的、烟火、分钟、十种、烟花等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:94eeda335ff0c497e0ef66c38aebdccd1f1e417c8c6b35545f36e99d8a23fd57",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23021.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23022",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《重塑时光之忆》保存的片段以蜡烛、纸牌、幽灵、剪切、太少等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:8d6ccb0f3eee94814eff08f444dd59eeb80be1ced169422a619bded185c1e7a8",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23022.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23023",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《命运从未公平》保存的片段以沮丧、镇静、百千、押上、筹码等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:7e96b346dfdde40990b438c675d5021ead8a31d7f7625805bd93d323342f4a58",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23023.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23024",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《行于流逝的岸》保存的片段以呼救、经受、下着雨、永世、两岸等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:0c33be8f2f1f55c8761e253dbbe5c844c65084850be24044dfa015762f1584a7",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23024.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23025",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《梦应归于何处》保存的片段以一粒、狂风、做梦、吸了、仍旧等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:70a1dfa6dfae53c032c0c982dbad070c5420d3e23d17225e00000a48b6aab0b6",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23025.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23026",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《夜色流光溢彩》保存的片段以有余、湖泊、不渝、很高、大典等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:ba63de7c81e2fe573fd862f5a7a8e39c6e4665a4340255f047d6a3e236ba025b",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23026.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23027",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《驶向第二次生命》保存的片段以保留、烧焦、电机、饥渴、刻骨等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:73e928eedd0ba338f469989d10c518950237d2a13dc41d767ad2737868eef6c7",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23027.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23028",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《偏偏希望无价》保存的片段以和善、福利、制止、院长、说给等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:115bea9f64bc81d93e943312d98ad5785f27eadc73d4c6959216ea39b3ea93d1",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23028.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23029",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《那无数个春天》保存的片段以过后、春潮、草丛、初次、朝气等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:86577ed26b7086f000ab3819f600137df32cdf6ea8cdaa55b0c1506530ffc4f0",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23029.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23030",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《落日时起舞》保存的片段以迅捷、房顶、先到、房檐、猫儿等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:1224d142bdfef097f08d0eac7bf475db5d70c4b99c37a6b720638ff0559090ef",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23030.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23031",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《我将，巡征追猎》保存的片段以可悲、可笑、洪水、军士、煞气等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:dc296f43746d17071dd1e753471000103af474625ab42adda8a64a185455f17f",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23031.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23032",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《唯有香如故》保存的片段以规定、错节、湖光山色、烦躁、随身携带等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f4ea52d1a08ab448d4d1231ce6f5351a46f7d9c5c75358fe0aeab114adc5edc4",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23032.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23033",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《忍法帖•缭乱破魔》保存的片段以某地、阴霾、呻吟、不定、下忍等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:95434ffa0f832a7360a7915b69bf0a1665b0ea64ba4c9787e29dba09a951f49a",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23033.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23034",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《回到大地的飞行》保存的片段以源源、水泉、受苦、虚妄、呼喊等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:16a25be05ea56748a569be4aa0b8d0cb08a95c4f9c7a015830b9f46f4abfcd87",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23034.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23035",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《长路终有归途》保存的片段以折扇、重重、未完成、吞噬、珠宝等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:c445b3a262fc8d6c0b54a71262e96b07375564cee0667caf3ff5b8ab3f218461",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23035.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23036",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《将光阴织成黄金》保存的片段以繁盛、引线、挽起、接续、缝补等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:77f17004e1de7d5abcf9f4fc4df5c42b4a38f6a3be4f31eda1cf261ae34e8755",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23036.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23037",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《向着不可追问处》保存的片段以信件、完毕、正常、再版、公理等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:4e08256d167d3edd38135b203b2d1d6dcfc073502a64630308a798c27f8a5033",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23037.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23038",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《如果时间是一朵花》保存的片段以凋零、成千、猜猜、烂的、杰作等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:9c26597f114f23bd182553e6227159be02212ed0b2ee66516b5ab820782bec0f",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23038.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23039",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《血火啊，燃烧前路》保存的片段以露水、鏖战、刚才、赤裸、上身等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f38f052ef17b2ce8e5dc816b15771887d9cec0922decd65c02d9d3f06b49bf5d",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23039.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23040",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《让告别，更美一些》保存的片段以河畔、彼方、手帕、思念、早逝等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:d6d2fba11c7d1b19f0765b9d99c19b0bbba2402f8aa0c9786edbeacabf2f282b",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23040.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23041",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《生命当付之一炬》保存的片段以幽深、涌来、指控、亵渎神明、推入等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:55eac90b7fbfa0486c0615d329aa1e3dabc092c933b4ab608357aeef5914edf6",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23041.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23042",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《愿虹光永驻天空》保存的片段以乌云密布、阴晴不定、关切、来访、七色等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:079ac2fb92503a891468bd7024f180448548a57b66c21c772a8fdfdeac283fc8",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23042.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23043",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《谎言在风中飘扬》保存的片段以屋顶、滑入、宝库、珍宝、纳入等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6faa45e2b13c5f344ca83306528bdf37218efe44bcbb482898d041dc30af74a9",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23043.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23044",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《黎明恰如此燃烧》保存的片段以骄阳、蒸发、活到、酷烈、悖谬等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:661f71d5d2856ccba3b1fbd3bb7807f6de6403b026e713a3374756de719d95f4",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23044.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23045",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《没有回报的加冕》保存的片段以梅林、的确、困难、何等、岩石等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:a7d4a9eccc21d40ddc834f767b77d3444f3ded0c62c40d0916c99422789be576",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23045.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23046",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《理想燃烧的地狱》保存的片段以弓矢、迟疑、平原、何人、拯救等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:d0dfc903b52c3d38b4a9bc6aff616e49260320cbdb7caefa1419149843a28c95",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23046.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23047",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《海洋为何而歌》保存的片段以洄游、空无一物、一曲、只剩、奏出等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:5e28951be31365927f41c771eb329e4fe0bd6c3d0428c7fc3f428aa042e8d8d7",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23047.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23048",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《金血铭刻的时代》保存的片段以威名、暴君、野心勃勃、火烧、棋子等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:79eed4f9670ea5cd84a68a1316c66fd1bdd523fbdff7f2519486005fb77517cb",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23048.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23049",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《致长夜的星光》保存的片段以交托、一站、陈设、性格、才要等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:76313c622bd20bd63373beb97e3f8e7baa190b366d366f244800c842a74d0173",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23049.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23050",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《勿忘她的火焰》保存的片段以花香、啜泣、亲切、心灵、烙印等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:d865824b63020d8814fd1ada57c848de19122be6515a953a758dd83fa424c890",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23050.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23051",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《纵然山河万程》保存的片段以渺无、边际、搏斗、仍能、航路等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:06de1b01f76abaa347398785efb53205b4285eea3e61a1896391ade3ee87abc0",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23051.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23052",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《爱如此刻永恒》保存的片段以百花、三千、万世、抵过、千言等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:2b8bfda7307fb8e0c49a3d2cecbe8a11c482e8535ff4dd20cf937780c9a35553",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23052.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23053",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《花花世界迷人眼》保存的片段以大笑、俏皮、骗了、毒药、弹幕等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:f706e66c8ce82891db51c8aca56d5f29ee91c3cc68f19d03aefc87dfd93c1550",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23053.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23054",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《当她决定看见》保存的片段以十方、法界、重叠、相映、师傅等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:5ea74e335d4d366a33b718733fc52bf72aee3f886840854ddd1d3682ad0c3772",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23054.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23056",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《一场谎言的终幕》保存的片段以推理、入门、怎么说、来着、不得已等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:3c0a541054c5e1886064bc860b1f47a5342b7cb2b25e917b0eba216dd7411dd0",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23056.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23057",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《欢迎来到银河城》保存的片段以传送、脱出、车马、NPC、顶了等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:85796d0280406cd083d56d9e90e5b5a125912fb153242726c7a8ea5caae39216",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23057.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23058",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《邂逅于下一个花季》保存的片段以鼻尖、一期一会、花开花谢、漫画、就去等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6f92a7f3a3850be100512fbe152a9fab7bdf4f615104824256434d1594f83394",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23058.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23059",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《灼尽炼狱的新骸》保存的片段以彼岸花、水流、未到、一新、散开等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:cf64b37ac1f7c776a2e79c5932eac6cf7a0b581821cc8683cec19a14b60689b5",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23059.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23060",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《当一颗星照亮夜空》保存的片段以幼时、浩渺、拿起、彗星、拖延等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:6303eaf20cbbd3331eb4df0ef2c52f32c78fdb6ba4ca7d834f67bf0e656ee6d6",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23060.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23061",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《星火悄然闪耀》保存的片段以印满、呵护、起伏、魔法使、加油等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:b8d60bfb90e056995658300e1ad5d273036bcbefbde8fa97e4f5003af194154e",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23061.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:23062",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《所见即我》保存的片段以财宝、权能、冗杂、放映、灯影等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:12b0b4f7cbb7ad89bce0e97f5eacede5bbec45db195d267ff4e5a7e949578b38",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "23062.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:24000",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《记一位星神的陨落》保存的片段以趋向、道光、复制、争先、繁殖等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:ed9251ea04e9a3864f0fadca0b06f709021e2d13d2c69cbb1dd5ffe633eef5ff",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "24000.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:24001",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《星海巡航》保存的片段以来往、闪光、解药、解脱、航程等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:28866655df12d560d36135f7295728f4871299cb17bca97f4ad9ad01ca8822b8",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "24001.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:24002",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《记忆的质料》保存的片段以琳琅、拣选、萌芽、苗圃、堆满等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:2715a4d04f33765ec1798ce98097b674d1c82090aa0492cd08b3c512bcc55a47",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "24002.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:24003",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《孤独的疗愈》保存的片段以救济、滋长、背向、天成、悲悯等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:8629f2b7e0943ba04b4e684d31b7fcd1a63a00936c3ae19a43411d62bc4bb007",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "24003.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:24004",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《不息的演算》保存的片段以虚空、初始、推演、脑海、澄明等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:1159b00d7a5237ff2c64cee5092bba973acb5d619df19836416f170eb7b54e2a",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "24004.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:24005",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《记忆永不落幕》保存的片段以悲哀、夹杂、凝聚、褪色、澄澈等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:ba2eda9211c9fc8c8add1235b3c372b41dfaa2588bab74a1b5720be596ff4e99",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "24005.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  },
+  {
+    "logicalId": "light-cone:24006",
+    "entityKind": "light-cone",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "《欢愉满溢祝福》保存的片段以潜藏在、剖析、引人入胜、依旧是、平稳等线索展开，呈现凝结于光锥中的经历与情绪。",
+    "contentChecksum": "sha256:256d72275fb4d7c3bdcc1cb952dca559e74765e5f7e1d28f7f172f3c68ede5fc",
+    "provenance": [
+      {
+        "sourceName": "Mar-7th/StarRailRes 4.4 Chinese light-cone stories",
+        "sourceUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/b95e75c7e1273d819d20c530c0b7e13a3ef19fb4/index_new/cn/light_cones.json",
+        "sourceRevision": "b95e75c7e1273d819d20c530c0b7e13a3ef19fb4",
+        "sourcePath": "24006.desc",
+        "sourceChecksum": "sha256:c75ea7451456dbbdb7211d31cf5c597db1c1c168955da0b9368f45f5ab49cbbe"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex theme summarizer",
+      "generatedAt": "2026-09-07T03:32:34.667Z"
+    }
+  }
+]

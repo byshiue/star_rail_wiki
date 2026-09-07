@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseDivergentUniverseEntry, parseReviewedSummary } from "./editorial";
+import { parseDivergentUniverseEntry, parseStorySummary } from "./editorial";
 
 const provenance = {
   sourceName: "Official public wiki",
@@ -23,7 +23,7 @@ const reviewedSummary = {
 
 describe("offline wiki editorial records", () => {
   it("accepts a reviewed original summary whose checksum matches its text", () => {
-    expect(parseReviewedSummary(reviewedSummary)).toMatchObject({
+    expect(parseStorySummary(reviewedSummary)).toMatchObject({
       logicalId: "character:1",
       locale: "zh-CN",
       reviewStatus: "reviewed",
@@ -31,10 +31,25 @@ describe("offline wiki editorial records", () => {
   });
 
   it("rejects draft summaries and summaries whose text changed after review", () => {
-    expect(() => parseReviewedSummary({ ...reviewedSummary, reviewStatus: "draft" }))
-      .toThrow(/reviewed/i);
-    expect(() => parseReviewedSummary({ ...reviewedSummary, summary: "摘要被修改。" }))
+    expect(() => parseStorySummary({ ...reviewedSummary, reviewStatus: "draft" }))
+      .toThrow();
+    expect(() => parseStorySummary({ ...reviewedSummary, summary: "摘要被修改。" }))
       .toThrow(/checksum/i);
+  });
+
+  it("accepts checksummed Agent output without pretending it was reviewed", () => {
+    const { reviewer: _reviewer, ...summaryBase } = reviewedSummary;
+    const generatedSummary = {
+      ...summaryBase,
+      reviewStatus: "auto-generated",
+      generator: { name: "Codex", generatedAt: "2026-09-07T03:00:00.000Z" },
+    };
+
+    expect(parseStorySummary(generatedSummary)).toMatchObject({
+      logicalId: "character:1",
+      reviewStatus: "auto-generated",
+      generator: { name: "Codex" },
+    });
   });
 
   it("requires a source for every Divergent Universe entry", () => {

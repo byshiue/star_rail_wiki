@@ -1,1 +1,2092 @@
-[]
+[
+  {
+    "logicalId": "character:1001",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "三月七从漂流恒冰中苏醒后失去了过去，于是以获救之日为名，用相机记录列车旅途，并在新的相遇中寻找自己的来历。",
+    "contentChecksum": "sha256:f73278bf25f544c91c94b9282a731d541a7558f94b426a055ef7bb03865fa96e",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101856;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[85].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1002",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "丹恒作为列车护卫沉默地守望同伴，也试图远离与持明前世有关的旧债；旅途却让他逐渐学会面对而非逃避过去。",
+    "contentChecksum": "sha256:fac558a66eb233fe95443559ec7bc0afa5d7918705c5d383417b8e3e6f28092a",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101840;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[86].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1003",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "姬子年少时发现并修复了搁浅的星穹列车，随后成为无名客领航者，邀请不同来处的人一同驶向尚未开拓的群星。",
+    "contentChecksum": "sha256:059d89a4ae2d54fda9b6b2fb71f9db42dd9a31fe6478ad2542a902d60bdf47db",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101857;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[84].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1004",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "瓦尔特曾以逆熵盟主与“世界”之名多次守护故乡，穿越星门后意外来到另一片宇宙，并在星穹列车上开启新的守护旅程。",
+    "contentChecksum": "sha256:955a0d76ff6255878a9a29c61eec24833b7e5f73b61c08fa07c4a14086cf4ff7",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101858;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[83].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1005",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "卡芙卡是艾利欧倚重的星核猎手，为实现预见中的未来而依照剧本行动；她与开拓者的过去和将来都保持着难解的联系。",
+    "contentChecksum": "sha256:266793a4306194050700ebd8af6e0c5b7cbc53abb154ec16cb9fafefb421795c",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101871;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[70].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1006",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "银狼把现实视作可破解的游戏，以顶尖骇客技术改写规则；加入星核猎手后，她继续把整个宇宙当成等待通关的关卡。",
+    "contentChecksum": "sha256:b893b9f5ca57dc262145b88899da48a8ca6396cdc596a27f0e54c93d2b283fd2",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101872;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[69].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1008",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "阿兰负责守卫黑塔空间站，宁愿承受伤痛也要保护科研人员；寡言的他只有在陪伴佩佩时才会显露柔软的一面。",
+    "contentChecksum": "sha256:e4b94dc8391b6ec11b2b53581ea6b9136a2228f96c17ffeca38370984c9389bb",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101868;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[73].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1009",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "艾丝妲出身富裕却选择管理黑塔空间站，以旺盛好奇心和出色协调能力应对研究员、学会与家族期待之间的复杂事务。",
+    "contentChecksum": "sha256:ef1cdb548f49d7ff9e629aa4483d0ac82c787e8df64ca5f33bdd014ec1508222",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101869;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[72].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1013",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "黑塔是天才俱乐部第83席及空间站真正的主人，只追逐能激起兴趣的课题，平日多借与幼年相似的人偶在外活动。",
+    "contentChecksum": "sha256:320843048d0f67ef678b63cb0b76c3473551cea8eb393eb1acfcaf7e7adf2dde",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101870;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[71].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1014",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "Saber是来自异界的骑士王英灵，背负卡美洛与圆桌的未竟理想；在特殊圣杯战争中，她再度面对王者愿望与石中剑的抉择。",
+    "contentChecksum": "sha256:108453cd44fd7e1048299db92a9cbcc4c5db221d42495aa30511b09d467ba070",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:156034;start:2025-07-02 07:00:00",
+        "sourcePath": "data.list[19].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1015",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "Archer曾目睹理想在过去与未来反复破灭，却仍无法舍弃正义；当虚假美梦借理想之名降临，他依然选择燃尽自身与伪善抗争。",
+    "contentChecksum": "sha256:0accd4c505f58c1ad39a9883a2fe305a2ccc53793d29b6f5b336bed09d710340",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:156035;start:2025-07-02 07:00:00",
+        "sourcePath": "data.list[18].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1101",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "布洛妮娅作为贝洛伯格大守护者继承人受过严格训练，却在亲眼看见下层区困境后重新思考统治者的责任与人民真正需要的未来。",
+    "contentChecksum": "sha256:906bc65b24cf02abf3290051b1a59397cedbf84928ea0bb337261acd5c2f87b8",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101861;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[80].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1102",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "希儿在贝洛伯格下层区长大，以地火成员身份反抗压迫；与布洛妮娅相遇后，她原本黑白分明的世界开始出现新的理解。",
+    "contentChecksum": "sha256:983ec55c625ed304634204268c82bd7a192ff3f702c1bbc8ddc615803f54e185",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101865;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[76].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1103",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "希露瓦曾是可可利亚的友人和研究者，如今经营机械屋并投入摇滚；自由叛逆的生活背后仍留着她与贝洛伯格旧日选择的伤痕。",
+    "contentChecksum": "sha256:b9e070819fa738f40412d887f562bf28c9368d2087bd2e97d117181dbab3033a",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101863;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[78].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1104",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "杰帕德出身朗道家族，是银鬃铁卫的戍卫官；他以近乎固执的正直守住贝洛伯格城墙，让风雪中的平凡生活得以延续。",
+    "contentChecksum": "sha256:1d7201d857e9c55a64b85e663cf59ccfdb064a66ffdd8b0ffddbe4842d5b4f69",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101860;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[81].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1105",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "娜塔莎是下层区少数能够长期行医的人，也是地火的重要支柱；她以温和而坚定的方式照顾居民，并守护地下社会的希望。",
+    "contentChecksum": "sha256:fe0e0147180ac91e1e1dbeb516471e2838b141ae59a938e1d1fc6fac7ef18d0d",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101864;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[77].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1106",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "佩拉年纪虽轻却是可靠的银鬃铁卫情报官，能精确处理军务与资源；严谨工作之外，她也悄悄保留着自己的兴趣世界。",
+    "contentChecksum": "sha256:d7eb1103172c90af1d97800b9778769eab65c97a15d7362b5fac8a18744b021a",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101862;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[79].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1107",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "克拉拉由史瓦罗和机器人们抚养，相信理性计算却逐渐发现正确答案未必带来幸福，于是鼓起勇气为人与机器寻找更温柔的道路。",
+    "contentChecksum": "sha256:d4163a231509816ef427d1d97b666f7d46fee7550f21a20747a87d76240d4302",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101867;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[74].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1108",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "桑博以商人和情报贩子的身份穿梭贝洛伯格，永远追逐有利可图的机会；他的笑谈与交易背后，还藏着假面愚者难以捉摸的目的。",
+    "contentChecksum": "sha256:1dfdcda7359e9cb28f9d8e9dfab93d99c3eced93c016cfb4a394137a7dab3d8f",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:101859;start:2022-04-28 12:00:00",
+        "sourcePath": "data.list[82].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1109",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "虎克自称“漆黑的虎克大人”，带领鼹鼠党在下层区展开属于孩子们的冒险，用顽皮和勇气守护伙伴与养父费斯曼。",
+    "contentChecksum": "sha256:a33e8f0c57cc66808880970e9b52f9af77f6f845b1c6e574ec50d33d784fb589",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:102868;start:2022-09-15 11:07:23",
+        "sourcePath": "data.list[75].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1110",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "玲可是朗道家最小的孩子，也是优秀的雪原探险家；她以独立行动避开繁琐社交，却会在极寒荒野中认真帮助需要援手的人。",
+    "contentChecksum": "sha256:f2997762f8993403cf93c5b3eeeb0a35183bf69a38ddd742d69f7c4e59947425",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:112749;start:2023-08-30 10:00:00",
+        "sourcePath": "data.list[58].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1111",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "卢卡从自由格斗擂台走向地火前线，以机械臂保护下层区居民；亲历绝望后，他更愿把力量用来向他人传递希望。",
+    "contentChecksum": "sha256:939de648fb0db109e8975cdb131d4ce964991e3bc94ccac32336c52c47da5c7d",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:112259;start:2023-07-19 00:00:00",
+        "sourcePath": "data.list[59].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1112",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "托帕是公司战略投资部的石心十人之一，与能感知财富的账账共同处理债务；她相信商业方案，也会在效率与被投资者的未来间作出判断。",
+    "contentChecksum": "sha256:b26abe47afee2a0b7e7b07fb621b6ee62b2b9351b8d143e1c02f7e7ccd88bb5f",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:113259;start:2023-10-11 10:00:00",
+        "sourcePath": "data.list[53].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1201",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "青雀为满足家人期待进入太卜司，却把在繁重职场中维持低调与摸鱼练成绝技；帝垣琼玉和闲适日常才是她真正向往的生活。",
+    "contentChecksum": "sha256:4df6319cdb4bc7dc9305e1efa1d35ff48e73abe97ea73c2b417078d2e2cbd0d1",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:102953;start:2022-09-22 16:36:42",
+        "sourcePath": "data.list[63].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1202",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "停云以天舶司商团代表的身份长袖善舞，善于用言辞促成贸易与合作；她的身份后来被夺用，也成为仙舟灾变中重要的谜团。",
+    "contentChecksum": "sha256:d9fd49b5b649b834f6e1b5fbd62aecf8cf81f48569b3d917fce13adfd3e8b779",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:102941;start:2022-09-21 18:31:35",
+        "sourcePath": "data.list[65].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1203",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "罗刹是携带神秘棺椁的天外行商，因星核危机滞留罗浮并以医术救人；温和外表之下，他的来意与棺中秘密仍未完全揭晓。",
+    "contentChecksum": "sha256:8540ae811d02f2ba417c55cefa793110a378650ad8c03e616984e0e63d29bef1",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:111803;start:2023-06-07 00:00:00",
+        "sourcePath": "data.list[62].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1204",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "景元身为罗浮神策将军，以周密布局在危机发生前化解隐患；看似慵懒的作风背后，是他对仙舟、师友与后辈的长久担当。",
+    "contentChecksum": "sha256:8ed24881230e0647c83130e3e09420a9e21850dc13be446e17dff678de33b293",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:102897;start:2022-09-20 14:10:03",
+        "sourcePath": "data.list[68].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1205",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "刃是不死诅咒缠身的星核猎手，破碎古剑映照着身体与心灵的创痕；他追逐死亡，也无法摆脱云上五骁留下的恩怨。",
+    "contentChecksum": "sha256:061d4bf764393e638e3a9100ffdc7dde96073a4b31724ef02bc32dd45a0b9334",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:112258;start:2023-07-19 00:00:00",
+        "sourcePath": "data.list[60].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1206",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "素裳是憧憬传奇的云骑新人，带着家传重剑践行行侠助人的信条；她虽经验不足，却总以热忱投入每一场需要她的行动。",
+    "contentChecksum": "sha256:944da5ebddeba6e6f64d4a51acd9fe01eca341c80f11533e326f1a2d1389ea86",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:102952;start:2022-09-22 16:35:48",
+        "sourcePath": "data.list[64].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1207",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "驭空曾是战功卓著的飞行士，惨烈战争使她离开天空并转任天舶司主司；旧日创伤没有消除她对罗浮航向与后辈的关怀。",
+    "contentChecksum": "sha256:70ab371ec2282ca89b0741909da85bd2013e6d78b70b4a58487f12252b3b691d",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:111804;start:2023-06-07 00:00:00",
+        "sourcePath": "data.list[61].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1208",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "符玄借法眼与穷观阵推演罗浮未来，坚信自己的选择最接近最优解；她一边承担太卜司职责，一边等待景元兑现让贤承诺。",
+    "contentChecksum": "sha256:8d851cb99d4b2f6864a7cca1913a6f00a544f9c1329d3f8be5460cb53f865236",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:112750;start:2023-08-30 10:00:00",
+        "sourcePath": "data.list[57].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1209",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "彦卿是景元麾下年轻的云骑骁卫，把剑术视作生命核心；接连遭遇强敌后，这位天才开始在挫败中理解真正的成长。",
+    "contentChecksum": "sha256:c3373f4ce67bfbf56cb82010a29aea6f32ff2c56e462372eeb3202911a14c1c2",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:102936;start:2022-09-21 17:37:39",
+        "sourcePath": "data.list[67].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1210",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "桂乃芬本名格妮薇儿，流落仙舟后以素裳所赠的新名生活；她靠热情与街头绝活融入罗浮，把异乡日子经营成热闹舞台。",
+    "contentChecksum": "sha256:c9d82835c8f6ce12261863db0bc565272bf77f116cd9cf29affff7dae71043fb",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:113258;start:2023-10-11 10:00:00",
+        "sourcePath": "data.list[54].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1211",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "白露是持明族衔药龙女，也是活泼而富同情心的医者；她不拘成法地救治病患，同时承受族人赋予龙尊身份的期待。",
+    "contentChecksum": "sha256:ed32b0a6c9cdc59a85d8931fc078585f42dabb13755f7075dc2dc5887e960a3d",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:102940;start:2022-09-21 18:29:06",
+        "sourcePath": "data.list[66].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1212",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "镜流曾是罗浮剑首与云上五骁成员，为获得斩神之力踏上危险道路；她最终成为记录中被抹去姓名的叛徒，也背负昔日同伴的悲剧。",
+    "contentChecksum": "sha256:8c78a9815ef7ad44bfab74d09f4935de307fd29e08e4993811df1ae2675de695",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:113257;start:2023-10-11 10:00:00",
+        "sourcePath": "data.list[55].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1213",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "丹恒接受饮月君遗留的持明力量与罪责，却坚持自己并非前世之人；这份新姿态象征他直面传承，同时守住独立身份。",
+    "contentChecksum": "sha256:f9a1fa42ac0157cfe44121314ac82d063de98eff919d0ac4883d6028ae9fb847",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:112751;start:2023-08-30 10:00:00",
+        "sourcePath": "data.list[56].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1214",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "雪衣生前肉身已毁，如今借偃偶之躯履行十王司拘役判官职责；她以缉凶换取短暂还阳时间，并珍惜与妹妹寒鸦的联系。",
+    "contentChecksum": "sha256:765925d6d68842798b9caa8745f536a22cc98153431925085a535b12d3a341c9",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:114135;start:2023-12-27 10:00:00",
+        "sourcePath": "data.list[47].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1215",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "寒鸦负责读取罪犯因果并书写判罚，长期承受恶业信息使她对世事麻木；只有与姐姐雪衣同行时，她才会短暂流露真实情感。",
+    "contentChecksum": "sha256:1d9b520b1b0bacd842eceda658a72f9b12f9bdda46c3767fc17c910c61bfe917",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:113552;start:2023-11-15 10:00:00",
+        "sourcePath": "data.list[50].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1217",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "藿藿胆小怕鬼，却因岁阳尾巴被封在身上而成为十王司见习判官；她总想逃离除魔任务，仍会在恐惧中坚持完成责任。",
+    "contentChecksum": "sha256:4ee4928acf8373277dbf7fd94e11a98ddb0996cd40fe9045887aebaba002b79f",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:113549;start:2023-11-15 10:00:00",
+        "sourcePath": "data.list[52].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1218",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "椒丘是曜青狐人医士兼策士，曾因往事放弃行医，后来为治疗飞霄重新出山；他把谋略、药理与嗜辣饮食结合成独特手段。",
+    "contentChecksum": "sha256:daaaeee3d2796d8fd8522ef3792f39dbf7797d517a5958d05cd36829e27347ea",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:124840;start:2024-07-31 06:00:00",
+        "sourcePath": "data.list[35].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1220",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "飞霄是曜青天击将军，以豪爽作风与百般武艺赢得“大捷将军”之名；她必须在月狂病症吞噬自己前完成对孽物的追猎。",
+    "contentChecksum": "sha256:964a39ae59a7c33bb3dd7633b32014761ea270cd48fa2a6e7c80927973d8fe7e",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:125609;start:2024-09-10 06:00:00",
+        "sourcePath": "data.list[33].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1221",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "云璃自幼随祖父怀炎修习剑艺与锻造，立誓追回并毁掉流出朱明的魔剑；直率好胜的她也在与同龄剑士相处中成长。",
+    "contentChecksum": "sha256:7880462bb4dbe3da1f5c446a57880170bab18ae26e0ec71fae47d82a1aad2079",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:124839;start:2024-07-31 06:00:00",
+        "sourcePath": "data.list[36].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1222",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "灵砂接任罗浮丹鼎司司鼎，凭敏锐嗅觉、医术和香薰诊治病患；即使内心容易动怒，她仍以周全手腕处理复杂的人际与旧怨。",
+    "contentChecksum": "sha256:f01b581d6d24230cff2d5e7ca29319dc4972c3b57a52fc238c7f5260eda45ec4",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:125610;start:2024-09-10 06:00:00",
+        "sourcePath": "data.list[32].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1223",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "貊泽作为曜青影卫专门处理情报与隐秘任务，只有出手时才显露踪迹；沉默孤僻的性格之外，他对秩序与清洁异常执着。",
+    "contentChecksum": "sha256:13c0981279d699b7881be42ef28904ddb3262d407476a3417181a6a68798920e",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:125611;start:2024-09-10 06:00:00",
+        "sourcePath": "data.list[31].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1224",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "三月七在罗浮换上仙舟装束，拜云璃与彦卿为师学习剑术；她把这段修行当作创造并珍藏新回忆的机会。",
+    "contentChecksum": "sha256:000753178cb739a6ce12ed6951c6855d3d96260ea3dbdc2a8b360fe0e835f87f",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:124841;start:2024-07-31 06:00:00",
+        "sourcePath": "data.list[34].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1225",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "忘归人曾是停云，却在灾难中被夺走容貌、姓名与身份；死里逃生后，她以新名拾回自我，重新踏上尚未结束的归途。",
+    "contentChecksum": "sha256:a11b3bf27f84800f3513c93e5d300b1c1c609d8604b2198de5e2ff51ada0b484",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:127090;start:2024-12-04 06:00:00",
+        "sourcePath": "data.list[29].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1301",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "加拉赫以猎犬家系治安官和调饮师的身份活动，散漫外表下始终保持戒心；他的存在与匹诺康尼梦境、虚构历史及米哈伊尔心愿紧密相连。",
+    "contentChecksum": "sha256:d15ec6ba7bbe415b53cbb02d284aaa554aed1b58903761996c697209527c365a",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:122839;start:2024-03-27 06:00:00",
+        "sourcePath": "data.list[41].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1302",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "银枝是独行银河的纯美骑士，以诚挚甚至夸张的方式践行伊德莉拉之美；无论身处何种险境，他都愿以长枪捍卫信念。",
+    "contentChecksum": "sha256:f345235f9a2eabdb7bebd95df860b644c160472d6d7aa9a8191d547cdf20db4b",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:113551;start:2023-11-15 10:00:00",
+        "sourcePath": "data.list[51].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1303",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "阮•梅是天才俱乐部生命科学家，以近乎冷静的执着研究生命本源并参与创造模拟宇宙；优雅兴趣与情感疏离在她身上并存。",
+    "contentChecksum": "sha256:d4c55c8897f1823bad9be2018ac584041b34fe71b04693d3c1e70cee64497b46",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:114133;start:2023-12-27 10:00:00",
+        "sourcePath": "data.list[49].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1304",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "砂金从茨冈尼亚幸存者走到公司石心十人，以自己的生命作筹码参与每场博弈；笑容和冒险背后，是失去故乡后对命运的反击。",
+    "contentChecksum": "sha256:fb72ad8a0f7b2a27ed35d78cd35c0744bd3858bdf0e3e0a8420564392559701a",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:122838;start:2024-03-27 06:00:00",
+        "sourcePath": "data.list[42].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1305",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "真理医生认为知识不应由天才垄断，以尖锐教学和石膏面具对抗愚钝；他的严苛来自让更多普通人学会独立思考的愿望。",
+    "contentChecksum": "sha256:e55f2dab688f5f62874cee0c2d507de937de757d16991fc02a2da7d58ae59e69",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:114134;start:2023-12-27 10:00:00",
+        "sourcePath": "data.list[48].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1306",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "花火是沉迷扮演与戏剧的假面愚者，身份和立场都能随乐趣改变；财富权力无法驱动她，混乱而精彩的舞台才是目标。",
+    "contentChecksum": "sha256:df140c20509bb3b2aeb60e5bcb73a5c9eeeb1cf777cb6a7fe567b007ba767da9",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:122124;start:2024-02-06 06:00:00",
+        "sourcePath": "data.list[45].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1307",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "黑天鹅作为流光忆庭忆者，以占卜师姿态进入他人记忆并收集独特片段；她温柔从容，却总把真正目的藏在牌面之后。",
+    "contentChecksum": "sha256:f3621231788322900199e8139b775b55b579ef0866bcec46f8ca372858f775e2",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:122114;start:2024-02-06 06:00:00",
+        "sourcePath": "data.list[46].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1308",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "黄泉是背负长刀、独行银河的自灭者，其故乡经历与虚无侵蚀让姓名逐渐远去；她仍凭自己的选择守住前行方向。",
+    "contentChecksum": "sha256:3ee6a6664ac9a6750c6d098dacdc752ca99ef22e111aca5334d3bf82562185df",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:122837;start:2024-03-27 06:30:00",
+        "sourcePath": "data.list[43].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1309",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "知更鸟是来自匹诺康尼的银河歌者，以同谐力量让万千听众产生共鸣；她经历战乱与梦境危机后，仍相信歌声能够连接不同生命。",
+    "contentChecksum": "sha256:df83f4acacb6ce0691a87b14ee72f19cc369a4c269f51cfead860edbdf607c59",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:123309;start:2024-05-08 06:50:00",
+        "sourcePath": "data.list[40].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1310",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "流萤是为战争制造的格拉默铁骑，身患失熵症并以装甲萨姆战斗；加入星核猎手后，她追寻作为普通人生活并违抗既定命运的可能。",
+    "contentChecksum": "sha256:f75fd93f1c8bffbdb2eedf59ef81d5bb1d36573b5312b92ae1d0f2ebc42f672a",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:123957;start:2024-06-19 06:50:00",
+        "sourcePath": "data.list[38].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1312",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "米沙是白日梦酒店门童，向往像祖父般远游银河；他与钟表匠米哈伊尔的记忆相连，最终把开拓梦想交给后来者。",
+    "contentChecksum": "sha256:1dd46e58c56a310c6b55b93b57fdfa439d41b26a7cd41ff67b8e40b675d2cac2",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:122125;start:2024-02-06 06:00:00",
+        "sourcePath": "data.list[44].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1313",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "星期日试图用秩序建立没有痛苦的永恒美梦，失败后离开匹诺康尼；即使羽翼折损，他仍带着保护众生的初心寻找新的道路。",
+    "contentChecksum": "sha256:1c4310a736a84ac685df00f4baa90fb7342d2a4c5bcaa72254f4c26a06108738",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:127020;start:2024-12-04 06:00:00",
+        "sourcePath": "data.list[28].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1314",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "翡翠是公司石心十人的放贷人，经营慈玉典押并擅长看穿欲望；她耐心等待有价值的交易，也让客户承担选择的代价。",
+    "contentChecksum": "sha256:43a5c4b9f82e576b708142663d0eaa8d07061d81db70c14977611021113f4cce",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:123958;start:2024-06-19 06:50:00",
+        "sourcePath": "data.list[37].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1315",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "波提欧是被改造成机械躯体的巡海游侠，以张扬行事和怪诞言辞惩治恶徒；他的真正目标是向毁掉故乡的公司复仇。",
+    "contentChecksum": "sha256:bde71bb3552cefb355266c3bc480b7b010c7756e55c834ad7afc2105a8e497d3",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:123310;start:2024-05-08 06:50:00",
+        "sourcePath": "data.list[39].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1317",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "乱破把说唱、涂鸦和漫画都解释为忍法，以巡海游侠身份行侠银河；她始终追猎造成自己悲剧的御猿邪忍。",
+    "contentChecksum": "sha256:7f25cc83f8985635c3b8b3763a278b78a0a3ae69962352587eafb5c99980e847",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:126410;start:2024-10-23 06:00:00",
+        "sourcePath": "data.list[30].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1321",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "大丽花与覆灭的永火官邸及被抹去的记忆相连，所经之处常伴毁灭与背叛；她重返无人知晓的梦境，寻找再次被点燃的理由。",
+    "contentChecksum": "sha256:7c3b435acc36c8e7451748cc2e774ce5e853886a84fffda503b020ffefa3901f",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:161288;start:2025-12-17 07:00:00",
+        "sourcePath": "data.list[11].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1401",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "大黑塔是黑塔本人而非远程人偶；这位天才俱乐部第83席极少离开银河边境，此次亲自现身意味着问题已值得她认真处理。",
+    "contentChecksum": "sha256:6bbe13fbd49a765e5f78546b4d183762f5316a11a888316713f9281931f4279c",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:127762;start:2025-01-15 07:00:00",
+        "sourcePath": "data.list[27].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1402",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "阿格莱雅是翁法罗斯的金织者与浪漫火种持有者，负责召集黄金裔踏上逐火之旅，试图从众神手中夺回世界的新生。",
+    "contentChecksum": "sha256:76c7057909cae1d8c298088dd045a69f94431cea4892f7b8e769e067b60a4634",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:127763;start:2025-01-15 07:00:00",
+        "sourcePath": "data.list[26].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1403",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "缇宝是雅努萨波利斯的圣女与门径火种持有者，能化作多位信使奔走大地；她承担寻找救世之人并传递预言的使命。",
+    "contentChecksum": "sha256:d2878c7680f6a10b0528210d0cccb8163db65069bac0d08810f7d2e4f0b842c9",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:154334;start:2025-02-26 07:00:00",
+        "sourcePath": "data.list[25].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1404",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "万敌是悬锋城流亡王族迈德漠斯，背负不死、纷争与弑亲宿命；他必须历经万死返乡，挑战王权与神明。",
+    "contentChecksum": "sha256:d4f278a8ab177610ed528551d04de7436eeab139b2a8dbf9c604bd37912c0865",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:154335;start:2025-02-26 07:00:00",
+        "sourcePath": "data.list[24].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1405",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "那刻夏是神悟树庭学者阿那克萨戈拉斯，为追索真实宁愿背负渎神恶名；他用怀疑和理性挑战预言与既定智慧。",
+    "contentChecksum": "sha256:625c2205946209e12e36f800210a4c07c64972ec8e0d99a6891f2c8dad64bd13",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:155154;start:2025-04-09 07:00:00",
+        "sourcePath": "data.list[22].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1406",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "赛飞儿出身盗寇之都多洛斯，是掌握诡计火种的黄金裔；她以敏捷、骗局与不受拘束的行动穿梭翁法罗斯。",
+    "contentChecksum": "sha256:8e2bd94daf62f5e596be5e8b2c248c46fa1739811a5fa224c39225313fd70deb",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:155820;start:2025-05-21 07:00:00",
+        "sourcePath": "data.list[20].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1407",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "遐蝶来自敬奉死亡的哀地里亚，是寻索死亡火种的冥河之女；她倾听亡魂悲恸，在孤独旅途中守望凋零与新生。",
+    "contentChecksum": "sha256:ca83fa191bb5c3130f8f264cad428637e76a0cfebc8bfaec33e53b5e7160ea34",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:155153;start:2025-04-09 07:00:00",
+        "sourcePath": "data.list[23].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1408",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "白厄是哀丽秘榭走出的无名英雄，承载负世火种与万众命运；即便黎明并不存在，他也愿燃尽自己为新世界开路。",
+    "contentChecksum": "sha256:133ea63038712c6d0e53c36dfe70cb35634ab9b23a58265b26e5ffb3219dc2d0",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:157029;start:2025-07-02 07:00:00",
+        "sourcePath": "data.list[17].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1409",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "风堇本名雅辛忒丝，是守望天空火种的医师；她继承先祖意志，试图修补云间城邦破裂的晨昏与积累的仇怨。",
+    "contentChecksum": "sha256:4ac854c4ce04a48629c53b06a4e32291c6b441dd6926ca24de55fc62902e0b81",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:155819;start:2025-05-21 07:00:00",
+        "sourcePath": "data.list[21].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1410",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "海瑟音是海滨城邦斯缇科西亚的海洋之女海列屈拉，肩负净化火种与暗流的使命，以歌声和浪潮守住易碎希望。",
+    "contentChecksum": "sha256:288d2586ee65bf7c53897cfd20692c5e3f88876b7be5afd855d9f7795f79b931",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:158011;start:2025-08-13 07:00:00",
+        "sourcePath": "data.list[16].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1412",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "刻律德菈是北境帝国君主与律法火种持有者，以棋局般的谋划征伐、审判并建立逐火基业，目光最终指向银河群星。",
+    "contentChecksum": "sha256:cba700130ee4df7e0a85c52e0e7409b66af3bdddae5069eb081066a1382ad9c7",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:158016;start:2025-08-13 07:00:00",
+        "sourcePath": "data.list[15].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1413",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "长夜月诞生于与世隔绝的忆域，是隐匿岁月火种的记忆之子；她愿掀起忘却浪潮，以任何代价守护镜中人的开拓愿望。",
+    "contentChecksum": "sha256:216955933e2a70681f22aa46a95664ed168ea77960dd3270bc512595cbebf7dc",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:159043;start:2025-09-24 07:00:00",
+        "sourcePath": "data.list[14].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1414",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "丹恒在腾荒之姿中继承大地火种，以伏龙身躯支撑破碎世界；他承受漫长苦痛，将生灵送往更远天地并延续不朽道路。",
+    "contentChecksum": "sha256:7b5c509f43132835922040969e2210f81f857565305e29420dcb6383a70a34a4",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:159044;start:2025-09-24 07:00:00",
+        "sourcePath": "data.list[13].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1415",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "昔涟是哀丽秘榭之女，与十三道光彩、生命长河和记忆种子相连；她希望让往昔在未来绽放，并写出不同于既定结局的新诗。",
+    "contentChecksum": "sha256:b7fbc4b93538b390515253d0f4a99881c09b9f0d569f26cce2d81ce1fdf1296e",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:160346;start:2025-11-05 07:00:00",
+        "sourcePath": "data.list[12].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1501",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "火花把直播、流量与被注视本身当作欢愉舞台；她与花火的边界如同可更换的假面，谁赢得关注，谁就成为当下答案。",
+    "contentChecksum": "sha256:6e415ea2213db1078e6b491b3f5b390c3640a8dbbc4ee24a630847fb230ceceb",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:162607;start:2026-02-13 07:00:00",
+        "sourcePath": "data.list[9].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1502",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "爻光是仙舟玉阙的戎韬将军，以巡猎之眼洞察吉凶；即便预见下下签，她仍选择孤身涉险，试图逆转天意。",
+    "contentChecksum": "sha256:5efd135730c3af5f9765df7e853fa21282d6d13dceb6cd81c02f5bd72b47d023",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:162605;start:2026-02-13 07:00:00",
+        "sourcePath": "data.list[10].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1504",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "不死途是行事随缘却屡破奇案的侦探，带着猴子助手等待主动上门的委托；幻月与恶兽出现后，他被卷入新的追猎谜局。",
+    "contentChecksum": "sha256:0f1a5e9e2a8775d4b63ba5de428a1249bd4d9083d72111b7be5a2758fa1b6a8b",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:163118;start:2026-03-25 07:00:00",
+        "sourcePath": "data.list[8].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1505",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "绯英是短暂停留二相乐园的神秘少女，对新时代充满兴趣并以尺刀裁断正邪；她的善恶立场和真实来历仍难判断。",
+    "contentChecksum": "sha256:6671c8d9ef4893915609b139c38174b8980cb816e3c1ff2e1e60b886f87f3135",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:163485;start:2026-04-22 07:00:00",
+        "sourcePath": "data.list[6].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1506",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "银狼以LV.999之名重返欢愉赛季，在银河游戏中已获得无数胜利；当常规成就失去吸引力，她决定亲自改写新卡带的玩法。",
+    "contentChecksum": "sha256:4dafc5629d97ca81bf13f3eccd6768a78e53bc846526e2e18a642ce7b78bce26",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:163484;start:2026-04-22 07:00:00",
+        "sourcePath": "data.list[7].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1507",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "千冶•刃仍保有工匠残火，却被累世宿怨再次点燃；他把自身锻成锋刃，决意与神明及过去一同走向彼岸。",
+    "contentChecksum": "sha256:bd523e7187a77036ba075b13816939491acdcfb4ddaa11fdb322ef746ac38aef",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:163908;start:2026-06-01 07:00:00",
+        "sourcePath": "data.list[5].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1508",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "远坂凛来自魔术与魔法并存的异界，是远坂家第六代当家；她在时钟塔名师门下修行，为实习课题穿越不同次元。",
+    "contentChecksum": "sha256:bea20f7ae9c7f3a93f5af27895d6475fe2125a0ae5c067887c3d20a1760276c5",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:164607;start:2026-07-15 07:00:00",
+        "sourcePath": "data.list[2].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1509",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "吉尔伽美什是来自异界、兼具神与人血统的最古英雄王；被宿敌女神牵连至陌生世界后，他准备再次夺回属于王的一切。",
+    "contentChecksum": "sha256:cb835bec00770da996ec077ff26dfd68b23e2ed94d6c2a81cf687054a084182e",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:164608;start:2026-07-15 07:00:00",
+        "sourcePath": "data.list[3].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:1510",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "姬子•启行展现了她作为列车领航者更深的开拓意志：她联结同行与守望之人，让银轨和未竟梦想继续照亮星河。",
+    "contentChecksum": "sha256:b2ffd8729fa1f42fc8f251478c22d359ba508435e8a3f42b020079f603ffb1f4",
+    "provenance": [
+      {
+        "sourceName": "HoYoverse official character showcase",
+        "sourceUrl": "https://sg-public-api-static.hoyoverse.com/content_v2_user/app/113fe6d3b4514cdd/getContentList?iChanId=242&iPage=1&iPageSize=500&sLangKey=zh-cn",
+        "sourceRevision": "iInfoId:164773;start:2026-07-15 07:00:00",
+        "sourcePath": "data.list[4].sExt.story",
+        "sourceChecksum": "sha256:b44e7325e9ff59f2cfd55b1aa8da20db1c5c27a403692c907a91d8ed234b7af3"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8001",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "开拓者在黑塔空间站醒来，体内承载星核且记忆残缺；为解决星核灾厄，他们以自己的意志加入列车并走上开拓之路。",
+    "contentChecksum": "sha256:ea98fd63d4dc43a10fa3f033bf3c1a83b25ad0e42f34c12e6546a8417982d8b2",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/6?lang=zh-cn",
+        "sourceRevision": "1704982224",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:258db16d8fb5e7969672f3000761afc674ef8f570858dbd33edff6f28bdcc07d"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8002",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "开拓者在黑塔空间站醒来，体内承载星核且记忆残缺；为解决星核灾厄，他们以自己的意志加入列车并走上开拓之路。",
+    "contentChecksum": "sha256:ea98fd63d4dc43a10fa3f033bf3c1a83b25ad0e42f34c12e6546a8417982d8b2",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/6?lang=zh-cn",
+        "sourceRevision": "1704982224",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:258db16d8fb5e7969672f3000761afc674ef8f570858dbd33edff6f28bdcc07d"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8003",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "开拓者在贝洛伯格的冰雪危机中得到存护回应，与同伴揭开城中谎言并守住火种，成为当地人迈向新未来的助力。",
+    "contentChecksum": "sha256:2cfbc09c912ce19a6208f1580b52ebce1ce0119f14f7f362f7254733304e0816",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/23?lang=zh-cn",
+        "sourceRevision": "1737011499",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:0e91d3079e996846ab5ed372d706f3f93dadb495fe9bcce706644731ea8213ae"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8004",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "开拓者在贝洛伯格的冰雪危机中得到存护回应，与同伴揭开城中谎言并守住火种，成为当地人迈向新未来的助力。",
+    "contentChecksum": "sha256:2cfbc09c912ce19a6208f1580b52ebce1ce0119f14f7f362f7254733304e0816",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/23?lang=zh-cn",
+        "sourceRevision": "1737011499",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:0e91d3079e996846ab5ed372d706f3f93dadb495fe9bcce706644731ea8213ae"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8005",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "开拓者在匹诺康尼经历死亡、交易与秩序美梦，最终联合不同道路的伙伴唤醒众人，让短暂而真实的明天取代永恒幻境。",
+    "contentChecksum": "sha256:c0b0ee64a1e351d947c120bf56c20380e15df80a943f047485d61469f0625391",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/2511?lang=zh-cn",
+        "sourceRevision": "1730018567",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:a147cf53cd2d873339bf317ac097f9f9b6f51be3d88bf41bd7231b3640ed17aa"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8006",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "开拓者在匹诺康尼经历死亡、交易与秩序美梦，最终联合不同道路的伙伴唤醒众人，让短暂而真实的明天取代永恒幻境。",
+    "contentChecksum": "sha256:c0b0ee64a1e351d947c120bf56c20380e15df80a943f047485d61469f0625391",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/2511?lang=zh-cn",
+        "sourceRevision": "1730018567",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:a147cf53cd2d873339bf317ac097f9f9b6f51be3d88bf41bd7231b3640ed17aa"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8007",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "开拓者在翁法罗斯以记忆承接黄金裔的逐火史诗，把一次次牺牲与火种留给未来，使被封闭的世界获得新的书写可能。",
+    "contentChecksum": "sha256:478b5fb31c3961006d9114ac25d18ec5fe07eda47345c0c294ae1a7ee12796b3",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/3287?lang=zh-cn",
+        "sourceRevision": "1745982024",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:9a7b36f35aa1fd34aa49ef534791112c6998125aebe7009f557d00e2276823b5"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8008",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "开拓者在翁法罗斯以记忆承接黄金裔的逐火史诗，把一次次牺牲与火种留给未来，使被封闭的世界获得新的书写可能。",
+    "contentChecksum": "sha256:478b5fb31c3961006d9114ac25d18ec5fe07eda47345c0c294ae1a7ee12796b3",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/3287?lang=zh-cn",
+        "sourceRevision": "1745982024",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:9a7b36f35aa1fd34aa49ef534791112c6998125aebe7009f557d00e2276823b5"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8009",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "走上欢愉命途的开拓者面对众声喧哗的狂欢时代，在英雄与笑柄不断翻转的舞台上寻找属于自己的快乐面相。",
+    "contentChecksum": "sha256:c3c3f8952b9884c58ccb72d0c1e73f022b2583b95121a542f250abde27bf4ba4",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/5006?lang=zh-cn",
+        "sourceRevision": "1780990188",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:eefb413a1fe730e7e3976aeb0c2b64058979b5cca1e1772ec455160c337fde64"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  },
+  {
+    "logicalId": "character:8010",
+    "entityKind": "character",
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "summary": "走上欢愉命途的开拓者面对众声喧哗的狂欢时代，在英雄与笑柄不断翻转的舞台上寻找属于自己的快乐面相。",
+    "contentChecksum": "sha256:c3c3f8952b9884c58ccb72d0c1e73f022b2583b95121a542f250abde27bf4ba4",
+    "provenance": [
+      {
+        "sourceName": "HoYoWiki HSR character story",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/5006?lang=zh-cn",
+        "sourceRevision": "1780990188",
+        "sourcePath": "data.page.modules[story]",
+        "sourceChecksum": "sha256:eefb413a1fe730e7e3976aeb0c2b64058979b5cca1e1772ec455160c337fde64"
+      }
+    ],
+    "reviewStatus": "auto-generated",
+    "generator": {
+      "name": "Codex",
+      "generatedAt": "2026-09-07T03:19:34.170Z"
+    }
+  }
+]
