@@ -8,7 +8,7 @@ import { loadEditorialData } from "./editorial";
 import { loadLocalFullTextOverlay } from "./lore/local-overlay";
 import { loadCachedRenderAssets } from "./render/assets";
 import { renderLoreVolumes } from "./render/lore-volumes";
-import { renderVolumes } from "./render/volumes";
+import { renderVolumes, type RenderedVolume } from "./render/volumes";
 
 export type BuildHtmlOptions = {
   releasesRoot: string;
@@ -22,7 +22,7 @@ export type BuildHtmlOptions = {
   localImportReportPath?: string;
 };
 
-export type HtmlOutput = { filename: string; path: string };
+export type HtmlOutput = Pick<RenderedVolume, "filename" | "family" | "group"> & { path: string };
 
 function writeAtomically(path: string, content: string): void {
   const temporaryPath = `${path}.${process.pid}.tmp`;
@@ -65,7 +65,7 @@ export function buildHtmlVolumes(options: BuildHtmlOptions): HtmlOutput[] {
   return [...baseVolumes, ...loreVolumes].map((volume) => {
     const path = join(outputDirectory, volume.filename);
     writeAtomically(path, volume.html);
-    return { filename: volume.filename, path };
+    return { filename: volume.filename, path, family: volume.family, group: volume.group };
   });
 }
 

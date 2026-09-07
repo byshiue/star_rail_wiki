@@ -1,6 +1,6 @@
 import type { EntityProvenance, FeatureRevision } from "../../../src/domain/entities";
 import type { DocumentChanges } from "../changes";
-import type { DocumentCatalog, LoreCoverageMetric, StorySummary } from "../schema";
+import type { DocumentCatalog, LoreCoverageMetric, LoreFamily, StorySummary } from "../schema";
 import { anchorFor, escapeHtml, externalLink, htmlDocument, textToHtml } from "./html";
 import { LORE_FAMILY_INDEXES } from "./lore-volumes";
 
@@ -21,6 +21,8 @@ export type RenderedVolume = {
   filename: string;
   title: string;
   html: string;
+  family: LoreFamily | null;
+  group: string;
 };
 
 function sources(provenance: EntityProvenance[]): string {
@@ -155,9 +157,9 @@ export function renderVolumes(input: VolumeRenderInput): RenderedVolume[] {
     .map((summary) => [summary.logicalId, summary]));
   const assetMap = new Map((input.assets ?? []).map((asset) => [asset.logicalId, asset]));
   return [
-    { filename: "00-总索引.html", title: "总索引", html: renderIndex(input) },
-    { filename: "01-角色图鉴.html", title: "角色图鉴", html: renderCharacters(input, summaryMap, assetMap) },
-    { filename: "02-光锥图鉴.html", title: "光锥图鉴", html: renderEquipment(input, summaryMap, assetMap, "light-cone") },
-    { filename: "03-遗器图鉴.html", title: "遗器图鉴", html: renderEquipment(input, summaryMap, assetMap, "relic-set") },
+    { filename: "00-总索引.html", title: "总索引", html: renderIndex(input), family: null, group: "global-index" },
+    { filename: "01-角色图鉴.html", title: "角色图鉴", html: renderCharacters(input, summaryMap, assetMap), family: null, group: "characters" },
+    { filename: "02-光锥图鉴.html", title: "光锥图鉴", html: renderEquipment(input, summaryMap, assetMap, "light-cone"), family: null, group: "light-cones" },
+    { filename: "03-遗器图鉴.html", title: "遗器图鉴", html: renderEquipment(input, summaryMap, assetMap, "relic-set"), family: null, group: "relic-sets" },
   ];
 }

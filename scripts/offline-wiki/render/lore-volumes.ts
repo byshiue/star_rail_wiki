@@ -209,6 +209,8 @@ function renderFamilyIndex(
     filename: `${definition.prefix}-索引.html`,
     title: `${definition.label}索引`,
     html: htmlDocument(`${definition.label}索引`, `${input.catalog.release.gameVersion} · ${input.catalog.release.id}`, body),
+    family: definition.family,
+    group: "index",
   };
 }
 
@@ -253,6 +255,8 @@ export function renderLoreVolumes(input: LoreVolumeRenderInput): RenderedVolume[
           filename: partFilename(definition, kind.label, part),
           title,
           html: htmlDocument(title, `${input.catalog.release.gameVersion} · ${input.catalog.release.id}`, body),
+          family: definition.family,
+          group: kind.kind,
         });
       }
     }

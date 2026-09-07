@@ -4,6 +4,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildHtmlVolumes } from "./build-html";
 import { renderPdfWithPlaywright, type PdfRenderer } from "./pdf/render";
+import type { LoreFamily } from "./schema";
 
 export type BuildOfflineWikiOptions = {
   releasesRoot: string;
@@ -17,10 +18,17 @@ export type BuildOfflineWikiOptions = {
 };
 
 export type BuildManifest = {
-  schemaVersion: 1;
+  schemaVersion: 2;
   releaseId: string;
   inputs: Array<{ filename: string; checksum: string }>;
-  outputs: Array<{ filename: string; checksum: string; pageCount: number }>;
+  outputs: Array<{
+    filename: string;
+    checksum: string;
+    pageCount: number;
+    family: LoreFamily | null;
+    group: string;
+    order: number;
+  }>;
 };
 
 function checksum(bytes: Uint8Array): string {
@@ -42,7 +50,7 @@ export async function buildOfflineWiki(options: BuildOfflineWikiOptions): Promis
   const inputs: BuildManifest["inputs"] = [];
   const outputs: BuildManifest["outputs"] = [];
 
-  for (const htmlOutput of htmlOutputs) {
+  for (const [order, htmlOutput] of htmlOutputs.entries()) {
     const htmlBytes = readFileSync(htmlOutput.path);
     inputs.push({ filename: htmlOutput.filename, checksum: checksum(htmlBytes) });
     const filename = htmlOutput.filename.replace(/\.html$/, ".pdf");
@@ -51,10 +59,17 @@ export async function buildOfflineWiki(options: BuildOfflineWikiOptions): Promis
       title: filename.replace(/\.pdf$/, ""),
     });
     writeAtomically(join(pdfRoot, filename), rendered.bytes);
-    outputs.push({ filename, checksum: checksum(rendered.bytes), pageCount: rendered.pageCount });
+    outputs.push({
+      filename,
+      checksum: checksum(rendered.bytes),
+      pageCount: rendered.pageCount,
+      family: htmlOutput.family,
+      group: htmlOutput.group,
+      order,
+    });
   }
 
-  const manifest: BuildManifest = { schemaVersion: 1, releaseId: options.releaseId, inputs, outputs };
+  const manifest: BuildManifest = { schemaVersion: 2, releaseId: options.releaseId, inputs, outputs };
   writeAtomically(
     join(buildRoot, "build-manifest.json"),
     Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, "utf8"),
