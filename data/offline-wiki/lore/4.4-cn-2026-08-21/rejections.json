@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "4.4-cn-2026-08-21",
+  "decisions": [
+    {
+      "candidateId": "candidate:du:arcadian-chronicles-4.5",
+      "decision": "reject-later-version",
+      "reason": "Official evidence first identifies this entry in version 4.5.",
+      "evidenceIds": ["evidence:official-4.5-du-update"]
+    },
+    {
+      "candidateId": "candidate:worldview:live-navigation",
+      "decision": "missing-source",
+      "reason": "No entry-level official release evidence was found.",
+      "evidenceIds": []
+    },
+    {
+      "candidateId": "candidate:collectible:bookshelf-current",
+      "decision": "reject-ambiguous-version",
+      "reason": "The live/current source lacks immutable entry-level 4.4 evidence.",
+      "evidenceIds": ["evidence:hoyowiki-current-bookshelf"]
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "4.4-cn-2026-08-21",
+  "locale": "zh-CN",
+  "exhaustive": false,
+  "accessedAt": "2026-09-07T13:17:28.000Z",
+  "candidates": [
+    {
+      "candidateId": "candidate:du:arcadian-chronicles-4.5",
+      "releaseId": "4.4-cn-2026-08-21",
+      "family": "divergent-universe",
+      "kind": "tutorial",
+      "logicalId": "lore:du:tutorial:arcadian-chronicles-4.5-update",
+      "name": "差分宇宙：阿卡迪亚编年史 4.5 更新",
+      "aliases": [],
+      "displayOrder": null,
+      "locale": "zh-CN",
+      "description": "官方公告明确标为 4.5 的差分宇宙更新候选。",
+      "relationships": [],
+      "mechanics": null,
+      "sourceUrl": "https://www.hoyolab.com/article/46375186",
+      "evidenceIds": ["evidence:official-4.5-du-update"]
+    },
+    {
+      "candidateId": "candidate:worldview:live-navigation",
+      "releaseId": "4.4-cn-2026-08-21",
+      "family": "worldview",
+      "kind": "term",
+      "logicalId": "lore:worldview:term:live-navigation-candidate",
+      "name": "HoYoWiki 当前世界观目录候选",
+      "aliases": [],
+      "displayOrder": null,
+      "locale": "zh-CN",
+      "description": "当前导航可用于发现世界观分类，但没有条目级 4.4 历史证据。",
+      "relationships": [],
+      "mechanics": null,
+      "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/aggregate/enemy?crawler=Googlebot",
+      "evidenceIds": []
+    },
+    {
+      "candidateId": "candidate:mission:planarcadia-whistle",
+      "releaseId": "4.4-cn-2026-08-21",
+      "family": "mission",
+      "kind": "trailblaze",
+      "logicalId": "lore:mission:trailblaze:planarcadia-whistle",
+      "name": "二相乐园—鸣笛于归寂之时",
+      "aliases": ["鸣笛于归寂之时"],
+      "displayOrder": null,
+      "locale": "zh-CN",
+      "description": "4.4 更新后永久开放的开拓任务，参与条件为开拓等级 21 级。",
+      "relationships": [],
+      "mechanics": null,
+      "sourceUrl": "https://sr.mihoyo.com/news/165210?type=activity",
+      "evidenceIds": ["evidence:official-cn-4.4-update-planarcadia"]
+    },
+    {
+      "candidateId": "candidate:collectible:bookshelf-current",
+      "releaseId": "4.4-cn-2026-08-21",
+      "family": "collectible",
+      "kind": "readable",
+      "logicalId": "lore:collectible:readable:bookshelf-current",
+      "name": "HoYoWiki 当前书架目录候选",
+      "aliases": [],
+      "displayOrder": null,
+      "locale": "zh-CN",
+      "description": "当前书架目录可用于发现名称，但不能单独证明条目在 4.4 已存在。",
+      "relationships": [],
+      "mechanics": null,
+      "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/aggregate/book?crawler=Googlebot",
+      "evidenceIds": ["evidence:hoyowiki-current-bookshelf"]
+    }
+  ],
+  "evidence": [
+    {
+      "evidenceId": "evidence:official-4.5-du-update",
+      "candidateId": "candidate:du:arcadian-chronicles-4.5",
+      "sourceName": "Divergent Universe: Arcadian Chronicles Update Details V4.5",
+      "sourceUrl": "https://www.hoyolab.com/article/46375186",
+      "sourceRevision": "article:46375186",
+      "sourcePath": "divergent-universe-arcadian-chronicles/update-v4.5",
+      "captureId": "manual-fact-capture:2026-09-07:46375186",
+      "sourceVersion": "4.5",
+      "publicationDate": null,
+      "accessedAt": "2026-09-07T13:17:28.000Z",
+      "immutable": true,
+      "facts": [
+        "The official article labels the update as V4.5.",
+        "The update announces new Equations, Curios, Weighted Curios, and Occurrences."
+      ],
+      "contentChecksum": "sha256:3837a9914aeffcf0ca737773c5c5410ca964c023e8411698ddc49734ee64e65d"
+    },
+    {
+      "evidenceId": "evidence:official-cn-4.4-update-planarcadia",
+      "candidateId": "candidate:mission:planarcadia-whistle",
+      "sourceName": "《崩坏：星穹铁道》4.4版本更新说明",
+      "sourceUrl": "https://sr.mihoyo.com/news/165210?type=activity",
+      "sourceRevision": "news:165210",
+      "sourcePath": "版本全新内容/全新剧情/二相乐园-鸣笛于归寂之时",
+      "captureId": "manual-fact-capture:2026-09-07:165210:mission",
+      "sourceVersion": "4.4",
+      "publicationDate": "2026-07-14",
+      "accessedAt": "2026-09-07T13:17:28.000Z",
+      "immutable": true,
+      "facts": [
+        "4.4版本全新剧情。",
+        "开拓任务「二相乐园」-「鸣笛于归寂之时」。",
+        "2026/07/15 4.4版本更新后永久开放，参与条件为开拓等级≥21级。"
+      ],
+      "contentChecksum": "sha256:a81b91fa696ef96036edb4eba719a0f25c5c79811e59b5f7149d53879fec40dd"
+    },
+    {
+      "evidenceId": "evidence:hoyowiki-current-bookshelf",
+      "candidateId": "candidate:collectible:bookshelf-current",
+      "sourceName": "HoYoWiki Bookshelf current directory",
+      "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/aggregate/book?crawler=Googlebot",
+      "sourceRevision": "live-directory:no-historical-revision",
+      "sourcePath": "aggregate/book",
+      "captureId": "manual-directory-observation:2026-09-07",
+      "sourceVersion": null,
+      "publicationDate": null,
+      "accessedAt": "2026-09-07T13:17:28.000Z",
+      "immutable": false,
+      "facts": [
+        "The live Bookshelf directory exposes collectible names.",
+        "The directory does not expose an entry-level historical 4.4 revision for each listed item."
+      ],
+      "contentChecksum": "sha256:34fb1cb1e3968b8db5aa6ebbcfb7104da1b3ca0aa933d798df92ab76ecac0d2d"
+    }
+  ]
+}

@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "logicalId": "lore:mission:trailblaze:planarcadia-whistle",
+    "name": "二相乐园—鸣笛于归寂之时",
+    "aliases": ["鸣笛于归寂之时"],
+    "displayOrder": null,
+    "releaseId": "4.4-cn-2026-08-21",
+    "locale": "zh-CN",
+    "description": "4.4 更新后永久开放的开拓任务，参与条件为开拓等级 21 级。",
+    "relationships": [],
+    "provenance": [
+      {
+        "sourceName": "《崩坏：星穹铁道》4.4版本更新说明",
+        "sourceUrl": "https://sr.mihoyo.com/news/165210?type=activity",
+        "sourceRevision": "news:165210;manual-fact-capture:2026-09-07:165210:mission",
+        "sourcePath": "版本全新内容/全新剧情/二相乐园-鸣笛于归寂之时",
+        "sourceChecksum": "sha256:a81b91fa696ef96036edb4eba719a0f25c5c79811e59b5f7149d53879fec40dd"
+      }
+    ],
+    "reviewStatus": "reviewed",
+    "contentChecksum": "sha256:b083a779fb585abdac0dc0b3b784a2b98bac4e6db45ea33b1316f67b2ee0e536",
+    "family": "mission",
+    "kind": "trailblaze"
+  }
+]
