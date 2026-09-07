@@ -11,6 +11,7 @@ import {
 } from "./schema";
 
 const RELEASE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+const SUPPORTED_RELEASE_PATTERN = /^4\.4(?:-|$)/;
 
 const FAMILY_FILES: ReadonlyArray<readonly [LoreFamily, string]> = [
   ["divergent-universe", "divergent-universe.json"],
@@ -124,6 +125,9 @@ export function loadLoreCatalog(root: string, releaseId: string): LoreCatalog {
   if (!RELEASE_ID_PATTERN.test(releaseId) || releaseId.toLowerCase() === "latest") {
     throw new Error(`offline wiki lore requires an exact release id; received ${JSON.stringify(releaseId)}`);
   }
+  if (!SUPPORTED_RELEASE_PATTERN.test(releaseId)) {
+    throw new Error(`offline wiki lore only supports 4.4 releases; received ${JSON.stringify(releaseId)}`);
+  }
 
   const releaseRoot = join(root, releaseId);
   const records: LoreRecord[] = [];
@@ -158,6 +162,17 @@ export function loadLoreCatalog(root: string, releaseId: string): LoreCatalog {
     verifyChecksum("lore baseline", baseline.family, baseline.contentChecksum, canonicalBaseline(baseline));
     return baseline;
   });
+
+  const baselineFamilies = new Set<LoreFamily>();
+  for (const baseline of baselines) {
+    if (baselineFamilies.has(baseline.family)) {
+      throw new Error(`duplicate lore baseline for family ${baseline.family}`);
+    }
+    baselineFamilies.add(baseline.family);
+  }
+  for (const [family] of FAMILY_FILES) {
+    if (!baselineFamilies.has(family)) throw new Error(`missing lore baseline for family ${family}`);
+  }
 
   const sortedRecords = [...records].sort(compareChineseName);
   return {

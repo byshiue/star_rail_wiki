@@ -9,6 +9,7 @@ import { assertComplete, buildCoverageReport, collectEffectSources, CoverageRepo
 import { extractCandidateEffects, type CandidateEffect } from "./game-data/extractEffects";
 import { validateCommunityRepository } from "./validate-community-teams";
 import { assertRoleAnnotations, loadRoleAnnotations } from "./game-data/applyRoleAnnotations";
+import { loadLoreCatalog } from "./offline-wiki/lore/catalog";
 import { validatePublicProfileRepository } from "./validate-public-profiles";
 import { validateProductionAudit } from "./validate-production-audit";
 
@@ -81,6 +82,10 @@ export async function validateRepository(repositoryRoot = "."): Promise<void> {
   }
   validateCommunityRepository(community, releaseIndex, bundles);
   await validatePublicProfileRepository(repositoryRoot);
+  loadLoreCatalog(
+    path.join(repositoryRoot, "data/offline-wiki/lore"),
+    "4.4-cn-2026-08-21",
+  );
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
