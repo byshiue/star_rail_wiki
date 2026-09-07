@@ -80,14 +80,15 @@
       "sourcePath": "divergent-universe-arcadian-chronicles/update-v4.5",
       "captureId": "manual-fact-capture:2026-09-07:46375186",
       "sourceVersion": "4.5",
-      "publicationDate": null,
+      "publishedAt": null,
       "accessedAt": "2026-09-07T13:17:28.000Z",
       "immutable": true,
       "facts": [
         "The official article labels the update as V4.5.",
         "The update announces new Equations, Curios, Weighted Curios, and Occurrences."
       ],
-      "contentChecksum": "sha256:3837a9914aeffcf0ca737773c5c5410ca964c023e8411698ddc49734ee64e65d"
+      "sourceArtifactChecksum": null,
+      "factCaptureChecksum": "sha256:7b9cbdb5dae042850113c7e9ffc3889c47bd697af1c40cccaaecc60dee651b1b"
     },
     {
       "evidenceId": "evidence:official-cn-4.4-update-planarcadia",
@@ -98,7 +99,7 @@
       "sourcePath": "版本全新内容/全新剧情/二相乐园-鸣笛于归寂之时",
       "captureId": "manual-fact-capture:2026-09-07:165210:mission",
       "sourceVersion": "4.4",
-      "publicationDate": "2026-07-14",
+      "publishedAt": "2026-07-14T00:00:00+08:00",
       "accessedAt": "2026-09-07T13:17:28.000Z",
       "immutable": true,
       "facts": [
@@ -106,7 +107,8 @@
         "开拓任务「二相乐园」-「鸣笛于归寂之时」。",
         "2026/07/15 4.4版本更新后永久开放，参与条件为开拓等级≥21级。"
       ],
-      "contentChecksum": "sha256:a81b91fa696ef96036edb4eba719a0f25c5c79811e59b5f7149d53879fec40dd"
+      "sourceArtifactChecksum": null,
+      "factCaptureChecksum": "sha256:57eec7a316caf1a025c616542e6cd4389d1902f154370be0e5e85d9863587cfa"
     },
     {
       "evidenceId": "evidence:hoyowiki-current-bookshelf",
@@ -117,14 +119,15 @@
       "sourcePath": "aggregate/book",
       "captureId": "manual-directory-observation:2026-09-07",
       "sourceVersion": null,
-      "publicationDate": null,
+      "publishedAt": null,
       "accessedAt": "2026-09-07T13:17:28.000Z",
       "immutable": false,
       "facts": [
         "The live Bookshelf directory exposes collectible names.",
         "The directory does not expose an entry-level historical 4.4 revision for each listed item."
       ],
-      "contentChecksum": "sha256:34fb1cb1e3968b8db5aa6ebbcfb7104da1b3ca0aa933d798df92ab76ecac0d2d"
+      "sourceArtifactChecksum": null,
+      "factCaptureChecksum": "sha256:089f549cd213ba5be3ed20def97c6434eb68ee1d45c99d8fe75deb046985dc43"
     }
   ]
 }

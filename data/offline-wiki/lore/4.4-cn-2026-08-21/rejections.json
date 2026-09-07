@@ -15,6 +15,12 @@
       "evidenceIds": []
     },
     {
+      "candidateId": "candidate:mission:planarcadia-whistle",
+      "decision": "missing-source",
+      "reason": "Release facts are documented, but no immutable source artifact checksum is available.",
+      "evidenceIds": ["evidence:official-cn-4.4-update-planarcadia"]
+    },
+    {
       "candidateId": "candidate:collectible:bookshelf-current",
       "decision": "reject-ambiguous-version",
       "reason": "The live/current source lacks immutable entry-level 4.4 evidence.",

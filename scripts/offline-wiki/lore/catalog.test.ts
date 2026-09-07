@@ -107,10 +107,8 @@ describe("loadLoreCatalog", () => {
 
   it("loads the exact production 4.4 release", () => {
     const catalog = loadLoreCatalog(productionRoot, "4.4-cn-2026-08-21");
-    expect(catalog.records.map((record) => record.logicalId)).toEqual([
-      "lore:mission:trailblaze:planarcadia-whistle",
-    ]);
-    expect(catalog.byFamily.mission).toHaveLength(1);
+    expect(catalog.records).toEqual([]);
+    expect(catalog.byFamily.mission).toHaveLength(0);
     expect(catalog.baselines).toHaveLength(4);
     expect(catalog.baselines.every((baseline) => (
       baseline.baselineStatus === "missing" && baseline.expectedCount === null

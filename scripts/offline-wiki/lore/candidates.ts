@@ -7,7 +7,7 @@ import { LoreFamilySchema, LoreRecordSchema, type LoreRecord } from "./schema";
 
 const RELEASE_ID = "4.4-cn-2026-08-21" as const;
 const RELEASE_VERSION = "4.4";
-const RELEASE_SNAPSHOT_DATE = "2026-08-21";
+const RELEASE_END_INSTANT = Date.parse("2026-08-26T06:00:00+08:00");
 const Sha256Schema = z.string().regex(/^sha256:[a-f0-9]{64}$/);
 const IsoDateSchema = z.iso.datetime({ offset: true });
 const SemanticVersionSchema = z.string().regex(/^\d+\.\d+(?:\.\d+)?$/);
@@ -44,11 +44,12 @@ export const CandidateEvidenceSchema = z.strictObject({
   sourcePath: z.string().min(1),
   captureId: z.string().min(1),
   sourceVersion: SemanticVersionSchema.nullable(),
-  publicationDate: z.iso.date().nullable(),
+  publishedAt: IsoDateSchema.nullable(),
   accessedAt: IsoDateSchema,
   immutable: z.boolean(),
   facts: z.array(z.string().min(1).max(300)).min(1),
-  contentChecksum: Sha256Schema,
+  sourceArtifactChecksum: Sha256Schema.nullable(),
+  factCaptureChecksum: Sha256Schema,
 });
 
 export const CandidateLedgerSchema = z.strictObject({
@@ -106,10 +107,11 @@ function canonicalEvidence(value: CandidateEvidence): object {
     sourcePath: value.sourcePath,
     captureId: value.captureId,
     sourceVersion: value.sourceVersion,
-    publicationDate: value.publicationDate,
+    publishedAt: value.publishedAt,
     accessedAt: value.accessedAt,
     immutable: value.immutable,
     facts: value.facts,
+    sourceArtifactChecksum: value.sourceArtifactChecksum,
   };
 }
 
@@ -166,7 +168,7 @@ function recordFromCandidate(candidate: LoreCandidate, evidence: readonly Candid
       sourceUrl: item.sourceUrl,
       sourceRevision: `${item.sourceRevision};${item.captureId}`,
       sourcePath: item.sourcePath,
-      sourceChecksum: item.contentChecksum,
+      sourceChecksum: item.sourceArtifactChecksum!,
     })),
     reviewStatus: "reviewed" as const,
     family: candidate.family,
@@ -223,7 +225,7 @@ export function evaluateLoreCandidates(
   }
 
   for (const item of evidence) {
-    if (checksum(canonicalEvidence(item)) !== item.contentChecksum) {
+    if (checksum(canonicalEvidence(item)) !== item.factCaptureChecksum) {
       throw new Error(`evidence checksum mismatch for ${item.evidenceId}`);
     }
   }
@@ -238,20 +240,37 @@ export function evaluateLoreCandidates(
       if (item.candidateId !== candidate.candidateId) throw new Error(`evidence ${id} belongs to candidate ${item.candidateId}, not ${candidate.candidateId}`);
       if (candidate.sourceUrl !== item.sourceUrl) throw new Error(`evidence ${id} source URL conflicts with candidate ${candidate.candidateId}`);
       return item;
-    });
+    }).sort((left, right) => left.evidenceId.localeCompare(right.evidenceId));
+    const normalizedEvidenceIds = candidateEvidence.map((item) => item.evidenceId);
     const versions = new Set(candidateEvidence.map((item) => item.sourceVersion).filter((value) => value !== null));
-    if (versions.size > 1) throw new Error(`conflicting evidence versions for candidate ${candidate.candidateId}`);
-    const sourceVersion = candidateEvidence[0]?.sourceVersion;
-    if (sourceVersion === undefined) throw new Error(`candidate ${candidate.candidateId} has no usable evidence`);
-    if (sourceVersion !== null && compareVersions(sourceVersion, RELEASE_VERSION) > 0) {
-      return { candidateId: candidate.candidateId, decision: "reject-later-version", reason: `Official evidence first identifies this entry in version ${sourceVersion}.`, evidenceIds: candidate.evidenceIds };
+    if (versions.size > 1) {
+      return { candidateId: candidate.candidateId, decision: "reject-ambiguous-version", reason: "Official evidence contains conflicting non-null release versions.", evidenceIds: normalizedEvidenceIds };
     }
-    if (candidateEvidence.some((item) => item.sourceVersion === null || !item.immutable
-      || item.publicationDate === null || item.publicationDate > RELEASE_SNAPSHOT_DATE)) {
-      return { candidateId: candidate.candidateId, decision: "reject-ambiguous-version", reason: "The live/current source lacks immutable entry-level 4.4 evidence.", evidenceIds: candidate.evidenceIds };
+    const sourceVersion = [...versions][0] ?? null;
+    if (sourceVersion !== null && compareVersions(sourceVersion, RELEASE_VERSION) > 0) {
+      return { candidateId: candidate.candidateId, decision: "reject-later-version", reason: `Official evidence first identifies this entry in version ${sourceVersion}.`, evidenceIds: normalizedEvidenceIds };
+    }
+    const identities = new Map<string, CandidateEvidence>();
+    for (const item of candidateEvidence) {
+      const identity = `${item.sourceUrl}\n${item.sourcePath}`;
+      const previous = identities.get(identity);
+      if (previous && (previous.sourceRevision !== item.sourceRevision
+        || previous.captureId !== item.captureId
+        || previous.publishedAt !== item.publishedAt
+        || previous.sourceArtifactChecksum !== item.sourceArtifactChecksum)) {
+        return { candidateId: candidate.candidateId, decision: "reject-ambiguous-version", reason: "Evidence for the same source identity conflicts.", evidenceIds: normalizedEvidenceIds };
+      }
+      identities.set(identity, item);
+    }
+    if (sourceVersion === null || candidateEvidence.some((item) => !item.immutable
+      || item.publishedAt === null || Date.parse(item.publishedAt) >= RELEASE_END_INSTANT)) {
+      return { candidateId: candidate.candidateId, decision: "reject-ambiguous-version", reason: "The live/current source lacks immutable entry-level 4.4 evidence.", evidenceIds: normalizedEvidenceIds };
+    }
+    if (candidateEvidence.some((item) => item.sourceArtifactChecksum === null)) {
+      return { candidateId: candidate.candidateId, decision: "missing-source", reason: "Release facts are documented, but no immutable source artifact checksum is available.", evidenceIds: normalizedEvidenceIds };
     }
     const record = recordFromCandidate(candidate, candidateEvidence);
-    return { candidateId: candidate.candidateId, decision: "admit", reason: `Immutable official evidence identifies the entry in version ${sourceVersion}.`, evidenceIds: candidate.evidenceIds, record };
+    return { candidateId: candidate.candidateId, decision: "admit", reason: `Immutable official evidence identifies the entry in version ${sourceVersion}.`, evidenceIds: normalizedEvidenceIds, record };
   });
 }
 
@@ -259,15 +278,48 @@ export function loreRecordsFromDecisions(decisions: readonly CandidateDecision[]
   return decisions.flatMap((decision) => decision.decision === "admit" && decision.record ? [decision.record] : []);
 }
 
-function main(): void {
-  const arguments_ = process.argv.slice(2);
+export function validateCandidateProduction(
+  family: z.infer<typeof LoreFamilySchema>,
+  candidatesInput: readonly LoreCandidate[],
+  decisions: readonly CandidateDecision[],
+  productionInput: readonly unknown[],
+): void {
+  const candidates = candidatesInput.map((candidate) => LoreCandidateSchema.parse(candidate));
+  const candidateFamily = new Map(candidates.map((candidate) => [candidate.candidateId, candidate.family]));
+  const expected = loreRecordsFromDecisions(decisions)
+    .filter((record) => record.family === family)
+    .sort((left, right) => left.logicalId.localeCompare(right.logicalId));
+  const production = productionInput.map((value) => {
+    const record = LoreRecordSchema.parse(value);
+    if (record.releaseId !== RELEASE_ID || record.family !== family) {
+      throw new Error(`production record ${record.logicalId} does not match ${RELEASE_ID}/${family}`);
+    }
+    if (checksum(canonicalRecord(record)) !== record.contentChecksum) {
+      throw new Error(`production record checksum mismatch for ${record.logicalId}`);
+    }
+    return record;
+  }).sort((left, right) => left.logicalId.localeCompare(right.logicalId));
+  uniqueIndex(production, (record) => record.logicalId, "production logical id");
+  const decisionIds = decisions.filter((decision) => candidateFamily.get(decision.candidateId) === family)
+    .map((decision) => decision.candidateId);
+  if (new Set(decisionIds).size !== candidates.filter((candidate) => candidate.family === family).length) {
+    throw new Error(`candidate decisions do not exactly cover family ${family}`);
+  }
+  if (JSON.stringify(production) !== JSON.stringify(expected)) {
+    throw new Error(`production records do not exactly match admitted candidates for family ${family}`);
+  }
+}
+
+export function runCandidateCli(
+  arguments_: readonly string[],
+  repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../.."),
+): { releaseId: typeof RELEASE_ID; family: z.infer<typeof LoreFamilySchema>; candidates: number; counts: Record<CandidateDecisionState, number> } {
   const releaseId = arguments_[arguments_.indexOf("--release") + 1];
   const familyInput = arguments_[arguments_.indexOf("--family") + 1];
   if (releaseId !== RELEASE_ID || familyInput === undefined) {
     throw new Error(`usage: npx tsx scripts/offline-wiki/lore/candidates.ts --release ${RELEASE_ID} --family <family>`);
   }
   const family = LoreFamilySchema.parse(familyInput);
-  const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
   const dataRoot = join(repositoryRoot, "data", "offline-wiki", "lore", releaseId);
   const ledger = CandidateLedgerSchema.parse(JSON.parse(readFileSync(join(dataRoot, "candidates.json"), "utf8")));
   const expectedRejections = CandidateRejectionLedgerSchema.parse(JSON.parse(readFileSync(join(dataRoot, "rejections.json"), "utf8")));
@@ -277,8 +329,20 @@ function main(): void {
     throw new Error("candidate rejection ledger does not match deterministic evaluation");
   }
   const selected = decisions.filter((decision) => ledger.candidates.find((candidate) => candidate.candidateId === decision.candidateId)?.family === family);
-  const counts = Object.fromEntries(CandidateDecisionStateSchema.options.map((state) => [state, selected.filter((decision) => decision.decision === state).length]));
-  process.stdout.write(`${JSON.stringify({ releaseId, family, candidates: selected.length, counts })}\n`);
+  const familyFile = ({
+    "divergent-universe": "divergent-universe.json",
+    worldview: "worldview.json",
+    mission: "missions.json",
+    collectible: "collectibles.json",
+  } as const)[family];
+  const production = z.array(z.unknown()).parse(JSON.parse(readFileSync(join(dataRoot, familyFile), "utf8")));
+  validateCandidateProduction(family, ledger.candidates, decisions, production);
+  const counts = Object.fromEntries(CandidateDecisionStateSchema.options.map((state) => (
+    [state, selected.filter((decision) => decision.decision === state).length]
+  ))) as Record<CandidateDecisionState, number>;
+  return { releaseId, family, candidates: selected.length, counts };
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  process.stdout.write(`${JSON.stringify(runCandidateCli(process.argv.slice(2)))}\n`);
+}
