@@ -14,11 +14,14 @@ export type BuildTransactionOperations = {
   afterPromoteRename?: () => void;
   afterJournalPhase?: (phase: BuildTransactionPhase) => void;
   duringLockReclaim?: () => void;
+  afterLegacyGuardObservation?: () => void;
+  duringLegacyGuardMigration?: () => void;
 };
 
 type DirectoryIdentity = { path: string; device: number | bigint; inode: number | bigint };
 type Lock = DirectoryIdentity & { nonce: string };
 type OwnerIdentity = { path: string; device: bigint; inode: bigint; pid: number; nonce: string; mtimeMs: number };
+type LegacyFileIdentity = { path: string; device: bigint; inode: bigint; mtimeMs: bigint; size: bigint };
 type Journal = {
   schemaVersion: 1; releaseId: string; phase: BuildTransactionPhase; targetName: string;
   stagingName: string; backupName: string | null; expectedManifestChecksum: string; priorManifestChecksum: string | null;
@@ -146,6 +149,21 @@ function sameIdentity(path: string, expected: Pick<OwnerIdentity, "device" | "in
   const stats = lstatMaybe(path); return stats !== null && !stats.isSymbolicLink() && stats.isFile()
     && BigInt(stats.dev) === expected.device && BigInt(stats.ino) === expected.inode;
 }
+function observeLegacyFile(path: string, label: string): LegacyFileIdentity {
+  const stats = lstatSync(path, { bigint: true });
+  if (stats.isSymbolicLink() || !stats.isFile() || stats.size > 4096n) throw new Error(`${label} is not a safe legacy regular file`);
+  return { path, device: stats.dev, inode: stats.ino, mtimeMs: stats.mtimeMs, size: stats.size };
+}
+function sameLegacyFile(path: string, expected: LegacyFileIdentity): boolean {
+  try {
+    const current = observeLegacyFile(path, "legacy owner");
+    return current.device === expected.device && current.inode === expected.inode
+      && current.mtimeMs === expected.mtimeMs && current.size === expected.size;
+  } catch { return false; }
+}
+function legacyFileIsAged(observed: LegacyFileIdentity): boolean {
+  return Date.now() - Number(observed.mtimeMs) >= LEGACY_MALFORMED_GRACE_MS;
+}
 function sameOwner(path: string, expected: OwnerIdentity, label: string): boolean {
   if (!sameIdentity(path, expected)) return false;
   try { const owner = ownerContent(path, label); return owner.pid === expected.pid && owner.nonce === expected.nonce; }
@@ -198,19 +216,49 @@ function replaceDeadOwner(builds: DirectoryIdentity, observed: OwnerIdentity, la
     return installed;
   } finally { restoreOrRemoveTombstone(builds, tombstone, observed.path, observed, installed !== null, label); }
 }
-function acquireReclaimGuard(builds: DirectoryIdentity, guardPath: string): OwnerIdentity {
+function restoreOrRemoveLegacyTombstone(builds: DirectoryIdentity, tombstone: string, canonical: string, observed: LegacyFileIdentity, installed: boolean): void {
+  const isolated = { ...observed, path: tombstone };
+  if (!sameLegacyFile(tombstone, isolated)) return;
+  if (!installed) {
+    try { linkSync(tombstone, canonical); fsyncDirectory(builds.path); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error; }
+  }
+  if (sameLegacyFile(tombstone, isolated)) { unlinkSync(tombstone); fsyncDirectory(builds.path); }
+}
+function acquireReclaimGuard(builds: DirectoryIdentity, guardPath: string, operations?: BuildTransactionOperations): OwnerIdentity {
+  const installedGuard = publishOwner(builds, guardPath, "build lock reclaim guard");
+  if (installedGuard) return installedGuard;
+  const firstGuardIdentity = observeLegacyFile(guardPath, "build lock reclaim guard");
+  let staleGuard: OwnerIdentity | null = null;
+  try { staleGuard = observeOwner(guardPath, "build lock reclaim guard"); }
+  catch { operations?.afterLegacyGuardObservation?.(); }
   const claimPath = `${guardPath}-claim`; let claim = publishOwner(builds, claimPath, "build lock reclaim claim");
   if (!claim) {
     const staleClaim = observeOwner(claimPath, "build lock reclaim claim");
     claim = replaceDeadOwner(builds, staleClaim, "build lock reclaim claim");
   }
   try {
-    let guard = publishOwner(builds, guardPath, "build lock reclaim guard");
-    if (!guard) {
-      const staleGuard = observeOwner(guardPath, "build lock reclaim guard");
-      guard = replaceDeadOwner(builds, staleGuard, "build lock reclaim guard");
+    if (staleGuard) {
+      if (!sameOwner(guardPath, staleGuard, "build lock reclaim guard")) throw new Error("build lock reclaim guard changed before stale recovery");
+      return replaceDeadOwner(builds, staleGuard, "build lock reclaim guard");
     }
-    return guard;
+    operations?.duringLegacyGuardMigration?.(); assertParent(builds);
+    if (!sameLegacyFile(guardPath, firstGuardIdentity)) throw new Error("legacy build lock reclaim guard changed before migration");
+    if (!legacyFileIsAged(firstGuardIdentity)) throw new Error("build lock reclaim guard is malformed or recently incomplete");
+    try { ownerContent(guardPath, "build lock reclaim guard"); }
+    catch {
+      const tombstone = `${guardPath}.stale-${randomUUID()}`; let migrated: OwnerIdentity | null = null;
+      try {
+        renameSync(guardPath, tombstone); fsyncDirectory(builds.path);
+        if (!sameLegacyFile(tombstone, { ...firstGuardIdentity, path: tombstone })) throw new Error("legacy build lock reclaim guard replacement was isolated; refusing to delete it");
+        migrated = publishOwner(builds, guardPath, "build lock reclaim guard");
+        if (!migrated) throw new Error("build lock reclaim guard changed during legacy migration");
+        return migrated;
+      } finally {
+        restoreOrRemoveLegacyTombstone(builds, tombstone, guardPath, firstGuardIdentity, migrated !== null);
+      }
+    }
+    throw new Error("legacy build lock reclaim guard became valid during migration");
   } finally { releaseOwner(claim, "build lock reclaim claim", builds); }
 }
 function releaseOwner(owner: OwnerIdentity, label: string, builds?: DirectoryIdentity): void {
@@ -242,7 +290,7 @@ function acquireLock(builds: DirectoryIdentity, releaseId: string, operations?: 
       if (originalStats.isSymbolicLink() || !originalStats.isFile() || Date.now() - Number(originalStats.mtimeMs) < LEGACY_MALFORMED_GRACE_MS) throw new Error("build lock is malformed or recently incomplete");
     }
     if (original && processIsAlive(original.pid)) throw new Error("another PDF build lock is active");
-    const guard = acquireReclaimGuard(builds, `${path}-reclaim`); let tombstone: string | null = null;
+    const guard = acquireReclaimGuard(builds, `${path}-reclaim`, operations); let tombstone: string | null = null;
     try {
       operations?.duringLockReclaim?.(); assertParent(builds);
       if (!sameOwner(guard.path, guard, "build lock reclaim guard")) throw new Error("build lock reclaim guard changed after acquisition");

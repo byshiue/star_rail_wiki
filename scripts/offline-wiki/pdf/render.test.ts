@@ -391,6 +391,84 @@ describe("offline wiki PDF build", () => {
     expect(existsSync(claimPath)).toBe(false);
   });
 
+  it.each(["", '{"pid":2147483647,'])("migrates an aged malformed legacy reclaim guard: %j", async (guardBytes) => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
+    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
+    const lockPath = join(buildsRoot, ".4.4-fixture.build-transaction.lock");
+    const guardPath = `${lockPath}-reclaim`;
+    writeFileSync(lockPath, JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
+    writeFileSync(guardPath, guardBytes); utimesSync(guardPath, new Date(0), new Date(0));
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    })).resolves.toMatchObject({ schemaVersion: 2 });
+    expect(existsSync(lockPath)).toBe(false);
+    expect(existsSync(guardPath)).toBe(false);
+  });
+
+  it("keeps a fresh malformed legacy reclaim guard", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
+    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
+    const lockPath = join(buildsRoot, ".4.4-fixture.build-transaction.lock");
+    const guardPath = `${lockPath}-reclaim`;
+    writeFileSync(lockPath, JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
+    writeFileSync(guardPath, "partial");
+    const identity = statSync(guardPath, { bigint: true });
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    })).rejects.toThrow(/guard|malformed|recent/i);
+    const after = statSync(guardPath, { bigint: true });
+    expect({ dev: after.dev, ino: after.ino, bytes: readFileSync(guardPath, "utf8") })
+      .toEqual({ dev: identity.dev, ino: identity.ino, bytes: "partial" });
+  });
+
+  it("keeps a legacy reclaim guard replaced after its first observation", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
+    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
+    const lockPath = join(buildsRoot, ".4.4-fixture.build-transaction.lock");
+    const guardPath = `${lockPath}-reclaim`;
+    writeFileSync(lockPath, JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
+    writeFileSync(guardPath, "legacy-partial"); utimesSync(guardPath, new Date(0), new Date(0));
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+      fileOperationsForTest: { afterLegacyGuardObservation: () => {
+        unlinkSync(guardPath); writeFileSync(guardPath, "replacement"); utimesSync(guardPath, new Date(0), new Date(0));
+      } },
+    })).rejects.toThrow(/guard.*changed|identity|reclaim/i);
+    expect(readFileSync(guardPath, "utf8")).toBe("replacement");
+  });
+
+  it("allows at most one contender to enter legacy reclaim-guard migration", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
+    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
+    const lockPath = join(buildsRoot, ".4.4-fixture.build-transaction.lock");
+    const guardPath = `${lockPath}-reclaim`;
+    writeFileSync(lockPath, JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
+    writeFileSync(guardPath, "legacy-partial"); utimesSync(guardPath, new Date(0), new Date(0));
+    let migrationEntrants = 0;
+    let nested: Promise<unknown> | null = null;
+
+    await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+      fileOperationsForTest: { duringLegacyGuardMigration: () => {
+        migrationEntrants += 1;
+        nested = buildOfflineWiki({
+          releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+          releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+          fileOperationsForTest: { duringLegacyGuardMigration: () => { migrationEntrants += 1; } },
+        });
+      } },
+    });
+    await expect(nested).rejects.toThrow(/active|claim|reclaim/i);
+    expect(migrationEntrants).toBe(1);
+  });
+
   it("allows at most one concurrent contender to enter dead-lock reclamation", async () => {
     const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
     const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
