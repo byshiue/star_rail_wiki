@@ -6,7 +6,13 @@ import {
 } from "../../src/domain/entities";
 import { DataReleaseSchema } from "../../src/domain/releases";
 
-export const StoryEntityKindSchema = z.enum(["character", "light-cone", "relic-set", "divergent-universe"]);
+export const StoryEntityKindSchema = z.enum([
+  "character",
+  "light-cone",
+  "relic-set",
+  "divergent-universe",
+  "lore",
+]);
 
 const SummaryBaseShape = {
   logicalId: z.string().min(1),
@@ -88,3 +94,4 @@ export type DocumentCatalog = z.infer<typeof DocumentCatalogSchema>;
 export type ReviewedSummary = z.infer<typeof ReviewedSummarySchema>;
 export type StorySummary = z.infer<typeof StorySummarySchema>;
 export type DivergentUniverseEntry = z.infer<typeof DivergentUniverseEntrySchema>;
+export type { LoreBaseline, LoreFamily, LoreRecord, LoreRelationship } from "./lore/schema";
