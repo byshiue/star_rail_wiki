@@ -26,7 +26,7 @@ export function htmlDocument(title: string, releaseLabel: string, body: string):
   <style>${printStyles}</style>
 </head>
 <body>
-  <header class="cover" id="top"><h1>${escapeHtml(title)}</h1><p>资料版本：${escapeHtml(releaseLabel)}</p><p>非官方离线资料；故事部分为经审核的原创摘要。</p></header>
+  <header class="cover" id="top"><h1>${escapeHtml(title)}</h1><p>资料版本：${escapeHtml(releaseLabel)}</p><p>非官方离线资料；故事内容可能包含经审核原创摘要、自动生成且未经人工复核的原创摘要，以及仅存在于本机的用户导入全文。</p></header>
   ${body}
 </body>
 </html>\n`;

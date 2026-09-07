@@ -6,9 +6,10 @@ import type { StorySummary } from "../schema";
 import { renderVolumes } from "./volumes";
 
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "releases");
+const loreRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "lore");
 
 describe("offline wiki HTML volumes", () => {
-  it("renders five ordered A4 volumes with gameplay text, release, and provenance", () => {
+  it("keeps the existing character and equipment volumes unchanged", () => {
     const catalog = loadDocumentCatalog(fixtureRoot, "4.4-fixture");
     const volumes = renderVolumes({ catalog, summaries: [] });
 
@@ -17,7 +18,6 @@ describe("offline wiki HTML volumes", () => {
       "01-角色图鉴.html",
       "02-光锥图鉴.html",
       "03-遗器图鉴.html",
-      "04-差分宇宙图鉴.html",
     ]);
     expect(volumes[1]?.html).toContain("@page { size: A4");
     expect(volumes[1]?.html).toContain("测试角色");
@@ -108,5 +108,23 @@ describe("offline wiki HTML volumes", () => {
 
     expect(volumes[1]?.html).toContain("自动生成 · 未经人工复核 · Codex");
     expect(volumes[1]?.html).not.toContain("Codex 审核");
+  });
+
+  it("describes reviewed, generated, and user-local story layers honestly", () => {
+    const catalog = loadDocumentCatalog(fixtureRoot, "4.4-fixture");
+
+    const volumes = renderVolumes({ catalog, summaries: [] });
+
+    expect(volumes[0]?.html).toContain("经审核原创摘要、自动生成且未经人工复核的原创摘要，以及仅存在于本机的用户导入全文");
+    expect(volumes[0]?.html).not.toContain("故事部分为经审核的原创摘要");
+  });
+
+  it("reports global lore coverage and rejections without a percentage when any baseline is missing", () => {
+    const catalog = loadDocumentCatalog(fixtureRoot, "4.4-fixture", undefined, { loreRoot });
+
+    const index = renderVolumes({ catalog, summaries: [] })[0]!.html;
+
+    expect(index).toContain("基准缺失；结构化 4；本地全文 0；拒绝 0");
+    expect(index).not.toMatch(/背景资料：[^<]*覆盖率[^<]*%/);
   });
 });

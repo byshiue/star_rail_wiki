@@ -5,7 +5,9 @@ import { loadAssetManifest } from "./assets/manifest";
 import { loadDocumentCatalog } from "./catalog";
 import { compareDocumentCatalogs } from "./changes";
 import { loadEditorialData } from "./editorial";
+import { loadLocalFullTextOverlay } from "./lore/local-overlay";
 import { loadCachedRenderAssets } from "./render/assets";
+import { renderLoreVolumes } from "./render/lore-volumes";
 import { renderVolumes } from "./render/volumes";
 
 export type BuildHtmlOptions = {
@@ -15,6 +17,9 @@ export type BuildHtmlOptions = {
   outputRoot: string;
   assetManifestPath?: string;
   assetCacheRoot?: string;
+  loreRoot?: string;
+  localOverlayPath?: string;
+  localImportReportPath?: string;
 };
 
 export type HtmlOutput = { filename: string; path: string };
@@ -27,7 +32,14 @@ function writeAtomically(path: string, content: string): void {
 
 export function buildHtmlVolumes(options: BuildHtmlOptions): HtmlOutput[] {
   const editorial = loadEditorialData(options.editorialRoot);
-  const catalog = loadDocumentCatalog(options.releasesRoot, options.releaseId, editorial);
+  const loreRoot = options.loreRoot ?? join(options.editorialRoot, "lore");
+  const localOverlayPath = options.localOverlayPath
+    ?? join(process.cwd(), ".local", "offline-wiki", "imports", options.releaseId, "normalized", "current.jsonl");
+  const catalog = loadDocumentCatalog(options.releasesRoot, options.releaseId, editorial, {
+    loreRoot,
+    localOverlayPath,
+    localImportReportPath: options.localImportReportPath,
+  });
   const previousCatalog = catalog.release.previousReleaseId
     ? loadDocumentCatalog(options.releasesRoot, catalog.release.previousReleaseId, editorial)
     : null;
@@ -40,12 +52,15 @@ export function buildHtmlVolumes(options: BuildHtmlOptions): HtmlOutput[] {
   );
   const outputDirectory = join(options.outputRoot, "builds", options.releaseId, "html");
   mkdirSync(outputDirectory, { recursive: true });
-  return renderVolumes({
+  const baseVolumes = renderVolumes({
     catalog,
     summaries: editorial.summaries,
     assets,
     changes: compareDocumentCatalogs(previousCatalog, catalog),
-  }).map((volume) => {
+  });
+  const localOverlay = loadLocalFullTextOverlay(localOverlayPath, options.releaseId, catalog.lore);
+  const loreVolumes = renderLoreVolumes({ catalog, summaries: editorial.summaries, localOverlay });
+  return [...baseVolumes, ...loreVolumes].map((volume) => {
     const path = join(outputDirectory, volume.filename);
     writeAtomically(path, volume.html);
     return { filename: volume.filename, path };

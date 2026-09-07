@@ -7,9 +7,10 @@ import { buildHtmlVolumes } from "./build-html";
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__", "releases");
+const loreRoot = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__", "lore");
 
 describe("offline wiki HTML build", () => {
-  it("writes all five rendered volumes beneath the requested local output root", () => {
+  it("writes existing and grouped lore volumes beneath the requested local output root", () => {
     const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-html-"));
 
     const outputs = buildHtmlVolumes({
@@ -17,6 +18,7 @@ describe("offline wiki HTML build", () => {
       editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
       releaseId: "4.4-fixture",
       outputRoot,
+      loreRoot,
     });
 
     expect(outputs.map(({ filename }) => filename)).toEqual([
@@ -24,7 +26,14 @@ describe("offline wiki HTML build", () => {
       "01-角色图鉴.html",
       "02-光锥图鉴.html",
       "03-遗器图鉴.html",
-      "04-差分宇宙图鉴.html",
+      "04-差分宇宙-索引.html",
+      "04-差分宇宙-方程-001.html",
+      "05-世界观-索引.html",
+      "05-世界观-地点-001.html",
+      "06-剧情-索引.html",
+      "06-剧情-开拓任务-001.html",
+      "07-文本收藏-索引.html",
+      "07-文本收藏-书籍与读物-001.html",
     ]);
     expect(readFileSync(join(outputRoot, "builds", "4.4-fixture", "html", "01-角色图鉴.html"), "utf8"))
       .toContain("测试角色");
@@ -53,6 +62,7 @@ describe("offline wiki HTML build", () => {
       outputRoot,
       assetManifestPath,
       assetCacheRoot: cacheRoot,
+      loreRoot,
     });
 
     expect(readFileSync(join(outputRoot, "builds", "4.4-fixture", "html", "01-角色图鉴.html"), "utf8"))
