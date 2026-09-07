@@ -179,7 +179,7 @@ describe("offline wiki lore volumes", () => {
     const volumes = renderLoreVolumes({ catalog, summaries: [], localOverlay: new Map() });
     const missionIndex = volumes.find(({ filename }) => filename === "06-剧情-索引.html")!.html;
 
-    expect(missionIndex).toContain("基准缺失");
+    expect(missionIndex).toContain("基准未建立");
     expect(missionIndex).toContain("结构化：1");
     expect(missionIndex).toContain("本地全文：0");
     expect(missionIndex).toContain("拒绝：2");

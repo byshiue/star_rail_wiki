@@ -144,7 +144,7 @@ describe("offline wiki HTML volumes", () => {
 
     const index = renderVolumes({ catalog, summaries: [] })[0]!.html;
 
-    expect(index).toContain("基准缺失；结构化 4；本地全文 0；拒绝 0");
+    expect(index).toContain("基准未建立；结构化 4；本地全文 0；拒绝 0");
     expect(index).toContain("未归属拒绝：未知类别 1 · 缺少文本 0 · 版本不明确 0 · 来源格式错误 2");
     expect(index).not.toMatch(/背景资料：[^<]*覆盖率[^<]*%/);
   });

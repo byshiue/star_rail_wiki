@@ -142,7 +142,7 @@ function renderIndex(input: VolumeRenderInput): string {
     + Object.values(metric.importRejections).reduce((sum, count) => sum + count, 0);
   const loreCoverage = catalog.loreCoverage.totals.baselineStatus === "complete"
     ? `基准完整；结构化 ${catalog.loreCoverage.totals.structured}/${catalog.loreCoverage.totals.expected}（覆盖率 ${catalog.loreCoverage.totals.percentage!.toFixed(1)}%）；本地全文 ${catalog.loreCoverage.totals.fullText}；拒绝 ${rejectedLore(catalog.loreCoverage.totals)}。`
-    : `基准缺失；结构化 ${catalog.loreCoverage.totals.structured}；本地全文 ${catalog.loreCoverage.totals.fullText}；拒绝 ${rejectedLore(catalog.loreCoverage.totals)}；不报告覆盖百分比。`;
+    : `基准未建立；结构化 ${catalog.loreCoverage.totals.structured}；本地全文 ${catalog.loreCoverage.totals.fullText}；拒绝 ${rejectedLore(catalog.loreCoverage.totals)}；不报告覆盖百分比。`;
   const unattributed = catalog.loreCoverage.unattributedImportRejections;
   const unattributedRejections = `未归属拒绝：未知类别 ${unattributed.unknownKind} · 缺少文本 ${unattributed.missingText} · 版本不明确 ${unattributed.ambiguousRelease} · 来源格式错误 ${unattributed.malformedSource}`;
   const body = `<section><h2>资料覆盖</h2><table><thead><tr><th>分册</th><th>条目</th></tr></thead><tbody>${rows.map(([label, count, filename]) => (
