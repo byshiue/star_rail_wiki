@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import {
-  closeSync, constants, fstatSync, fsyncSync, lstatSync, mkdirSync, mkdtempSync, openSync, readFileSync, readdirSync,
+  closeSync, constants, fsyncSync, linkSync, lstatSync, mkdirSync, mkdtempSync, openSync, readFileSync, readdirSync,
   realpathSync, renameSync, rmSync, statSync, unlinkSync, writeFileSync, type Stats,
 } from "node:fs";
 import { basename, dirname, join, parse, resolve, sep } from "node:path";
@@ -18,6 +18,7 @@ export type BuildTransactionOperations = {
 
 type DirectoryIdentity = { path: string; device: number | bigint; inode: number | bigint };
 type Lock = DirectoryIdentity & { nonce: string };
+type OwnerIdentity = { path: string; device: bigint; inode: bigint; pid: number; nonce: string; mtimeMs: number };
 type Journal = {
   schemaVersion: 1; releaseId: string; phase: BuildTransactionPhase; targetName: string;
   stagingName: string; backupName: string | null; expectedManifestChecksum: string; priorManifestChecksum: string | null;
@@ -25,6 +26,8 @@ type Journal = {
 type Context = { builds: DirectoryIdentity; releaseId: string; finalRoot: string; journalPath: string; operations?: BuildTransactionOperations };
 
 const CHECKSUM = /^sha256:[a-f0-9]{64}$/u;
+const OWNER_NONCE = /^[0-9a-f-]{36}$/u;
+const LEGACY_MALFORMED_GRACE_MS = 60_000;
 const JournalSchema = z.strictObject({
   schemaVersion: z.literal(1), releaseId: z.string().min(1),
   phase: z.enum(["prepared", "backed-up", "promoted", "cleanup-pending"]),
@@ -127,48 +130,148 @@ function setManifestWarnings(context: Context, root: string, warnings: BuildMani
   verifyBuildRoot(root, context.releaseId); return updated;
 }
 
-function lockContent(path: string): { pid: number; nonce: string } {
-  const stats = lstatSync(path); if (stats.isSymbolicLink() || !stats.isFile() || stats.size > 4096) throw new Error("build lock is not a safe regular file");
-  const value = JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>;
-  if (Object.keys(value).sort().join(",") !== "nonce,pid" || !Number.isInteger(value.pid) || (value.pid as number) <= 0 || typeof value.nonce !== "string" || !/^[0-9a-f-]{36}$/u.test(value.nonce)) throw new Error("build lock is malformed");
+function ownerContent(path: string, label: string): { pid: number; nonce: string } {
+  const stats = lstatSync(path); if (stats.isSymbolicLink() || !stats.isFile() || stats.size > 4096) throw new Error(`${label} is not a safe regular file`);
+  let value: Record<string, unknown>;
+  try { value = JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>; }
+  catch { throw new Error(`${label} is malformed`); }
+  if (Object.keys(value).sort().join(",") !== "nonce,pid" || !Number.isInteger(value.pid) || (value.pid as number) <= 0 || typeof value.nonce !== "string" || !OWNER_NONCE.test(value.nonce)) throw new Error(`${label} is malformed`);
   return value as { pid: number; nonce: string };
+}
+function observeOwner(path: string, label: string): OwnerIdentity {
+  const stats = lstatSync(path, { bigint: true }); const owner = ownerContent(path, label);
+  return { path, device: stats.dev, inode: stats.ino, pid: owner.pid, nonce: owner.nonce, mtimeMs: Number(stats.mtimeMs) };
+}
+function sameIdentity(path: string, expected: Pick<OwnerIdentity, "device" | "inode">): boolean {
+  const stats = lstatMaybe(path); return stats !== null && !stats.isSymbolicLink() && stats.isFile()
+    && BigInt(stats.dev) === expected.device && BigInt(stats.ino) === expected.inode;
+}
+function sameOwner(path: string, expected: OwnerIdentity, label: string): boolean {
+  if (!sameIdentity(path, expected)) return false;
+  try { const owner = ownerContent(path, label); return owner.pid === expected.pid && owner.nonce === expected.nonce; }
+  catch { return false; }
+}
+function unlinkOwned(path: string, expected: OwnerIdentity, label: string): boolean {
+  if (!sameOwner(path, expected, label)) return false;
+  unlinkSync(path); return true;
+}
+function publishOwner(builds: DirectoryIdentity, path: string, label: string, nonce = randomUUID()): OwnerIdentity | null {
+  assertParent(builds); const temporary = `${path}.candidate-${nonce}.tmp`; let descriptor: number | null = null; let candidate: OwnerIdentity | null = null;
+  try {
+    descriptor = openSync(temporary, "wx", 0o600); writeFileSync(descriptor, JSON.stringify({ pid: process.pid, nonce })); fsyncSync(descriptor);
+    closeSync(descriptor); descriptor = null; candidate = observeOwner(temporary, `${label} candidate`); assertParent(builds);
+    try { linkSync(temporary, path); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code === "EEXIST") return null; throw error; }
+    fsyncDirectory(builds.path);
+    if (!sameOwner(path, candidate, label)) throw new Error(`${label} publish identity mismatch`);
+    unlinkOwned(temporary, candidate, `${label} candidate`); fsyncDirectory(builds.path);
+    return observeOwner(path, label);
+  } finally {
+    if (descriptor !== null) closeSync(descriptor);
+    if (candidate && unlinkOwned(temporary, candidate, `${label} candidate`)) fsyncDirectory(builds.path);
+  }
+}
+function isolateOwner(builds: DirectoryIdentity, observed: OwnerIdentity, label: string): string {
+  assertParent(builds);
+  if (!sameOwner(observed.path, observed, label)) throw new Error(`${label} owner changed before isolation`);
+  const tombstone = `${observed.path}.stale-${randomUUID()}`; renameSync(observed.path, tombstone); fsyncDirectory(builds.path);
+  if (!sameOwner(tombstone, observed, label)) throw new Error(`${label} replacement was isolated; refusing to delete it`);
+  return tombstone;
+}
+function restoreOrRemoveTombstone(builds: DirectoryIdentity, tombstone: string, canonical: string, observed: OwnerIdentity, installed: boolean, label: string): void {
+  if (!sameOwner(tombstone, observed, label)) return;
+  if (!installed) {
+    try { linkSync(tombstone, canonical); fsyncDirectory(builds.path); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error; }
+  }
+  if (unlinkOwned(tombstone, { ...observed, path: tombstone }, label)) fsyncDirectory(builds.path);
 }
 function processIsAlive(pid: number): boolean {
   try { process.kill(pid, 0); return true; } catch (error) { if ((error as NodeJS.ErrnoException).code === "ESRCH") return false; throw error; }
 }
-function acquireLock(builds: DirectoryIdentity, releaseId: string, operations?: BuildTransactionOperations): Lock {
-  assertParent(builds); const path = join(builds.path, lockName(releaseId)); const nonce = randomUUID(); let descriptor: number;
-  try { descriptor = openSync(path, "wx", 0o600); }
-  catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
-    const original = lstatSync(path, { bigint: true }); const owner = lockContent(path);
-    if (processIsAlive(owner.pid)) throw new Error("another PDF build lock is active");
-    const guard = `${path}-reclaim`; let guardDescriptor: number;
-    try { guardDescriptor = openSync(guard, "wx", 0o600); } catch { throw new Error("build lock reclaim is already active"); }
-    const guardIdentity = fstatSync(guardDescriptor, { bigint: true }); closeSync(guardDescriptor);
-    const tombstone = `${path}.stale-${randomUUID()}`; let moved = false; let installed = false;
-    try {
-      const guardStats = lstatSync(guard, { bigint: true });
-      if (guardStats.isSymbolicLink() || !guardStats.isFile() || guardStats.dev !== guardIdentity.dev || guardStats.ino !== guardIdentity.ino) throw new Error("lock reclaim guard identity mismatch");
-      operations?.duringLockReclaim?.(); assertParent(builds);
-      const current = lstatSync(path, { bigint: true }); const currentOwner = lockContent(path);
-      if (current.isSymbolicLink() || !current.isFile() || current.dev !== original.dev || current.ino !== original.ino || currentOwner.pid !== owner.pid || currentOwner.nonce !== owner.nonce || processIsAlive(currentOwner.pid)) throw new Error("build lock owner changed during reclaim");
-      renameSync(path, tombstone); moved = true; descriptor = openSync(path, "wx", 0o600); installed = true;
-    } catch (reclaimError) {
-      if (moved && !installed && !lstatMaybe(path)) renameSync(tombstone, path); throw reclaimError;
-    } finally {
-      const tomb = lstatMaybe(tombstone); if (tomb?.isFile() && !tomb.isSymbolicLink()) unlinkSync(tombstone);
-      const guardNow = lstatMaybe(guard);
-      if (guardNow?.isFile() && !guardNow.isSymbolicLink()
-          && BigInt(guardNow.dev) === guardIdentity.dev && BigInt(guardNow.ino) === guardIdentity.ino) unlinkSync(guard);
-    }
+function replaceDeadOwner(builds: DirectoryIdentity, observed: OwnerIdentity, label: string): OwnerIdentity {
+  if (processIsAlive(observed.pid)) throw new Error(`${label} is active`);
+  const tombstone = isolateOwner(builds, observed, label); let installed: OwnerIdentity | null = null;
+  try {
+    installed = publishOwner(builds, observed.path, label);
+    if (!installed) throw new Error(`${label} changed during stale recovery`);
+    return installed;
+  } finally { restoreOrRemoveTombstone(builds, tombstone, observed.path, observed, installed !== null, label); }
+}
+function acquireReclaimGuard(builds: DirectoryIdentity, guardPath: string): OwnerIdentity {
+  const claimPath = `${guardPath}-claim`; let claim = publishOwner(builds, claimPath, "build lock reclaim claim");
+  if (!claim) {
+    const staleClaim = observeOwner(claimPath, "build lock reclaim claim");
+    claim = replaceDeadOwner(builds, staleClaim, "build lock reclaim claim");
   }
-  try { writeFileSync(descriptor, JSON.stringify({ pid: process.pid, nonce })); fsyncSync(descriptor); } finally { closeSync(descriptor); }
-  const stats = lstatSync(path, { bigint: true }); return { path, device: stats.dev, inode: stats.ino, nonce };
+  try {
+    let guard = publishOwner(builds, guardPath, "build lock reclaim guard");
+    if (!guard) {
+      const staleGuard = observeOwner(guardPath, "build lock reclaim guard");
+      guard = replaceDeadOwner(builds, staleGuard, "build lock reclaim guard");
+    }
+    return guard;
+  } finally { releaseOwner(claim, "build lock reclaim claim", builds); }
+}
+function releaseOwner(owner: OwnerIdentity, label: string, builds?: DirectoryIdentity): void {
+  try { if (unlinkOwned(owner.path, owner, label) && builds) fsyncDirectory(builds.path); }
+  catch { /* retain an unverified or replaced owner file */ }
+}
+function cleanupCandidateArtifacts(builds: DirectoryIdentity, releaseId: string): void {
+  const lock = lockName(releaseId); const prefixes = [`${lock}.candidate-`, `${lock}-reclaim.candidate-`, `${lock}-reclaim-claim.candidate-`];
+  for (const name of readdirSync(builds.path).filter((entry) => prefixes.some((prefix) => entry.startsWith(prefix)))) {
+    if (!/\.candidate-[0-9a-f-]{36}\.tmp$/u.test(name)) continue;
+    const path = join(builds.path, name); let observed: OwnerIdentity;
+    try { observed = observeOwner(path, "build lock candidate"); }
+    catch {
+      const stats = lstatSync(path, { bigint: true });
+      if (stats.isSymbolicLink() || !stats.isFile() || Date.now() - Number(stats.mtimeMs) < LEGACY_MALFORMED_GRACE_MS) continue;
+      const identity = { device: stats.dev, inode: stats.ino }; if (sameIdentity(path, identity)) unlinkSync(path);
+      continue;
+    }
+    if (!processIsAlive(observed.pid)) unlinkOwned(path, observed, "build lock candidate");
+  }
+  fsyncDirectory(builds.path);
+}
+function acquireLock(builds: DirectoryIdentity, releaseId: string, operations?: BuildTransactionOperations): Lock {
+  assertParent(builds); const path = join(builds.path, lockName(releaseId)); let installed = publishOwner(builds, path, "build lock");
+  if (!installed) {
+    const originalStats = lstatSync(path, { bigint: true }); let original: OwnerIdentity | null = null;
+    try { original = observeOwner(path, "build lock"); }
+    catch {
+      if (originalStats.isSymbolicLink() || !originalStats.isFile() || Date.now() - Number(originalStats.mtimeMs) < LEGACY_MALFORMED_GRACE_MS) throw new Error("build lock is malformed or recently incomplete");
+    }
+    if (original && processIsAlive(original.pid)) throw new Error("another PDF build lock is active");
+    const guard = acquireReclaimGuard(builds, `${path}-reclaim`); let tombstone: string | null = null;
+    try {
+      operations?.duringLockReclaim?.(); assertParent(builds);
+      if (!sameOwner(guard.path, guard, "build lock reclaim guard")) throw new Error("build lock reclaim guard changed after acquisition");
+      if (original) {
+        if (!sameOwner(path, original, "build lock") || processIsAlive(original.pid)) throw new Error("build lock owner changed during reclaim");
+        tombstone = isolateOwner(builds, original, "build lock");
+      } else {
+        const current = lstatSync(path, { bigint: true });
+        if (current.dev !== originalStats.dev || current.ino !== originalStats.ino || current.isSymbolicLink() || !current.isFile()
+            || Date.now() - Number(current.mtimeMs) < LEGACY_MALFORMED_GRACE_MS) throw new Error("legacy build lock changed during reclaim");
+        tombstone = `${path}.stale-${randomUUID()}`; renameSync(path, tombstone); fsyncDirectory(builds.path);
+        const isolated = lstatSync(tombstone, { bigint: true });
+        if (isolated.dev !== originalStats.dev || isolated.ino !== originalStats.ino) throw new Error("legacy build lock replacement was isolated; refusing to delete it");
+      }
+      installed = publishOwner(builds, path, "build lock");
+      if (!installed) throw new Error("build lock changed during reclaim");
+      if (tombstone) {
+        const tomb = lstatMaybe(tombstone);
+        if (original) restoreOrRemoveTombstone(builds, tombstone, path, original, true, "build lock");
+        else if (tomb && !tomb.isSymbolicLink() && tomb.isFile() && BigInt(tomb.dev) === originalStats.dev && BigInt(tomb.ino) === originalStats.ino) { unlinkSync(tombstone); fsyncDirectory(builds.path); }
+      }
+    } finally { releaseOwner(guard, "build lock reclaim guard", builds); }
+  }
+  cleanupCandidateArtifacts(builds, releaseId);
+  return { path, device: installed.device, inode: installed.inode, nonce: installed.nonce };
 }
 function releaseLock(lock: Lock): void {
   try {
-    const stats = lstatSync(lock.path, { bigint: true }); const owner = lockContent(lock.path);
+    const stats = lstatSync(lock.path, { bigint: true }); const owner = ownerContent(lock.path, "build lock");
     if (!stats.isSymbolicLink() && stats.isFile() && stats.dev === lock.device && stats.ino === lock.inode && owner.nonce === lock.nonce) unlinkSync(lock.path);
   } catch { /* retain an unverified or replaced lock */ }
 }
