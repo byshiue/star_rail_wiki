@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, symlinkSync, unlinkSync, writeFileSync } from "
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { loadLocalLoreManifest } from "./manifest";
+import { loadLocalLoreManifest, validateExactPathSet } from "./manifest";
 
 const FIXTURE_RELEASE = "4.4-fixture";
 
@@ -49,6 +49,13 @@ function loadFixture(fixture: ReturnType<typeof createFixture>) {
 }
 
 describe("local lore manifest", () => {
+  it("rejects a declared path missing from the stable enumeration", () => {
+    expect(() => validateExactPathSet(
+      new Set(["nested/worldview.jsonl"]),
+      new Set(),
+    )).toThrow(/declared.*missing|missing.*enumeration/i);
+  });
+
   it("loads a release-locked user-provided manifest and excludes its own file", () => {
     const fixture = createFixture();
     expect(loadFixture(fixture)).toMatchObject(fixture.manifest);

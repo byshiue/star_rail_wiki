@@ -246,6 +246,22 @@ function enumerateRegularFiles(
   return result;
 }
 
+export function validateExactPathSet(
+  declaredPaths: ReadonlySet<string>,
+  actualPaths: ReadonlySet<string>,
+): void {
+  for (const actualPath of actualPaths) {
+    if (!declaredPaths.has(actualPath)) {
+      throw new Error(`undeclared source file found during enumeration: ${actualPath}`);
+    }
+  }
+  for (const declaredPath of declaredPaths) {
+    if (!actualPaths.has(declaredPath)) {
+      throw new Error(`declared source file missing from stable enumeration: ${declaredPath}`);
+    }
+  }
+}
+
 export function loadLocalLoreManifest(
   path: string,
   expectedReleaseId: string,
@@ -318,11 +334,13 @@ export function loadLocalLoreManifest(
 
   const actualFiles = enumerateRegularFiles(canonicalRoot);
   if (isContained(canonicalRoot, canonicalManifest)) actualFiles.delete(canonicalManifest);
+  validateExactPathSet(
+    new Set(declaredCanonicalPaths.keys()),
+    new Set(actualFiles.keys()),
+  );
   for (const [actualPath, actualStats] of actualFiles) {
     const declaredStats = declaredCanonicalPaths.get(actualPath);
-    if (!declaredStats) {
-      throw new Error(`undeclared source file: ${relative(canonicalRoot, actualPath)}`);
-    }
+    if (!declaredStats) throw new Error(`internal path-set mismatch: ${actualPath}`);
     if (!sameStableMetadata(declaredStats, actualStats)) {
       throw new Error(`source file changed during validation: ${relative(canonicalRoot, actualPath)}`);
     }
