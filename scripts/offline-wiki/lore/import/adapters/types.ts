@@ -21,10 +21,14 @@ export type ImportRejectionDetail =
   | "invalid-table-json"
   | "row-kind-not-approved"
   | "story-not-found"
-  | "referenced-text-missing";
+  | "referenced-text-missing"
+  | "duplicate-entry-id"
+  | "duplicate-excel-row-id"
+  | "duplicate-story-id";
 
 export type AdaptedCanonicalEntry = Readonly<{
   sourcePath: string;
+  dependencyPaths: string[];
   input: CanonicalLoreInput;
 }>;
 

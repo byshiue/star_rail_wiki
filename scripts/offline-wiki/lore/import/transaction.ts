@@ -4,7 +4,7 @@ import {
   renameSync, rmSync, unlinkSync, writeFileSync,
 } from "node:fs";
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
-import { parseCanonicalLoreJsonl, serializeCanonicalLoreRecords, validateLocalFullTextRecords, type LocalFullTextRecord } from "./canonical";
+import { materializeCanonicalLoreInput, parseCanonicalLoreJsonl, serializeCanonicalLoreRecords, validateLocalFullTextRecords, type LocalFullTextRecord } from "./canonical";
 import { loadLocalLoreManifest, readValidatedLocalLoreFile } from "./manifest";
 import { convertCompatibleGameData } from "./adapters/game-data";
 import { convertSavedHoyoWiki } from "./adapters/hoyowiki";
@@ -214,10 +214,7 @@ function materializeAdapterEntries(
   for (const entry of result.entries) {
     if (logicalIds.has(entry.input.logicalId)) throw new Error("duplicate adapter logicalId");
     logicalIds.add(entry.input.logicalId);
-    const sourceFile = manifest.files.find((file) => file.path === entry.sourcePath);
-    if (!sourceFile) throw new Error("adapter source path is not declared");
-    const sourceManifest = { ...manifest, adapter: "canonical-jsonl" as const, files: [sourceFile] };
-    records.push(...parseCanonicalLoreJsonl(JSON.stringify(entry.input), sourceManifest));
+    records.push(materializeCanonicalLoreInput(entry.input, manifest, entry.sourcePath, entry.dependencyPaths));
   }
   validateLocalFullTextRecords(records);
   return records;

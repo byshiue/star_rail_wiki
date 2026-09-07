@@ -38,15 +38,33 @@ const CanonicalLoreInputSchema = z.strictObject({
 
 export type CanonicalLoreInput = z.infer<typeof CanonicalLoreInputSchema>;
 
+const SourceDependencySchema = z.strictObject({
+  path: z.string().min(1),
+  checksum: Sha256Schema,
+});
+
 export const LocalFullTextRecordSchema = z.strictObject({
   logicalId: z.string().regex(/^lore:/), family: LoreFamilySchema, kind: z.string().min(1), name: z.string().min(1),
   releaseId: z.string().min(1), locale: z.literal("zh-CN"), sourceRevision: z.string().min(1), sourcePath: z.string().min(1),
-  sourceChecksum: Sha256Schema, sections: z.array(CanonicalSectionSchema).min(1), inputChecksum: Sha256Schema,
+  sourceChecksum: Sha256Schema, sourceDependencies: z.array(SourceDependencySchema).min(1),
+  sections: z.array(CanonicalSectionSchema).min(1), inputChecksum: Sha256Schema,
   contentChecksum: Sha256Schema, importedAt: z.iso.datetime(), adapterVersion: z.number().int().positive(),
 }).superRefine(({ family, kind }, context) => {
   if (!LoreKinds[family].has(kind)) context.addIssue({ code: "custom", path: ["kind"], message: `kind ${kind} is not valid for ${family}` });
+}).superRefine(({ sourcePath, sourceChecksum, sourceDependencies }, context) => {
+  let previousPath: string | null = null;
+  for (const [index, dependency] of sourceDependencies.entries()) {
+    if (previousPath !== null && dependency.path <= previousPath) {
+      context.addIssue({ code: "custom", path: ["sourceDependencies", index], message: "source dependencies must be uniquely sorted by path" });
+    }
+    previousPath = dependency.path;
+  }
+  const primary = sourceDependencies.find((dependency) => dependency.path === sourcePath);
+  if (!primary || primary.checksum !== sourceChecksum) {
+    context.addIssue({ code: "custom", path: ["sourceDependencies"], message: "primary source must match its dependency" });
+  }
 });
-export type LocalFullTextRecord = z.infer<typeof LocalFullTextRecordSchema> & { sourceChecksum: Sha256; inputChecksum: Sha256; contentChecksum: Sha256 };
+export type LocalFullTextRecord = z.infer<typeof LocalFullTextRecordSchema> & { sourceChecksum: Sha256; inputChecksum: Sha256; contentChecksum: Sha256; sourceDependencies: Array<{ path: string; checksum: Sha256 }> };
 
 function checksum(value: string): Sha256 {
   return `sha256:${createHash("sha256").update(value).digest("hex")}`;
@@ -128,6 +146,50 @@ function inputChecksumFields(input: CanonicalLoreInput) {
   };
 }
 
+export function materializeCanonicalLoreInput(
+  rawInput: CanonicalLoreInput,
+  manifest: LocalLoreManifest,
+  sourcePath: string,
+  dependencyPaths: readonly string[],
+): LocalFullTextRecord {
+  const input = normalizeInput(CanonicalLoreInputSchema.parse(rawInput));
+  validateManifestBinding(input, manifest);
+  const sourceFile = manifest.files.find((file) => file.path === sourcePath);
+  if (!sourceFile) throw new Error("primary source path is not declared by the manifest");
+  const uniqueDependencyPaths = new Set(dependencyPaths);
+  if (uniqueDependencyPaths.size !== dependencyPaths.length) throw new Error("duplicate source dependency path");
+  const sourceDependencies = [...uniqueDependencyPaths]
+    .sort((left, right) => left < right ? -1 : left > right ? 1 : 0)
+    .map((path) => {
+      const file = manifest.files.find((candidate) => candidate.path === path);
+      if (!file) throw new Error("source dependency path is not declared by the manifest");
+      return { path: file.path, checksum: Sha256Schema.parse(file.checksum) as Sha256 };
+    });
+  if (!sourceDependencies.some((dependency) => dependency.path === sourcePath)) {
+    throw new Error("primary source must be included in source dependencies");
+  }
+  const canonicalFields = {
+    logicalId: input.logicalId,
+    family: input.family,
+    kind: input.kind,
+    name: input.name,
+    releaseId: manifest.releaseId,
+    locale: manifest.locale,
+    sourceRevision: manifest.source.revision,
+    sourcePath: sourceFile.path,
+    sourceChecksum: Sha256Schema.parse(sourceFile.checksum) as Sha256,
+    sourceDependencies,
+    sections: input.sections,
+    inputChecksum: checksum(JSON.stringify(inputChecksumFields(input))),
+    importedAt: manifest.source.exportedAt,
+    adapterVersion: manifest.adapterVersion,
+  } satisfies Omit<LocalFullTextRecord, "contentChecksum">;
+  return LocalFullTextRecordSchema.parse({
+    ...canonicalFields,
+    contentChecksum: checksum(JSON.stringify(canonicalFields)),
+  }) as LocalFullTextRecord;
+}
+
 export function parseCanonicalLoreJsonl(
   text: string,
   manifest: LocalLoreManifest,
@@ -142,44 +204,12 @@ export function parseCanonicalLoreJsonl(
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
     if (line.length === 0) continue;
-    const input = normalizeInput(parseLine(line, index + 1));
+    const input = parseLine(line, index + 1);
     if (logicalIds.has(input.logicalId)) {
       throw new Error(`duplicate canonical logicalId: ${input.logicalId}`);
     }
     logicalIds.add(input.logicalId);
-    validateManifestBinding(input, manifest);
-    const canonicalFields = {
-      logicalId: input.logicalId,
-      family: input.family,
-      kind: input.kind,
-      name: input.name,
-      releaseId: manifest.releaseId,
-      locale: manifest.locale,
-      sourceRevision: manifest.source.revision,
-      sourcePath: manifestFile.path,
-      sourceChecksum: Sha256Schema.parse(manifestFile.checksum) as Sha256,
-      sections: input.sections,
-      inputChecksum: checksum(JSON.stringify(inputChecksumFields(input))),
-      importedAt: manifest.source.exportedAt,
-      adapterVersion: manifest.adapterVersion,
-    } satisfies Omit<LocalFullTextRecord, "contentChecksum">;
-    const contentChecksum = checksum(JSON.stringify(canonicalFields));
-    records.push({
-      logicalId: canonicalFields.logicalId,
-      family: canonicalFields.family,
-      kind: canonicalFields.kind,
-      name: canonicalFields.name,
-      releaseId: canonicalFields.releaseId,
-      locale: canonicalFields.locale,
-      sourceRevision: canonicalFields.sourceRevision,
-      sourcePath: canonicalFields.sourcePath,
-      sourceChecksum: canonicalFields.sourceChecksum,
-      sections: canonicalFields.sections,
-      inputChecksum: canonicalFields.inputChecksum,
-      contentChecksum,
-      importedAt: canonicalFields.importedAt,
-      adapterVersion: canonicalFields.adapterVersion,
-    });
+    records.push(materializeCanonicalLoreInput(input, manifest, manifestFile.path, [manifestFile.path]));
   }
   return records;
 }

@@ -45,6 +45,20 @@ export function convertCompatibleGameData({ manifest, sourceRoot }: AdapterInput
   if (excel.releaseId !== manifest.releaseId || excel.locale !== manifest.locale) {
     return { entries: [], rejections: [reject(PATHS.excel, null, "ambiguous-release", "release-evidence-mismatch")] };
   }
+  const rowIds = new Set<string>();
+  for (const row of excel.rows) {
+    if (rowIds.has(row.id)) {
+      return { entries: [], rejections: [reject(PATHS.excel, null, "malformed-source", "duplicate-excel-row-id")] };
+    }
+    rowIds.add(row.id);
+  }
+  const storyIds = new Set<string>();
+  for (const story of storyData.stories) {
+    if (storyIds.has(story.id)) {
+      return { entries: [], rejections: [reject(PATHS.story, null, "malformed-source", "duplicate-story-id")] };
+    }
+    storyIds.add(story.id);
+  }
   const stories = new Map(storyData.stories.map((story) => [story.id, story]));
   const entries: AdapterResult["entries"] = [];
   const rejections: ImportRejection[] = [];
@@ -80,7 +94,7 @@ export function convertCompatibleGameData({ manifest, sourceRoot }: AdapterInput
       rejections.push(reject(PATHS.story, row.logicalId, "missing-text", "referenced-text-missing"));
       continue;
     }
-    entries.push({ sourcePath: PATHS.story, input: {
+    entries.push({ sourcePath: PATHS.story, dependencyPaths: Object.values(PATHS).sort(), input: {
       logicalId: row.logicalId, family: row.family, kind: row.kind, name,
       releaseId: manifest.releaseId, locale: manifest.locale, sourceRevision: manifest.source.revision, sections,
     } });

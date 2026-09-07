@@ -107,6 +107,14 @@ describe("local lore manifest", () => {
     expect(() => loadFixture(fixture)).toThrow(/adapter|enum|option/i);
   });
 
+  it.each(["canonical-jsonl", "saved-hoyowiki", "compatible-game-data"])("rejects unsupported %s adapter versions", (adapter) => {
+    for (const adapterVersion of [2, 999]) {
+      const fixture = createFixture();
+      writeManifest(fixture.manifestPath, { ...fixture.manifest, adapter, adapterVersion });
+      expect(() => loadFixture(fixture)).toThrow(/adapterVersion|version|literal/i);
+    }
+  });
+
   it.each([
     "/tmp/worldview.jsonl",
     "../worldview.jsonl",

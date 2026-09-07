@@ -44,7 +44,7 @@ const LocalLoreManifestSchema = z.strictObject({
     exportedAt: z.iso.datetime(),
   }),
   adapter: z.enum(["canonical-jsonl", "saved-hoyowiki", "compatible-game-data"]),
-  adapterVersion: z.number().int().positive(),
+  adapterVersion: z.literal(1),
   families: z.array(LoreFamilySchema).min(1),
   userProvided: z.literal(true, {
     error: "manifest must be explicitly user-provided",

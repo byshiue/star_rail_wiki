@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import type { LocalLoreManifest } from "./manifest";
-import { parseCanonicalLoreJsonl } from "./canonical";
+import { parseCanonicalLoreJsonl, validateLocalFullTextRecords } from "./canonical";
 
 const FILE_CHECKSUM = `sha256:${"a".repeat(64)}` as const;
 
@@ -53,11 +53,19 @@ describe("parseCanonicalLoreJsonl", () => {
     expect(parsed[0]).toMatchObject({
       sourcePath: manifest.files[0].path,
       sourceChecksum: manifest.files[0].checksum,
+      sourceDependencies: [{ path: manifest.files[0].path, checksum: manifest.files[0].checksum }],
       importedAt: manifest.source.exportedAt,
       adapterVersion: manifest.adapterVersion,
     });
     const { contentChecksum, ...canonicalFields } = parsed[0];
     expect(contentChecksum).toBe(hash(JSON.stringify(canonicalFields)));
+  });
+
+  it("covers the complete sorted source dependency set in the content checksum", () => {
+    const parsed = parseCanonicalLoreJsonl(JSON.stringify(record()), manifest)[0];
+    const mutated = structuredClone(parsed);
+    mutated.sourceDependencies[0].checksum = `sha256:${"b".repeat(64)}`;
+    expect(() => validateLocalFullTextRecords([mutated])).toThrow(/content checksum|primary|dependenc/i);
   });
 
   it("derives input checksums from fixed-order normalized raw fields regardless of input key order", () => {

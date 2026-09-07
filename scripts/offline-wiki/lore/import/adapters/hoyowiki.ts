@@ -56,6 +56,13 @@ export function convertSavedHoyoWiki({ manifest, sourceRoot }: AdapterInput): Ad
   if (aggregate.releaseId !== manifest.releaseId || aggregate.locale !== manifest.locale) {
     return { entries: [], rejections: [reject(aggregatePath, null, "ambiguous-release", "release-evidence-mismatch")] };
   }
+  const aggregateIds = new Set<string>();
+  for (const sourceEntry of aggregate.entries) {
+    if (aggregateIds.has(sourceEntry.id)) {
+      return { entries: [], rejections: [reject(aggregatePath, null, "malformed-source", "duplicate-entry-id")] };
+    }
+    aggregateIds.add(sourceEntry.id);
+  }
 
   const entries: AdapterResult["entries"] = [];
   const rejections: ImportRejection[] = [];
@@ -90,10 +97,14 @@ export function convertSavedHoyoWiki({ manifest, sourceRoot }: AdapterInput): Ad
       rejections.push(reject(aggregatePath, binding.logicalId, "missing-text", "display-name-empty"));
       continue;
     }
-    entries.push({ sourcePath: binding.sourcePath, input: {
+    entries.push({
+      sourcePath: binding.sourcePath,
+      dependencyPaths: [aggregatePath, mappingPath, binding.sourcePath].sort(),
+      input: {
       logicalId: binding.logicalId, family: category.family, kind: category.kind, name,
       releaseId: manifest.releaseId, locale: manifest.locale, sourceRevision: manifest.source.revision, sections,
-    } });
+      },
+    });
   }
   return { entries, rejections };
 }

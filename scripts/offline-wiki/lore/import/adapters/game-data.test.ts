@@ -4,20 +4,23 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { LocalLoreManifest } from "../manifest";
+import { materializeCanonicalLoreInput } from "../canonical";
 import { convertCompatibleGameData } from "./game-data";
 
 const checksum = (text: string) => `sha256:${createHash("sha256").update(text).digest("hex")}`;
 
-function fixture(options: { missingHash?: boolean; releaseId?: string | undefined; unsafeText?: boolean } = {}) {
+function fixture(options: { missingHash?: boolean; releaseId?: string | undefined; unsafeText?: boolean; duplicateExcel?: boolean; duplicateStory?: boolean } = {}) {
   const sourceRoot = mkdtempSync(join(tmpdir(), "game-data-adapter-"));
-  const excel = JSON.stringify({ releaseId: options.releaseId ?? "4.4-fixture", locale: "zh-CN", rows: [{
+  const row = {
     id: "mission-1", logicalId: "lore:mission:companion:1", family: "mission", kind: "companion", nameHash: "1", storyId: "story-1",
-  }] });
+  };
+  const excel = JSON.stringify({ releaseId: options.releaseId ?? "4.4-fixture", locale: "zh-CN", rows: options.duplicateExcel ? [row, row] : [row] });
   const textMap = JSON.stringify({ "1": "测试任务", "2": "甲", "3": options.unsafeText ? "正文 <tag> https://bad.invalid/body" : "第一分支", "4": "乙", ...(options.missingHash ? {} : { "5": "第二分支" }) });
-  const story = JSON.stringify({ stories: [{ id: "story-1", sections: [
+  const storyRecord = { id: "story-1", sections: [
     { order: 2, speakerHash: "4", branch: "B", bodyHash: "5" },
     { order: 1, speakerHash: "2", branch: "A", bodyHash: "3" },
-  ] }] });
+  ] };
+  const story = JSON.stringify({ stories: options.duplicateStory ? [storyRecord, storyRecord] : [storyRecord] });
   const files = [["ExcelOutput/LoreEntries.json", excel], ["TextMap/TextMapCHS.json", textMap], ["Story/Story.json", story]] as const;
   for (const directory of ["ExcelOutput", "TextMap", "Story"]) mkdirSync(join(sourceRoot, directory));
   for (const [path, text] of files) writeFileSync(join(sourceRoot, path), text);
@@ -37,6 +40,7 @@ describe("convertCompatibleGameData", () => {
     expect(result.rejections).toEqual([]);
     expect(result.entries).toEqual([{
       sourcePath: "Story/Story.json",
+      dependencyPaths: ["ExcelOutput/LoreEntries.json", "Story/Story.json", "TextMap/TextMapCHS.json"],
       input: {
         logicalId: "lore:mission:companion:1", family: "mission", kind: "companion", name: "测试任务",
         releaseId: "4.4-fixture", locale: "zh-CN", sourceRevision: "fixture-revision",
@@ -46,6 +50,27 @@ describe("convertCompatibleGameData", () => {
         ],
       },
     }]);
+  });
+
+  it.each([
+    ["Excel row", { duplicateExcel: true }, "duplicate-excel-row-id"],
+    ["Story", { duplicateStory: true }, "duplicate-story-id"],
+  ] as const)("rejects duplicate %s IDs before lookup", (_label, options, detail) => {
+    const { sourceRoot, manifest } = fixture(options);
+    expect(convertCompatibleGameData({ manifest, sourceRoot })).toMatchObject({ entries: [], rejections: [{ reason: "malformed-source", detail }] });
+  });
+
+  it("filters controls before reconstructed unsafe tokens in JSON strings", () => {
+    const { sourceRoot, manifest } = fixture({ unsafeText: true });
+    const textMapPath = join(sourceRoot, "TextMap/TextMapCHS.json");
+    const value = JSON.parse(readFileSync(textMapPath, "utf8"));
+    value["3"] = "保留 java\u0000script:run https\u0000://bad.invalid on\u0000click=run 结尾";
+    const text = JSON.stringify(value);
+    writeFileSync(textMapPath, text);
+    manifest.files[1] = { ...manifest.files[1], bytes: Buffer.byteLength(text), checksum: checksum(text) };
+    const result = convertCompatibleGameData({ manifest, sourceRoot });
+    expect(result.entries[0].input.sections[0].body).toBe("保留 结尾");
+    expect(JSON.stringify(result.entries)).not.toMatch(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]|https?:\/\/|javascript:|\bon[a-z]+\s*=/iu);
   });
 
   it("rejects a row when any referenced text hash is absent", () => {
@@ -79,5 +104,20 @@ describe("convertCompatibleGameData", () => {
       manifest.files[0] = { ...manifest.files[0], bytes: Buffer.byteLength(text), checksum: checksum(text) };
     }
     expect(convertCompatibleGameData({ manifest, sourceRoot })).toMatchObject({ entries: [], rejections: [{ reason: "ambiguous-release", detail: "release-evidence-mismatch" }] });
+  });
+
+  it.each(["ExcelOutput/LoreEntries.json", "TextMap/TextMapCHS.json"])("changes record provenance when only %s bytes change", (relativePath) => {
+    const { sourceRoot, manifest } = fixture();
+    const firstEntry = convertCompatibleGameData({ manifest, sourceRoot }).entries[0];
+    const first = materializeCanonicalLoreInput(firstEntry.input, manifest, firstEntry.sourcePath, firstEntry.dependencyPaths);
+    const index = manifest.files.findIndex((file) => file.path === relativePath);
+    const absolutePath = join(sourceRoot, relativePath);
+    const changedText = JSON.stringify(JSON.parse(readFileSync(absolutePath, "utf8")), null, 2);
+    writeFileSync(absolutePath, changedText);
+    manifest.files[index] = { ...manifest.files[index], bytes: Buffer.byteLength(changedText), checksum: checksum(changedText) };
+    const secondEntry = convertCompatibleGameData({ manifest, sourceRoot }).entries[0];
+    const second = materializeCanonicalLoreInput(secondEntry.input, manifest, secondEntry.sourcePath, secondEntry.dependencyPaths);
+    expect(second.sourceDependencies.find((dependency) => dependency.path === relativePath)?.checksum).not.toBe(first.sourceDependencies.find((dependency) => dependency.path === relativePath)?.checksum);
+    expect(second.contentChecksum).not.toBe(first.contentChecksum);
   });
 });

@@ -37,4 +37,19 @@ describe("sanitizeSavedHtml", () => {
     const result = sanitizeSavedHtml("<p>可见<script>嵌套脚本正文</script><style>.hidden{color:red}</style>结尾</p>");
     expect(result).toEqual([{ label: "paragraph", text: "可见结尾" }]);
   });
+
+  it("extracts nested allowlisted blocks once in stable DOM order", () => {
+    expect(sanitizeSavedHtml("<ul><li>before<p>nested</p>after</li></ul><table><tr><td><p>cell</p></td></tr></table>")).toEqual([
+      { label: "list-item", text: "before" },
+      { label: "paragraph", text: "nested" },
+      { label: "list-item", text: "after" },
+      { label: "paragraph", text: "cell" },
+    ]);
+  });
+
+  it("removes controls before filtering reconstructed protocols and event tokens", () => {
+    const result = sanitizeSavedHtml("<p>保留 java&#0;script:run https&#0;://bad.invalid on&#0;click=run 结尾</p>");
+    expect(result).toEqual([{ label: "paragraph", text: "保留 结尾" }]);
+    expect(JSON.stringify(result)).not.toMatch(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]|https?:\/\/|javascript:|\bon[a-z]+\s*=/iu);
+  });
 });

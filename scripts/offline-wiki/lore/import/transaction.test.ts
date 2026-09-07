@@ -78,6 +78,11 @@ describe("importLocalLore", () => {
     const record = JSON.parse(current.trim());
     expect(record).toMatchObject({ logicalId: "lore:worldview:faction:1001", sourcePath: "entries/1001.html" });
     expect(record.sourceChecksum).toBe(checksum("<h2>背景</h2><p>离线正文。</p>"));
+    expect(record.sourceDependencies).toEqual([
+      { path: "aggregate-list.json", checksum: report.inputChecksums[0] },
+      { path: "category-mapping.json", checksum: report.inputChecksums[1] },
+      { path: "entries/1001.html", checksum: report.inputChecksums[2] },
+    ]);
   });
 
   it("rejects the whole adapter batch, preserves the last-good overlay, and emits only safe rejection metadata", () => {
