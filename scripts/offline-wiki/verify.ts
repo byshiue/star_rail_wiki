@@ -21,8 +21,14 @@ const BuildManifestSchema = z.strictObject({
     group: z.string().min(1),
     order: z.number().int().nonnegative(),
   })),
-  warnings: z.array(z.literal("backup-cleanup-pending")).max(1),
+  warnings: z.array(z.literal("backup-cleanup-pending")).max(1).default([]),
 });
+
+export type BuildManifest = z.infer<typeof BuildManifestSchema>;
+
+export function readBuildManifest(buildRoot: string): BuildManifest {
+  return BuildManifestSchema.parse(JSON.parse(readFileSync(join(buildRoot, "build-manifest.json"), "utf8")));
+}
 
 type Family = z.infer<typeof LoreFamilySchema>;
 type VolumeMetadata = { family: Family | null; group: string; part: number | null; sortKey: readonly number[] };
@@ -109,7 +115,7 @@ function sameNames(actual: string[], expected: string[]): boolean {
 }
 
 export function verifyBuildRoot(buildRoot: string, releaseId: string): VerificationReport {
-  const manifest = BuildManifestSchema.parse(JSON.parse(readFileSync(join(buildRoot, "build-manifest.json"), "utf8")));
+  const manifest = readBuildManifest(buildRoot);
   if (manifest.releaseId !== releaseId) throw new Error("build manifest release does not match requested release");
   const inputNames = manifest.inputs.map((item) => item.filename);
   const outputNames = manifest.outputs.map((item) => item.filename);

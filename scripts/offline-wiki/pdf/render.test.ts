@@ -1,11 +1,12 @@
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, symlinkSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { chromium } from "@playwright/test";
 import { describe, expect, it } from "vitest";
 import { buildOfflineWiki } from "../build";
 import { verifyOfflineWiki } from "../verify";
-import { createPdfRendererWithPostValidationInjectionForTest, renderPdfWithPlaywright } from "./render";
+import { installNetworkBlocker, renderPdfWithPlaywright } from "./render";
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "releases");
@@ -86,24 +87,30 @@ describe("offline wiki PDF build", () => {
     })).resolves.toMatchObject({ pageCount: 1 });
   });
 
-  it("reports the blocked URL when low-level raw HTML attempts a remote request", async () => {
-    const renderInjected = createPdfRendererWithPostValidationInjectionForTest(
-      () => '<!doctype html><img src="https://blocked.invalid/raw.png">',
-    );
-    await expect(renderInjected({
-      html: "<!doctype html><p>validated before test injection</p>",
-      title: "unsafe raw hook",
-    })).rejects.toThrow(/https:\/\/blocked\.invalid\/raw\.png/);
+  it.each([
+    ["raw", '<!doctype html><img src="https://blocked.invalid/raw.png">', "https://blocked.invalid/raw.png"],
+    ["print", '<!doctype html><style>@media print { body { background-image: url("https://blocked.invalid/print.png") } }</style>', "https://blocked.invalid/print.png"],
+  ])("the production network blocker aborts and records a %s HTTP request", async (_phase, html, expectedUrl) => {
+    const browser = await chromium.launch({ headless: true });
+    try {
+      const context = await browser.newContext({ javaScriptEnabled: false });
+      const blockedUrls: string[] = [];
+      await installNetworkBlocker(context, blockedUrls);
+      const page = await context.newPage();
+      await page.setContent(html, { waitUntil: "load" });
+      await page.emulateMedia({ media: "print" });
+      await page.waitForTimeout(50);
+      expect(blockedUrls).toContain(expectedUrl);
+    } finally {
+      await browser.close();
+    }
   });
 
-  it("reports a print-only blocked URL after the media phase", async () => {
-    const renderInjected = createPdfRendererWithPostValidationInjectionForTest(
-      () => '<!doctype html><style>@media print { body { background-image: url("https://blocked.invalid/print.png") } }</style>',
-    );
-    await expect(renderInjected({
-      html: "<!doctype html><p>validated before test injection</p>",
-      title: "unsafe print hook",
-    })).rejects.toThrow(/https:\/\/blocked\.invalid\/print\.png/);
+  it("the public renderer cannot bypass static validation with raw HTTP HTML", async () => {
+    await expect(renderPdfWithPlaywright({
+      html: '<!doctype html><img src="https://blocked.invalid/raw.png">',
+      title: "unsafe raw HTML",
+    })).rejects.toThrow(/data image|forbidden/i);
   });
 
   it.each([
@@ -187,6 +194,10 @@ describe("offline wiki PDF build", () => {
     expect(warned.warnings).toEqual(["backup-cleanup-pending"]);
     expect(JSON.parse(readFileSync(join(outputRoot, "builds", "4.4-fixture", "build-manifest.json"), "utf8")).warnings)
       .toEqual(["backup-cleanup-pending"]);
+    expect(JSON.parse(readFileSync(
+      join(outputRoot, "builds", ".4.4-fixture.build-transaction.json"),
+      "utf8",
+    )).phase).toBe("cleanup-pending");
     expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(8);
     expect(readdirSync(join(outputRoot, "builds")).filter((name) => name.includes(".backup-"))).toHaveLength(1);
 
@@ -213,6 +224,147 @@ describe("offline wiki PDF build", () => {
       releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
     })).rejects.toThrow(/ambiguous.*backup/i);
     expect(readdirSync(buildsRoot).filter((name) => name.includes(".backup-"))).toHaveLength(2);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+  });
+  it("restores the verified prior build after crashing between backup rename and backed-up journal", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-crash-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+      fileOperationsForTest: { afterBackupRename: () => { throw new Error("simulated crash"); } },
+    })).rejects.toThrow(/simulated crash/);
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+  });
+
+  it("keeps referenced staging durable when the prepared journal hook crashes", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-crash-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+      fileOperationsForTest: { afterJournalPhase: (phase) => { if (phase === "prepared") throw new Error("prepared crash"); } },
+    })).rejects.toThrow(/prepared crash/);
+    expect(readdirSync(join(outputRoot, "builds")).some((name) => name.startsWith(".4.4-fixture.staging-"))).toBe(true);
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+  });
+
+  it("recognizes a no-prior expected final promoted before the prepared journal advanced", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-crash-"));
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+      fileOperationsForTest: { afterPromoteRename: () => { throw new Error("simulated crash"); } },
+    })).rejects.toThrow(/simulated crash/);
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+  });
+
+  it("keeps the expected promoted final and disposes a partially deleted prior backup", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-crash-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+      fileOperationsForTest: { afterJournalPhase: (phase) => { if (phase === "promoted") throw new Error("simulated crash"); } },
+    })).rejects.toThrow(/simulated crash/);
+    const buildsRoot = join(outputRoot, "builds");
+    const backup = readdirSync(buildsRoot).find((name) => name.includes(".backup-"))!;
+    rmSync(join(buildsRoot, backup, "build-manifest.json"));
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(8);
+    expect(readdirSync(buildsRoot).some((name) => name.includes(".backup-") || name.includes("transaction.json"))).toBe(false);
+  });
+
+  it("recovers a unique verified legacy backup when final is missing", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-legacy-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    const buildsRoot = join(outputRoot, "builds");
+    renameSync(join(buildsRoot, "4.4-fixture"), join(buildsRoot, "4.4-fixture.backup-legacy"));
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+    expect(readdirSync(buildsRoot).filter((name) => name.includes(".backup-"))).toEqual([]);
+  });
+
+  it("holds an exclusive build lock and cleans only canonical unreferenced staging siblings", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
+    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
+    const orphan = join(buildsRoot, ".4.4-fixture.staging-orphan"); mkdirSync(orphan);
+    let nestedRejected = false;
+    let first = true;
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot,
+      renderPdf: async (input) => {
+        if (first) {
+          first = false;
+          await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf })).rejects.toThrow(/active|lock/i);
+          nestedRejected = true;
+        }
+        return fakePdf(input);
+      },
+    });
+    expect(nestedRejected).toBe(true);
+    expect(existsSync(orphan)).toBe(false);
+  });
+
+  it("restores the prior build from a backed-up phase crash", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-crash-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+      fileOperationsForTest: { afterJournalPhase: (phase) => { if (phase === "backed-up") throw new Error("backed-up crash"); } },
+    })).rejects.toThrow(/backed-up crash/);
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+  });
+
+  it("recognizes the expected final when promotion happened while the journal says backed-up", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-crash-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+      fileOperationsForTest: { afterPromoteRename: () => { throw new Error("promote rename crash"); } },
+    })).rejects.toThrow(/promote rename crash/);
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(8);
+  });
+
+  it("restores the complete prior backup when an expected promoted final disappears", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-crash-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+      fileOperationsForTest: { afterJournalPhase: (phase) => { if (phase === "promoted") throw new Error("promoted crash"); } },
+    })).rejects.toThrow(/promoted crash/);
+    rmSync(join(outputRoot, "builds", "4.4-fixture"), { recursive: true });
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+  });
+
+  it("cleans one complete legacy backup beside a verified active final", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-legacy-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    const buildsRoot = join(outputRoot, "builds");
+    cpSync(join(buildsRoot, "4.4-fixture"), join(buildsRoot, "4.4-fixture.backup-legacy"), { recursive: true });
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: async () => { throw new Error("stop after recovery"); } })).rejects.toThrow(/stop after recovery/);
+    expect(readdirSync(buildsRoot).filter((name) => name.includes(".backup-"))).toEqual([]);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+  });
+
+  it("reclaims a dead lock but rejects an orphan staging symlink without touching its target", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
+    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
+    writeFileSync(join(buildsRoot, ".4.4-fixture.build-transaction.lock"), JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
+    const outside = mkdtempSync(join(tmpdir(), "offline-wiki-orphan-target-")); writeFileSync(join(outside, "keep"), "keep");
+    symlinkSync(outside, join(buildsRoot, ".4.4-fixture.staging-orphan"), "dir");
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf })).rejects.toThrow(/symlink|unsafe/i);
+    expect(readFileSync(join(outside, "keep"), "utf8")).toBe("keep");
+  });
+
+  it("rejects a strict journal with unknown fields without deleting artifacts", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-journal-"));
+    await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf });
+    const buildsRoot = join(outputRoot, "builds");
+    writeFileSync(join(buildsRoot, ".4.4-fixture.build-transaction.json"), JSON.stringify({ schemaVersion: 1, extra: "bad" }));
+    await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf })).rejects.toThrow(/journal|malformed/i);
     expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
   });
 });

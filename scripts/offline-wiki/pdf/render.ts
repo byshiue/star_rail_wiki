@@ -1,10 +1,18 @@
-import { chromium, type Page } from "@playwright/test";
+import { chromium, type BrowserContext, type Page } from "@playwright/test";
 import { countPdfPages } from "./inspect";
 import { validatePdfHtml } from "./security";
 
 export type PdfRenderInput = { html: string; title: string };
 export type PdfRenderOutput = { bytes: Uint8Array; pageCount: number };
 export type PdfRenderer = (input: PdfRenderInput) => Promise<PdfRenderOutput>;
+
+export async function installNetworkBlocker(context: BrowserContext, blockedUrls: string[]): Promise<void> {
+  await context.route("**/*", async (route) => {
+    const url = route.request().url();
+    blockedUrls.push(url);
+    await route.abort("blockedbyclient");
+  });
+}
 
 async function assertRequestsSettled(page: Page, blockedUrls: readonly string[]): Promise<void> {
   let previousCount = -1;
@@ -32,11 +40,7 @@ const renderHtmlWithPlaywright: PdfRenderer = async ({ html }) => {
   try {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const blockedUrls: string[] = [];
-    await context.route("**/*", async (route) => {
-      const url = route.request().url();
-      blockedUrls.push(url);
-      await route.abort("blockedbyclient");
-    });
+    await installNetworkBlocker(context, blockedUrls);
     const page = await context.newPage();
     await page.setContent(html, { waitUntil: "load" });
     await assertRequestsSettled(page, blockedUrls);
@@ -62,12 +66,3 @@ export const renderPdfWithPlaywright: PdfRenderer = async (input) => {
   validatePdfHtml(input.html);
   return renderHtmlWithPlaywright(input);
 };
-
-export function createPdfRendererWithPostValidationInjectionForTest(
-  injectAfterValidation: (html: string) => string,
-): PdfRenderer {
-  return async (input) => {
-    validatePdfHtml(input.html);
-    return renderHtmlWithPlaywright({ ...input, html: injectAfterValidation(input.html) });
-  };
-}

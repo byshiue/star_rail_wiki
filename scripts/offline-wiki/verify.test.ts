@@ -51,6 +51,19 @@ describe("offline wiki PDF verification", () => {
     expect(() => verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" })).toThrow(/checksum/i);
   });
 
+  it("normalizes a legacy manifest v2 without warnings and can rebuild it", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-verify-"));
+    await buildFixture(outputRoot);
+    const manifestPath = join(outputRoot, "builds", "4.4-fixture", "build-manifest.json");
+    const legacy = JSON.parse(readFileSync(manifestPath, "utf8")) as Record<string, unknown>;
+    delete legacy.warnings;
+    writeFileSync(manifestPath, `${JSON.stringify(legacy, null, 2)}\n`);
+
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+    await buildFixture(outputRoot);
+    expect((JSON.parse(readFileSync(manifestPath, "utf8")) as BuildManifest).warnings).toEqual([]);
+  });
+
   it("requires every ordered HTML input to have exactly one matching PDF output", async () => {
     const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-verify-"));
     await buildFixture(outputRoot);
