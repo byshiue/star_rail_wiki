@@ -43,11 +43,11 @@ function sameStableFile(left: StableStats, right: StableStats): boolean {
     && left.ctimeNs === right.ctimeNs;
 }
 
-function validateExactOverlayPath(path: string, releaseId: string): {
+function inspectExactOverlayPath(path: string, releaseId: string): {
   resolvedPath: string;
   parentStates: Array<{ path: string; stats: StableStats }>;
   fileStats: StableStats;
-} {
+} | null {
   if (!isAbsolute(path) || path !== resolve(path)) {
     throw new Error("normalized lore overlay path must be an absolute canonical lexical path");
   }
@@ -68,39 +68,36 @@ function validateExactOverlayPath(path: string, releaseId: string): {
   }
   const parentStates: Array<{ path: string; stats: StableStats }> = [{ path: repositoryRoot, stats: rootStats }];
   let current = repositoryRoot;
-  for (const component of suffix.slice(0, -1)) {
+  for (const [index, component] of suffix.entries()) {
     current = join(current, component);
-    const stats = lstatSync(current, { bigint: true }) as StableStats;
-    if (stats.isSymbolicLink() || !stats.isDirectory()) {
-      throw new Error(`normalized lore overlay parent is a symlink or non-directory: ${component}`);
+    let stats: StableStats;
+    try {
+      stats = lstatSync(current, { bigint: true });
+    } catch (error) {
+      if (error instanceof Error && "code" in error && error.code === "ENOENT") return null;
+      throw error;
+    }
+    const isFile = index === suffix.length - 1;
+    if (stats.isSymbolicLink() || (isFile ? !stats.isFile() : !stats.isDirectory())) {
+      throw new Error(`normalized lore overlay component is a symlink or has the wrong type: ${component}`);
+    }
+    if (isFile) {
+      if (stats.size > BigInt(MAX_OVERLAY_BYTES)) {
+        throw new Error("normalized lore overlay exceeds the 16 MiB size limit");
+      }
+      if (realpathSync(resolvedPath) !== resolvedPath) {
+        throw new Error("normalized lore overlay path must be canonical");
+      }
+      return { resolvedPath, parentStates, fileStats: stats };
     }
     parentStates.push({ path: current, stats });
   }
-  const fileStats = lstatSync(resolvedPath, { bigint: true }) as StableStats;
-  if (fileStats.isSymbolicLink() || !fileStats.isFile()) {
-    throw new Error("normalized lore overlay must be a regular non-symlink file");
-  }
-  if (fileStats.size > BigInt(MAX_OVERLAY_BYTES)) {
-    throw new Error("normalized lore overlay exceeds the 16 MiB size limit");
-  }
-  if (realpathSync(resolvedPath) !== resolvedPath) {
-    throw new Error("normalized lore overlay path must be canonical");
-  }
-  return { resolvedPath, parentStates, fileStats };
+  throw new Error("normalized lore overlay path inspection did not reach its file component");
 }
 
-function pathEntryExists(path: string): boolean {
-  try {
-    lstatSync(path);
-    return true;
-  } catch (error) {
-    if (error instanceof Error && "code" in error && error.code === "ENOENT") return false;
-    throw error;
-  }
-}
-
-function readVerifiedOverlay(path: string, releaseId: string, options: LocalOverlayLoadOptions): string {
-  const initial = validateExactOverlayPath(path, releaseId);
+function readVerifiedOverlay(path: string, releaseId: string, options: LocalOverlayLoadOptions): string | null {
+  const initial = inspectExactOverlayPath(path, releaseId);
+  if (initial === null) return null;
   const descriptor = openSync(initial.resolvedPath, constants.O_RDONLY | constants.O_NOFOLLOW);
   try {
     const descriptorBefore = fstatSync(descriptor, { bigint: true }) as StableStats;
@@ -111,7 +108,10 @@ function readVerifiedOverlay(path: string, releaseId: string, options: LocalOver
     const bytes = readFileSync(descriptor);
     options.operations?.afterRead?.();
     const descriptorAfter = fstatSync(descriptor, { bigint: true }) as StableStats;
-    const finalPath = validateExactOverlayPath(path, releaseId);
+    const finalPath = inspectExactOverlayPath(path, releaseId);
+    if (finalPath === null) {
+      throw new Error("normalized lore overlay path disappeared while reading");
+    }
     if (!sameStableFile(descriptorBefore, descriptorAfter)
         || !sameStableFile(descriptorAfter, finalPath.fileStats)
         || bytes.byteLength !== Number(descriptorAfter.size)) {
@@ -155,8 +155,10 @@ export function loadLocalFullTextOverlay(
   committedRecords: readonly LoreRecord[],
   options: LocalOverlayLoadOptions = {},
 ): Map<string, LocalFullTextOverlayRecord> {
-  if (path === undefined || !pathEntryExists(path)) return new Map();
-  const rawRecords = parseJsonLines(readVerifiedOverlay(path, releaseId, options));
+  if (path === undefined) return new Map();
+  const text = readVerifiedOverlay(path, releaseId, options);
+  if (text === null) return new Map();
+  const rawRecords = parseJsonLines(text);
   const version = validateLocalFullTextRecords(rawRecords);
   if (version === null) return new Map();
 

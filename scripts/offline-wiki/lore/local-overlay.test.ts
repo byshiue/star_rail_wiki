@@ -49,7 +49,9 @@ describe("loadLocalFullTextOverlay", () => {
 
   it("returns an empty map when the optional path is absent or missing", () => {
     expect(loadLocalFullTextOverlay(undefined, "4.4-fixture", committed).size).toBe(0);
-    expect(loadLocalFullTextOverlay(join(tmpdir(), "missing-lore-overlay.jsonl"), "4.4-fixture", committed).size).toBe(0);
+    const root = mkdtempSync(join(tmpdir(), "offline-wiki-missing-overlay-"));
+    const missing = join(root, ".local", "offline-wiki", "imports", "4.4-fixture", "normalized", "current.jsonl");
+    expect(loadLocalFullTextOverlay(missing, "4.4-fixture", committed).size).toBe(0);
   });
 
   it("admits a strict normalized record only when its committed source identity matches", () => {
@@ -109,6 +111,24 @@ describe("loadLocalFullTextOverlay", () => {
     symlinkSync(join(root, "missing.jsonl"), path);
     expect(() => loadLocalFullTextOverlay(path, "4.4-fixture", committed)).toThrow(/symlink|regular|path/i);
   });
+
+  it.each([".local", "imports", "release", "normalized"])(
+    "rejects a dangling %s parent symlink instead of treating the overlay as absent",
+    (level) => {
+      const root = mkdtempSync(join(tmpdir(), "offline-wiki-dangling-parent-"));
+      const local = join(root, ".local");
+      const offlineWiki = join(local, "offline-wiki");
+      const imports = join(offlineWiki, "imports");
+      const release = join(imports, "4.4-fixture");
+      const normalized = join(release, "normalized");
+      const parentByLevel = { ".local": local, imports, release, normalized } as const;
+      const dangling = parentByLevel[level as keyof typeof parentByLevel];
+      mkdirSync(join(dangling, ".."), { recursive: true });
+      symlinkSync(join(root, "missing-directory"), dangling);
+      const path = join(normalized, "current.jsonl");
+      expect(() => loadLocalFullTextOverlay(path, "4.4-fixture", committed)).toThrow(/symlink|canonical|directory|path/i);
+    },
+  );
 
   it("detects replacement of the opened file before admitting its bytes", () => {
     const path = writeOverlay([overlayRecord()]);
