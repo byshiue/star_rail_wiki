@@ -1,0 +1,30 @@
+[
+  {
+    "logicalId": "lore:mission:trailblaze:silent-star",
+    "name": "沉默的星",
+    "aliases": [],
+    "releaseId": "4.4-fixture",
+    "locale": "zh-CN",
+    "description": "测试开拓任务说明。",
+    "relationships": [
+      {
+        "type": "located-in",
+        "targetLogicalId": "lore:worldview:location:belobog",
+        "external": false
+      }
+    ],
+    "provenance": [
+      {
+        "sourceName": "Official fixture",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/1",
+        "sourceRevision": "fixture-revision",
+        "sourcePath": "entry/1",
+        "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "reviewStatus": "reviewed",
+    "family": "mission",
+    "kind": "trailblaze",
+    "contentChecksum": "sha256:e2c6cc3a4875f251179061635f47a7709e5fb8da9ee2b0813f512b716543dee3"
+  }
+]

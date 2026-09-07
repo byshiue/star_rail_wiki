@@ -1,0 +1,24 @@
+[
+  {
+    "logicalId": "lore:worldview:location:belobog",
+    "name": "贝洛伯格",
+    "aliases": ["雅利洛-Ⅵ"],
+    "releaseId": "4.4-fixture",
+    "locale": "zh-CN",
+    "description": "测试世界观说明。",
+    "relationships": [],
+    "provenance": [
+      {
+        "sourceName": "Official fixture",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/1",
+        "sourceRevision": "fixture-revision",
+        "sourcePath": "entry/1",
+        "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "reviewStatus": "reviewed",
+    "family": "worldview",
+    "kind": "location",
+    "contentChecksum": "sha256:fb8f24cd2904fcb405d87ccb0c794428c5de6197a3a6ea9ee6d3ed929ed80a4e"
+  }
+]

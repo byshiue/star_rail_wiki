@@ -43,7 +43,7 @@ function readArray(path: string): unknown[] {
 }
 
 export function loadEditorialData(root: string): EditorialData {
-  const summaries = ["characters.json", "light-cones.json", "relics.json", "divergent-universe.json"]
+  const summaries = ["characters.json", "light-cones.json", "relics.json", "divergent-universe.json", "lore.json"]
     .flatMap((filename) => readArray(join(root, "summaries", filename)).map(parseStorySummary));
   const divergentUniverse = readArray(join(root, "divergent-universe", "entries.json"))
     .map(parseDivergentUniverseEntry);

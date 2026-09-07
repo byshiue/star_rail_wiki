@@ -1,5 +1,8 @@
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { parseDivergentUniverseEntry, parseStorySummary } from "./editorial";
+import { loadEditorialData, parseDivergentUniverseEntry, parseStorySummary } from "./editorial";
 
 const provenance = {
   sourceName: "Official public wiki",
@@ -65,5 +68,25 @@ describe("offline wiki editorial records", () => {
 
     expect(() => parseDivergentUniverseEntry(entry)).toThrow(/provenance/i);
     expect(parseDivergentUniverseEntry({ ...entry, provenance: [provenance] }).name).toBe("测试方程");
+  });
+
+  it("loads reviewed lore summaries from the strict editorial file set", () => {
+    const root = mkdtempSync(join(tmpdir(), "offline-wiki-editorial-"));
+    mkdirSync(join(root, "summaries"), { recursive: true });
+    mkdirSync(join(root, "divergent-universe"), { recursive: true });
+    for (const filename of ["characters.json", "light-cones.json", "relics.json", "divergent-universe.json"]) {
+      writeFileSync(join(root, "summaries", filename), "[]");
+    }
+    writeFileSync(join(root, "summaries", "lore.json"), JSON.stringify([{
+      ...reviewedSummary,
+      logicalId: "lore:worldview:location:belobog",
+      entityKind: "lore",
+    }]));
+    writeFileSync(join(root, "divergent-universe", "entries.json"), "[]");
+
+    expect(loadEditorialData(root).summaries).toMatchObject([{
+      logicalId: "lore:worldview:location:belobog",
+      entityKind: "lore",
+    }]);
   });
 });

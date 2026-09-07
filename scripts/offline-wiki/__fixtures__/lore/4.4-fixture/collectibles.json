@@ -1,0 +1,30 @@
+[
+  {
+    "logicalId": "lore:collectible:readable:origami-bird",
+    "name": "折纸小鸟",
+    "aliases": [],
+    "releaseId": "4.4-fixture",
+    "locale": "zh-CN",
+    "description": "测试读物说明。",
+    "relationships": [
+      {
+        "type": "mentions",
+        "targetLogicalId": "character:1",
+        "external": false
+      }
+    ],
+    "provenance": [
+      {
+        "sourceName": "Official fixture",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/1",
+        "sourceRevision": "fixture-revision",
+        "sourcePath": "entry/1",
+        "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "reviewStatus": "reviewed",
+    "family": "collectible",
+    "kind": "readable",
+    "contentChecksum": "sha256:de482e01e05aa0fffb67fbf0ef11cc5d00b271b63008ffde82325dda6a0735f2"
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "releaseId": "4.4-fixture",
+    "family": "divergent-universe",
+    "baselineStatus": "complete",
+    "expectedCount": 1,
+    "provenance": [
+      {
+        "sourceName": "Official fixture",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/1",
+        "sourceRevision": "fixture-revision",
+        "sourcePath": "entry/1",
+        "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "contentChecksum": "sha256:e75600e519e7bee92b740bc9d0d8a1063ca6979b850688913b5b60d36e12aaeb"
+  },
+  {
+    "releaseId": "4.4-fixture",
+    "family": "worldview",
+    "baselineStatus": "complete",
+    "expectedCount": 1,
+    "provenance": [
+      {
+        "sourceName": "Official fixture",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/1",
+        "sourceRevision": "fixture-revision",
+        "sourcePath": "entry/1",
+        "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "contentChecksum": "sha256:d0cbc6b1c436f17ce51b59c50c0dd187982e93e7e8cca3225d712eec882eb7c3"
+  },
+  {
+    "releaseId": "4.4-fixture",
+    "family": "mission",
+    "baselineStatus": "missing",
+    "expectedCount": null,
+    "provenance": [],
+    "contentChecksum": "sha256:66bf8278762fe0ecf99f51fa532c305b0a24f19a5f696aa8c5fe5f8f2fd45a17"
+  },
+  {
+    "releaseId": "4.4-fixture",
+    "family": "collectible",
+    "baselineStatus": "complete",
+    "expectedCount": 1,
+    "provenance": [
+      {
+        "sourceName": "Official fixture",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/1",
+        "sourceRevision": "fixture-revision",
+        "sourcePath": "entry/1",
+        "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "contentChecksum": "sha256:1cb8de5a3249a2e3d5b368d73942600754f6192d05fd17c6ae25125ff2062ffe"
+  }
+]

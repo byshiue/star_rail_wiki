@@ -69,6 +69,7 @@ describe("offline wiki prepare report", () => {
     writeFileSync(join(editorialRoot, "summaries", "light-cones.json"), "[]");
     writeFileSync(join(editorialRoot, "summaries", "relics.json"), "[]");
     writeFileSync(join(editorialRoot, "summaries", "divergent-universe.json"), "[]");
+    writeFileSync(join(editorialRoot, "summaries", "lore.json"), "[]");
     writeFileSync(join(editorialRoot, "divergent-universe", "entries.json"), "[]");
 
     const report = prepareOfflineWiki({

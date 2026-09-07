@@ -64,17 +64,21 @@ describe("offline wiki draft review", () => {
       .rejects.toThrow(/loopback/i);
   });
 
-  it("writes an accepted browser review into the committed-summary shape", async () => {
+  it("writes an accepted lore browser review into the lore summary file", async () => {
     const draftsRoot = mkdtempSync(join(tmpdir(), "offline-wiki-review-"));
     const editorialRoot = mkdtempSync(join(tmpdir(), "offline-wiki-reviewed-"));
     mkdirSync(join(editorialRoot, "summaries"), { recursive: true });
-    writeFileSync(join(editorialRoot, "summaries", "characters.json"), "[]");
-    writeFileSync(join(draftsRoot, "character-1.draft.json"), JSON.stringify(draft));
+    writeFileSync(join(editorialRoot, "summaries", "lore.json"), "[]");
+    writeFileSync(join(draftsRoot, "lore-1.draft.json"), JSON.stringify({
+      ...draft,
+      logicalId: "lore:worldview:location:belobog",
+      entityKind: "lore",
+    }));
     const server = await startReviewServer({ host: "127.0.0.1", port: 0, draftsRoot, editorialRoot });
     try {
       const address = server.address() as AddressInfo;
       const body = new URLSearchParams({
-        filename: "character-1.draft.json",
+        filename: "lore-1.draft.json",
         decision: "accept",
         reviewer: "Fixture reviewer",
         summary: "原创故事摘要。",
@@ -87,9 +91,9 @@ describe("offline wiki draft review", () => {
       });
 
       expect(response.status).toBe(303);
-      const reviewed = JSON.parse(readFileSync(join(editorialRoot, "summaries", "characters.json"), "utf8"));
+      const reviewed = JSON.parse(readFileSync(join(editorialRoot, "summaries", "lore.json"), "utf8"));
       expect(reviewed).toMatchObject([{
-        logicalId: "character:1",
+        logicalId: "lore:worldview:location:belobog",
         reviewStatus: "reviewed",
         reviewer: { name: "Fixture reviewer" },
       }]);

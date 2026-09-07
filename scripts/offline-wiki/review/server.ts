@@ -47,6 +47,7 @@ function summaryFilename(kind: ReviewedSummary["entityKind"]): string {
     "light-cone": "light-cones.json",
     "relic-set": "relics.json",
     "divergent-universe": "divergent-universe.json",
+    lore: "lore.json",
   })[kind];
 }
 

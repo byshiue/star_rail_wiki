@@ -1,0 +1,32 @@
+[
+  {
+    "logicalId": "lore:du:equation:aha",
+    "name": "阿哈时刻",
+    "aliases": [],
+    "releaseId": "4.4-fixture",
+    "locale": "zh-CN",
+    "description": "测试方程说明。",
+    "relationships": [],
+    "provenance": [
+      {
+        "sourceName": "Official fixture",
+        "sourceUrl": "https://wiki.hoyolab.com/pc/hsr/entry/1",
+        "sourceRevision": "fixture-revision",
+        "sourcePath": "entry/1",
+        "sourceChecksum": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "reviewStatus": "reviewed",
+    "family": "divergent-universe",
+    "kind": "equation",
+    "mechanics": {
+      "rarity": 3,
+      "path": "欢愉",
+      "activationRequirement": null,
+      "enhancementRequirement": null,
+      "effect": "测试效果。",
+      "enhancedEffect": null
+    },
+    "contentChecksum": "sha256:828e98d0b05130b1428b2c1a565766cb55986a8a2e47fdd948991525a289aac9"
+  }
+]

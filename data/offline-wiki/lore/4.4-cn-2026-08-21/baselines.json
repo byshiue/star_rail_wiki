@@ -1,0 +1,34 @@
+[
+  {
+    "releaseId": "4.4-cn-2026-08-21",
+    "family": "divergent-universe",
+    "baselineStatus": "missing",
+    "expectedCount": null,
+    "provenance": [],
+    "contentChecksum": "sha256:724998c0fbcd811cd4a0e181e44a6553f507a2b3aac9b2ebc4db8e4275649056"
+  },
+  {
+    "releaseId": "4.4-cn-2026-08-21",
+    "family": "worldview",
+    "baselineStatus": "missing",
+    "expectedCount": null,
+    "provenance": [],
+    "contentChecksum": "sha256:4645d31b96e87e3b79b2dd38629d77a1c55fc12d3255392268a3c1736c9b0049"
+  },
+  {
+    "releaseId": "4.4-cn-2026-08-21",
+    "family": "mission",
+    "baselineStatus": "missing",
+    "expectedCount": null,
+    "provenance": [],
+    "contentChecksum": "sha256:1a4ecec73fe3356434b32e140e8a055ff2d18c06b51cbd9067f3c69c70c2e805"
+  },
+  {
+    "releaseId": "4.4-cn-2026-08-21",
+    "family": "collectible",
+    "baselineStatus": "missing",
+    "expectedCount": null,
+    "provenance": [],
+    "contentChecksum": "sha256:490c32600dc1f1c24ec299791b2604e3525efbbbbe66c74158ad850eaa59a2eb"
+  }
+]
