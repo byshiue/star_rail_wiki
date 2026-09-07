@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { prepareOfflineWiki } from "./prepare";
 
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__", "releases");
+const loreRoot = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__", "lore");
 
 describe("offline wiki prepare report", () => {
   it("writes deterministic entity counts to the release build directory", () => {
@@ -18,7 +19,7 @@ describe("offline wiki prepare report", () => {
     });
 
     expect(report).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       releaseId: "4.4-fixture",
       gameVersion: "4.4",
       counts: { characters: 1, lightCones: 1, relicSets: 1, divergentUniverse: 0 },
@@ -36,6 +37,19 @@ describe("offline wiki prepare report", () => {
       "utf8",
     ));
     expect(saved).toEqual(report);
+    expect(report.lore.totals).toMatchObject({ structured: 0, expected: null, percentage: null });
+  });
+
+  it("includes four lore family reports and totals while retaining legacy counts and gaps", () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-prepare-lore-"));
+    const report = prepareOfflineWiki({ releasesRoot: fixtureRoot, loreRoot, releaseId: "4.4-fixture", outputRoot });
+    expect(report.schemaVersion).toBe(2);
+    expect(Object.keys(report.lore)).toEqual(["divergentUniverse", "worldview", "mission", "collectible", "totals"]);
+    expect(report.lore.divergentUniverse).toMatchObject({ structured: 1, expected: 1, percentage: 100 });
+    expect(report.lore.mission).toMatchObject({ baselineStatus: "missing", expected: null, percentage: null });
+    expect(report.lore.totals).toMatchObject({ structured: 4, expected: null, percentage: null });
+    expect(report.counts).toEqual({ characters: 1, lightCones: 1, relicSets: 1, divergentUniverse: 0 });
+    expect(report.gaps.storySummaries).toBe(3);
   });
 
   it("rejects mutable latest release aliases", () => {

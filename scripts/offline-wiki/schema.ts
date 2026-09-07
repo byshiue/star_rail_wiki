@@ -5,6 +5,8 @@ import {
   EquipmentRevisionSchema,
 } from "../../src/domain/entities";
 import { DataReleaseSchema } from "../../src/domain/releases";
+import { LoreCoverageReportSchema } from "./lore/coverage";
+import { LoreRecordSchema } from "./lore/schema";
 
 export const StoryEntityKindSchema = z.enum([
   "character",
@@ -80,6 +82,8 @@ export const DocumentCatalogSchema = z.strictObject({
   lightCones: z.array(DocumentLightConeSchema),
   relicSets: z.array(DocumentRelicSetSchema),
   divergentUniverse: z.array(DivergentUniverseEntrySchema),
+  lore: z.array(LoreRecordSchema),
+  loreCoverage: LoreCoverageReportSchema,
   summaryCoverage: z.strictObject({
     available: z.number().int().nonnegative(),
     reviewed: z.number().int().nonnegative(),
@@ -94,4 +98,5 @@ export type DocumentCatalog = z.infer<typeof DocumentCatalogSchema>;
 export type ReviewedSummary = z.infer<typeof ReviewedSummarySchema>;
 export type StorySummary = z.infer<typeof StorySummarySchema>;
 export type DivergentUniverseEntry = z.infer<typeof DivergentUniverseEntrySchema>;
+export type { LoreCoverageMetric, LoreCoverageReport, LoreFamilyCoverage } from "./lore/coverage";
 export type { LoreBaseline, LoreFamily, LoreRecord, LoreRelationship } from "./lore/schema";

@@ -4,16 +4,20 @@ import { fileURLToPath } from "node:url";
 import { loadDocumentCatalog } from "./catalog";
 import { compareDocumentCatalogs, type DocumentChanges } from "./changes";
 import { loadEditorialData } from "./editorial";
+import type { LoreFamilyCoverage, LoreCoverageMetric } from "./lore/coverage";
 
 export type PrepareOptions = {
   releasesRoot: string;
   releaseId: string;
   outputRoot: string;
   editorialRoot?: string;
+  loreRoot?: string;
+  localOverlayPath?: string;
+  localImportReportPath?: string;
 };
 
 export type PrepareReport = {
-  schemaVersion: 1;
+  schemaVersion: 2;
   releaseId: string;
   gameVersion: string;
   counts: {
@@ -27,6 +31,13 @@ export type PrepareReport = {
     images: number;
     divergentUniverse: number;
   };
+  lore: {
+    divergentUniverse: LoreFamilyCoverage;
+    worldview: LoreFamilyCoverage;
+    mission: LoreFamilyCoverage;
+    collectible: LoreFamilyCoverage;
+    totals: LoreCoverageMetric;
+  };
   changes: DocumentChanges;
 };
 
@@ -39,13 +50,17 @@ function writeJsonAtomically(path: string, value: unknown): void {
 
 export function prepareOfflineWiki(options: PrepareOptions): PrepareReport {
   const editorialData = options.editorialRoot ? loadEditorialData(options.editorialRoot) : undefined;
-  const catalog = loadDocumentCatalog(options.releasesRoot, options.releaseId, editorialData);
+  const catalog = loadDocumentCatalog(options.releasesRoot, options.releaseId, editorialData, {
+    loreRoot: options.loreRoot,
+    localOverlayPath: options.localOverlayPath,
+    localImportReportPath: options.localImportReportPath,
+  });
   const previousCatalog = catalog.release.previousReleaseId
     ? loadDocumentCatalog(options.releasesRoot, catalog.release.previousReleaseId, editorialData)
     : null;
   const storyEntityCount = catalog.characters.length + catalog.lightCones.length + catalog.relicSets.length;
   const report: PrepareReport = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     releaseId: catalog.release.id,
     gameVersion: catalog.release.gameVersion,
     counts: {
@@ -58,6 +73,13 @@ export function prepareOfflineWiki(options: PrepareOptions): PrepareReport {
       storySummaries: catalog.summaryCoverage.missing,
       images: storyEntityCount,
       divergentUniverse: 0,
+    },
+    lore: {
+      divergentUniverse: catalog.loreCoverage.families["divergent-universe"],
+      worldview: catalog.loreCoverage.families.worldview,
+      mission: catalog.loreCoverage.families.mission,
+      collectible: catalog.loreCoverage.families.collectible,
+      totals: catalog.loreCoverage.totals,
     },
     changes: compareDocumentCatalogs(previousCatalog, catalog),
   };
@@ -82,6 +104,9 @@ function runCli(): void {
     releaseId,
     outputRoot: join(process.cwd(), ".local", "offline-wiki"),
     editorialRoot: join(process.cwd(), "data", "offline-wiki"),
+    loreRoot: join(process.cwd(), "data", "offline-wiki", "lore"),
+    localOverlayPath: join(process.cwd(), ".local", "offline-wiki", "imports", releaseId, "normalized", "current.jsonl"),
+    localImportReportPath: join(process.cwd(), ".local", "offline-wiki", "imports", releaseId, "reports", "last-rejected.json"),
   });
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }
