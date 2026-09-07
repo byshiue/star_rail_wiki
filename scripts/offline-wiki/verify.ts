@@ -21,6 +21,7 @@ const BuildManifestSchema = z.strictObject({
     group: z.string().min(1),
     order: z.number().int().nonnegative(),
   })),
+  warnings: z.array(z.literal("backup-cleanup-pending")).max(1),
 });
 
 type Family = z.infer<typeof LoreFamilySchema>;

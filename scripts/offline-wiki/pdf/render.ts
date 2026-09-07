@@ -19,7 +19,7 @@ async function assertRequestsSettled(page: Page, blockedUrls: readonly string[])
   }
 }
 
-export const renderTrustedPdfHtmlWithPlaywrightForTest: PdfRenderer = async ({ html }) => {
+const renderHtmlWithPlaywright: PdfRenderer = async ({ html }) => {
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
@@ -60,5 +60,14 @@ export const renderTrustedPdfHtmlWithPlaywrightForTest: PdfRenderer = async ({ h
 
 export const renderPdfWithPlaywright: PdfRenderer = async (input) => {
   validatePdfHtml(input.html);
-  return renderTrustedPdfHtmlWithPlaywrightForTest(input);
+  return renderHtmlWithPlaywright(input);
 };
+
+export function createPdfRendererWithPostValidationInjectionForTest(
+  injectAfterValidation: (html: string) => string,
+): PdfRenderer {
+  return async (input) => {
+    validatePdfHtml(input.html);
+    return renderHtmlWithPlaywright({ ...input, html: injectAfterValidation(input.html) });
+  };
+}

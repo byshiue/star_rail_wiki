@@ -1,4 +1,5 @@
 import { createRequire } from "node:module";
+import { printStyles } from "../render/styles";
 
 const require = createRequire(import.meta.url);
 const { JSDOM } = require("jsdom") as {
@@ -14,27 +15,20 @@ const RESOURCE_ATTRIBUTES = new Set([
   "action", "background", "data", "formaction", "href", "manifest", "ping", "poster", "src", "srcset",
 ]);
 const IMAGE_MIMES = new Set(["image/png", "image/jpeg", "image/webp"]);
-const MAX_ENCODED_IMAGE_BYTES = 16 * 1024 * 1024;
-const MAX_DECODED_IMAGE_BYTES = 12 * 1024 * 1024;
-const MAX_IMAGE_DIMENSION = 8_192;
-const MAX_IMAGE_PIXELS = 40_000_000;
+export const PDF_HTML_LIMITS = Object.freeze({
+  maxHtmlBytes: 64 * 1024 * 1024,
+  maxImages: 128,
+  maxEncodedImageBytes: 16 * 1024 * 1024,
+  maxDecodedImageBytes: 12 * 1024 * 1024,
+  maxImageDimension: 8_192,
+  maxImagePixels: 40_000_000,
+  maxTotalEncodedBytes: 32 * 1024 * 1024,
+  maxTotalDecodedBytes: 24 * 1024 * 1024,
+  maxTotalPixels: 80_000_000,
+});
 
-function decodeCssEscapes(css: string): string {
-  return css.replace(
-    /\\([0-9a-f]{1,6})(?:\r\n|[\t\n\f\r ])?|\\([^\n\f\r0-9a-f])/giu,
-    (_match, hex: string | undefined, escaped: string | undefined) => (
-      hex === undefined ? (escaped ?? "") : String.fromCodePoint(Number.parseInt(hex, 16))
-    ),
-  );
-}
-
-function rejectCssUrls(css: string): void {
-  const decoded = decodeCssEscapes(css);
-  if (/@import\b/iu.test(decoded)) throw new Error("PDF HTML CSS @import resources are forbidden");
-  if (/url\s*\(/iu.test(decoded)) {
-    throw new Error("PDF HTML CSS url() resources are forbidden");
-  }
-}
+export type PdfHtmlLimits = { readonly [Key in keyof typeof PDF_HTML_LIMITS]: number };
+type ImageBudget = { count: number; encodedBytes: number; decodedBytes: number; pixels: number };
 
 function hasPrefix(bytes: Buffer, prefix: readonly number[]): boolean {
   return prefix.every((byte, index) => bytes[index] === byte);
@@ -97,27 +91,36 @@ function webpDimensions(bytes: Buffer): { width: number; height: number } {
   throw new Error("data image WebP dimensions are missing or invalid");
 }
 
-function validateDataImage(url: string): void {
-  if (url.length > MAX_ENCODED_IMAGE_BYTES) throw new Error("data image encoded size exceeds the limit");
+function validateDataImage(url: string, budget: ImageBudget, limits: PdfHtmlLimits): void {
+  if (url.length > limits.maxEncodedImageBytes + 64) throw new Error("data image encoded size exceeds the limit");
   const match = /^data:(image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/]+={0,2})$/u.exec(url);
   if (!match || !IMAGE_MIMES.has(match[1]!)) {
     throw new Error(`data image must use an allowed raster MIME and strict base64 encoding: ${url.slice(0, 96)}`);
   }
   const payload = match[2]!;
+  if (payload.length > limits.maxEncodedImageBytes) throw new Error("data image encoded size exceeds the limit");
   if (payload.length % 4 !== 0) throw new Error("data image has invalid base64 padding");
+  budget.encodedBytes += payload.length;
+  if (budget.encodedBytes > limits.maxTotalEncodedBytes) throw new Error("data image encoded volume budget exceeded");
+  const padding = payload.endsWith("==") ? 2 : payload.endsWith("=") ? 1 : 0;
+  const predictedDecodedBytes = (payload.length / 4) * 3 - padding;
+  if (predictedDecodedBytes > limits.maxDecodedImageBytes) throw new Error("data image decoded size exceeds the limit");
+  budget.decodedBytes += predictedDecodedBytes;
+  if (budget.decodedBytes > limits.maxTotalDecodedBytes) throw new Error("data image decoded volume budget exceeded");
   const bytes = Buffer.from(payload, "base64");
   if (bytes.toString("base64") !== payload) throw new Error("data image has non-canonical base64 encoding");
-  if (bytes.length > MAX_DECODED_IMAGE_BYTES) throw new Error("data image decoded size exceeds the limit");
   const dimensions = match[1] === "image/png"
     ? pngDimensions(bytes)
     : match[1] === "image/jpeg"
       ? jpegDimensions(bytes)
       : webpDimensions(bytes);
   if (dimensions.width < 1 || dimensions.height < 1
-      || dimensions.width > MAX_IMAGE_DIMENSION || dimensions.height > MAX_IMAGE_DIMENSION
-      || dimensions.width * dimensions.height > MAX_IMAGE_PIXELS) {
+      || dimensions.width > limits.maxImageDimension || dimensions.height > limits.maxImageDimension
+      || dimensions.width * dimensions.height > limits.maxImagePixels) {
     throw new Error("data image dimensions or pixel count exceed the limit");
   }
+  budget.pixels += dimensions.width * dimensions.height;
+  if (budget.pixels > limits.maxTotalPixels) throw new Error("data image pixel volume budget exceeded");
 }
 
 function validateAnchor(url: string): void {
@@ -126,8 +129,10 @@ function validateAnchor(url: string): void {
   throw new Error(`PDF HTML anchor URL is forbidden: ${url}`);
 }
 
-export function validatePdfHtml(html: string): void {
+function validateWithLimits(html: string, limits: PdfHtmlLimits): void {
+  if (Buffer.byteLength(html, "utf8") > limits.maxHtmlBytes) throw new Error("PDF HTML size exceeds the volume limit");
   const dom = new JSDOM(html, { runScripts: undefined, resources: undefined, url: "about:blank" });
+  const budget: ImageBudget = { count: 0, encodedBytes: 0, decodedBytes: 0, pixels: 0 };
   try {
     const { document } = dom.window;
     for (const element of document.querySelectorAll("*")) {
@@ -143,11 +148,13 @@ export function validatePdfHtml(html: string): void {
         const name = attribute.toLowerCase();
         const value = element.getAttribute(attribute)?.trim() ?? "";
         if (name.startsWith("on")) throw new Error(`PDF HTML event handler is forbidden: ${name}`);
-        if (name === "style") rejectCssUrls(value);
+        if (name === "style") throw new Error("PDF HTML style attributes are forbidden");
         if (!RESOURCE_ATTRIBUTES.has(name)) continue;
         if (name === "srcset") throw new Error("PDF HTML srcset resources are forbidden");
         if (tag === "img" && name === "src") {
-          validateDataImage(value);
+          budget.count += 1;
+          if (budget.count > limits.maxImages) throw new Error("PDF HTML image count exceeds the volume limit");
+          validateDataImage(value, budget, limits);
         } else if (tag === "a" && name === "href") {
           validateAnchor(value);
         } else {
@@ -155,8 +162,19 @@ export function validatePdfHtml(html: string): void {
         }
       }
     }
-    for (const style of document.querySelectorAll("style")) rejectCssUrls(style.textContent ?? "");
+    const styles = [...document.querySelectorAll("style")];
+    if (styles.length > 1 || styles.some((style) => style.textContent !== printStyles)) {
+      throw new Error("PDF HTML style element does not exactly match the trusted project stylesheet");
+    }
   } finally {
     dom.window.close();
   }
+}
+
+export function validatePdfHtml(html: string): void {
+  validateWithLimits(html, PDF_HTML_LIMITS);
+}
+
+export function validatePdfHtmlWithLimitsForTest(html: string, limits: PdfHtmlLimits): void {
+  validateWithLimits(html, limits);
 }

@@ -1,11 +1,11 @@
-import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { buildOfflineWiki } from "../build";
 import { verifyOfflineWiki } from "../verify";
-import { renderPdfWithPlaywright, renderTrustedPdfHtmlWithPlaywrightForTest } from "./render";
+import { createPdfRendererWithPostValidationInjectionForTest, renderPdfWithPlaywright } from "./render";
 
 const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "__fixtures__", "releases");
@@ -87,15 +87,21 @@ describe("offline wiki PDF build", () => {
   });
 
   it("reports the blocked URL when low-level raw HTML attempts a remote request", async () => {
-    await expect(renderTrustedPdfHtmlWithPlaywrightForTest({
-      html: '<!doctype html><img src="https://blocked.invalid/raw.png">',
+    const renderInjected = createPdfRendererWithPostValidationInjectionForTest(
+      () => '<!doctype html><img src="https://blocked.invalid/raw.png">',
+    );
+    await expect(renderInjected({
+      html: "<!doctype html><p>validated before test injection</p>",
       title: "unsafe raw hook",
     })).rejects.toThrow(/https:\/\/blocked\.invalid\/raw\.png/);
   });
 
   it("reports a print-only blocked URL after the media phase", async () => {
-    await expect(renderTrustedPdfHtmlWithPlaywrightForTest({
-      html: '<!doctype html><style>@media print { body { background-image: url("https://blocked.invalid/print.png") } }</style>',
+    const renderInjected = createPdfRendererWithPostValidationInjectionForTest(
+      () => '<!doctype html><style>@media print { body { background-image: url("https://blocked.invalid/print.png") } }</style>',
+    );
+    await expect(renderInjected({
+      html: "<!doctype html><p>validated before test injection</p>",
       title: "unsafe print hook",
     })).rejects.toThrow(/https:\/\/blocked\.invalid\/print\.png/);
   });
@@ -145,6 +151,68 @@ describe("offline wiki PDF build", () => {
 
     expect(readFileSync(join(buildRoot, "build-manifest.json"), "utf8")).toBe(oldManifest);
     expect(readFileSync(join(buildRoot, "html", "00-总索引.html"), "utf8")).toBe(oldIndex);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
+  });
+
+  it.each(["output-root", "builds", "dangling-builds"])("rejects a %s symlink without writing outside", async (mode) => {
+    const container = mkdtempSync(join(tmpdir(), "offline-wiki-path-"));
+    const outside = mkdtempSync(join(tmpdir(), "offline-wiki-outside-"));
+    const outputRoot = join(container, "output");
+    if (mode === "output-root") {
+      symlinkSync(outside, outputRoot, "dir");
+    } else {
+      mkdirSync(outputRoot);
+      symlinkSync(mode === "builds" ? outside : join(container, "missing"), join(outputRoot, "builds"), "dir");
+    }
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    })).rejects.toThrow(/symlink|canonical/i);
+    expect(readdirSync(outside)).toEqual([]);
+  });
+
+  it("commits a verified build with a persistent cleanup warning and clears it on retry", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-cleanup-"));
+    await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    });
+    const warned = await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+      fileOperationsForTest: { removeBackup: () => { throw new Error("cleanup denied"); } },
+    });
+
+    expect(warned.warnings).toEqual(["backup-cleanup-pending"]);
+    expect(JSON.parse(readFileSync(join(outputRoot, "builds", "4.4-fixture", "build-manifest.json"), "utf8")).warnings)
+      .toEqual(["backup-cleanup-pending"]);
+    expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(8);
+    expect(readdirSync(join(outputRoot, "builds")).filter((name) => name.includes(".backup-"))).toHaveLength(1);
+
+    const retried = await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot: emptyLoreFixture(), renderPdf: fakePdf,
+    });
+    expect(retried.warnings).toEqual([]);
+    expect(readdirSync(join(outputRoot, "builds")).filter((name) => name.includes(".backup-"))).toEqual([]);
+  });
+
+  it("fails closed without deleting ambiguous pending backups", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-cleanup-"));
+    await buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    });
+    const buildsRoot = join(outputRoot, "builds");
+    mkdirSync(join(buildsRoot, "4.4-fixture.backup-first"));
+    mkdirSync(join(buildsRoot, "4.4-fixture.backup-second"));
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
+    })).rejects.toThrow(/ambiguous.*backup/i);
+    expect(readdirSync(buildsRoot).filter((name) => name.includes(".backup-"))).toHaveLength(2);
     expect(verifyOfflineWiki({ outputRoot, releaseId: "4.4-fixture" }).verifiedFiles).toBe(12);
   });
 });
