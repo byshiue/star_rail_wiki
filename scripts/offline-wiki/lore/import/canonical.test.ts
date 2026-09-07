@@ -51,6 +51,7 @@ describe("parseCanonicalLoreJsonl", () => {
       { order: 2, branch: "B", body: "第二行\n文本" },
     ]);
     expect(parsed[0]).toMatchObject({
+      schemaVersion: 2,
       sourcePath: manifest.files[0].path,
       sourceChecksum: manifest.files[0].checksum,
       sourceDependencies: [{ path: manifest.files[0].path, checksum: manifest.files[0].checksum }],
@@ -59,6 +60,22 @@ describe("parseCanonicalLoreJsonl", () => {
     });
     const { contentChecksum, ...canonicalFields } = parsed[0];
     expect(contentChecksum).toBe(hash(JSON.stringify(canonicalFields)));
+  });
+
+  it("validates strict legacy v1 records without a schemaVersion", () => {
+    const fields = legacyFields();
+    expect(validateLocalFullTextRecords([{ ...fields, contentChecksum: hash(JSON.stringify(fields)) }])).toBe(1);
+  });
+
+  it("rejects unknown versions, pseudo-legacy extra fields, and mixed v1/v2 batches", () => {
+    const v2 = parseCanonicalLoreJsonl(JSON.stringify(record()), manifest)[0];
+    const legacy = legacyFields();
+    const v1 = { ...legacy, contentChecksum: hash(JSON.stringify(legacy)) };
+    expect(() => validateLocalFullTextRecords([{ ...v2, schemaVersion: 99 }])).toThrow(/version/i);
+    const { contentChecksum: _ignored, ...v2Fields } = v2;
+    const pseudoFields = { ...legacy, sourceDependencies: v2.sourceDependencies };
+    expect(() => validateLocalFullTextRecords([{ ...pseudoFields, contentChecksum: hash(JSON.stringify(pseudoFields)) }])).toThrow(/unrecognized|legacy|schema/i);
+    expect(() => validateLocalFullTextRecords([v1, { ...v2Fields, contentChecksum: hash(JSON.stringify(v2Fields)) }])).toThrow(/mixed|version/i);
   });
 
   it("covers the complete sorted source dependency set in the content checksum", () => {
@@ -139,3 +156,21 @@ describe("parseCanonicalLoreJsonl", () => {
     expect(() => parseCanonicalLoreJsonl(JSON.stringify(record({ unexpected: true })), manifest)).toThrow(/unrecognized|unexpected|invalid/i);
   });
 });
+
+function legacyFields() {
+  return {
+    logicalId: "lore:worldview:faction:legacy",
+    family: "worldview",
+    kind: "faction",
+    name: "旧版派系",
+    releaseId: "4.4-fixture",
+    locale: "zh-CN",
+    sourceRevision: "fixture-revision",
+    sourcePath: "worldview.jsonl",
+    sourceChecksum: FILE_CHECKSUM,
+    sections: [{ order: 0, title: null, speaker: null, branch: null, body: "旧版正文。" }],
+    inputChecksum: `sha256:${"b".repeat(64)}`,
+    importedAt: "2026-09-06T00:00:00.000Z",
+    adapterVersion: 1,
+  } as const;
+}

@@ -43,7 +43,17 @@ const SourceDependencySchema = z.strictObject({
   checksum: Sha256Schema,
 });
 
+const LegacyLocalFullTextRecordSchema = z.strictObject({
+  logicalId: z.string().regex(/^lore:/), family: LoreFamilySchema, kind: z.string().min(1), name: z.string().min(1),
+  releaseId: z.string().min(1), locale: z.literal("zh-CN"), sourceRevision: z.string().min(1), sourcePath: z.string().min(1),
+  sourceChecksum: Sha256Schema, sections: z.array(CanonicalSectionSchema).min(1), inputChecksum: Sha256Schema,
+  contentChecksum: Sha256Schema, importedAt: z.iso.datetime(), adapterVersion: z.number().int().positive(),
+}).superRefine(({ family, kind }, context) => {
+  if (!LoreKinds[family].has(kind)) context.addIssue({ code: "custom", path: ["kind"], message: `kind ${kind} is not valid for ${family}` });
+});
+
 export const LocalFullTextRecordSchema = z.strictObject({
+  schemaVersion: z.literal(2),
   logicalId: z.string().regex(/^lore:/), family: LoreFamilySchema, kind: z.string().min(1), name: z.string().min(1),
   releaseId: z.string().min(1), locale: z.literal("zh-CN"), sourceRevision: z.string().min(1), sourcePath: z.string().min(1),
   sourceChecksum: Sha256Schema, sourceDependencies: z.array(SourceDependencySchema).min(1),
@@ -169,6 +179,7 @@ export function materializeCanonicalLoreInput(
     throw new Error("primary source must be included in source dependencies");
   }
   const canonicalFields = {
+    schemaVersion: 2 as const,
     logicalId: input.logicalId,
     family: input.family,
     kind: input.kind,
@@ -218,14 +229,30 @@ export function serializeCanonicalLoreRecords(records: readonly LocalFullTextRec
   return records.length === 0 ? "" : `${records.map((record) => JSON.stringify(record)).join("\n")}\n`;
 }
 
-export function validateLocalFullTextRecords(records: readonly LocalFullTextRecord[]): void {
+export function validateLocalFullTextRecords(records: readonly unknown[]): 1 | 2 | null {
+  let batchVersion: 1 | 2 | null = null;
   for (const record of records) {
-    const parsed = LocalFullTextRecordSchema.parse(record) as LocalFullTextRecord;
+    if (record === null || typeof record !== "object" || Array.isArray(record)) {
+      throw new Error("normalized lore record must be an object");
+    }
+    const hasVersion = Object.prototype.hasOwnProperty.call(record, "schemaVersion");
+    if (hasVersion && (record as { schemaVersion?: unknown }).schemaVersion !== 2) {
+      throw new Error("unknown normalized lore schema version");
+    }
+    const version = hasVersion ? 2 : 1;
+    if (batchVersion !== null && batchVersion !== version) {
+      throw new Error("mixed normalized lore schema versions are not allowed");
+    }
+    batchVersion = version;
+    const parsed = hasVersion
+      ? LocalFullTextRecordSchema.parse(record)
+      : LegacyLocalFullTextRecordSchema.parse(record);
     const { contentChecksum, ...canonicalFields } = parsed;
     if (checksum(JSON.stringify(canonicalFields)) !== contentChecksum) {
-      throw new Error(`normalized lore content checksum mismatch for ${record.logicalId}`);
+      throw new Error(`normalized lore content checksum mismatch for ${parsed.logicalId}`);
     }
   }
+  return batchVersion;
 }
 
 export type { LoreFamily };

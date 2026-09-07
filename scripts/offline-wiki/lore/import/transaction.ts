@@ -81,7 +81,7 @@ function validateAcceptedReport(value: unknown): LocalImportReport {
 function validateOverlay(path: string, expected?: string): LocalImportReport {
   if (!existsSync(path) || lstatSync(path).isSymbolicLink() || !lstatSync(path).isDirectory()) throw new Error("overlay missing or unsafe");
   const text = readFileSync(join(path, "current.jsonl"), "utf8");
-  const records = text.length === 0 ? [] : text.trimEnd().split("\n").map((line) => JSON.parse(line) as LocalFullTextRecord);
+  const records = text.length === 0 ? [] : text.trimEnd().split("\n").map((line) => JSON.parse(line) as unknown);
   validateLocalFullTextRecords(records);
   const report = validateAcceptedReport(JSON.parse(readFileSync(join(path, "report.json"), "utf8")));
   if (report.status !== "accepted" || report.outputChecksum !== sha(text) || report.acceptedCount !== records.length || (expected && report.outputChecksum !== expected)) throw new Error("overlay report/checksum mismatch");

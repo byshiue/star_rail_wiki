@@ -69,7 +69,71 @@ function savedHoyoWikiFixture(options: { invalidHtml?: boolean } = {}) {
   return { repositoryRoot, sourceRoot, manifestPath };
 }
 
+function legacyRecord() {
+  const fields = {
+    logicalId: "lore:worldview:faction:legacy", family: "worldview", kind: "faction", name: "旧版派系",
+    releaseId: "4.4-fixture", locale: "zh-CN", sourceRevision: "fixture-revision", sourcePath: "worldview.jsonl",
+    sourceChecksum: `sha256:${"a".repeat(64)}`, sections: [{ order: 0, title: null, speaker: null, branch: null, body: "旧版正文。" }],
+    inputChecksum: `sha256:${"b".repeat(64)}`, importedAt: "2026-09-06T00:00:00.000Z", adapterVersion: 1,
+  };
+  return { ...fields, contentChecksum: checksum(JSON.stringify(fields)) };
+}
+
+function installOverlay(repositoryRoot: string, records: unknown[]) {
+  const target = join(repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized");
+  mkdirSync(target, { recursive: true });
+  const text = `${records.map((record) => JSON.stringify(record)).join("\n")}\n`;
+  const outputChecksum = checksum(text);
+  writeFileSync(join(target, "current.jsonl"), text);
+  writeFileSync(join(target, "report.json"), `${JSON.stringify({
+    status: "accepted", releaseId: "4.4-fixture", acceptedCount: records.length, rejectedCount: 0,
+    inputChecksums: [`sha256:${"a".repeat(64)}`], outputChecksum, warnings: [], rejection: null,
+  }, null, 2)}\n`);
+  return { target, text, outputChecksum };
+}
+
 describe("importLocalLore", () => {
+  it("upgrades a valid legacy v1 overlay to newly imported v2 records", () => {
+    const data = fixture(["VALID"]);
+    installOverlay(data.repositoryRoot, [legacyRecord()]);
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
+    expect(report.status).toBe("accepted");
+    const current = JSON.parse(readFileSync(join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized/current.jsonl"), "utf8").trim());
+    expect(current).toMatchObject({ schemaVersion: 2, logicalId: "lore:worldview:faction:1" });
+  });
+
+  it("preserves a valid legacy v1 overlay byte-for-byte when the new import fails", () => {
+    const data = fixture(["{bad json}"]);
+    const legacy = installOverlay(data.repositoryRoot, [legacyRecord()]);
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
+    expect(report.status).toBe("rejected");
+    expect(readFileSync(join(legacy.target, "current.jsonl"), "utf8")).toBe(legacy.text);
+  });
+
+  it.each(["prepared", "backed-up"] as const)("validates and restores a legacy v1 backup during %s recovery", (phase) => {
+    const data = fixture(["{bad json}"]);
+    const legacy = installOverlay(data.repositoryRoot, [legacyRecord()]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    const backupName = `.normalized-backup-legacy-${phase}`;
+    renameSync(legacy.target, join(releaseRoot, backupName));
+    writeJournal(releaseRoot, { phase, stagingName: `.normalized-staging-legacy-${phase}`, backupName, priorOutputChecksum: legacy.outputChecksum, expectedOutputChecksum: `sha256:${"c".repeat(64)}` });
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
+    expect(report.status).toBe("rejected");
+    expect(readFileSync(join(legacy.target, "current.jsonl"), "utf8")).toBe(legacy.text);
+    expect(existsSync(join(releaseRoot, backupName))).toBe(false);
+  });
+
+  it.each([
+    ["unknown version", () => ({ ...legacyRecord(), schemaVersion: 99 })],
+    ["pseudo legacy", () => ({ ...legacyRecord(), sourceDependencies: [{ path: "worldview.jsonl", checksum: `sha256:${"a".repeat(64)}` }] })],
+  ] as const)("rejects a %s overlay instead of treating it as v1", (_label, buildRecord) => {
+    const data = fixture(["VALID"]);
+    const installed = installOverlay(data.repositoryRoot, [buildRecord()]);
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
+    expect(report.status).toBe("rejected");
+    expect(readFileSync(join(installed.target, "current.jsonl"), "utf8")).toBe(installed.text);
+  });
+
   it("dispatches a saved HoYoWiki manifest and binds the entry source checksum", () => {
     const data = savedHoyoWikiFixture();
     const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
