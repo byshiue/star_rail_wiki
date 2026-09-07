@@ -38,22 +38,15 @@ const CanonicalLoreInputSchema = z.strictObject({
 
 export type CanonicalLoreInput = z.infer<typeof CanonicalLoreInputSchema>;
 
-export type LocalFullTextRecord = {
-  logicalId: string;
-  family: LoreFamily;
-  kind: string;
-  name: string;
-  releaseId: string;
-  locale: "zh-CN";
-  sourceRevision: string;
-  sourcePath: string;
-  sourceChecksum: Sha256;
-  sections: z.infer<typeof CanonicalSectionSchema>[];
-  inputChecksum: Sha256;
-  contentChecksum: Sha256;
-  importedAt: string;
-  adapterVersion: number;
-};
+export const LocalFullTextRecordSchema = z.strictObject({
+  logicalId: z.string().regex(/^lore:/), family: LoreFamilySchema, kind: z.string().min(1), name: z.string().min(1),
+  releaseId: z.string().min(1), locale: z.literal("zh-CN"), sourceRevision: z.string().min(1), sourcePath: z.string().min(1),
+  sourceChecksum: Sha256Schema, sections: z.array(CanonicalSectionSchema).min(1), inputChecksum: Sha256Schema,
+  contentChecksum: Sha256Schema, importedAt: z.iso.datetime(), adapterVersion: z.number().int().positive(),
+}).superRefine(({ family, kind }, context) => {
+  if (!LoreKinds[family].has(kind)) context.addIssue({ code: "custom", path: ["kind"], message: `kind ${kind} is not valid for ${family}` });
+});
+export type LocalFullTextRecord = z.infer<typeof LocalFullTextRecordSchema> & { sourceChecksum: Sha256; inputChecksum: Sha256; contentChecksum: Sha256 };
 
 function checksum(value: string): Sha256 {
   return `sha256:${createHash("sha256").update(value).digest("hex")}`;
@@ -197,7 +190,8 @@ export function serializeCanonicalLoreRecords(records: readonly LocalFullTextRec
 
 export function validateLocalFullTextRecords(records: readonly LocalFullTextRecord[]): void {
   for (const record of records) {
-    const { contentChecksum, ...canonicalFields } = record;
+    const parsed = LocalFullTextRecordSchema.parse(record) as LocalFullTextRecord;
+    const { contentChecksum, ...canonicalFields } = parsed;
     if (checksum(JSON.stringify(canonicalFields)) !== contentChecksum) {
       throw new Error(`normalized lore content checksum mismatch for ${record.logicalId}`);
     }

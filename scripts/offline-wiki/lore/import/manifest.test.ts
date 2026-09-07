@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, symlinkSync, unlinkSync, writeFileSync } from "
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { loadLocalLoreManifest, validateExactPathSet } from "./manifest";
+import { loadLocalLoreManifest, readValidatedLocalLoreFile, validateExactPathSet } from "./manifest";
 
 const FIXTURE_RELEASE = "4.4-fixture";
 
@@ -49,6 +49,30 @@ function loadFixture(fixture: ReturnType<typeof createFixture>) {
 }
 
 describe("local lore manifest", () => {
+  it("rejects a regular file replaced after manifest validation", () => {
+    const fixture = createFixture("original\n");
+    const loaded = loadFixture(fixture);
+    unlinkSync(join(fixture.sourceRoot, "worldview.jsonl"));
+    writeFileSync(join(fixture.sourceRoot, "worldview.jsonl"), "replacement\n");
+    expect(() => readValidatedLocalLoreFile(loaded, fixture.sourceRoot, "worldview.jsonl")).toThrow(/byte|checksum|changed/i);
+  });
+
+  it("rejects a symlink substituted after manifest validation", () => {
+    const fixture = createFixture("original\n");
+    const loaded = loadFixture(fixture);
+    const outside = mkdtempSync(join(tmpdir(), "offline-wiki-read-race-"));
+    writeFileSync(join(outside, "replacement.jsonl"), "original\n");
+    unlinkSync(join(fixture.sourceRoot, "worldview.jsonl"));
+    symlinkSync(join(outside, "replacement.jsonl"), join(fixture.sourceRoot, "worldview.jsonl"));
+    expect(() => readValidatedLocalLoreFile(loaded, fixture.sourceRoot, "worldview.jsonl")).toThrow(/symlink|canonical/i);
+  });
+
+  it("reapplies byte, UTF-8, and checksum checks when consuming a validated file", () => {
+    const fixture = createFixture("original\n");
+    const loaded = loadFixture(fixture);
+    writeFileSync(join(fixture.sourceRoot, "worldview.jsonl"), Buffer.from([0xc3, 0x28]));
+    expect(() => readValidatedLocalLoreFile(loaded, fixture.sourceRoot, "worldview.jsonl")).toThrow(/byte|UTF-8|checksum/i);
+  });
   it("rejects a declared path missing from the stable enumeration", () => {
     expect(() => validateExactPathSet(
       new Set(["nested/worldview.jsonl"]),

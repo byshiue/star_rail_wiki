@@ -53,6 +53,12 @@ const LocalLoreManifestSchema = z.strictObject({
 });
 
 export type LocalLoreManifest = z.infer<typeof LocalLoreManifestSchema>;
+export type ValidatedLocalLoreFile = Readonly<{
+  path: string;
+  bytes: number;
+  checksum: string;
+  text: string;
+}>;
 
 function isContained(root: string, candidate: string): boolean {
   const fromRoot = relative(root, candidate);
@@ -260,6 +266,40 @@ export function validateExactPathSet(
       throw new Error(`declared source file missing from stable enumeration: ${declaredPath}`);
     }
   }
+}
+
+export function readValidatedLocalLoreFile(
+  manifest: LocalLoreManifest,
+  sourceRoot: string,
+  relativePath: string,
+): ValidatedLocalLoreFile {
+  const rootBefore = requireCanonicalDirectory(sourceRoot);
+  const declared = manifest.files.find((file) => file.path === relativePath);
+  if (!declared) throw new Error("requested source path is not declared by the manifest");
+  validateRelativePath(declared.path);
+  if (declared.bytes > FILE_BYTE_LIMIT) throw new Error("source file exceeds the 16 MiB file limit");
+  const absolutePath = resolve(rootBefore.canonicalPath, declared.path);
+  if (!isContained(rootBefore.canonicalPath, absolutePath)) throw new Error("source file escapes source root");
+  const parentSnapshots: StablePath[] = [];
+  let parent = resolve(absolutePath, "..");
+  while (isContained(rootBefore.canonicalPath, parent)) {
+    parentSnapshots.push(snapshotDirectory(parent, rootBefore.canonicalPath));
+    if (parent === rootBefore.canonicalPath) break;
+    parent = resolve(parent, "..");
+  }
+  const stable = inspectStableRegularFile(absolutePath, `manifest file ${declared.path}`, true, declared.bytes);
+  if (!isContained(rootBefore.canonicalPath, stable.canonicalPath)) throw new Error("source file escapes source root");
+  if (checksum(stable.bytes) !== declared.checksum) throw new Error(`manifest checksum mismatch for ${declared.path}`);
+  const text = decodeUtf8(stable.bytes, declared.path);
+  const rootAfter = requireCanonicalDirectory(rootBefore.canonicalPath);
+  if (!sameStableMetadata(rootBefore.stats, rootAfter.stats)) throw new Error("source root changed during source read");
+  for (const before of parentSnapshots) {
+    const after = snapshotDirectory(before.absolutePath, rootBefore.canonicalPath);
+    if (before.canonicalPath !== after.canonicalPath || !sameStableMetadata(before.stats, after.stats)) {
+      throw new Error("source parent directory changed during source read");
+    }
+  }
+  return Object.freeze({ path: declared.path, bytes: declared.bytes, checksum: declared.checksum, text });
 }
 
 export function loadLocalLoreManifest(

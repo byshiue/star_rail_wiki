@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -112,4 +112,98 @@ describe("importLocalLore", () => {
     })).toThrow(/symlink|canonical|boundary/i);
     expect(existsSync(join(outside, "imports"))).toBe(false);
   });
+
+  it("rejects a source replaced after its manifest was written and preserves current bytes", () => {
+    const data = fixture(["VALID"]);
+    const normalizedRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized");
+    mkdirSync(normalizedRoot, { recursive: true });
+    const currentPath = join(normalizedRoot, "current.jsonl");
+    writeFileSync(currentPath, "last-good\n");
+    unlinkSync(join(data.sourceRoot, "worldview.jsonl"));
+    writeFileSync(join(data.sourceRoot, "worldview.jsonl"), "replacement\n");
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    expect(report.status).toBe("rejected");
+    expect(report.rejection?.reason).toMatch(/^(?:manifest|source)-validation-failed$/);
+    expect(readFileSync(currentPath, "utf8")).toBe("last-good\n");
+  });
+
+  it.each([
+    ["symlink", (path: string) => { const outside = mkdtempSync(join(tmpdir(), "lore-swap-")); writeFileSync(join(outside, "x"), "x"); unlinkSync(path); symlinkSync(join(outside, "x"), path); }],
+    ["invalid UTF-8", (path: string) => writeFileSync(path, Buffer.from([0xc3, 0x28]))],
+    ["oversized replacement", (path: string) => writeFileSync(path, Buffer.alloc(16 * 1024 * 1024 + 1))],
+  ])("preserves current when source becomes %s", (_label, mutate) => {
+    const data = fixture(["VALID"]); const target = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture/normalized");
+    mkdirSync(target, { recursive: true }); writeFileSync(join(target, "current.jsonl"), "last-good\n");
+    mutate(join(data.sourceRoot, "worldview.jsonl"));
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    expect(report.status).toBe("rejected"); expect(readFileSync(join(target, "current.jsonl"), "utf8")).toBe("last-good\n");
+  });
+
+  it("restores a verified last-good backup when a crash journal exists and target is missing", () => {
+    const good = fixture(["VALID"]);
+    importLocalLore({ repositoryRoot: good.repositoryRoot, releaseId: "4.4-fixture", manifestPath: good.manifestPath, sourceRoot: good.sourceRoot });
+    const releaseRoot = join(good.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    const target = join(releaseRoot, "normalized");
+    const backupName = ".normalized-backup-test1234";
+    renameSync(target, join(releaseRoot, backupName));
+    writeFileSync(join(releaseRoot, ".normalized-transaction.json"), JSON.stringify({ schemaVersion: 1, phase: "backed-up", targetName: "normalized", stagingName: ".normalized-staging-test1234", backupName, expectedOutputChecksum: `sha256:${"b".repeat(64)}` }));
+    writeFileSync(join(releaseRoot, ".normalized-transaction.lock"), JSON.stringify({ pid: 2147483647, nonce: "stale-lock" }));
+    writeFileSync(join(good.sourceRoot, "worldview.jsonl"), "{bad}\n");
+
+    const report = importLocalLore({ repositoryRoot: good.repositoryRoot, releaseId: "4.4-fixture", manifestPath: good.manifestPath, sourceRoot: good.sourceRoot });
+    expect(report.status).toBe("rejected");
+    expect(existsSync(target)).toBe(true);
+    expect(existsSync(join(releaseRoot, backupName))).toBe(false);
+  });
+
+  it("treats a verified promoted target as committed when backup cleanup fails", () => {
+    const data = fixture(["VALID"]);
+    const first = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    const target = join(releaseRoot, "normalized");
+    const backupName = ".normalized-backup-test5678";
+    cpSync(target, join(releaseRoot, backupName), { recursive: true });
+    writeFileSync(join(releaseRoot, ".normalized-transaction.json"), JSON.stringify({ schemaVersion: 1, phase: "promoted", targetName: "normalized", stagingName: ".normalized-staging-test5678", backupName, expectedOutputChecksum: first.outputChecksum }));
+
+    const report = importLocalLore({
+      repositoryRoot: data.repositoryRoot,
+      releaseId: "4.4-fixture",
+      manifestPath: data.manifestPath,
+      sourceRoot: data.sourceRoot,
+      operations: { removeBackup: () => { throw new Error("fixture cleanup failure"); } },
+    });
+    expect(report.status).toBe("accepted");
+    expect(report.warnings).toContain("backup-cleanup-pending");
+    expect(existsSync(target)).toBe(true);
+    expect(existsSync(join(releaseRoot, backupName))).toBe(true);
+  });
+
+  it("fails closed on malformed recovery state without overwriting a last-good backup", () => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    mkdirSync(join(releaseRoot, ".normalized-backup-manual"), { recursive: true });
+    writeFileSync(join(releaseRoot, ".normalized-backup-manual/current.jsonl"), "last-good\n");
+    writeFileSync(join(releaseRoot, ".normalized-transaction.json"), "{bad}");
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    expect(report.status).toBe("rejected");
+    expect(report.rejection?.reason).toBe("recovery-failed");
+    expect(existsSync(join(releaseRoot, ".normalized-backup-manual/current.jsonl"))).toBe(true);
+    expect(existsSync(join(releaseRoot, "normalized"))).toBe(false);
+  });
+
+  it("retains the unique backup and journal when a competing target blocks rollback", () => {
+    const data = fixture(["VALID"]);
+    importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot });
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot, operations: {
+      beforePromote: (target) => { mkdirSync(target); writeFileSync(join(target, "competitor"), "do-not-delete"); throw new Error("stop"); },
+    } });
+    expect(report.status).toBe("rejected");
+    expect(readFileSync(join(releaseRoot, "normalized/competitor"), "utf8")).toBe("do-not-delete");
+    const backups = readdirSync(releaseRoot).filter((name) => name.startsWith(".normalized-backup-"));
+    expect(backups).toHaveLength(1);
+    expect(report.rejection?.recoveryNames).toEqual(expect.arrayContaining([JOURNAL_NAME_FOR_TEST, backups[0]]));
+  });
 });
+
+const JOURNAL_NAME_FOR_TEST = ".normalized-transaction.json";
