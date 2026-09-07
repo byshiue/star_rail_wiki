@@ -86,7 +86,7 @@ export function prepareOfflineWiki(options: PrepareOptions): PrepareReport {
     changes: compareDocumentCatalogs(previousCatalog, catalog),
   };
   writeJsonAtomically(
-    join(options.outputRoot, "builds", options.releaseId, "prepare-report.json"),
+    join(options.outputRoot, "previews", options.releaseId, "prepare-report.json"),
     report,
   );
   return report;

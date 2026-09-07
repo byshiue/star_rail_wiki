@@ -9,7 +9,7 @@ const fixtureRoot = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__"
 const loreRoot = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__", "lore");
 
 describe("offline wiki prepare report", () => {
-  it("writes deterministic entity counts to the release build directory", () => {
+  it("writes deterministic entity counts to the standalone release preview directory", () => {
     const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-prepare-"));
 
     const report = prepareOfflineWiki({
@@ -33,7 +33,7 @@ describe("offline wiki prepare report", () => {
       removed: [],
     });
     const saved = JSON.parse(readFileSync(
-      join(outputRoot, "builds", "4.4-fixture", "prepare-report.json"),
+      join(outputRoot, "previews", "4.4-fixture", "prepare-report.json"),
       "utf8",
     ));
     expect(saved).toEqual(report);

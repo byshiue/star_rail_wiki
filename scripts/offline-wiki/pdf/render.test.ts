@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
 import { describe, expect, it } from "vitest";
 import { buildOfflineWiki } from "../build";
+import { buildHtmlVolumes } from "../build-html";
+import { prepareOfflineWiki } from "../prepare";
 import { verifyOfflineWiki } from "../verify";
 import { installNetworkBlocker, renderPdfWithPlaywright } from "./render";
 
@@ -28,6 +30,31 @@ const fakePdf = async ({ title }: { title: string }) => ({
 });
 
 describe("offline wiki PDF build", () => {
+  it("keeps standalone prepare and HTML previews separate from the atomic final build", async () => {
+    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-workflow-"));
+
+    prepareOfflineWiki({ releasesRoot: fixtureRoot, loreRoot, releaseId: "4.4-fixture", outputRoot });
+    buildHtmlVolumes({
+      releasesRoot: fixtureRoot,
+      editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture",
+      outputRoot,
+      loreRoot,
+    });
+
+    await expect(buildOfflineWiki({
+      releasesRoot: fixtureRoot,
+      editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
+      releaseId: "4.4-fixture",
+      outputRoot,
+      loreRoot,
+      renderPdf: fakePdf,
+    })).resolves.toMatchObject({ schemaVersion: 2, releaseId: "4.4-fixture" });
+    expect(existsSync(join(outputRoot, "previews", "4.4-fixture", "prepare-report.json"))).toBe(true);
+    expect(existsSync(join(outputRoot, "previews", "4.4-fixture", "html", "00-总索引.html"))).toBe(true);
+    expect(existsSync(join(outputRoot, "builds", "4.4-fixture", "build-manifest.json"))).toBe(true);
+  });
+
   it("writes the fixture's grouped PDFs and a checksummed build manifest", async () => {
     const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-pdf-"));
 

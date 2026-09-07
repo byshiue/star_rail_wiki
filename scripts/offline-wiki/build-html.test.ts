@@ -35,7 +35,7 @@ describe("offline wiki HTML build", () => {
       "07-文本收藏-索引.html",
       "07-文本收藏-书籍与读物-001.html",
     ]);
-    expect(readFileSync(join(outputRoot, "builds", "4.4-fixture", "html", "01-角色图鉴.html"), "utf8"))
+    expect(readFileSync(join(outputRoot, "previews", "4.4-fixture", "html", "01-角色图鉴.html"), "utf8"))
       .toContain("测试角色");
   });
 
@@ -65,7 +65,7 @@ describe("offline wiki HTML build", () => {
       loreRoot,
     });
 
-    expect(readFileSync(join(outputRoot, "builds", "4.4-fixture", "html", "01-角色图鉴.html"), "utf8"))
+    expect(readFileSync(join(outputRoot, "previews", "4.4-fixture", "html", "01-角色图鉴.html"), "utf8"))
       .toContain('src="data:image/png;base64,iVBORw0KGgo="');
   });
 
@@ -92,7 +92,7 @@ describe("offline wiki HTML build", () => {
       localOverlayPath,
     });
 
-    const index = readFileSync(join(outputRoot, "builds", "4.4-fixture", "html", "00-总索引.html"), "utf8");
+    const index = readFileSync(join(outputRoot, "previews", "4.4-fixture", "html", "00-总索引.html"), "utf8");
     expect(index).toContain("未归属拒绝：未知类别 1");
   });
 });

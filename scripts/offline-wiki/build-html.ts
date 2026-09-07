@@ -54,7 +54,7 @@ export function buildHtmlVolumes(options: BuildHtmlOptions): HtmlOutput[] {
     options.assetCacheRoot ?? join(options.outputRoot, "assets", options.releaseId),
   );
   const outputDirectory = join(
-    options.buildRootOverride ?? join(options.outputRoot, "builds", options.releaseId),
+    options.buildRootOverride ?? join(options.outputRoot, "previews", options.releaseId),
     "html",
   );
   mkdirSync(outputDirectory, { recursive: true });
