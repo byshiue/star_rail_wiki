@@ -317,6 +317,10 @@ describe("offline wiki PDF build", () => {
     let first = true;
     await buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot,
       renderPdf: async (input) => {
+        expect(existsSync(join(buildsRoot, ".ownership-worker.mutex"))).toBe(true);
+        expect(JSON.parse(readFileSync(join(buildsRoot, ".4.4-fixture.build-transaction.lock"), "utf8"))).toMatchObject({
+          pid: process.pid, processIdentity: { platform: "linux" },
+        });
         if (first) {
           first = false;
           await expect(buildOfflineWiki({ releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"), releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf })).rejects.toThrow(/active|lock/i);
@@ -452,72 +456,8 @@ describe("offline wiki PDF build", () => {
       .toEqual({ dev: identity.dev, ino: identity.ino, bytes: "partial" });
   });
 
-  it("keeps a legacy reclaim guard replaced after its first observation", async () => {
-    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
-    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
-    const lockPath = join(buildsRoot, ".4.4-fixture.build-transaction.lock");
-    const guardPath = `${lockPath}-reclaim`;
-    writeFileSync(lockPath, JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
-    writeFileSync(guardPath, "legacy-partial"); utimesSync(guardPath, new Date(0), new Date(0));
 
-    await expect(buildOfflineWiki({
-      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
-      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
-      fileOperationsForTest: { afterLegacyGuardObservation: () => {
-        unlinkSync(guardPath); writeFileSync(guardPath, "replacement"); utimesSync(guardPath, new Date(0), new Date(0));
-      } },
-    })).rejects.toThrow(/guard.*changed|identity|reclaim/i);
-    expect(readFileSync(guardPath, "utf8")).toBe("replacement");
-  });
 
-  it("allows at most one contender to enter legacy reclaim-guard migration", async () => {
-    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
-    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
-    const lockPath = join(buildsRoot, ".4.4-fixture.build-transaction.lock");
-    const guardPath = `${lockPath}-reclaim`;
-    writeFileSync(lockPath, JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
-    writeFileSync(guardPath, "legacy-partial"); utimesSync(guardPath, new Date(0), new Date(0));
-    let migrationEntrants = 0;
-    let nested: Promise<unknown> | null = null;
-
-    await buildOfflineWiki({
-      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
-      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
-      fileOperationsForTest: { duringLegacyGuardMigration: () => {
-        migrationEntrants += 1;
-        nested = buildOfflineWiki({
-          releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
-          releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
-          fileOperationsForTest: { duringLegacyGuardMigration: () => { migrationEntrants += 1; } },
-        });
-      } },
-    });
-    await expect(nested).rejects.toThrow(/active|claim|reclaim/i);
-    expect(migrationEntrants).toBe(1);
-  });
-
-  it("allows at most one concurrent contender to enter dead-lock reclamation", async () => {
-    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
-    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
-    writeFileSync(join(buildsRoot, ".4.4-fixture.build-transaction.lock"), JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
-    let reclaimEntrants = 0;
-    let nested: Promise<unknown> | null = null;
-
-    await buildOfflineWiki({
-      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
-      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
-      fileOperationsForTest: { duringLockReclaim: () => {
-        reclaimEntrants += 1;
-        nested = buildOfflineWiki({
-          releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
-          releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
-          fileOperationsForTest: { duringLockReclaim: () => { reclaimEntrants += 1; } },
-        });
-      } },
-    });
-    await expect(nested).rejects.toThrow(/active|guard|reclaim/i);
-    expect(reclaimEntrants).toBe(1);
-  });
 
   it.each([
     ["live", JSON.stringify({ pid: process.pid, nonce: "00000000-0000-4000-8000-000000000001" })],
@@ -540,23 +480,6 @@ describe("offline wiki PDF build", () => {
       .toEqual({ dev: identity.dev, ino: identity.ino, bytes: guardBytes });
   });
 
-  it("fails closed without deleting a reclaim guard replaced after acquisition", async () => {
-    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
-    const buildsRoot = join(outputRoot, "builds"); mkdirSync(buildsRoot);
-    const lockPath = join(buildsRoot, ".4.4-fixture.build-transaction.lock");
-    const guardPath = `${lockPath}-reclaim`;
-    writeFileSync(lockPath, JSON.stringify({ pid: 2_147_483_647, nonce: "00000000-0000-4000-8000-000000000000" }));
-
-    await expect(buildOfflineWiki({
-      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
-      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
-      fileOperationsForTest: { duringLockReclaim: () => {
-        unlinkSync(guardPath); writeFileSync(guardPath, "attacker-controlled");
-      } },
-    })).rejects.toThrow(/guard.*changed|identity|reclaim/i);
-    expect(readFileSync(guardPath, "utf8")).toBe("attacker-controlled");
-    expect(readFileSync(lockPath, "utf8")).toContain("2147483647");
-  });
 
   it("cleans bounded dead lock-publish crash artifacts after acquiring the lock", async () => {
     const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-lock-"));
@@ -587,7 +510,7 @@ describe("offline wiki PDF build", () => {
     writeFileSync(join(buildsRoot, ".4.4-fixture.build-transaction.lock"), JSON.stringify({
       pid: process.pid,
       nonce: "00000000-0000-4000-8000-000000000000",
-      processIdentity: { platform: "linux", bootId: "different-boot", startTimeTicks: "0" },
+      processIdentity: { platform: "linux", bootId: "00000000-0000-4000-8000-000000000000", startTimeTicks: "1" },
     }));
 
     await expect(buildOfflineWiki({
@@ -596,23 +519,6 @@ describe("offline wiki PDF build", () => {
     })).resolves.toMatchObject({ schemaVersion: 2 });
   });
 
-  it("cleans a just-published PDF owner when the publisher crashes after linking", async () => {
-    const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-owner-crash-"));
-    const lockPath = join(outputRoot, "builds", ".4.4-fixture.build-transaction.lock");
-
-    await expect(buildOfflineWiki({
-      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
-      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
-      fileOperationsForTest: {
-        afterOwnerPublishLink: (label) => { if (label === "build lock") throw new Error("post-link crash"); },
-      },
-    })).rejects.toThrow(/post-link crash/);
-    expect(existsSync(lockPath)).toBe(false);
-    await expect(buildOfflineWiki({
-      releasesRoot: fixtureRoot, editorialRoot: join(repositoryRoot, "data", "offline-wiki"),
-      releaseId: "4.4-fixture", outputRoot, loreRoot, renderPdf: fakePdf,
-    })).resolves.toMatchObject({ schemaVersion: 2 });
-  });
 
   it("cleans only validated dead PDF lock tombstones after guarded acquisition", async () => {
     const outputRoot = mkdtempSync(join(tmpdir(), "offline-wiki-tombstones-"));

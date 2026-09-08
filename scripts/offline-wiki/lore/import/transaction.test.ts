@@ -212,6 +212,17 @@ describe("importLocalLore", () => {
     })).toThrow(/\.local\/offline-wiki|outside|boundary/i);
   });
 
+  it("rejects an unsafe release id before deriving or creating its release directory", () => {
+    const data = fixture(["VALID"]);
+    const escaped = join(data.repositoryRoot, "escaped-by-release");
+    expect(() => importLocalLore({
+      ...data,
+      releaseId: "../../../escaped-by-release",
+      outputRoot: join(data.repositoryRoot, ".local/offline-wiki/safe-output"),
+    })).toThrow(/release.*safe|unsupported.*release/i);
+    expect(existsSync(escaped)).toBe(false);
+  });
+
   it("rejects a symlinked local lore directory instead of writing through it", () => {
     const data = fixture(["VALID"]);
     const outside = mkdtempSync(join(tmpdir(), "offline-wiki-output-outside-"));
@@ -428,28 +439,6 @@ describe("importLocalLore", () => {
     expect(readFileSync(guardPath, "utf8")).toContain("dead-guard");
   });
 
-  it("treats EPERM from kill zero as a live owner and preserves the shared rejection report", () => {
-    const data = fixture(["VALID"]);
-    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
-    const reportsRoot = join(releaseRoot, "reports");
-    mkdirSync(reportsRoot, { recursive: true });
-    const prior = "{\"prior\":true}\n";
-    const lockPath = join(releaseRoot, ".normalized-transaction.lock");
-    const lockBytes = JSON.stringify({ pid: 424242, nonce: "permission-denied-owner" });
-    writeFileSync(join(reportsRoot, "last-rejected.json"), prior);
-    writeFileSync(lockPath, lockBytes);
-    const kill = vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
-      if (pid === 424242 && signal === 0) throw Object.assign(new Error("not permitted"), { code: "EPERM" });
-      return true;
-    });
-    try {
-      expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("rejected");
-    } finally {
-      kill.mockRestore();
-    }
-    expect(readFileSync(lockPath, "utf8")).toBe(lockBytes);
-    expect(readFileSync(join(reportsRoot, "last-rejected.json"), "utf8")).toBe(prior);
-  });
 
   it("does not overwrite the shared last-rejected report when a live owner holds the lock", () => {
     const data = fixture(["VALID"]);
@@ -459,6 +448,21 @@ describe("importLocalLore", () => {
     const prior = "{\"prior\":true}\n";
     writeFileSync(join(reportsRoot, "last-rejected.json"), prior);
     writeFileSync(join(releaseRoot, ".normalized-transaction.lock"), JSON.stringify({ pid: process.pid, nonce: "live" }));
+
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
+
+    expect(report.status).toBe("rejected");
+    expect(readFileSync(join(reportsRoot, "last-rejected.json"), "utf8")).toBe(prior);
+  });
+
+  it("does not overwrite the shared rejection report when ownership acquisition fails", () => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    const reportsRoot = join(releaseRoot, "reports");
+    mkdirSync(reportsRoot, { recursive: true });
+    const prior = "{\"prior\":true}\n";
+    writeFileSync(join(reportsRoot, "last-rejected.json"), prior);
+    writeFileSync(join(releaseRoot, ".ownership-worker.mutex"), "unsafe-mutex");
 
     const report = importLocalLore({ ...data, releaseId: "4.4-fixture" });
 
@@ -489,32 +493,6 @@ describe("importLocalLore", () => {
     expect(readdirSync(reportsRoot)).toEqual(["last-rejected.json"]);
   });
 
-  it.each([
-    ["transaction lock", "afterOwnerCandidateFsync"],
-    ["transaction lock reclaim guard", "afterOwnerCandidateFsync"],
-    ["transaction lock", "afterOwnerPublishLink"],
-  ] as const)("recovers after an interrupted atomic %s publication at %s", (label, hook) => {
-    const data = fixture(["VALID"]);
-    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
-    mkdirSync(releaseRoot, { recursive: true });
-    const lockPath = join(releaseRoot, ".normalized-transaction.lock");
-    if (label !== "transaction lock" || hook === "afterOwnerPublishLink") {
-      writeFileSync(lockPath, JSON.stringify({ pid: 2147483647, nonce: "old" }));
-    }
-    let injected = false;
-    const operations = {
-      [hook]: (publishedLabel: string) => {
-        if (!injected && publishedLabel === label) {
-          injected = true;
-          throw new Error("simulated publication crash");
-        }
-      },
-    };
-
-    expect(importLocalLore({ ...data, releaseId: "4.4-fixture", operations }).status).toBe("rejected");
-    expect(injected).toBe(true);
-    expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("accepted");
-  });
 
   it("cleans only strictly named, validated dead importer candidates and tombstones", () => {
     const data = fixture(["VALID"]);
@@ -543,15 +521,6 @@ describe("importLocalLore", () => {
     expect(readFileSync(join(releaseRoot, unvalidated), "utf8")).toBe(deadOwner);
   });
 
-  it("serializes stale-lock reclaimers so a nested contender cannot enter", () => {
-    const data = fixture(["VALID"]); const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); mkdirSync(releaseRoot, { recursive: true });
-    writeFileSync(join(releaseRoot, ".normalized-transaction.lock"), JSON.stringify({ pid: 2147483647, nonce: "old" }));
-    let nested: ReturnType<typeof importLocalLore> | undefined;
-    const outer = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot, operations: {
-      duringLockReclaim: () => { nested = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot }); },
-    } });
-    expect(outer.status).toBe("accepted"); expect(nested?.status).toBe("rejected");
-  });
 
   it("cleans only its own atomic-json temp after rename failure", () => {
     const data = fixture(["VALID"]); const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); mkdirSync(releaseRoot, { recursive: true });
@@ -569,11 +538,21 @@ describe("importLocalLore", () => {
     expect(report.status).toBe("rejected"); expect(firstOutputChecksum(target)).toBe(competingChecksum); expect(existsSync(join(releaseRoot, JOURNAL_NAME_FOR_TEST))).toBe(true); expect(readdirSync(releaseRoot).some((name) => name.startsWith(".normalized-staging-"))).toBe(true);
   });
 
-  it("closes the reclaim guard fd when inspection aborts", () => {
-    const data = fixture(["VALID"]); const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture"); mkdirSync(releaseRoot, { recursive: true }); writeFileSync(join(releaseRoot, ".normalized-transaction.lock"), JSON.stringify({ pid: 2147483647, nonce: "old" }));
-    let descriptor = -1;
-    const report = importLocalLore({ repositoryRoot: data.repositoryRoot, releaseId: "4.4-fixture", manifestPath: data.manifestPath, sourceRoot: data.sourceRoot, operations: { inspectReclaimGuardFd: (fd) => { descriptor = fd; throw new Error("inspection failure"); } } });
-    expect(report.status).toBe("rejected"); expect(descriptor).toBeGreaterThanOrEqual(0); expect(() => closeSync(descriptor)).toThrow(/bad file descriptor|EBADF/i);
+
+  it("uses the shared parent-owned flock worker while preserving the synchronous import API", () => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    let observed = false;
+    const report = importLocalLore({ ...data, releaseId: "4.4-fixture", operations: {
+      beforePromote: () => {
+        const owner = JSON.parse(readFileSync(join(releaseRoot, ".normalized-transaction.lock"), "utf8"));
+        expect(owner).toMatchObject({ pid: process.pid, processIdentity: { platform: "linux" } });
+        observed = true;
+      },
+    } });
+    expect(report.status).toBe("accepted");
+    expect(observed).toBe(true);
+    expect(existsSync(join(releaseRoot, ".ownership-worker.mutex"))).toBe(true);
   });
 });
 

@@ -6,7 +6,19 @@
 
 ## 环境
 
-需要 Node.js 24，并要求构建输出位于支持同目录 hard link、原子 rename、目录 open/fsync 的本地 POSIX 文件系统；不支持这些语义时，lock 会给出定向错误并 fail closed。非 Linux 主机无法核对进程启动时间，遇到疑似 PID 复用的 lock 时会保守保留，需先确认没有构建进程再人工移除。首次安装：
+需要 Node.js 24。导入和 PDF 构建的 ownership acquisition 整体只支持 Linux，并依赖固定的 `/usr/bin/flock`、真实 procfs 及 `/proc/self/fd`。构建输出文件系统还必须支持同目录 hard link、原子 rename、目录 open/fsync 等 POSIX 语义；本地 POSIX 文件系统支持完整自动恢复，NFS 上的 stale mutation 则受下述双客户端认证策略限制。不满足平台或文件系统要求时，lock 会给出定向错误并 fail closed。
+
+父进程会永久保留每个事务目录中的 `.ownership-worker.mutex` inode；不得重命名、替换或纳入清理。一次性 worker 通过 FD 3 持有该 inode 的 exclusive flock，在锁内重新观察并完成全部 stale owner/旧 guard/claim 迁移与新 owner 发布，再通过父进程预创建的 FD 4 返回有界结果。owner 记录父进程 PID、boot ID 和 start-time identity；父进程只有在直接子进程被回收、exit 0、result token/schema/inode/path 与 owner identity 全部一致后才进入事务。exit 99 仅表示 flock contention，worker 自身不会返回 99。
+
+所有 writer 必须同时升级；advisory flock 不能隔离仍使用旧 guard/claim 协议的二进制。结果 token 只用于关联，不是秘密或密码学认证；安全来源是继承的唯一 result FD 与联合 inode/path/owner 校验。同一用户恶意替换 pathname/FD 不在 cooperative-writer threat model 内，但意外 symlink、类型或 identity 不匹配会 fail closed。内核 uninterruptible wait 也不受 Node timeout 的硬上限保证。
+
+当前实现**尚未完成双客户端 NFS 认证**。在未认证 NFS 上，fresh ownership acquisition 仍可正常工作，但任何需要 stale mutation 的状态都会返回 `nfs-unqualified`，不会自动移动或删除 owner/guard/claim。`nfs-qualified-v1` 是实验性、受控调用方显式传入的 deployment attestation；只有在目标内核、util-linux、NFS client/server、export/mount options 的双客户端矩阵完成并记录以下项目后才可启用：并发排他、父/worker SIGKILL 恢复、client/server/lock-service restart 与 grace recovery、支持的 network partition，以及持续探针证明 live holder 存续时另一客户端从未获得锁。当前本机 `/tmp` subprocess 测试不是这项认证。
+
+混合版本、未认证 NFS stale 状态或任何 ownership transport/invariant 错误都应停止自动恢复。人工处理前先确认没有导入/构建进程，保存 journal、owner、candidate 和 tombstone 供诊断；不要删除永久 mutex。
+
+父进程若在 `spawnSync` 或 mutex 初始化期间被 `SIGKILL`，可能留下唯一命名、大小有界的 `.ownership-worker-result-<pid>-<uuid>.tmp` 或 `.ownership-worker.mutex.candidate-<uuid>.tmp`。这些文件不参与 ownership 判定，也不会占用 canonical owner/mutex 名称，但重复硬崩溃可能造成累积。只有在确认没有 importer、PDF builder、ownership worker 或 flock holder 后，才可归档并人工移除严格匹配这些名称的孤儿文件；不得以宽泛 glob 清理，也不得删除 `.ownership-worker.mutex`。
+
+首次安装：
 
 ```bash
 npm ci
