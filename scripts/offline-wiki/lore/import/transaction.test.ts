@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { closeSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, unlinkSync, utimesSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { importLocalLore } from "./transaction";
 
 function checksum(value: string | Uint8Array): string {
@@ -390,6 +390,67 @@ describe("importLocalLore", () => {
     }
   });
 
+  it.each([
+    ["dead owner", JSON.stringify({ pid: 2147483647, nonce: "dead-claim" }), false],
+    ["aged malformed owner", "partial", true],
+  ] as const)("recovers an existing %s reclaim claim", (_label, claimBytes, ageClaim) => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    mkdirSync(releaseRoot, { recursive: true });
+    const lockPath = join(releaseRoot, ".normalized-transaction.lock");
+    const guardPath = `${lockPath}-reclaim`;
+    const claimPath = `${guardPath}-claim`;
+    writeFileSync(lockPath, JSON.stringify({ pid: 2147483647, nonce: "dead-lock" }));
+    writeFileSync(guardPath, JSON.stringify({ pid: 2147483647, nonce: "dead-guard" }));
+    writeFileSync(claimPath, claimBytes);
+    if (ageClaim) utimesSync(claimPath, new Date(0), new Date(0));
+
+    expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("accepted");
+    expect(existsSync(lockPath)).toBe(false);
+    expect(existsSync(guardPath)).toBe(false);
+    expect(existsSync(claimPath)).toBe(false);
+  });
+
+  it("retains a live reclaim claim and does not enter stale-guard recovery", () => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    mkdirSync(releaseRoot, { recursive: true });
+    const lockPath = join(releaseRoot, ".normalized-transaction.lock");
+    const guardPath = `${lockPath}-reclaim`;
+    const claimPath = `${guardPath}-claim`;
+    const liveClaim = JSON.stringify({ pid: process.pid, nonce: "live-claim" });
+    writeFileSync(lockPath, JSON.stringify({ pid: 2147483647, nonce: "dead-lock" }));
+    writeFileSync(guardPath, JSON.stringify({ pid: 2147483647, nonce: "dead-guard" }));
+    writeFileSync(claimPath, liveClaim);
+
+    expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("rejected");
+    expect(readFileSync(claimPath, "utf8")).toBe(liveClaim);
+    expect(readFileSync(guardPath, "utf8")).toContain("dead-guard");
+  });
+
+  it("treats EPERM from kill zero as a live owner and preserves the shared rejection report", () => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    const reportsRoot = join(releaseRoot, "reports");
+    mkdirSync(reportsRoot, { recursive: true });
+    const prior = "{\"prior\":true}\n";
+    const lockPath = join(releaseRoot, ".normalized-transaction.lock");
+    const lockBytes = JSON.stringify({ pid: 424242, nonce: "permission-denied-owner" });
+    writeFileSync(join(reportsRoot, "last-rejected.json"), prior);
+    writeFileSync(lockPath, lockBytes);
+    const kill = vi.spyOn(process, "kill").mockImplementation((pid, signal) => {
+      if (pid === 424242 && signal === 0) throw Object.assign(new Error("not permitted"), { code: "EPERM" });
+      return true;
+    });
+    try {
+      expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("rejected");
+    } finally {
+      kill.mockRestore();
+    }
+    expect(readFileSync(lockPath, "utf8")).toBe(lockBytes);
+    expect(readFileSync(join(reportsRoot, "last-rejected.json"), "utf8")).toBe(prior);
+  });
+
   it("does not overwrite the shared last-rejected report when a live owner holds the lock", () => {
     const data = fixture(["VALID"]);
     const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
@@ -453,6 +514,33 @@ describe("importLocalLore", () => {
     expect(importLocalLore({ ...data, releaseId: "4.4-fixture", operations }).status).toBe("rejected");
     expect(injected).toBe(true);
     expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("accepted");
+  });
+
+  it("cleans only strictly named, validated dead importer candidates and tombstones", () => {
+    const data = fixture(["VALID"]);
+    const releaseRoot = join(data.repositoryRoot, ".local/offline-wiki/imports/4.4-fixture");
+    mkdirSync(releaseRoot, { recursive: true });
+    const lock = ".normalized-transaction.lock";
+    const deadOwner = JSON.stringify({ pid: 2147483647, nonce: "validated-dead" });
+    const dead = [
+      `${lock}.candidate-00000000-0000-4000-8000-000000000001.tmp`,
+      `${lock}-reclaim.candidate-00000000-0000-4000-8000-000000000002.tmp`,
+      `${lock}-reclaim-claim.candidate-00000000-0000-4000-8000-000000000003.tmp`,
+      `${lock}.stale-00000000-0000-4000-8000-000000000004`,
+      `${lock}-reclaim.stale-00000000-0000-4000-8000-000000000005`,
+      `${lock}-reclaim-claim.stale-00000000-0000-4000-8000-000000000006`,
+    ];
+    dead.forEach((name) => writeFileSync(join(releaseRoot, name), deadOwner));
+    const malformed = `${lock}.candidate-00000000-0000-4000-8000-000000000007.tmp`;
+    const unvalidated = `${lock}.stale-not-a-uuid`;
+    writeFileSync(join(releaseRoot, malformed), "partial");
+    writeFileSync(join(releaseRoot, unvalidated), deadOwner);
+    utimesSync(join(releaseRoot, malformed), new Date(0), new Date(0));
+
+    expect(importLocalLore({ ...data, releaseId: "4.4-fixture" }).status).toBe("accepted");
+    expect(dead.filter((name) => existsSync(join(releaseRoot, name)))).toEqual([]);
+    expect(readFileSync(join(releaseRoot, malformed), "utf8")).toBe("partial");
+    expect(readFileSync(join(releaseRoot, unvalidated), "utf8")).toBe(deadOwner);
   });
 
   it("serializes stale-lock reclaimers so a nested contender cannot enter", () => {

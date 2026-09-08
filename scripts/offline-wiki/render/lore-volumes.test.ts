@@ -187,6 +187,19 @@ describe("offline wiki lore volumes", () => {
     expect(missionIndex).not.toMatch(/覆盖率[^<]*%/);
   });
 
+  it("renders every production candidate decision in its family rejection total", () => {
+    const productionRoot = join(import.meta.dirname, "..", "..", "..", "public", "data", "releases");
+    const productionLoreRoot = join(import.meta.dirname, "..", "..", "..", "data", "offline-wiki", "lore");
+    const catalog = loadDocumentCatalog(productionRoot, "4.4-cn-2026-08-21", undefined, { loreRoot: productionLoreRoot });
+
+    const volumes = renderLoreVolumes({ catalog, summaries: [], localOverlay: new Map() });
+    const divergentUniverse = volumes.find(({ filename }) => filename === "04-差分宇宙-索引.html")!.html;
+    const collectible = volumes.find(({ filename }) => filename === "07-文本收藏-索引.html")!.html;
+
+    expect(divergentUniverse).toContain("拒绝：1");
+    expect(collectible).toContain("拒绝：1");
+  });
+
   it("escapes every record and relationship label instead of trusting catalog text", () => {
     const catalog = fixtureCatalog();
     const mission = catalog.lore.find((record) => record.family === "mission")!;

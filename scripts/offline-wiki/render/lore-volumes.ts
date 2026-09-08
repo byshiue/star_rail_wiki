@@ -94,10 +94,10 @@ function partFilename(definition: FamilyDefinition, kindLabel: string, part: num
 }
 
 function rejectionCount(metric: LoreCoverageMetric): number {
-    + metric.rejectedLaterVersion
+  return metric.rejectedLaterVersion
     + metric.rejectedAmbiguousVersion
     + metric.invalidRelationships
-  return metric.missingSourceEvidence
+    + metric.missingSourceEvidence
     + Object.values(metric.importRejections).reduce((sum, count) => sum + count, 0);
 }
 

@@ -122,6 +122,7 @@ function recoveryNames(releaseRoot: string): string[] {
 }
 type ImportOwnerValue = { pid: number; nonce: string };
 type ImportOwner = PublishedOwner<ImportOwnerValue>;
+type LegacyOwnerIdentity = { dev: bigint; ino: bigint; mtimeMs: bigint; size: bigint };
 const LEGACY_LOCK_GRACE_MS = 30_000;
 
 class LiveImportLockError extends Error {}
@@ -143,16 +144,19 @@ function processIsAlive(pid: number): boolean {
     process.kill(pid, 0);
     return true;
   } catch (error) {
-    if (error instanceof Error && "code" in error && error.code === "ESRCH") return false;
+    const code = error instanceof Error && "code" in error ? error.code : undefined;
+    if (code === "ESRCH") return false;
+    if (code === "EPERM") return true;
     throw error;
   }
 }
 
-function sameLegacyIdentity(path: string, stats: { dev: number | bigint; ino: number | bigint }): boolean {
+function sameLegacyIdentity(path: string, expected: LegacyOwnerIdentity): boolean {
   try {
     const current = lstatSync(path, { bigint: true });
     return !current.isSymbolicLink() && current.isFile()
-      && current.dev === BigInt(stats.dev) && current.ino === BigInt(stats.ino);
+      && current.dev === expected.dev && current.ino === expected.ino
+      && current.mtimeMs === expected.mtimeMs && current.size === expected.size;
   } catch {
     return false;
   }
@@ -186,27 +190,37 @@ function replaceStaleArtifact(
   releaseRoot: string,
   path: string,
   label: string,
-  stats: { dev: number | bigint; ino: number | bigint },
+  identity: LegacyOwnerIdentity,
   options: ImportLocalLoreOptions,
+  observed: ImportOwner | null = null,
 ): ImportOwner {
+  if (observed && !samePublishedOwner(observed, label, parseImportOwner)) {
+    throw new Error(`${label} owner changed before isolation`);
+  }
+  if (!sameLegacyIdentity(path, identity)) throw new Error(`${label} identity changed before isolation`);
   const tombstone = `${path}.stale-${randomUUID()}`;
   renameSync(path, tombstone);
   fsyncDirectory(releaseRoot, label);
+  const isolatedOwner = observed ? { ...observed, path: tombstone } : null;
   let installed: ImportOwner | null = null;
   try {
-    if (!sameLegacyIdentity(tombstone, stats)) throw new Error(`${label} identity changed during isolation`);
+    if (!sameLegacyIdentity(tombstone, identity)
+        || (isolatedOwner && !samePublishedOwner(isolatedOwner, label, parseImportOwner))) {
+      throw new Error(`${label} identity changed during isolation`);
+    }
     installed = publishImportOwner(releaseRoot, path, label, options);
     if (!installed) throw new Error(`${label} changed during stale recovery`);
     return installed;
   } catch (error) {
-    if (!installed && !existsSync(path) && sameLegacyIdentity(tombstone, stats)) {
+    if (!installed && !existsSync(path) && sameLegacyIdentity(tombstone, identity)) {
       renameSync(tombstone, path);
       fsyncDirectory(releaseRoot, label);
     }
     throw error;
   } finally {
-    if (installed && sameLegacyIdentity(tombstone, stats)) {
-      unlinkSync(tombstone);
+    if (installed && sameLegacyIdentity(tombstone, identity)
+        && (!isolatedOwner || unlinkPublishedOwner(isolatedOwner, label, parseImportOwner))) {
+      if (!isolatedOwner) unlinkSync(tombstone);
       fsyncDirectory(releaseRoot, label);
     }
   }
@@ -249,15 +263,34 @@ function acquireReclaimGuard(releaseRoot: string, path: string, options: ImportL
   if (observed && processIsAlive(observed.value.pid)) throw new LiveImportLockError("lock reclaim is already active");
 
   const claimPath = `${path}-claim`;
-  const claim = publishImportOwner(releaseRoot, claimPath, "transaction lock reclaim claim", options);
-  if (!claim) throw new LiveImportLockError("lock reclaim is already active");
+  let claim = publishImportOwner(releaseRoot, claimPath, "transaction lock reclaim claim", options);
+  if (!claim) {
+    const claimIdentity = lstatSync(claimPath, { bigint: true });
+    if (claimIdentity.isSymbolicLink() || !claimIdentity.isFile()) {
+      throw new Error("transaction lock reclaim claim is not a regular file");
+    }
+    let observedClaim: ImportOwner | null = null;
+    try {
+      observedClaim = observePublishedOwner(claimPath, "transaction lock reclaim claim", parseImportOwner);
+    } catch {
+      if (Date.now() - Number(claimIdentity.mtimeMs) < LEGACY_LOCK_GRACE_MS) {
+        throw new Error("transaction lock reclaim claim is malformed or recently incomplete");
+      }
+    }
+    if (observedClaim && processIsAlive(observedClaim.value.pid)) {
+      throw new LiveImportLockError("lock reclaim is already active");
+    }
+    claim = replaceStaleArtifact(
+      releaseRoot, claimPath, "transaction lock reclaim claim", claimIdentity, options, observedClaim,
+    );
+  }
   try {
     if (!sameLegacyIdentity(path, stats)) throw new Error("transaction lock reclaim guard changed before recovery");
     if (observed && !samePublishedOwner(observed, "transaction lock reclaim guard", parseImportOwner)) {
       throw new Error("transaction lock reclaim guard owner changed before recovery");
     }
     if (observed && processIsAlive(observed.value.pid)) throw new LiveImportLockError("lock reclaim became active");
-    guard = replaceStaleArtifact(releaseRoot, path, "transaction lock reclaim guard", stats, options);
+    guard = replaceStaleArtifact(releaseRoot, path, "transaction lock reclaim guard", stats, options, observed);
     inspectGuardDescriptor(guard, options);
     return guard;
   } finally {
@@ -265,38 +298,93 @@ function acquireReclaimGuard(releaseRoot: string, path: string, options: ImportL
   }
 }
 
-function acquireLock(releaseRoot: string, options: ImportLocalLoreOptions): ImportOwner {
-  const path = join(releaseRoot, LOCK_NAME);
-  let installed = publishImportOwner(releaseRoot, path, "transaction lock", options);
-  if (installed) return installed;
+const OWNER_ARTIFACT_SUFFIX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
-  const stats = lstatSync(path, { bigint: true });
-  if (stats.isSymbolicLink() || !stats.isFile()) throw new Error("transaction lock is not a regular file");
-  let observed: ImportOwner | null = null;
-  try {
-    observed = observePublishedOwner(path, "transaction lock", parseImportOwner);
-  } catch {
-    if (Date.now() - Number(stats.mtimeMs) < LEGACY_LOCK_GRACE_MS) {
-      throw new Error("transaction lock is malformed or recently incomplete");
-    }
+function cleanupCandidateArtifacts(releaseRoot: string): void {
+  const prefixes = [
+    `${LOCK_NAME}.candidate-`,
+    `${LOCK_NAME}-reclaim.candidate-`,
+    `${LOCK_NAME}-reclaim-claim.candidate-`,
+  ];
+  let removed = false;
+  for (const name of readdirSync(releaseRoot)) {
+    const prefix = prefixes.find((candidate) => name.startsWith(candidate));
+    if (!prefix || !name.endsWith(".tmp")
+        || !OWNER_ARTIFACT_SUFFIX.test(name.slice(prefix.length, -".tmp".length))) continue;
+    const path = join(releaseRoot, name);
+    let observed: ImportOwner;
+    try { observed = observePublishedOwner(path, "transaction lock candidate", parseImportOwner); }
+    catch { continue; }
+    if (!processIsAlive(observed.value.pid)
+        && unlinkPublishedOwner(observed, "transaction lock candidate", parseImportOwner)) removed = true;
   }
-  if (observed && processIsAlive(observed.value.pid)) {
-    throw new LiveImportLockError("another import or manual recovery is active");
-  }
+  if (removed) fsyncDirectory(releaseRoot, "transaction lock candidate cleanup");
+}
 
-  const guard = acquireReclaimGuard(releaseRoot, `${path}-reclaim`, options);
+function cleanupTombstoneArtifacts(releaseRoot: string, options: ImportLocalLoreOptions): void {
+  const prefixes = [
+    `${LOCK_NAME}.stale-`,
+    `${LOCK_NAME}-reclaim.stale-`,
+    `${LOCK_NAME}-reclaim-claim.stale-`,
+  ];
+  const guard = acquireReclaimGuard(releaseRoot, join(releaseRoot, `${LOCK_NAME}-reclaim`), options);
+  let removed = false;
   try {
-    options.operations?.duringLockReclaim?.();
-    if (!sameLegacyIdentity(path, stats)) throw new Error("lock identity changed during reclaim");
-    if (observed) {
-      if (!samePublishedOwner(observed, "transaction lock", parseImportOwner)) throw new Error("lock owner changed during reclaim");
-      if (processIsAlive(observed.value.pid)) throw new LiveImportLockError("lock owner became active");
+    for (const name of readdirSync(releaseRoot)) {
+      const prefix = prefixes.find((candidate) => name.startsWith(candidate));
+      if (!prefix || !OWNER_ARTIFACT_SUFFIX.test(name.slice(prefix.length))) continue;
+      const path = join(releaseRoot, name);
+      let observed: ImportOwner;
+      try { observed = observePublishedOwner(path, "transaction lock tombstone", parseImportOwner); }
+      catch { continue; }
+      if (!processIsAlive(observed.value.pid)
+          && unlinkPublishedOwner(observed, "transaction lock tombstone", parseImportOwner)) removed = true;
     }
-    installed = replaceStaleArtifact(releaseRoot, path, "transaction lock", stats, options);
-    return installed;
+    if (removed) fsyncDirectory(releaseRoot, "transaction lock tombstone cleanup");
   } finally {
     releaseImportOwner(releaseRoot, guard, "transaction lock reclaim guard");
   }
+}
+
+function acquireLock(releaseRoot: string, options: ImportLocalLoreOptions): ImportOwner {
+  const path = join(releaseRoot, LOCK_NAME);
+  let installed = publishImportOwner(releaseRoot, path, "transaction lock", options);
+  if (!installed) {
+    const stats = lstatSync(path, { bigint: true });
+    if (stats.isSymbolicLink() || !stats.isFile()) throw new Error("transaction lock is not a regular file");
+    let observed: ImportOwner | null = null;
+    try {
+      observed = observePublishedOwner(path, "transaction lock", parseImportOwner);
+    } catch {
+      if (Date.now() - Number(stats.mtimeMs) < LEGACY_LOCK_GRACE_MS) {
+        throw new Error("transaction lock is malformed or recently incomplete");
+      }
+    }
+    if (observed && processIsAlive(observed.value.pid)) {
+      throw new LiveImportLockError("another import or manual recovery is active");
+    }
+
+    const guard = acquireReclaimGuard(releaseRoot, `${path}-reclaim`, options);
+    try {
+      options.operations?.duringLockReclaim?.();
+      if (!sameLegacyIdentity(path, stats)) throw new Error("lock identity changed during reclaim");
+      if (observed) {
+        if (!samePublishedOwner(observed, "transaction lock", parseImportOwner)) throw new Error("lock owner changed during reclaim");
+        if (processIsAlive(observed.value.pid)) throw new LiveImportLockError("lock owner became active");
+      }
+      installed = replaceStaleArtifact(releaseRoot, path, "transaction lock", stats, options, observed);
+    } finally {
+      releaseImportOwner(releaseRoot, guard, "transaction lock reclaim guard");
+    }
+  }
+  try {
+    cleanupCandidateArtifacts(releaseRoot);
+    cleanupTombstoneArtifacts(releaseRoot, options);
+  } catch (error) {
+    releaseImportOwner(releaseRoot, installed, "transaction lock");
+    throw error;
+  }
+  return installed;
 }
 
 function releaseLock(lock: ImportOwner): void {
