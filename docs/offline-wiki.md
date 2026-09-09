@@ -2,6 +2,43 @@
 
 这套流程把仓库中固定版本、附带来源的正式服资料转换为可搜索的简体中文离线图鉴。仓库提交短机制、事实、原创摘要、关系与来源；用户合法取得的官方长文只可经本地导入，和 HTML、PDF、图片缓存、草稿一样保存在被 Git 忽略的 `.local/offline-wiki/`。项目不会建立 HoYoWiki 全站镜像，也不会把这些本地资料上传 GitHub。
 
+## 4.5 IPA 完整原文归档
+
+`docs:extract-ipa-lore` 可从用户本地持有的 4.5 IPA 读取版本锚点和内置中文 TextMap，再与 `data/offline-wiki/ipa-sources/4.5-cn-2026-08-13.json` 固定的最早 4.5 正式发布映射提交合并。脚本只接受配置中的完整 commit hash 和正式版 marker，不读取 `latest` 或可变分支。
+
+映射仓库应检出配置中 `requiredPaths` 的全部文件，以及 `Story/Mission/`、`Story/Discussion/Mission/`。本次固定来源为 Dimbreath `TurnBasedGameData` 提交 `5d064ec9bdf7b8983957abc6e45494dd76c8a8fa`。可以在本地临时目录或 `.local` source cache 准备 sparse checkout；来源缓存不可提交。
+
+```bash
+git clone --filter=blob:none --no-checkout https://gitlab.com/Dimbreath/turnbasedgamedata.git /absolute/local/path/turnbasedgamedata-4.5
+git -C /absolute/local/path/turnbasedgamedata-4.5 switch --detach 5d064ec9bdf7b8983957abc6e45494dd76c8a8fa
+git -C /absolute/local/path/turnbasedgamedata-4.5 sparse-checkout init --no-cone
+# 按 ipa-sources JSON 的 requiredPaths 加入文件，并额外加入 /Story/Mission/ 与 /Story/Discussion/Mission/。
+```
+
+依序执行：
+
+```bash
+npm run docs:extract-ipa-lore -- \
+  --ipa /absolute/path/com.HoYoverse.hkrpgoversea_4.5.0.ipa \
+  --mapping-root /absolute/local/path/turnbasedgamedata-4.5 \
+  --release 4.5-cn-2026-08-13
+npm run docs:build-ipa-lore -- --release 4.5-cn-2026-08-13
+npm run docs:verify-ipa-lore -- --release 4.5-cn-2026-08-13
+```
+
+输出全部位于 `.local/offline-wiki/ipa-imports/4.5-cn-2026-08-13/`：
+
+- `archive.jsonl`：角色介绍／故事与最高等级技能、光锥故事与叠影 1–5 能力、遗器部件故事与套装能力，以及世界观、文本收藏、差分宇宙能力／故事和任务台词的完整本地正文。
+- `audit.json`：版本、输入 checksum、各类计数、缺失 hash 与预载/正式版冲突元数据；不复制正文。
+- `build/html/`、`build/pdf/`：自包含 HTML 与可搜索 PDF 分册。
+- `build/build-manifest.json`：HTML/PDF checksum、实际页数和连续分册记录数。
+
+角色／光锥的能力说明直接使用表内 TextMap hash；遗器套装说明使用资料表中的稳定文字 key，按上游格式以 xxHash64 解析为 TextMap hash。带参数的说明会用对应等级的官方参数展开，原始来源表与行号仍写入每条记录的 provenance。无 `SkillDesc` 引用的内部技能不是可展示内容，会跳过；存在描述 hash 但找不到正文时则拒绝整条记录。
+
+合并默认遇到重叠 TextMap 差异就失败。本次 4.5 导入按已审核策略显式采用正式发布快照文字覆盖 3 条 IPA 预载差异，并在审计中记录两侧 checksum 与字节数。不存在的正文 hash 只进入拒绝报告，不会由摘要、AI 扩写或占位文本替代。没有正文引用的 TalkSentence 控制占位会跳过；正文完整但官方未提供章节标题时保留正文并将标题记为 `null`。
+
+重新运行提取或构建会先写 sibling staging 并验证，再原子替换 last-good；失败不会把半套输出提升为正式归档。Git 只提交解析器、提取器、渲染器、测试、短来源配置与本说明，禁止提交 IPA、TextMap、来源缓存、完整原文、HTML 或 PDF。
+
 当前正式 release 是 `4.4-cn-2026-08-21`。角色、光锥、遗器沿用既有分册；新增差分宇宙、世界观、剧情、文本收藏四个索引，并只为有结构化记录的子类生成内容分册。生产 lore 目前没有获准条目，四类基准也都尚未建立，因此索引会诚实显示缺漏，而不是冒充完整 4.4 Wiki。
 
 ## 环境
