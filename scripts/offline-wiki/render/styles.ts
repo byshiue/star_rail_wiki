@@ -14,6 +14,11 @@ h3 { margin-bottom: 1.5mm; }
 .coverage { border-left: 3px solid #879cc0; padding: 2mm 3mm; background: #f4f7fb; }
 .local-notice { border: 1px solid #d5a94e; padding: 2mm 3mm; color: #765614; background: #fff9e8; }
 .lore-section { break-inside: avoid; margin: 4mm 0; padding-left: 3mm; border-left: 2px solid #d6deeb; }
+.lore-body { overflow-wrap: anywhere; line-height: 1.7; }
+.game-align { display: block; margin: 1.5mm 0; }
+.game-align-center { text-align: center; }
+.game-align-right { text-align: right; }
+.game-nowrap, .game-icon { white-space: nowrap; }
 .relationships { padding-left: 6mm; }
 .image-placeholder { min-height: 38mm; border: 1px dashed #9ba8bd; display: grid; place-items: center; color: #6b7688; }
 .entry-image { display: block; max-width: 100%; max-height: 110mm; margin: 3mm auto; object-fit: contain; }

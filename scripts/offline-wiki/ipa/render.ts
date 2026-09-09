@@ -25,8 +25,93 @@ function escapeHtml(value: string): string {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 }
 
+type OpenRichTag = { kind: string; openHtml: string; closeHtml: string };
+
+function richTag(raw: string): OpenRichTag | { standaloneHtml: string } | undefined {
+  const align = /^<align="(left|center|right)">$/iu.exec(raw);
+  if (align) return { kind: "align", openHtml: `<div class="game-align game-align-${align[1]!.toLowerCase()}">`, closeHtml: "</div>" };
+  if (/^<unbreak>$/iu.test(raw)) return { kind: "unbreak", openHtml: '<span class="game-nowrap">', closeHtml: "</span>" };
+  if (/^<(?:i|it)>$/iu.test(raw)) return { kind: "em", openHtml: "<em>", closeHtml: "</em>" };
+  if (/^<b>$/iu.test(raw)) return { kind: "strong", openHtml: "<strong>", closeHtml: "</strong>" };
+  if (/^<u>$/iu.test(raw)) return { kind: "u", openHtml: "<u>", closeHtml: "</u>" };
+  if (/^<s>$/iu.test(raw)) return { kind: "s", openHtml: "<s>", closeHtml: "</s>" };
+  if (/^<color=#[0-9a-f]{3,8}>$/iu.test(raw)) return { kind: "color", openHtml: "", closeHtml: "" };
+  if (/^<size=[+-]?\d+>$/iu.test(raw)) return { kind: "size", openHtml: "", closeHtml: "" };
+  if (/^<\/?rhythm>$/iu.test(raw)) return { standaloneHtml: "" };
+  if (/^<br\s*\/?>$/iu.test(raw)) return { standaloneHtml: "\n" };
+  const icon = /^<icon\s+SpriteName=([a-z0-9_]+)(?:\s+[^>]*)?>$/iu.exec(raw);
+  if (icon) {
+    const name = icon[1]!;
+    return { standaloneHtml: `<span class="game-icon" aria-label="图标 ${name}">〔图标：${name}〕</span>` };
+  }
+  return undefined;
+}
+
+function closingKind(raw: string): string | undefined {
+  if (/^<\/align>$/iu.test(raw)) return "align";
+  if (/^<\/unbreak>$/iu.test(raw)) return "unbreak";
+  if (/^<\/(?:i|it)>$/iu.test(raw)) return "em";
+  if (/^<\/b>$/iu.test(raw)) return "strong";
+  if (/^<\/u>$/iu.test(raw)) return "u";
+  if (/^<\/s>$/iu.test(raw)) return "s";
+  if (/^<\/color>$/iu.test(raw)) return "color";
+  if (/^<\/size>$/iu.test(raw)) return "size";
+  return undefined;
+}
+
 function bodyHtml(value: string): string {
-  return escapeHtml(value).replaceAll("\r\n", "\n").replaceAll("\r", "\n").replaceAll("\n", "<br>\n");
+  const normalized = value
+    .replaceAll("\\r\\n", "\n")
+    .replaceAll("\\n", "\n")
+    .replaceAll("\\r", "\n")
+    .replaceAll("\r\n", "\n")
+    .replaceAll("\r", "\n");
+  const output: string[] = [];
+  const stack: OpenRichTag[] = [];
+  const tags = /<[^>\n]{1,160}>/gu;
+  let cursor = 0;
+  for (const match of normalized.matchAll(tags)) {
+    const offset = match.index;
+    output.push(escapeHtml(normalized.slice(cursor, offset)));
+    const matchedRaw = match[0];
+    let raw = matchedRaw;
+    const nestedTagOffset = raw.lastIndexOf("<");
+    if (nestedTagOffset > 0) {
+      const candidate = raw.slice(nestedTagOffset);
+      if (closingKind(candidate) || richTag(candidate)) {
+        output.push(escapeHtml(raw.slice(0, nestedTagOffset)));
+        raw = candidate;
+      }
+    }
+    const close = closingKind(raw);
+    if (close) {
+      const current = stack.at(-1);
+      if (current?.kind === close) {
+        stack.pop();
+        output.push(current.closeHtml);
+      } else {
+        output.push(escapeHtml(raw));
+      }
+    } else {
+      const parsed = richTag(raw);
+      if (!parsed) {
+        output.push(escapeHtml(raw));
+      } else if ("standaloneHtml" in parsed) {
+        output.push(parsed.standaloneHtml);
+      } else {
+        stack.push(parsed);
+        output.push(parsed.openHtml);
+      }
+    }
+    cursor = offset + matchedRaw.length;
+  }
+  output.push(escapeHtml(normalized.slice(cursor)));
+  while (stack.length > 0) output.push(stack.pop()!.closeHtml);
+  return output.join("").replaceAll("\n", "<br>\n");
+}
+
+function inlineHtml(value: string): string {
+  return bodyHtml(value);
 }
 
 function document(title: string, content: string): string {
@@ -48,17 +133,17 @@ ${content}
 function renderRecord(value: StoryRecord): string {
   const sections = value.sections.map((section) => {
     const metadata = [
-      section.title ? `<h3>${escapeHtml(section.title)}</h3>` : "",
-      section.speaker ? `<div class="meta">说话人：${escapeHtml(section.speaker)}</div>` : "",
-      section.branch ? `<div class="meta">分支：${escapeHtml(section.branch)}</div>` : "",
+      section.title ? `<h3>${inlineHtml(section.title)}</h3>` : "",
+      section.speaker ? `<div class="meta">说话人：${inlineHtml(section.speaker)}</div>` : "",
+      section.branch ? `<div class="meta">分支：${inlineHtml(section.branch)}</div>` : "",
     ].filter(Boolean).join("\n");
     return `<section class="lore-section" data-source-hash="${escapeHtml(section.sourceHash)}">
 ${metadata}
-<div>${bodyHtml(section.body)}</div>
+<div class="lore-body">${bodyHtml(section.body)}</div>
 </section>`;
   }).join("\n");
   return `<article class="entry" id="${escapeHtml(value.logicalId)}">
-<h2>${escapeHtml(value.name)}</h2>
+<h2>${inlineHtml(value.name)}</h2>
 <div class="meta">${escapeHtml(value.kind)} · ${escapeHtml(value.logicalId)}</div>
 ${sections}
 </article>`;

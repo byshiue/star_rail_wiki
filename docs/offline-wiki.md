@@ -35,6 +35,8 @@ npm run docs:verify-ipa-lore -- --release 4.5-cn-2026-08-13
 
 角色／光锥的能力说明直接使用表内 TextMap hash；遗器套装说明使用资料表中的稳定文字 key，按上游格式以 xxHash64 解析为 TextMap hash。带参数的说明会用对应等级的官方参数展开，原始来源表与行号仍写入每条记录的 provenance。无 `SkillDesc` 引用的内部技能不是可展示内容，会跳过；存在描述 hash 但找不到正文时则拒绝整条记录。
 
+归档 JSONL 保留来源原文；HTML/PDF 渲染时才把字面 `\\n` 还原为换行，并以安全白名单处理 `align`、`unbreak`、`i`／`it`、`b`、`u`、`s`、`color`、`size`、`rhythm`、`br` 与 `icon`。未知尖括号文字继续转义显示，不能作为任意 HTML 执行。
+
 合并默认遇到重叠 TextMap 差异就失败。本次 4.5 导入按已审核策略显式采用正式发布快照文字覆盖 3 条 IPA 预载差异，并在审计中记录两侧 checksum 与字节数。不存在的正文 hash 只进入拒绝报告，不会由摘要、AI 扩写或占位文本替代。没有正文引用的 TalkSentence 控制占位会跳过；正文完整但官方未提供章节标题时保留正文并将标题记为 `null`。
 
 重新运行提取或构建会先写 sibling staging 并验证，再原子替换 last-good；失败不会把半套输出提升为正式归档。Git 只提交解析器、提取器、渲染器、测试、短来源配置与本说明，禁止提交 IPA、TextMap、来源缓存、完整原文、HTML 或 PDF。
